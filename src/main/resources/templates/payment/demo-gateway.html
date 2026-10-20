@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Cổng thanh toán Demo')}"></head>
+<body>
+<header th:replace="~{fragments/common :: topbar}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="demo-gateway-shell">
+  <section class="demo-gateway-card">
+    <div class="gateway-brand"><b>TalentPay</b><span>DEMO GATEWAY</span></div>
+    <div class="gateway-status">
+      <div class="gateway-icon"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+      <h1>Xác nhận giao dịch</h1>
+      <p>Đây là màn hình mô phỏng callback cổng thanh toán cho đồ án.</p>
+    </div>
+    <div class="gateway-details">
+      <div><span>Mã giao dịch</span><b th:text="${payment.transactionCode}">TM-001</b></div>
+      <div><span>Dự án</span><b th:text="${payment.project.application.job.title}">Dự án</b></div>
+      <div><span>Hạng mục</span><b th:text="${payment.milestone != null ? payment.milestone.title : 'Toàn dự án'}">Toàn dự án</b></div>
+      <div><span>Phương thức</span><b th:text="${payment.method}">VNPAY_DEMO</b></div>
+      <div><span>Trạng thái</span><b th:text="${payment.status}">PENDING</b></div>
+      <div><span>Số tiền</span><b class="gateway-amount" th:text="${#numbers.formatDecimal(payment.amount,0,'POINT',0,'COMMA')} + 'đ'">0đ</b></div>
+    </div>
+    <div class="gateway-actions" th:if="${payment.status.name() == 'PENDING'}">
+      <form th:action="@{/payment/demo/{code}/success(code=${payment.transactionCode})}" method="post" data-confirm="Mô phỏng thanh toán thành công cho giao dịch này?"><button class="btn btn-gradient btn-lg" type="submit"><svg viewBox="0 0 24 24"><path d="m5 12 4 4 10-10"/></svg><span>Thanh toán thành công</span></button></form>
+      <form th:action="@{/payment/demo/{code}/fail(code=${payment.transactionCode})}" method="post" data-confirm="Hủy giao dịch này?"><button class="btn btn-danger-soft btn-lg" type="submit">Hủy giao dịch</button></form>
+    </div>
+    <a th:if="${payment.status.name() != 'PENDING'}" class="btn btn-outline w100" th:href="@{/projects/{id}(id=${payment.project.id})}">Quay lại dự án</a>
+    <p class="gateway-caption">Không phát sinh tiền thật. Trang này dùng để kiểm thử luồng PENDING → PAID/FAILED → DISBURSED.</p>
+  </section>
+</main>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body>
+</html>

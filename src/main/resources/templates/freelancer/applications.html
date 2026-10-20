@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Ứng tuyển của tôi')}"></head>
+<body class="market-body freelancer-workspace-page freelancer-applications-page">
+<aside th:replace="~{fragments/common :: marketSidebar('applications')}"></aside>
+<header th:replace="~{fragments/common :: marketTopbar('jobs')}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+
+<main class="market-main">
+  <div class="market-page-shell freelancer-shell-v23">
+    <div class="market-breadcrumb"><a th:href="@{/}">Trang chủ</a><span>/</span><b>Ứng tuyển</b></div>
+
+    <section class="freelancer-page-heading">
+      <div>
+        <span class="freelancer-page-kicker"><i class="fa-regular fa-file-lines"></i> QUẢN LÝ PROPOSAL</span>
+        <h1>Ứng tuyển của tôi</h1>
+        <p>Theo dõi proposal, báo giá và phản hồi từ khách hàng trong một nơi.</p>
+      </div>
+      <a class="market-primary-action freelancer-cta" th:href="@{/jobs}"><i class="fa-solid fa-magnifying-glass"></i> Tìm dự án mới</a>
+    </section>
+
+    <section class="freelancer-kpi-grid applications-kpis">
+      <a th:href="@{/freelancer/applications(status='ALL',q=${q})}" th:classappend="${status == 'ALL'} ? ' active' : ''">
+        <span class="kpi-icon purple"><i class="fa-regular fa-paper-plane"></i></span>
+        <div><strong th:text="${totalCount}">0</strong><small>Tổng ứng tuyển</small></div>
+      </a>
+      <a th:href="@{/freelancer/applications(status='PENDING',q=${q})}" th:classappend="${status == 'PENDING'} ? ' active' : ''">
+        <span class="kpi-icon amber"><i class="fa-regular fa-clock"></i></span>
+        <div><strong th:text="${pendingCount}">0</strong><small>Chờ phản hồi</small></div>
+      </a>
+      <a th:href="@{/freelancer/applications(status='SHORTLISTED',q=${q})}" th:classappend="${status == 'SHORTLISTED'} ? ' active' : ''">
+        <span class="kpi-icon blue"><i class="fa-solid fa-star"></i></span>
+        <div><strong th:text="${shortlistedCount}">0</strong><small>Được shortlist</small></div>
+      </a>
+      <a th:href="@{/freelancer/applications(status='ACCEPTED',q=${q})}" th:classappend="${status == 'ACCEPTED'} ? ' active' : ''">
+        <span class="kpi-icon green"><i class="fa-solid fa-check"></i></span>
+        <div><strong th:text="${acceptedCount}">0</strong><small>Đã chấp nhận</small></div>
+      </a>
+      <a th:href="@{/freelancer/applications(status='REJECTED',q=${q})}" th:classappend="${status == 'REJECTED'} ? ' active' : ''">
+        <span class="kpi-icon red"><i class="fa-solid fa-xmark"></i></span>
+        <div><strong th:text="${rejectedCount}">0</strong><small>Đã từ chối</small></div>
+      </a>
+    </section>
+
+    <section class="freelancer-toolbar-card">
+      <form class="freelancer-search-form" th:action="@{/freelancer/applications}" method="get">
+        <input type="hidden" name="status" th:value="${status}">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input name="q" th:value="${q}" placeholder="Tìm theo tên dự án, khách hàng hoặc nội dung proposal...">
+        <button type="submit">Tìm</button>
+      </form>
+      <div class="freelancer-filter-pills">
+        <a th:href="@{/freelancer/applications(status='ALL',q=${q})}" th:classappend="${status == 'ALL'} ? ' active' : ''">Tất cả</a>
+        <a th:href="@{/freelancer/applications(status='SUBMITTED',q=${q})}" th:classappend="${status == 'SUBMITTED'} ? ' active' : ''">Đã gửi</a>
+        <a th:href="@{/freelancer/applications(status='SHORTLISTED',q=${q})}" th:classappend="${status == 'SHORTLISTED'} ? ' active' : ''">Shortlist</a>
+        <a th:href="@{/freelancer/applications(status='ACCEPTED',q=${q})}" th:classappend="${status == 'ACCEPTED'} ? ' active' : ''">Đã nhận</a>
+        <a th:href="@{/freelancer/applications(status='WITHDRAWN',q=${q})}" th:classappend="${status == 'WITHDRAWN'} ? ' active' : ''">Đã rút</a>
+      </div>
+    </section>
+
+    <section class="freelancer-list-card" th:if="${!#lists.isEmpty(applications)}">
+      <article class="freelancer-application-card" th:each="a : ${applications}">
+        <div class="application-company-icon"><i class="fa-solid fa-briefcase"></i></div>
+        <div class="application-content">
+          <div class="application-title-row">
+            <div>
+              <h2><a th:href="@{/jobs/{id}(id=${a.job.id})}" th:text="${a.job.title}">Tên dự án</a></h2>
+              <div class="application-company-line">
+                <b th:text="${a.job.customer.companyName != null ? a.job.customer.companyName : a.job.customer.fullName}">Công ty</b>
+                <span><i class="fa-regular fa-calendar"></i> <span th:text="${#temporals.format(a.createdAt,'dd/MM/yyyy')}">01/10/2026</span></span>
+                <span><i class="fa-regular fa-clock"></i> <span th:text="${a.estimatedDays + ' ngày dự kiến'}">10 ngày</span></span>
+              </div>
+            </div>
+            <span class="freelancer-status" th:classappend="${#strings.toLowerCase(a.status.name())}">
+              <i th:class="${a.status.name() == 'ACCEPTED' ? 'fa-solid fa-check' : (a.status.name() == 'SHORTLISTED' ? 'fa-solid fa-star' : (a.status.name() == 'REJECTED' ? 'fa-solid fa-xmark' : (a.status.name() == 'WITHDRAWN' ? 'fa-solid fa-arrow-rotate-left' : 'fa-regular fa-clock')))}"></i>
+              <span th:text="${a.status.name() == 'SUBMITTED' ? 'Đã gửi' : (a.status.name() == 'SHORTLISTED' ? 'Shortlisted' : (a.status.name() == 'ACCEPTED' ? 'Đã chấp nhận' : (a.status.name() == 'REJECTED' ? 'Đã từ chối' : 'Đã rút')))}">Trạng thái</span>
+            </span>
+          </div>
+
+          <p class="application-proposal" th:text="${#strings.abbreviate(a.proposal, 240)}">Nội dung proposal</p>
+
+          <div class="application-details-grid">
+            <div><small>Báo giá của bạn</small><strong th:text="${#numbers.formatDecimal(a.proposedPrice,0,'POINT',0,'COMMA')} + 'đ'">12.000.000đ</strong></div>
+            <div><small>Ngân sách dự án</small><strong th:text="${#numbers.formatDecimal(a.job.budget,0,'POINT',0,'COMMA')} + 'đ'">15.000.000đ</strong></div>
+            <div><small>Lĩnh vực</small><strong th:text="${a.job.category}">Thiết kế</strong></div>
+          </div>
+
+          <div class="application-actions">
+            <a class="freelancer-btn ghost" th:href="@{/jobs/{id}(id=${a.job.id})}"><i class="fa-regular fa-eye"></i> Xem công việc</a>
+            <a class="freelancer-btn soft" th:if="${a.status.name() == 'ACCEPTED'}" th:href="@{/freelancer/projects}"><i class="fa-solid fa-briefcase"></i> Mở dự án</a>
+            <form th:if="${a.status.name() == 'SUBMITTED' or a.status.name() == 'SHORTLISTED'}" th:action="@{/freelancer/applications/{id}/withdraw(id=${a.id})}" method="post" data-confirm="Bạn chắc chắn muốn rút ứng tuyển này?">
+              <button class="freelancer-btn danger" type="submit"><i class="fa-solid fa-arrow-rotate-left"></i> Rút ứng tuyển</button>
+            </form>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="freelancer-empty-card" th:if="${#lists.isEmpty(applications)}">
+      <span><i class="fa-regular fa-paper-plane"></i></span>
+      <h3>Không có ứng tuyển phù hợp bộ lọc</h3>
+      <p>Thử chọn trạng thái khác hoặc khám phá thêm dự án mới phù hợp với hồ sơ của bạn.</p>
+      <a class="market-primary-action" th:href="@{/jobs}">Tìm dự án ngay</a>
+    </section>
+  </div>
+</main>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Lời mời dành cho Freelancer')}"></head>
+<body class="market-body freelancer-invitations-page">
+<aside th:replace="~{fragments/common :: marketSidebar('invitations')}"></aside>
+<header th:replace="~{fragments/common :: marketTopbar('hire')}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+
+<main class="market-main">
+  <div class="client-shell">
+    <div class="market-breadcrumb"><a th:href="@{/}">Trang chủ</a><span>/</span><b>Lời mời từ Client</b></div>
+
+    <section class="client-page-heading">
+      <div>
+        <span class="client-eyebrow"><i class="fa-solid fa-envelope-open-text"></i> CƠ HỘI CÔNG VIỆC</span>
+        <h1>Lời mời <span>từ Client</span></h1>
+        <p>Xem chi tiết lời mời, phản hồi nhanh và chuyển sang bước gửi proposal ngay trên TalentMatch.</p>
+      </div>
+      <a class="market-primary-action freelancer-cta" th:href="@{/jobs}"><i class="fa-solid fa-magnifying-glass"></i> Tìm dự án phù hợp</a>
+    </section>
+
+    <section class="client-cards" th:if="${!#lists.isEmpty(invitations)}">
+      <article th:each="i : ${invitations}" class="client-job-card">
+        <div class="client-job-leading">
+          <span class="client-job-icon"><i class="fa-solid fa-envelope-open-text"></i></span>
+          <div>
+            <span class="client-tag" th:text="${i.customer.companyName != null ? i.customer.companyName : i.customer.fullName}">Doanh nghiệp</span>
+            <h2 th:text="${i.job.title}">Tên dự án</h2>
+            <p th:text="${i.message != null and !#strings.isEmpty(i.message) ? i.message : 'Bạn nhận được lời mời quan tâm từ khách hàng. Hãy xem chi tiết công việc và phản hồi sớm để tăng cơ hội hợp tác.'}">Lời mời</p>
+            <div class="client-job-tags">
+              <span th:text="${i.status}">SENT</span>
+              <span th:text="${#temporals.format(i.createdAt,'dd/MM/yyyy HH:mm')}">Ngày</span>
+              <span th:text="${i.job.workType != null ? i.job.workType : 'REMOTE'}">REMOTE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="client-job-right">
+          <strong th:text="${#numbers.formatDecimal(i.job.budget,0,'POINT',0,'COMMA')} + '₫'">0₫</strong>
+          <a class="client-btn outline" th:href="@{/jobs/{id}(id=${i.job.id})}">Xem công việc</a>
+
+          <div class="client-actions" th:if="${i.status == 'SENT'}">
+            <form method="post" th:action="@{/freelancer/invitations/{id}/answer(id=${i.id})}">
+              <input type="hidden" name="status" value="ACCEPTED">
+              <button class="client-btn primary" type="submit">Đồng ý</button>
+            </form>
+            <form method="post" th:action="@{/freelancer/invitations/{id}/answer(id=${i.id})}">
+              <input type="hidden" name="status" value="DECLINED">
+              <button class="client-btn danger-outline" type="submit">Từ chối</button>
+            </form>
+          </div>
+          <small>Sau khi đồng ý, bạn có thể mở công việc để gửi proposal và báo giá chi tiết.</small>
+        </div>
+      </article>
+    </section>
+
+    <section class="invitation-empty-card" th:if="${#lists.isEmpty(invitations)}">
+      <span><i class="fa-regular fa-paper-plane"></i></span>
+      <h3>Bạn chưa có lời mời mới</h3>
+      <p>Hoàn thiện hồ sơ và lưu nhiều dự án phù hợp để tăng khả năng được doanh nghiệp chủ động gửi lời mời hợp tác.</p>
+      <div class="invitation-empty-actions">
+        <a class="market-primary-action" th:href="@{/jobs}"><i class="fa-solid fa-magnifying-glass"></i> Tìm dự án phù hợp</a>
+        <a class="ghost-link" th:href="@{/freelancer/profile}"><i class="fa-regular fa-user"></i>&nbsp; Cập nhật hồ sơ</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body>
+</html>

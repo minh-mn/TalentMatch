@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/common :: head('Tìm dự án')}"></head>
+<body class="market-body talent-job-board-v28">
+<aside th:replace="~{fragments/common :: marketSidebar('jobs')}"></aside>
+<header th:replace="~{fragments/common :: marketTopbar('jobs')}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+
+<main class="market-main tm28-main">
+  <div class="tm28-shell">
+    <div class="tm28-breadcrumb">
+      <a th:href="@{/}">Trang chủ</a><i class="fa-solid fa-chevron-right"></i><strong>Tìm dự án</strong>
+    </div>
+
+    <section class="tm28-intro">
+      <div class="tm28-titleblock">
+        <span class="tm28-kicker"><i class="fa-solid fa-briefcase"></i> CƠ HỘI DÀNH CHO FREELANCER</span>
+        <h1>Tìm dự án <span>phù hợp</span></h1>
+        <p><strong th:text="${allJobsCount}">375</strong> dự án đang mở. Lọc theo kỹ năng, ngân sách, hình thức làm việc và kinh nghiệm của bạn.</p>
+      </div>
+      <div class="tm28-promo">
+        <div class="tm28-promo-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+        <div><b>Khám phá cơ hội mới</b><small>Ưu tiên dự án phù hợp với hồ sơ để tăng khả năng được Client lựa chọn.</small></div>
+      </div>
+    </section>
+
+    <nav class="tm28-categories" aria-label="Danh mục dự án">
+      <a th:href="@{/jobs}" data-category="" th:classappend="${category == null or category.isBlank()} ? ' active' : ''">
+        <i class="fa-solid fa-layer-group"></i><span>Tất cả</span><em th:text="${allJobsCount}">375</em>
+      </a>
+      <a th:each="c : ${categories}" th:href="@{/jobs(category=${c})}" th:attr="data-category=${c}" th:classappend="${category == c} ? ' active' : ''">
+        <i class="fa-solid fa-user-tie" th:if="${c == 'Hành chính & Nhân sự'}"></i>
+        <i class="fa-solid fa-pen-ruler" th:if="${c == 'Thiết kế & Sáng tạo'}"></i>
+        <i class="fa-solid fa-code" th:if="${c == 'Lập trình & CNTT'}"></i>
+        <i class="fa-solid fa-bullhorn" th:if="${c == 'Marketing & Bán hàng'}"></i>
+        <i class="fa-solid fa-building" th:if="${c == 'Kỹ thuật & Kiến trúc'}"></i>
+        <i class="fa-solid fa-scale-balanced" th:if="${c == 'Luật & Pháp lý'}"></i>
+        <i class="fa-solid fa-coins" th:if="${c == 'Tài chính & Kế toán'}"></i>
+        <i class="fa-solid fa-pen-nib" th:if="${c == 'Viết lách & Nội dung'}"></i>
+        <i class="fa-solid fa-graduation-cap" th:if="${c == 'Đào tạo & Giáo dục'}"></i>
+        <i class="fa-solid fa-ellipsis" th:if="${c == 'Khác'}"></i>
+        <span th:text="${c}">Danh mục</span><em th:text="${categoryCounts[c]}">12</em>
+      </a>
+    </nav>
+
+    <div class="tm28-discover-row">
+      <form id="tm28Search" class="tm28-search" method="get" th:action="@{/jobs}">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="search" name="q" id="tm28Query" th:value="${q}" aria-label="Tìm dự án"
+               placeholder="Tìm theo tên dự án, mô tả hoặc kỹ năng (React, Java, UI/UX...)">
+        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
+      </form>
+      <label class="tm28-sort">Sắp xếp
+        <select id="tm28Sort" aria-label="Sắp xếp dự án">
+          <option value="latest" th:selected="${sort == 'latest'}">Mới nhất</option>
+          <option value="match_desc" th:selected="${sort == 'match_desc'}" sec:authorize="hasRole('FREELANCER')">Phù hợp nhất</option>
+          <option value="budget_desc" th:selected="${sort == 'budget_desc'}">Ngân sách cao</option>
+          <option value="budget_asc" th:selected="${sort == 'budget_asc'}">Ngân sách thấp</option>
+          <option value="deadline_asc" th:selected="${sort == 'deadline_asc'}">Hạn gần nhất</option>
+          <option value="competition_asc" th:selected="${sort == 'competition_asc'}">Ít ứng tuyển</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="tm28-results-layout">
+      <aside class="tm28-filter-panel" aria-label="Bộ lọc dự án">
+        <form id="tm28Filters" th:action="@{/jobs}" method="get">
+          <input type="hidden" name="q" th:value="${q}">
+          <input type="hidden" name="category" th:value="${category}">
+          <input type="hidden" name="sort" th:value="${sort}">
+
+          <div class="tm28-filter-head">
+            <h2><i class="fa-solid fa-sliders"></i> Bộ lọc</h2>
+            <a th:href="@{/jobs}"><i class="fa-solid fa-rotate-right"></i> Đặt lại</a>
+          </div>
+
+          <div class="tm28-filter-section">
+            <h3>Danh mục</h3>
+            <select id="tm28CategorySelect" aria-label="Danh mục">
+              <option value="">Tất cả danh mục</option>
+              <option th:each="c : ${categories}" th:value="${c}" th:text="${c}" th:selected="${c == category}"></option>
+            </select>
+          </div>
+
+          <div class="tm28-filter-section">
+            <h3>Kỹ năng</h3>
+            <div class="tm28-inline-input"><i class="fa-solid fa-code"></i><input type="text" name="skill" th:value="${skill}" placeholder="VD: Java, Figma, SEO"></div>
+          </div>
+
+          <div class="tm28-filter-section">
+            <h3>Khoảng ngân sách</h3>
+            <div class="tm28-budget-fields">
+              <input type="number" min="0" step="100000" name="minBudget" th:value="${minBudget}" placeholder="Từ (VNĐ)" aria-label="Ngân sách tối thiểu">
+              <span>–</span>
+              <input type="number" min="0" step="100000" name="maxBudget" th:value="${maxBudget}" placeholder="Đến (VNĐ)" aria-label="Ngân sách tối đa">
+            </div>
+            <div class="tm28-budget-pills">
+              <button type="button" data-budget-min="0" data-budget-max="4999999">Dưới 5tr</button>
+              <button type="button" data-budget-min="5000000" data-budget-max="10000000">5–10tr</button>
+              <button type="button" data-budget-min="10000001" data-budget-max="20000000">10–20tr</button>
+              <button type="button" data-budget-min="20000001" data-budget-max="">Trên 20tr</button>
+            </div>
+          </div>
+
+          <div class="tm28-filter-section">
+            <h3>Hình thức làm việc</h3>
+            <label class="tm28-filter-option"><input type="checkbox" id="tm28AllWork" th:checked="${#lists.isEmpty(workType)}"><span>Tất cả</span></label>
+            <label class="tm28-filter-option"><input type="checkbox" name="workType" value="REMOTE" th:checked="${#lists.contains(workType,'REMOTE')}"><span>Remote</span></label>
+            <label class="tm28-filter-option"><input type="checkbox" name="workType" value="HYBRID" th:checked="${#lists.contains(workType,'HYBRID')}"><span>Hybrid</span></label>
+            <label class="tm28-filter-option"><input type="checkbox" name="workType" value="ONSITE" th:checked="${#lists.contains(workType,'ONSITE')}"><span>Onsite</span></label>
+          </div>
+
+          <div class="tm28-filter-section">
+            <h3>Kinh nghiệm yêu cầu</h3>
+            <label class="tm28-filter-option"><input type="checkbox" name="levelGroup" value="BEGINNER" th:checked="${#lists.contains(levelGroup,'BEGINNER')}"><span>Mới bắt đầu</span></label>
+            <label class="tm28-filter-option"><input type="checkbox" name="levelGroup" value="MIDDLE" th:checked="${#lists.contains(levelGroup,'MIDDLE')}"><span>Trung cấp</span></label>
+            <label class="tm28-filter-option"><input type="checkbox" name="levelGroup" value="SENIOR" th:checked="${#lists.contains(levelGroup,'SENIOR')}"><span>Cao cấp</span></label>
+          </div>
+
+          <div class="tm28-filter-section">
+            <h3>Thời gian hoàn thành</h3>
+            <select id="tm28DurationSelect" name="duration" aria-label="Thời gian hoàn thành">
+              <option value="">Tất cả thời gian</option>
+              <option value="under7" th:selected="${duration == 'under7'}">Dưới 1 tuần</option>
+              <option value="7to14" th:selected="${duration == '7to14'}">1–2 tuần</option>
+              <option value="15to30" th:selected="${duration == '15to30'}">2–4 tuần</option>
+              <option value="over30" th:selected="${duration == 'over30'}">Trên 1 tháng</option>
+            </select>
+          </div>
+
+          <div class="tm28-filter-section">
+            <h3>Hạn nhận ứng tuyển</h3>
+            <input class="tm28-date-input" type="date" name="deadline" th:value="${deadline}" aria-label="Hạn nhận ứng tuyển">
+          </div>
+
+          <div class="tm28-filter-section tm28-filter-last">
+            <h3>Chỉ hiển thị</h3>
+            <label class="tm28-filter-option"><input type="checkbox" name="featuredOnly" value="true" th:checked="${featuredOnly}"><span><i class="fa-solid fa-crown tm28-orange"></i> Dự án nổi bật</span></label>
+            <label class="tm28-filter-option"><input type="checkbox" name="verifiedOnly" value="true" th:checked="${verifiedOnly}"><span><i class="fa-solid fa-circle-check tm28-blue"></i> Client đã xác minh</span></label>
+            <label class="tm28-filter-option"><input type="checkbox" name="escrowOnly" value="true" th:checked="${escrowOnly}"><span><i class="fa-solid fa-shield-halved tm28-green"></i> Đã ký quỹ</span></label>
+            <label class="tm28-filter-option" sec:authorize="hasRole('FREELANCER')"><input type="checkbox" name="savedOnly" value="true" th:checked="${savedOnly}"><span><i class="fa-solid fa-bookmark tm28-purple"></i> Dự án đã lưu</span></label>
+          </div>
+
+          <button type="submit" class="tm28-filter-submit"><i class="fa-solid fa-filter"></i> Áp dụng bộ lọc</button>
+        </form>
+      </aside>
+
+      <section class="tm28-result-column">
+        <div class="tm28-list-info">
+          <span><i class="fa-solid fa-circle-check"></i> Đang hiển thị <b th:text="${totalJobs}">375</b> dự án phù hợp</span>
+          <small th:if="${totalJobs > 0}" th:text="|Trang ${currentPage}/${totalPages} · tối đa 10 dự án/trang|">Trang 1/38</small>
+        </div>
+
+        <div class="tm28-jobs" id="tm28Results">
+          <article class="tm28-card" th:each="job : ${jobs}">
+            <div class="tm28-card-icon" th:classappend="${#strings.contains(job.category,'Thiết kế')} ? ' design' : (${#strings.contains(job.category,'Lập trình')} ? ' coding' : (${#strings.contains(job.category,'Marketing')} ? ' marketing' : (${#strings.contains(job.category,'Viết')} ? ' writing' : ' other'))">
+              <span th:text="${job.customer != null and job.customer.companyName != null and !job.customer.companyName.isBlank() ? #strings.substring(job.customer.companyName,0,1) : 'T'}">N</span>
+            </div>
+
+            <div class="tm28-card-copy">
+              <div class="tm28-card-heading">
+                <h2><a th:href="@{/jobs/{id}(id=${job.id})}" th:text="${job.title}">Tên dự án</a></h2>
+                <span class="tm28-badge tm28-featured" th:if="${job.featured}"><i class="fa-solid fa-crown"></i> Nổi bật</span>
+                <span class="tm28-badge tm28-new" th:if="${job.createdAt != null and job.createdAt.isAfter(T(java.time.LocalDateTime).now().minusDays(4))}"><i class="fa-solid fa-sparkles"></i> Mới đăng</span>
+                <span class="tm28-badge tm28-verified" th:if="${job.verified}"><i class="fa-solid fa-shield-halved"></i> Xác minh</span>
+              </div>
+
+              <p class="tm28-description" th:text="${#strings.abbreviate(job.description,240)}">Mô tả dự án</p>
+
+              <div class="tm28-skills" th:if="${job.requiredSkills != null and !job.requiredSkills.isBlank()}">
+                <span th:each="item, st : ${#strings.arraySplit(job.requiredSkills, ',')}" th:if="${st.index < 5}" th:text="${#strings.trim(item)}">Figma</span>
+              </div>
+
+              <div class="tm28-card-meta">
+                <span class="tm28-company"><i class="fa-regular fa-building"></i><strong th:text="${job.customer.companyName != null and !job.customer.companyName.isBlank() ? job.customer.companyName : job.customer.fullName}">Nova Digital</strong></span>
+                <span class="tm28-rating" th:if="${job.customer.rating != null}"><i class="fa-solid fa-star"></i><strong th:text="${#numbers.formatDecimal(job.customer.rating,1,1)}">4.8</strong></span>
+                <span><i class="fa-solid fa-location-dot"></i><span th:text="${job.customer.location != null ? job.customer.location : 'Việt Nam'}">Hồ Chí Minh</span></span>
+                <span><i class="fa-regular fa-clock"></i>Đăng <span th:text="${postedAgo[job.id]}">2 giờ trước</span></span>
+              </div>
+            </div>
+
+            <div class="tm28-card-side">
+              <div class="tm28-price-row">
+                <div class="tm28-budget"><strong th:text="${#numbers.formatDecimal(job.budget,0,'POINT',0,'COMMA') + 'đ'}">5.500.000đ</strong><small th:text="${job.priceType == 'HOURLY' ? 'Theo giờ' : 'Cố định'}">Cố định</small></div>
+                <form sec:authorize="hasRole('FREELANCER')" class="tm28-save" th:action="@{/jobs/{id}/save(id=${job.id})}" method="post">
+                  <input type="hidden" name="returnTo" th:value="${returnTo}">
+                  <button type="submit" th:classappend="${savedJobIds.contains(job.id)} ? ' is-saved' : ''" th:attr="aria-label=${savedJobIds.contains(job.id) ? 'Bỏ lưu dự án' : 'Lưu dự án'},title=${savedJobIds.contains(job.id) ? 'Bỏ lưu' : 'Lưu dự án'}"><i th:class="${savedJobIds.contains(job.id)} ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'"></i></button>
+                </form>
+                <a sec:authorize="isAnonymous()" class="tm28-save-link" th:href="@{/login}" title="Đăng nhập để lưu"><i class="fa-regular fa-bookmark"></i></a>
+              </div>
+
+              <div class="tm28-side-details">
+                <span><i class="fa-regular fa-calendar-check"></i><b th:text="${job.estimatedDurationDays != null ? job.estimatedDurationDays + ' ngày' : 'Trao đổi'}">14 ngày</b> dự kiến</span>
+                <span><i class="fa-solid fa-display"></i><span th:text="${job.workType == 'REMOTE' ? 'Remote' : (job.workType == 'HYBRID' ? 'Hybrid' : 'Onsite')}">Remote</span></span>
+                <span><i class="fa-solid fa-chart-simple"></i><span th:text="${job.experienceLevel == 'SENIOR' ? 'Cao cấp' : (job.experienceLevel == 'MIDDLE' ? 'Trung cấp' : 'Mới bắt đầu')}">Trung cấp</span></span>
+                <span><i class="fa-solid fa-users"></i><span th:text="|${proposalCounts[job.id]} ứng tuyển|">4 ứng tuyển</span></span>
+              </div>
+
+              <div class="tm28-card-actions">
+                <a class="tm28-btn tm28-outline" th:href="@{/jobs/{id}(id=${job.id})}">Xem chi tiết</a>
+                <a class="tm28-btn tm28-solid" sec:authorize="hasRole('FREELANCER')" th:if="${applicationStatusByJobId[job.id] == null}" th:href="@{/jobs/{id}(id=${job.id},apply=true)}">Ứng tuyển</a>
+                <a class="tm28-btn tm28-solid" sec:authorize="isAnonymous()" th:href="@{/login}">Ứng tuyển</a>
+                <span class="tm28-applied" sec:authorize="hasRole('FREELANCER')" th:if="${applicationStatusByJobId[job.id] != null}"><i class="fa-solid fa-check"></i> Đã ứng tuyển</span>
+              </div>
+            </div>
+          </article>
+
+          <div class="tm28-empty" th:if="${#lists.isEmpty(jobs)}">
+            <i class="fa-solid fa-magnifying-glass-minus"></i><h3>Chưa tìm thấy dự án phù hợp</h3><p>Hãy thử từ khóa khác hoặc nới rộng một vài điều kiện lọc.</p><a th:href="@{/jobs}">Xem tất cả dự án</a>
+          </div>
+        </div>
+
+        <nav class="tm28-pagination" th:if="${totalPages > 1}" aria-label="Phân trang">
+          <a th:classappend="${currentPage == 1} ? ' disabled' : ''" th:href="@{/jobs(page=${currentPage - 1},q=${q},category=${category},skill=${skill},minBudget=${minBudget},maxBudget=${maxBudget},deadline=${deadline},workType=${workType},levelGroup=${levelGroup},duration=${duration},featuredOnly=${featuredOnly},verifiedOnly=${verifiedOnly},escrowOnly=${escrowOnly},savedOnly=${savedOnly},sort=${sort})}" aria-label="Trang trước"><i class="fa-solid fa-chevron-left"></i></a>
+          <th:block th:each="p : ${paginationItems}">
+            <span class="tm28-dots" th:if="${p == 0}">…</span>
+            <a th:if="${p != 0}" th:text="${p}" th:classappend="${p == currentPage} ? ' active' : ''" th:href="@{/jobs(page=${p},q=${q},category=${category},skill=${skill},minBudget=${minBudget},maxBudget=${maxBudget},deadline=${deadline},workType=${workType},levelGroup=${levelGroup},duration=${duration},featuredOnly=${featuredOnly},verifiedOnly=${verifiedOnly},escrowOnly=${escrowOnly},savedOnly=${savedOnly},sort=${sort})}">1</a>
+          </th:block>
+          <a th:classappend="${currentPage == totalPages} ? ' disabled' : ''" th:href="@{/jobs(page=${currentPage + 1},q=${q},category=${category},skill=${skill},minBudget=${minBudget},maxBudget=${maxBudget},deadline=${deadline},workType=${workType},levelGroup=${levelGroup},duration=${duration},featuredOnly=${featuredOnly},verifiedOnly=${verifiedOnly},escrowOnly=${escrowOnly},savedOnly=${savedOnly},sort=${sort})}" aria-label="Trang tiếp"><i class="fa-solid fa-chevron-right"></i></a>
+        </nav>
+      </section>
+    </div>
+  </div>
+</main>
+
+<script th:replace="~{fragments/common :: scripts}"></script>
+<script th:src="@{/js/jobs-board-v28.js}"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+
+.idea/
+**/.idea/
+target/
+**/target/
+*.class
+*.iml
+.env
+.env.*
+!.env.example
+*.log
+uploads/
+**/uploads/

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Việc quan tâm')}"></head>
+<body class="market-body freelancer-workspace-page freelancer-saved-page">
+<aside th:replace="~{fragments/common :: marketSidebar('saved')}"></aside>
+<header th:replace="~{fragments/common :: marketTopbar('jobs')}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+
+<main class="market-main">
+  <div class="market-page-shell freelancer-shell-v23">
+    <div class="market-breadcrumb"><a th:href="@{/}">Trang chủ</a><span>/</span><b>Việc quan tâm</b></div>
+
+    <section class="freelancer-page-heading">
+      <div>
+        <span class="freelancer-page-kicker"><i class="fa-regular fa-heart"></i> CƠ HỘI ĐÃ LƯU</span>
+        <h1>Việc quan tâm</h1>
+        <p>Lưu những dự án phù hợp để theo dõi, so sánh và ứng tuyển ngay khi bạn sẵn sàng làm việc.</p>
+      </div>
+      <a class="market-primary-action freelancer-cta" th:href="@{/jobs}"><i class="fa-solid fa-magnifying-glass"></i> Tìm thêm dự án</a>
+    </section>
+
+    <section class="saved-jobs-v23" th:if="${!#lists.isEmpty(savedJobs)}">
+      <article class="saved-job-v23" th:each="s : ${savedJobs}">
+        <span class="saved-job-icon"><i class="fa-regular fa-bookmark"></i></span>
+
+        <div class="saved-job-main">
+          <span class="project-category" th:text="${s.job.category != null ? s.job.category : 'Danh mục dự án'}">Danh mục</span>
+          <h2><a th:href="@{/jobs/{id}(id=${s.job.id})}" th:text="${s.job.title}">Công việc</a></h2>
+          <p th:text="${#strings.abbreviate(s.job.description, 190)}">Mô tả dự án</p>
+
+          <div class="market-project-skills" th:if="${s.job.requiredSkills != null and !#strings.isEmpty(s.job.requiredSkills)}">
+            <span th:each="k, kStat : ${#strings.arraySplit(s.job.requiredSkills, ',')}" th:if="${kStat.index < 5}" th:text="${#strings.trim(k)}">Skill</span>
+          </div>
+
+          <small>
+            <i class="fa-solid fa-building"></i>
+            <span th:text="${s.job.customer.companyName != null ? s.job.customer.companyName : s.job.customer.fullName}">Nova Digital</span>
+          </small>
+        </div>
+
+        <div class="saved-job-side">
+          <strong th:text="${#numbers.formatDecimal(s.job.budget,0,'POINT',0,'COMMA')} + 'đ'">0đ</strong>
+          <span th:text="${s.job.workType != null ? s.job.workType : 'REMOTE'}">REMOTE</span>
+          <a class="freelancer-btn soft" th:href="@{/jobs/{id}(id=${s.job.id})}">Xem chi tiết</a>
+          <form th:action="@{/freelancer/saved-jobs/{id}/remove(id=${s.job.id})}" method="post">
+            <button class="freelancer-btn danger" type="submit">Bỏ lưu</button>
+          </form>
+        </div>
+      </article>
+    </section>
+
+    <section class="freelancer-empty-card" th:if="${#lists.isEmpty(savedJobs)}">
+      <span><i class="fa-regular fa-heart"></i></span>
+      <h3>Chưa có công việc quan tâm</h3>
+      <p>Mở trang Tìm dự án và nhấn nút lưu để xây dựng danh sách cơ hội phù hợp với kỹ năng của bạn.</p>
+      <a class="market-primary-action" th:href="@{/jobs}"><i class="fa-solid fa-magnifying-glass"></i> Tìm dự án</a>
+    </section>
+  </div>
+</main>
+
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body>
+</html>

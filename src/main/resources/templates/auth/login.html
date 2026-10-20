@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Đăng nhập')}"></head>
+<body class="market-auth-body">
+<div class="auth-market-backdrop" aria-hidden="true">
+  <aside th:replace="~{fragments/common :: marketSidebar('home')}"></aside>
+  <header th:replace="~{fragments/common :: marketTopbar('home')}"></header>
+  <main class="market-main">
+    <div class="market-page-shell auth-preview">
+      <div class="auth-preview-hero"></div>
+      <div class="auth-preview-grid"><div></div><div></div><div></div></div>
+    </div>
+  </main>
+</div>
+
+<div class="market-auth-overlay">
+  <section class="market-auth-modal market-auth-login-modal">
+    <a class="market-auth-close" th:href="@{/}" aria-label="Đóng cửa sổ đăng nhập"><i class="fa-solid fa-xmark"></i></a>
+    <aside class="market-auth-brand-panel">
+      <a class="market-auth-logo" th:href="@{/}">
+        <span class="market-brand-symbol"><i></i><i></i></span>
+        <b>TalentMatch</b>
+      </a>
+
+      <div class="market-auth-brand-content">
+        <h1>Việc freelance xịn,<br>thanh toán an toàn</h1>
+        <p>Tham gia marketplace để ứng tuyển dự án hoặc thuê freelancer uy tín.</p>
+        <ul>
+          <li><span>✓</span>Escrow bảo vệ mọi khoản thanh toán</li>
+          <li><span>✓</span>Hàng chục dự án mới mỗi tuần</li>
+          <li><span>✓</span>Đánh giá minh bạch hai chiều</li>
+        </ul>
+      </div>
+
+      <div class="market-auth-brand-stats">
+        <span><b>33+</b><small>dự án mở</small></span>
+        <span><b>100%</b><small>an toàn</small></span>
+        <span><b>24/7</b><small>hỗ trợ</small></span>
+      </div>
+    </aside>
+
+    <div class="market-auth-form-panel">
+      <div th:replace="~{fragments/common :: flash}"></div>
+
+      <div class="market-auth-tabs">
+        <a class="active" th:href="@{/login}">Đăng nhập</a>
+        <a th:href="@{/register}">Đăng ký</a>
+      </div>
+
+      <form th:action="@{/login}" method="post" class="market-auth-form">
+        <label>
+          <span class="market-field-label">Email <em>*</em></span>
+          <input type="email" name="email" required autofocus placeholder="Nhập email">
+        </label>
+
+        <label>
+          <span class="market-field-label">Mật khẩu <em>*</em></span>
+          <div class="market-password-field">
+            <input id="login-password" type="password" name="password" required placeholder="Nhập mật khẩu">
+            <button type="button" data-password-toggle="login-password" aria-label="Hiện hoặc ẩn mật khẩu"><i class="fa-regular fa-eye-slash"></i></button>
+          </div>
+        </label>
+
+        <div class="market-auth-forgot-row">
+          <a th:href="@{/forgot-password}">Quên mật khẩu?</a>
+        </div>
+
+        <div class="market-auth-error" th:if="${param.error}">Email hoặc mật khẩu không đúng, hoặc tài khoản chưa xác thực email.</div>
+        <button class="market-auth-submit" type="submit">Đăng nhập</button>
+
+      </form>
+    </div>
+  </section>
+</div>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body>
+</html>

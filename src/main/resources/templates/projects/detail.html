@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Chi tiết dự án')}"></head>
+<body class="market-body freelancer-workspace-page project-detail-v23 client-workspace">
+<aside th:replace="~{fragments/common :: marketSidebar('projects')}"></aside>
+<header th:replace="~{fragments/common :: marketTopbar('jobs')}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="market-main"><div class="market-page-shell freelancer-shell-v23">
+  <div class="market-breadcrumb"><a th:href="@{/}">Trang chủ</a><span>/</span><a th:href="${currentUser.role.name() == 'ADMIN' ? '/admin/projects' : (currentUser.role.name() == 'FREELANCER' ? '/freelancer/projects' : '/customer/projects')}">Dự án</a><span>/</span><b th:text="${project.application.job.title}">Chi tiết</b></div>
+
+  <section class="project-detail-hero-v23">
+    <div class="project-detail-title"><span class="freelancer-page-kicker"><i class="fa-solid fa-diagram-project"></i> KHÔNG GIAN DỰ ÁN</span><h1 th:text="${project.application.job.title}">Dự án</h1><p><b th:text="${project.customer.companyName != null ? project.customer.companyName : project.customer.fullName}">Khách hàng</b><span>↔</span><b th:text="${project.freelancer.fullName}">Freelancer</b></p></div>
+    <div class="project-detail-value"><span class="freelancer-status project-status" th:classappend="${#strings.toLowerCase(project.status.name())}" th:text="${project.status}">IN_PROGRESS</span><small>Giá trị hợp đồng</small><strong th:text="${#numbers.formatDecimal(project.totalPrice,0,'POINT',0,'COMMA')} + 'đ'">20.000.000đ</strong></div>
+  </section>
+
+  <section class="client-contract-box"><h2><i class="fa-solid fa-file-signature"></i> Thỏa thuận dự án (Project Agreement)</h2>
+  <p>Phạm vi: <b th:text="${project.application.job.title}">Dự án</b>. Giá hợp đồng bằng Proposal đã chọn, thời gian <b th:text="${project.application.estimatedDays}+' ngày'">Ngày</b>.
+  Xác nhận của hai bên được lưu vào database; chỉ thanh toán sau khi cả hai đã ký xác nhận.</p>
+  <div class="client-contract-sigs"><span th:text="${project.customerSignedAt != null ? '✓ Client đã xác nhận' : '○ Chờ Client xác nhận'}">Client</span>
+  <span th:text="${project.freelancerSignedAt != null ? '✓ Freelancer đã xác nhận' : '○ Chờ Freelancer xác nhận'}">Freelancer</span>
+  <form th:if="${project.status.name()!='CANCELLED' and project.status.name()!='COMPLETED' and project.status.name()!='DISPUTED' and ((currentUser.role.name()=='CUSTOMER' and project.customerSignedAt==null) or (currentUser.role.name()=='FREELANCER' and project.freelancerSignedAt==null))}" th:action="@{/projects/{id}/agreement/sign(id=${project.id})}" method="post"><button type="submit" class="client-btn primary">Xác nhận thỏa thuận của tôi</button></form></div></section>
+  <section class="project-overview-v23"><article><i class="fa-solid fa-building"></i><div><small>Khách hàng</small><b th:text="${project.customer.companyName != null ? project.customer.companyName : project.customer.fullName}"></b></div></article><article><i class="fa-regular fa-calendar"></i><div><small>Ngày bắt đầu</small><b th:text="${#temporals.format(project.createdAt,'dd/MM/yyyy')}"></b></div></article><article><i class="fa-regular fa-clock"></i><div><small>Thời gian dự kiến</small><b th:text="${project.application.estimatedDays + ' ngày'}"></b></div></article><article><i class="fa-solid fa-layer-group"></i><div><small>Milestone</small><b th:text="${#lists.size(milestones)}">0</b></div></article></section>
+
+  <div class="project-detail-layout-v23">
+    <div class="project-detail-main-v23">
+      <section class="project-section-v23">
+        <header><span class="section-icon purple"><i class="fa-solid fa-flag-checkered"></i></span><div><h2>Milestone & bàn giao</h2><p>Freelancer bắt đầu công việc sau khi milestone được thanh toán và gửi nghiệm thu khi hoàn tất.</p></div></header>
+        <div class="milestone-list-v23" th:if="${!#lists.isEmpty(milestones)}">
+          <article class="milestone-v23" th:each="m,mStat:${milestones}">
+            <span class="milestone-number" th:text="${mStat.count}">1</span>
+            <div class="milestone-main"><div class="milestone-title-row"><h3 th:text="${m.title}">Milestone</h3><span class="freelancer-status" th:classappend="${#strings.toLowerCase(m.status.name())}" th:text="${m.status}"></span></div><p th:text="${m.description}">Mô tả</p><div class="milestone-meta-v23"><span><i class="fa-solid fa-coins"></i><b th:text="${#numbers.formatDecimal(m.amount,0,'POINT',0,'COMMA')} + 'đ'"></b></span><span><i class="fa-regular fa-calendar"></i><b th:text="${m.deadline != null ? #temporals.format(m.deadline,'dd/MM/yyyy') : 'Linh hoạt'}"></b></span></div>
+              <div class="milestone-actions-v23">
+                <a th:if="${currentUser.role.name()=='CUSTOMER' and project.isAgreementSigned() and m.status.name()=='UNPAID'}" class="freelancer-btn soft" th:href="@{/payment/project/{id}(id=${project.id},milestoneId=${m.id})}">Thanh toán Milestone</a>
+                <form th:if="${currentUser.role.name()=='FREELANCER' and m.status.name()=='PAID'}" th:action="@{/projects/{id}/milestones/{mid}/status(id=${project.id},mid=${m.id})}" method="post"><input type="hidden" name="status" value="IN_PROGRESS"><button class="freelancer-btn soft" type="submit"><i class="fa-solid fa-play"></i> Bắt đầu thực hiện</button></form>
+                <form th:if="${currentUser.role.name()=='FREELANCER' and m.status.name()=='IN_PROGRESS'}" th:action="@{/projects/{id}/milestones/{mid}/status(id=${project.id},mid=${m.id})}" method="post"><input type="hidden" name="status" value="SUBMITTED"><button class="freelancer-btn soft" type="submit"><i class="fa-solid fa-paper-plane"></i> Gửi nghiệm thu</button></form>
+                <form th:if="${currentUser.role.name()=='CUSTOMER' and m.status.name()=='SUBMITTED'}" th:action="@{/projects/{id}/milestones/{mid}/revision(id=${project.id},mid=${m.id})}" method="post" class="client-revision-form"><input name="note" minlength="10" required placeholder="Nội dung cần chỉnh sửa (≥ 10 ký tự)" style="padding:10px;border:1px solid #d6d9e7;border-radius:8px;max-width:320px"><button class="freelancer-btn soft">Yêu cầu chỉnh sửa</button></form>
+                <p class="client-small-note" th:if="${m.revisionNote!=null}" th:text="'Góp ý gần nhất: '+${m.revisionNote}">Yêu cầu sửa</p>
+                <form th:if="${currentUser.role.name()=='CUSTOMER' and m.status.name()=='SUBMITTED'}" th:action="@{/projects/{id}/milestones/{mid}/status(id=${project.id},mid=${m.id})}" method="post" data-confirm="Xác nhận nghiệm thu Milestone và giải ngân?"><input type="hidden" name="status" value="COMPLETED"><button class="freelancer-btn success" type="submit"><i class="fa-solid fa-check"></i> Nghiệm thu & giải ngân</button></form>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="project-inline-empty" th:if="${#lists.isEmpty(milestones)}"><i class="fa-solid fa-layer-group"></i><div><b>Dự án chưa chia Milestone</b><p>Khách hàng có thể thanh toán toàn dự án hoặc tạo milestone để quản lý theo giai đoạn.</p></div></div>
+      </section>
+
+      <section class="project-section-v23" th:if="${currentUser.role.name()=='CUSTOMER' and project.status.name()!='COMPLETED' and project.status.name()!='CANCELLED'}">
+        <header><span class="section-icon blue"><i class="fa-solid fa-plus"></i></span><div><h2>Tạo Milestone</h2><p>Tổng giá trị các milestone không được vượt giá trị hợp đồng.</p></div></header>
+        <form class="milestone-form-v23" th:action="@{/projects/{id}/milestones(id=${project.id})}" method="post"><label><span>Tên Milestone</span><input name="title" required placeholder="Ví dụ: Thiết kế UI hoàn chỉnh"></label><label><span>Giá trị (VNĐ)</span><input type="number" min="1" name="amount" required></label><label><span>Deadline</span><input type="date" name="deadline"></label><label class="wide"><span>Mô tả sản phẩm bàn giao</span><input name="description" placeholder="Nội dung cần bàn giao"></label><button class="freelancer-btn soft" type="submit">+ Thêm Milestone</button></form>
+      </section>
+
+      <section class="project-section-v23" id="payments">
+        <header><span class="section-icon green"><i class="fa-solid fa-receipt"></i></span><div><h2>Lịch sử thanh toán</h2><p>Trạng thái thanh toán và giải ngân của từng hạng mục.</p></div></header>
+        <div class="history-table-wrap"><table><thead><tr><th>Mã giao dịch</th><th>Hạng mục</th><th>Số tiền</th><th>Phương thức</th><th>Trạng thái</th><th>Thời gian</th></tr></thead><tbody><tr th:each="pay:${payments}"><td th:text="${pay.transactionCode}"></td><td th:text="${pay.milestone != null ? pay.milestone.title : 'Toàn dự án'}"></td><td><b th:text="${#numbers.formatDecimal(pay.amount,0,'POINT',0,'COMMA')} + 'đ'"></b></td><td th:text="${pay.method}"></td><td><span class="freelancer-status" th:classappend="${#strings.toLowerCase(pay.status.name())}" th:text="${pay.status}"></span></td><td th:text="${#temporals.format(pay.createdAt,'dd/MM/yyyy HH:mm')}"></td></tr></tbody></table></div>
+      </section>
+    </div>
+
+    <aside class="project-detail-side-v23">
+      <section class="project-side-card-v23 dark"><h3><i class="fa-solid fa-shield-halved"></i> Thanh toán & nghiệm thu</h3><p>Tiền chỉ được ghi nhận là doanh thu Freelancer sau khi khách hàng nghiệm thu và hệ thống giải ngân.</p><a th:if="${currentUser.role.name()=='CUSTOMER' and project.isAgreementSigned() and #lists.isEmpty(milestones) and project.status.name()=='WAITING_PAYMENT'}" class="project-lime-btn" th:href="@{/payment/project/{id}(id=${project.id})}">Thanh toán toàn dự án</a><form th:if="${currentUser.role.name()=='CUSTOMER' and #lists.isEmpty(milestones) and project.status.name()=='IN_PROGRESS'}" th:action="@{/projects/{id}/complete(id=${project.id})}" method="post" data-confirm="Xác nhận hoàn thành và giải ngân cho Freelancer?"><button class="project-lime-btn" type="submit">Nghiệm thu & giải ngân</button></form></section>
+      <section class="project-side-card-v23"><h3><i class="fa-regular fa-file-lines"></i> Proposal đã chốt</h3><div class="side-metric"><span>Báo giá</span><b th:text="${#numbers.formatDecimal(project.application.proposedPrice,0,'POINT',0,'COMMA')} + 'đ'"></b></div><div class="side-metric"><span>Thời gian dự kiến</span><b th:text="${project.application.estimatedDays + ' ngày'}"></b></div><p th:text="${project.application.proposal}"></p></section>
+    </aside>
+  <section class="client-extra-panel" th:if="${project.status.name()=='COMPLETED'}"><h2>Đánh giá sau khi hoàn thành</h2><p class="client-small-note">Mỗi bên có thể đánh giá đối tác một lần (1–5 sao).</p>
+  <form th:if="${!alreadyReviewed and currentUser.role.name()!='ADMIN'}" th:action="@{/projects/{id}/reviews(id=${project.id})}" method="post"><label>Chất lượng hợp tác<select name="rating" required><option value="5">★★★★★ (5 sao)</option><option value="4">★★★★☆ (4 sao)</option><option value="3">★★★☆☆ (3 sao)</option><option value="2">★★☆☆☆ (2 sao)</option><option value="1">★☆☆☆☆ (1 sao)</option></select></label><label>Nhận xét<textarea name="comment" minlength="10" required placeholder="Mô tả trải nghiệm hợp tác"></textarea></label><button class="client-btn primary">Gửi đánh giá</button></form>
+  <p th:if="${alreadyReviewed}">✓ Bạn đã gửi đánh giá cho dự án này.</p>
+  <div th:each="rv:${reviews}" class="client-answer"><b th:text="${rv.author.fullName}+' · '+${rv.rating}+' / 5 sao'">Người đánh giá</b><p th:text="${rv.comment}">Nhận xét</p></div></section>
+  <section class="client-extra-panel" th:if="${currentUser.role.name()!='ADMIN'}"><h2><i class="fa-solid fa-flag"></i> Báo cáo vấn đề với đối tác</h2><p class="client-small-note">Báo cáo được lưu và chuyển đến bảng kiểm duyệt Admin.</p><form th:action="@{/projects/{id}/reports(id=${project.id})}" method="post"><label>Lý do<select name="reason" required><option value="Không thực hiện cam kết">Không thực hiện cam kết</option><option value="Chất lượng không đạt">Chất lượng không đạt</option><option value="Hành vi không phù hợp">Hành vi không phù hợp</option><option value="Khác">Khác</option></select></label><label>Mô tả sự việc<textarea name="description" minlength="15" required placeholder="Mô tả chi tiết để Admin kiểm tra"></textarea></label><button class="client-btn outline">Gửi báo cáo</button></form></section>
+  <section class="client-extra-panel" th:if="${currentUser.role.name()!='ADMIN' and project.status.name()!='COMPLETED' and project.status.name()!='CANCELLED' and project.status.name()!='DISPUTED'}"><h2>Yêu cầu hủy hợp đồng</h2><p class="client-small-note">Nếu có tiền đã thanh toán, dự án chuyển sang tranh chấp để Admin xử lý trên ledger DEMO. Không tự hoàn tiền thực tế.</p><form th:action="@{/projects/{id}/cancel(id=${project.id})}" method="post" data-confirm="Gửi yêu cầu hủy hợp đồng?"><label>Lý do yêu cầu hủy<textarea name="reason" required minlength="10" placeholder="Nêu rõ lý do hủy"></textarea></label><button class="client-btn danger-outline">Gửi yêu cầu hủy</button></form></section>
+  </div>
+</div></main>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body></html>

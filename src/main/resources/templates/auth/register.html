@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Đăng ký')}"></head>
+<body class="market-auth-body">
+<div class="auth-market-backdrop" aria-hidden="true">
+  <aside th:replace="~{fragments/common :: marketSidebar('home')}"></aside>
+  <header th:replace="~{fragments/common :: marketTopbar('home')}"></header>
+  <main class="market-main">
+    <div class="market-page-shell auth-preview">
+      <div class="auth-preview-hero"></div>
+      <div class="auth-preview-grid"><div></div><div></div><div></div></div>
+    </div>
+  </main>
+</div>
+
+<div class="market-auth-overlay">
+  <section class="market-auth-modal market-auth-register-modal">
+    <a class="market-auth-close" th:href="@{/}" aria-label="Đóng cửa sổ đăng ký"><i class="fa-solid fa-xmark"></i></a>
+    <aside class="market-auth-brand-panel">
+      <a class="market-auth-logo" th:href="@{/}">
+        <span class="market-brand-symbol"><i></i><i></i></span>
+        <b>TalentMatch</b>
+      </a>
+
+      <div class="market-auth-brand-content">
+        <h1>Việc freelance xịn,<br>thanh toán an toàn</h1>
+        <p>Tham gia marketplace để ứng tuyển dự án hoặc thuê freelancer uy tín.</p>
+        <ul>
+          <li><span>✓</span>Escrow bảo vệ mọi khoản thanh toán</li>
+          <li><span>✓</span>Hàng chục dự án mới mỗi tuần</li>
+          <li><span>✓</span>Đánh giá minh bạch hai chiều</li>
+        </ul>
+      </div>
+
+      <div class="market-auth-brand-stats">
+        <span><b>33+</b><small>dự án mở</small></span>
+        <span><b>100%</b><small>an toàn</small></span>
+        <span><b>24/7</b><small>hỗ trợ</small></span>
+      </div>
+    </aside>
+
+    <div class="market-auth-form-panel">
+      <div th:replace="~{fragments/common :: flash}"></div>
+
+      <div class="market-auth-tabs">
+        <a th:href="@{/login}">Đăng nhập</a>
+        <a class="active" th:href="@{/register}">Đăng ký</a>
+      </div>
+
+      <form th:action="@{/register}" method="post" class="market-auth-form market-register-form">
+        <div class="market-form-two">
+          <label><span class="market-field-label">Tên <em>*</em></span><input name="firstName" required placeholder="Nhập tên"></label>
+          <label><span class="market-field-label">Họ <em>*</em></span><input name="lastName" required placeholder="Nhập họ"></label>
+        </div>
+
+        <label><span class="market-field-label">Email <em>*</em></span><input type="email" name="email" required placeholder="Nhập email"></label>
+
+        <div class="market-form-two">
+          <label>
+            <span class="market-field-label">Mật khẩu <em>*</em></span>
+            <div class="market-password-field">
+              <input id="reg-password" type="password" name="password" required minlength="8" placeholder="Nhập mật khẩu">
+              <button type="button" data-password-toggle="reg-password" aria-label="Hiện hoặc ẩn mật khẩu"><i class="fa-regular fa-eye-slash"></i></button>
+            </div>
+          </label>
+          <label>
+            <span class="market-field-label">Xác nhận mật khẩu <em>*</em></span>
+            <div class="market-password-field">
+              <input id="reg-confirm" type="password" name="confirmPassword" required minlength="8" placeholder="Nhập lại mật khẩu">
+              <button type="button" data-password-toggle="reg-confirm" aria-label="Hiện hoặc ẩn mật khẩu"><i class="fa-regular fa-eye-slash"></i></button>
+            </div>
+          </label>
+        </div>
+
+        <input type="hidden" name="role" th:value="${preselectedRole == 'CUSTOMER' ? 'CUSTOMER' : 'FREELANCER'}">
+
+        <label class="market-terms"><input type="checkbox" name="agreeTerms" value="true" required> Tôi đồng ý với <a href="#">điều khoản &amp; điều kiện</a></label>
+        <button class="market-auth-submit" type="submit">Tham gia ngay</button>
+
+      </form>
+    </div>
+  </section>
+</div>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body>
+</html>

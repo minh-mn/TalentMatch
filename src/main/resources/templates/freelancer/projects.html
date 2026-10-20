@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Dự án của tôi')}"></head>
+<body class="market-body freelancer-workspace-page freelancer-projects-page">
+<aside th:replace="~{fragments/common :: marketSidebar('projects')}"></aside>
+<header th:replace="~{fragments/common :: marketTopbar('jobs')}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+
+<main class="market-main">
+  <div class="market-page-shell freelancer-shell-v23">
+    <div class="market-breadcrumb"><a th:href="@{/}">Trang chủ</a><span>/</span><b>Dự án đang làm</b></div>
+
+    <section class="freelancer-page-heading">
+      <div>
+        <span class="freelancer-page-kicker"><i class="fa-solid fa-diagram-project"></i> QUẢN LÝ DỰ ÁN</span>
+        <h1>Dự án của tôi</h1>
+        <p>Theo dõi tiến độ, milestone, nghiệm thu và khoản tiền đã được giải ngân.</p>
+      </div>
+      <a class="market-primary-action freelancer-cta" th:href="@{/jobs}"><i class="fa-solid fa-magnifying-glass"></i> Tìm thêm dự án</a>
+    </section>
+
+    <section class="freelancer-kpi-grid project-kpis">
+      <a th:href="@{/freelancer/projects(status='ALL',q=${q})}" th:classappend="${status == 'ALL'} ? ' active' : ''">
+        <span class="kpi-icon purple"><i class="fa-solid fa-layer-group"></i></span>
+        <div><strong th:text="${totalCount}">0</strong><small>Tổng dự án</small></div>
+      </a>
+      <a th:href="@{/freelancer/projects(status='WAITING_PAYMENT',q=${q})}" th:classappend="${status == 'WAITING_PAYMENT'} ? ' active' : ''">
+        <span class="kpi-icon amber"><i class="fa-solid fa-wallet"></i></span>
+        <div><strong th:text="${paymentPendingCount}">0</strong><small>Chờ thanh toán</small></div>
+      </a>
+      <a th:href="@{/freelancer/projects(status='ACTIVE',q=${q})}" th:classappend="${status == 'ACTIVE'} ? ' active' : ''">
+        <span class="kpi-icon blue"><i class="fa-solid fa-spinner"></i></span>
+        <div><strong th:text="${activeCount}">0</strong><small>Đang thực hiện</small></div>
+      </a>
+      <a th:href="@{/freelancer/projects(status='WAITING_ACCEPTANCE',q=${q})}" th:classappend="${status == 'WAITING_ACCEPTANCE'} ? ' active' : ''">
+        <span class="kpi-icon amber"><i class="fa-regular fa-clock"></i></span>
+        <div><strong th:text="${waitingCount}">0</strong><small>Chờ nghiệm thu</small></div>
+      </a>
+      <a th:href="@{/freelancer/projects(status='COMPLETED',q=${q})}" th:classappend="${status == 'COMPLETED'} ? ' active' : ''">
+        <span class="kpi-icon green"><i class="fa-solid fa-circle-check"></i></span>
+        <div><strong th:text="${completedCount}">0</strong><small>Đã hoàn thành</small></div>
+      </a>
+      <article class="kpi-revenue">
+        <span class="kpi-icon mint"><i class="fa-solid fa-coins"></i></span>
+        <div><strong th:text="${#numbers.formatDecimal(revenue,0,'POINT',0,'COMMA')} + 'đ'">0đ</strong><small>Doanh thu đã giải ngân</small></div>
+      </article>
+    </section>
+
+    <section class="freelancer-toolbar-card">
+      <form class="freelancer-search-form" th:action="@{/freelancer/projects}" method="get">
+        <input type="hidden" name="status" th:value="${status}">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input name="q" th:value="${q}" placeholder="Tìm theo dự án, khách hàng hoặc lĩnh vực...">
+        <button type="submit">Tìm</button>
+      </form>
+      <div class="freelancer-filter-pills">
+        <a th:href="@{/freelancer/projects(status='ALL',q=${q})}" th:classappend="${status == 'ALL'} ? ' active' : ''">Tất cả</a>
+        <a th:href="@{/freelancer/projects(status='WAITING_PAYMENT',q=${q})}" th:classappend="${status == 'WAITING_PAYMENT'} ? ' active' : ''">Chờ thanh toán</a>
+        <a th:href="@{/freelancer/projects(status='ACTIVE',q=${q})}" th:classappend="${status == 'ACTIVE'} ? ' active' : ''">Đang làm</a>
+        <a th:href="@{/freelancer/projects(status='WAITING_ACCEPTANCE',q=${q})}" th:classappend="${status == 'WAITING_ACCEPTANCE'} ? ' active' : ''">Chờ nghiệm thu</a>
+        <a th:href="@{/freelancer/projects(status='COMPLETED',q=${q})}" th:classappend="${status == 'COMPLETED'} ? ' active' : ''">Hoàn thành</a>
+        <a th:href="@{/freelancer/projects(status='CANCELLED',q=${q})}" th:classappend="${status == 'CANCELLED'} ? ' active' : ''">Đã hủy</a>
+      </div>
+    </section>
+
+    <section class="freelancer-project-list" th:if="${!#lists.isEmpty(projects)}">
+      <article class="freelancer-project-card" th:each="p : ${projects}">
+        <div class="project-card-accent" th:classappend="${#strings.toLowerCase(p.status.name())}"></div>
+        <div class="project-card-body">
+          <div class="project-card-header">
+            <div class="project-company-mark" th:text="${#strings.substring(p.customer.companyName != null ? p.customer.companyName : p.customer.fullName,0,1)}">N</div>
+            <div class="project-title-block">
+              <span class="project-category" th:text="${p.application.job.category}">Lập trình & CNTT</span>
+              <h2><a th:href="@{/projects/{id}(id=${p.id})}" th:text="${p.application.job.title}">Tên dự án</a></h2>
+              <p><b th:text="${p.customer.companyName != null ? p.customer.companyName : p.customer.fullName}">Khách hàng</b> · bắt đầu <span th:text="${#temporals.format(p.createdAt,'dd/MM/yyyy')}">01/10/2026</span></p>
+            </div>
+            <span class="freelancer-status project-status" th:classappend="${#strings.toLowerCase(p.status.name())}">
+              <span th:text="${p.status.name() == 'WAITING_PAYMENT' ? 'Chờ thanh toán' : (p.status.name() == 'IN_PROGRESS' ? 'Đang thực hiện' : (p.status.name() == 'WAITING_ACCEPTANCE' ? 'Chờ nghiệm thu' : (p.status.name() == 'COMPLETED' ? 'Đã hoàn thành' : (p.status.name() == 'CANCELLED' ? 'Đã hủy' : 'Tranh chấp'))))}">Trạng thái</span>
+            </span>
+          </div>
+
+          <div class="project-progress-wrap">
+            <div class="project-progress-head"><span>Tiến độ dự án</span><b th:text="${progress[p.id] + '%'}">60%</b></div>
+            <div class="project-progress-track"><i th:style="|width:${progress[p.id]}%|"></i></div>
+          </div>
+
+          <div class="project-info-grid">
+            <div><small>Giá trị hợp đồng</small><strong th:text="${#numbers.formatDecimal(p.totalPrice,0,'POINT',0,'COMMA')} + 'đ'">20.000.000đ</strong></div>
+            <div><small>Đã giải ngân</small><strong class="green" th:text="${#numbers.formatDecimal(received[p.id],0,'POINT',0,'COMMA')} + 'đ'">10.000.000đ</strong></div>
+            <div><small>Milestone</small><strong th:text="${milestoneDone[p.id] + '/' + milestoneTotal[p.id]}">1/2</strong></div>
+            <div><small>Việc tiếp theo</small><strong th:text="${nextMilestone[p.id]}">Bàn giao</strong></div>
+          </div>
+
+          <div class="project-card-actions">
+            <a class="freelancer-btn soft" th:href="@{/projects/{id}(id=${p.id})}"><i class="fa-solid fa-arrow-up-right-from-square"></i> Mở không gian dự án</a>
+            <a class="freelancer-btn ghost" th:href="@{/freelancer/history#payments}"><i class="fa-solid fa-receipt"></i> Xem giao dịch</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="freelancer-empty-card" th:if="${#lists.isEmpty(projects)}">
+      <span><i class="fa-solid fa-briefcase"></i></span>
+      <h3>Chưa có dự án phù hợp bộ lọc</h3>
+      <p>Khi proposal được khách hàng chấp nhận, hợp đồng và milestone sẽ xuất hiện ở đây.</p>
+      <a class="market-primary-action" th:href="@{/jobs}">Khám phá dự án</a>
+    </section>
+  </div>
+</main>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body>
+</html>
