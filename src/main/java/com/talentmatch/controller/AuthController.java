@@ -47,25 +47,31 @@ public class AuthController {
             if (!password.equals(confirmPassword)) {
                 throw new IllegalArgumentException("Mật khẩu xác nhận không khớp.");
             }
-            String token = users.register(finalName, email, password, role);
-            String link = mail.sendVerification(email, token);
-            ra.addFlashAttribute("success", "Đăng ký thành công. Hãy kiểm tra email để xác nhận tài khoản trước khi đăng nhập.");
-            return "redirect:/login";
+            users.registerAndSend(finalName, email, password, role);
+            ra.addFlashAttribute("success", "Đã gửi OTP 6 số đến email. Mã có hiệu lực 5 phút.");
+            return "redirect:/verify-otp?email=" + java.net.URLEncoder.encode(email.trim(), java.nio.charset.StandardCharsets.UTF_8);
         } catch (Exception e) {
             ra.addFlashAttribute("error", e.getMessage());
             return "redirect:/register";
         }
     }
 
-    @GetMapping("/verify")
-    public String verify(@RequestParam String token, RedirectAttributes ra) {
+    @GetMapping("/verify-otp")
+    public String verifyOtpPage(@RequestParam String email, Model model) {
+        model.addAttribute("email", email);
+        return "auth/verify-otp";
+    }
+
+    @PostMapping("/verify-otp")
+    public String verifyOtp(@RequestParam String email, @RequestParam String otp, RedirectAttributes ra) {
         try {
-            users.verify(token);
-            ra.addFlashAttribute("success", "Xác nhận email thành công. Bạn có thể đăng nhập.");
+            users.verifyOtp(email, otp);
+            ra.addFlashAttribute("success", "Xác minh thành công! Tài khoản đã được tạo. Hãy đăng nhập.");
+            return "redirect:/login";
         } catch (Exception e) {
             ra.addFlashAttribute("error", e.getMessage());
+            return "redirect:/verify-otp?email=" + java.net.URLEncoder.encode(email, java.nio.charset.StandardCharsets.UTF_8);
         }
-        return "redirect:/login";
     }
 
     @GetMapping("/forgot-password")
@@ -75,45 +81,35 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     public String forgot(@RequestParam String email, RedirectAttributes ra) {
-        String token;
         try {
-            token = users.createResetToken(email);
-        } catch (Exception ignored) {
-            // Không tiết lộ email có tồn tại trong hệ thống hay không.
-            ra.addFlashAttribute("success", "Nếu email tồn tại, hệ thống đã gửi liên kết đặt lại mật khẩu.");
-            return "redirect:/forgot-password";
-        }
-
-        try {
-            mail.sendResetPassword(email, token);
-            ra.addFlashAttribute("success", "Liên kết đặt lại mật khẩu đã được gửi tới email của bạn.");
+            users.requestPasswordReset(email);
+            ra.addFlashAttribute("success", "Nếu email đã đăng ký và được xác minh, OTP 6 số đã được gửi (hiệu lực 5 phút).");
+            return "redirect:/reset-password?email=" + java.net.URLEncoder.encode(email, java.nio.charset.StandardCharsets.UTF_8);
         } catch (Exception e) {
-            ra.addFlashAttribute("error", "Không thể gửi email: " + e.getMessage());
+            ra.addFlashAttribute("error", "Không gửi được email. Vui lòng kiểm tra cấu hình SMTP hoặc thử lại sau.");
         }
         return "redirect:/forgot-password";
     }
 
     @GetMapping("/reset-password")
-    public String reset(@RequestParam String token, Model model) {
-        model.addAttribute("token", token);
+    public String reset(@RequestParam String email, Model model) {
+        model.addAttribute("email", email);
         return "auth/reset-password";
     }
 
     @PostMapping("/reset-password")
-    public String reset(@RequestParam String token,
-                        @RequestParam String password,
-                        @RequestParam String confirmPassword,
+    public String reset(@RequestParam String email, @RequestParam String otp,
+                        @RequestParam String password, @RequestParam String confirmPassword,
                         RedirectAttributes ra) {
         try {
-            if (!password.equals(confirmPassword)) {
+            if (!password.equals(confirmPassword))
                 throw new IllegalArgumentException("Mật khẩu xác nhận không khớp.");
-            }
-            users.resetPassword(token, password);
+            users.resetPasswordWithOtp(email, otp, password);
             ra.addFlashAttribute("success", "Đặt lại mật khẩu thành công. Hãy đăng nhập.");
             return "redirect:/login";
         } catch (Exception e) {
             ra.addFlashAttribute("error", e.getMessage());
-            return "redirect:/reset-password?token=" + token;
+            return "redirect:/reset-password?email=" + java.net.URLEncoder.encode(email, java.nio.charset.StandardCharsets.UTF_8);
         }
     }
 

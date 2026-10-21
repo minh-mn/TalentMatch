@@ -1,77 +1,26 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/common :: head('Đăng nhập')}"></head>
-<body class="market-auth-body">
-<div class="auth-market-backdrop" aria-hidden="true">
-  <aside th:replace="~{fragments/common :: marketSidebar('home')}"></aside>
-  <header th:replace="~{fragments/common :: marketTopbar('home')}"></header>
-  <main class="market-main">
-    <div class="market-page-shell auth-preview">
-      <div class="auth-preview-hero"></div>
-      <div class="auth-preview-grid"><div></div><div></div><div></div></div>
-    </div>
-  </main>
-</div>
-
-<div class="market-auth-overlay">
-  <section class="market-auth-modal market-auth-login-modal">
-    <a class="market-auth-close" th:href="@{/}" aria-label="Đóng cửa sổ đăng nhập"><i class="fa-solid fa-xmark"></i></a>
-    <aside class="market-auth-brand-panel">
-      <a class="market-auth-logo" th:href="@{/}">
-        <span class="market-brand-symbol"><i></i><i></i></span>
-        <b>TalentMatch</b>
-      </a>
-
-      <div class="market-auth-brand-content">
-        <h1>Việc freelance xịn,<br>thanh toán an toàn</h1>
-        <p>Tham gia marketplace để ứng tuyển dự án hoặc thuê freelancer uy tín.</p>
-        <ul>
-          <li><span>✓</span>Escrow bảo vệ mọi khoản thanh toán</li>
-          <li><span>✓</span>Hàng chục dự án mới mỗi tuần</li>
-          <li><span>✓</span>Đánh giá minh bạch hai chiều</li>
-        </ul>
-      </div>
-
-      <div class="market-auth-brand-stats">
-        <span><b>33+</b><small>dự án mở</small></span>
-        <span><b>100%</b><small>an toàn</small></span>
-        <span><b>24/7</b><small>hỗ trợ</small></span>
-      </div>
-    </aside>
-
-    <div class="market-auth-form-panel">
-      <div th:replace="~{fragments/common :: flash}"></div>
-
-      <div class="market-auth-tabs">
-        <a class="active" th:href="@{/login}">Đăng nhập</a>
-        <a th:href="@{/register}">Đăng ký</a>
-      </div>
-
-      <form th:action="@{/login}" method="post" class="market-auth-form">
-        <label>
-          <span class="market-field-label">Email <em>*</em></span>
-          <input type="email" name="email" required autofocus placeholder="Nhập email">
-        </label>
-
-        <label>
-          <span class="market-field-label">Mật khẩu <em>*</em></span>
-          <div class="market-password-field">
-            <input id="login-password" type="password" name="password" required placeholder="Nhập mật khẩu">
-            <button type="button" data-password-toggle="login-password" aria-label="Hiện hoặc ẩn mật khẩu"><i class="fa-regular fa-eye-slash"></i></button>
-          </div>
-        </label>
-
-        <div class="market-auth-forgot-row">
-          <a th:href="@{/forgot-password}">Quên mật khẩu?</a>
-        </div>
-
-        <div class="market-auth-error" th:if="${param.error}">Email hoặc mật khẩu không đúng, hoặc tài khoản chưa xác thực email.</div>
-        <button class="market-auth-submit" type="submit">Đăng nhập</button>
-
-      </form>
-    </div>
+<body class="auth-compact-page">
+<main class="auth-compact-scene">
+  <section class="auth-compact-card auth-login-card">
+    <a class="auth-compact-close" th:href="@{/}" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></a>
+    <h2 class="auth-compact-brand"><span>Talent</span>Match</h2>
+    <h1>Chào mừng trở lại</h1>
+    <p class="auth-compact-intro">Đăng nhập để tiếp tục khám phá các dự án<br>và cơ hội trên TalentMatch.</p>
+    <div th:replace="~{fragments/common :: flash}"></div>
+    <nav class="auth-compact-tabs"><a class="active" th:href="@{/login}">Đăng nhập</a><a th:href="@{/register}">Đăng ký</a></nav>
+    <form method="post" th:action="@{/login}" class="auth-compact-form">
+      <label><strong>Email <em>*</em></strong><span class="auth-compact-input"><i class="fa-regular fa-envelope"></i><input type="email" name="email" placeholder="Nhập email của bạn" required autofocus></span></label>
+      <label><strong>Mật khẩu <em>*</em></strong><span class="auth-compact-input"><i class="fa-solid fa-lock"></i><input id="auth-login-pass" type="password" name="password" placeholder="Nhập mật khẩu" required><button type="button" data-password-toggle="auth-login-pass" aria-label="Hiện mật khẩu"><i class="fa-regular fa-eye-slash"></i></button></span></label>
+      <div class="auth-compact-line"><label><input type="checkbox" name="remember-me" checked> Ghi nhớ đăng nhập</label><a th:href="@{/forgot-password}">Quên mật khẩu?</a></div>
+      <p class="auth-error" th:if="${param.error}">Email hoặc mật khẩu sai, hoặc tài khoản chưa xác minh.</p>
+      <button class="auth-compact-primary" type="submit">Đăng nhập <i class="fa-solid fa-arrow-right"></i></button>
+    </form>
+    <div class="auth-compact-or"><span>Hoặc</span></div>
+    <p class="auth-compact-bottom">Chưa có tài khoản? <a th:href="@{/register}">Đăng ký ngay</a></p>
   </section>
-</div>
+</main>
 <script th:replace="~{fragments/common :: scripts}"></script>
 </body>
 </html>

@@ -1,86 +1,30 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/common :: head('Đăng ký')}"></head>
-<body class="market-auth-body">
-<div class="auth-market-backdrop" aria-hidden="true">
-  <aside th:replace="~{fragments/common :: marketSidebar('home')}"></aside>
-  <header th:replace="~{fragments/common :: marketTopbar('home')}"></header>
-  <main class="market-main">
-    <div class="market-page-shell auth-preview">
-      <div class="auth-preview-hero"></div>
-      <div class="auth-preview-grid"><div></div><div></div><div></div></div>
-    </div>
-  </main>
-</div>
-
-<div class="market-auth-overlay">
-  <section class="market-auth-modal market-auth-register-modal">
-    <a class="market-auth-close" th:href="@{/}" aria-label="Đóng cửa sổ đăng ký"><i class="fa-solid fa-xmark"></i></a>
-    <aside class="market-auth-brand-panel">
-      <a class="market-auth-logo" th:href="@{/}">
-        <span class="market-brand-symbol"><i></i><i></i></span>
-        <b>TalentMatch</b>
-      </a>
-
-      <div class="market-auth-brand-content">
-        <h1>Việc freelance xịn,<br>thanh toán an toàn</h1>
-        <p>Tham gia marketplace để ứng tuyển dự án hoặc thuê freelancer uy tín.</p>
-        <ul>
-          <li><span>✓</span>Escrow bảo vệ mọi khoản thanh toán</li>
-          <li><span>✓</span>Hàng chục dự án mới mỗi tuần</li>
-          <li><span>✓</span>Đánh giá minh bạch hai chiều</li>
-        </ul>
-      </div>
-
-      <div class="market-auth-brand-stats">
-        <span><b>33+</b><small>dự án mở</small></span>
-        <span><b>100%</b><small>an toàn</small></span>
-        <span><b>24/7</b><small>hỗ trợ</small></span>
-      </div>
-    </aside>
-
-    <div class="market-auth-form-panel">
-      <div th:replace="~{fragments/common :: flash}"></div>
-
-      <div class="market-auth-tabs">
-        <a th:href="@{/login}">Đăng nhập</a>
-        <a class="active" th:href="@{/register}">Đăng ký</a>
-      </div>
-
-      <form th:action="@{/register}" method="post" class="market-auth-form market-register-form">
-        <div class="market-form-two">
-          <label><span class="market-field-label">Tên <em>*</em></span><input name="firstName" required placeholder="Nhập tên"></label>
-          <label><span class="market-field-label">Họ <em>*</em></span><input name="lastName" required placeholder="Nhập họ"></label>
-        </div>
-
-        <label><span class="market-field-label">Email <em>*</em></span><input type="email" name="email" required placeholder="Nhập email"></label>
-
-        <div class="market-form-two">
-          <label>
-            <span class="market-field-label">Mật khẩu <em>*</em></span>
-            <div class="market-password-field">
-              <input id="reg-password" type="password" name="password" required minlength="8" placeholder="Nhập mật khẩu">
-              <button type="button" data-password-toggle="reg-password" aria-label="Hiện hoặc ẩn mật khẩu"><i class="fa-regular fa-eye-slash"></i></button>
-            </div>
-          </label>
-          <label>
-            <span class="market-field-label">Xác nhận mật khẩu <em>*</em></span>
-            <div class="market-password-field">
-              <input id="reg-confirm" type="password" name="confirmPassword" required minlength="8" placeholder="Nhập lại mật khẩu">
-              <button type="button" data-password-toggle="reg-confirm" aria-label="Hiện hoặc ẩn mật khẩu"><i class="fa-regular fa-eye-slash"></i></button>
-            </div>
-          </label>
-        </div>
-
-        <input type="hidden" name="role" th:value="${preselectedRole == 'CUSTOMER' ? 'CUSTOMER' : 'FREELANCER'}">
-
-        <label class="market-terms"><input type="checkbox" name="agreeTerms" value="true" required> Tôi đồng ý với <a href="#">điều khoản &amp; điều kiện</a></label>
-        <button class="market-auth-submit" type="submit">Tham gia ngay</button>
-
-      </form>
-    </div>
+<body class="auth-compact-page">
+<main class="auth-compact-scene">
+  <section class="auth-compact-card auth-register-card">
+    <a class="auth-compact-close" th:href="@{/}" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></a>
+    <h2 class="auth-compact-brand"><span>Talent</span>Match</h2>
+    <h1>Tạo tài khoản mới</h1>
+    <p class="auth-compact-intro">Tham gia TalentMatch để tìm kiếm cơ hội phù hợp<br>hoặc tuyển dụng freelancer tài năng.</p>
+    <div th:replace="~{fragments/common :: flash}"></div>
+    <nav class="auth-compact-tabs"><a th:href="@{/login}">Đăng nhập</a><a class="active" th:href="@{/register}">Đăng ký</a></nav>
+    <form method="post" th:action="@{/register}" class="auth-compact-form auth-compact-register-form">
+      <div><strong class="auth-compact-field-label">Bạn là <em>*</em></strong><div class="auth-compact-roles">
+        <label class="auth-compact-role"><input type="radio" name="role" value="FREELANCER" th:checked="${preselectedRole != 'CUSTOMER'}"><span class="auth-role-icon"><i class="fa-solid fa-user"></i></span><span><b>Freelancer</b><small>Tìm việc, nhận dự án</small></span></label>
+        <label class="auth-compact-role"><input type="radio" name="role" value="CUSTOMER" th:checked="${preselectedRole == 'CUSTOMER'}"><span class="auth-role-icon"><i class="fa-solid fa-building"></i></span><span><b>Doanh nghiệp</b><small>Đăng dự án, tuyển người</small></span></label>
+      </div></div>
+      <div class="auth-compact-two"><label><strong>Họ <em>*</em></strong><span class="auth-compact-input"><input name="lastName" required placeholder="Nhập họ"></span></label><label><strong>Tên <em>*</em></strong><span class="auth-compact-input"><input name="firstName" required placeholder="Nhập tên"></span></label></div>
+      <label><strong>Email <em>*</em></strong><span class="auth-compact-input"><i class="fa-regular fa-envelope"></i><input type="email" name="email" required placeholder="Nhập email của bạn"></span></label>
+      <div class="auth-compact-two"><label><strong>Mật khẩu <em>*</em></strong><span class="auth-compact-input"><i class="fa-solid fa-lock"></i><input id="auth-register-pass" type="password" name="password" minlength="8" required placeholder="Nhập mật khẩu"><button type="button" data-password-toggle="auth-register-pass" aria-label="Hiện mật khẩu"><i class="fa-regular fa-eye-slash"></i></button></span></label><label><strong>Xác nhận mật khẩu <em>*</em></strong><span class="auth-compact-input"><i class="fa-solid fa-lock"></i><input id="auth-register-confirm" type="password" name="confirmPassword" minlength="8" required placeholder="Nhập lại mật khẩu"><button type="button" data-password-toggle="auth-register-confirm" aria-label="Hiện mật khẩu"><i class="fa-regular fa-eye-slash"></i></button></span></label></div>
+      <label class="auth-compact-terms"><input type="checkbox" name="agreeTerms" value="true" required><span>Tôi đồng ý với <a href="#" onclick="return false">Điều khoản sử dụng</a> và <a href="#" onclick="return false">Chính sách bảo mật</a> của TalentMatch.</span></label>
+      <button class="auth-compact-primary" type="submit">Tạo tài khoản <i class="fa-solid fa-arrow-right"></i></button>
+      <p class="auth-compact-hint">OTP 6 số được gửi đến email và có hiệu lực trong 5 phút. Chỉ tạo tài khoản sau khi xác minh.</p>
+    </form>
+    <p class="auth-compact-bottom">Đã có tài khoản? <a th:href="@{/login}">Đăng nhập ngay</a></p>
   </section>
-</div>
+</main>
 <script th:replace="~{fragments/common :: scripts}"></script>
 </body>
 </html>

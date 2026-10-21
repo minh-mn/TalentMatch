@@ -1,0 +1,13 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Xác minh OTP')}"></head>
+<body class="auth-compact-page"><main class="auth-compact-scene"><section class="auth-compact-card auth-forgot-card">
+<a class="auth-compact-close" th:href="@{/}" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></a>
+<h2 class="auth-compact-brand"><span>Talent</span>Match</h2><h1>Xác minh email</h1>
+<p class="auth-compact-intro">Nhập OTP 6 số được gửi đến <strong th:text="${email}">email</strong>.<br>Mã hết hạn sau 5 phút và chỉ dùng một lần.</p>
+<div th:replace="~{fragments/common :: flash}"></div>
+<form method="post" th:action="@{/verify-otp}" class="auth-compact-form">
+<input type="hidden" name="email" th:value="${email}">
+<label><strong>OTP 6 số <em>*</em></strong><span class="auth-compact-input"><i class="fa-solid fa-key"></i><input type="text" name="otp" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" autocomplete="one-time-code" required autofocus placeholder="Nhập mã gồm 6 chữ số"></span></label>
+<button class="auth-compact-primary" type="submit">Xác minh tài khoản <i class="fa-solid fa-arrow-right"></i></button></form>
+<p class="auth-compact-bottom">Mã đã hết hạn? <a th:href="@{/register}">Đăng ký lại để nhận mã mới</a></p>
+</section></main><script th:replace="~{fragments/common :: scripts}"></script></body></html>

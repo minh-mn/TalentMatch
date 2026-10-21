@@ -1,37 +1,46 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/common :: head('Tìm dự án')}"></head>
-<body class="market-body talent-job-board-v28 talent-job-board-reference">
+<body class="market-body fm-dashboard tm35-jobs">
+<link rel="stylesheet" th:href="@{/css/jobs-board-reference.css}">
+<link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
+<link rel="stylesheet" th:href="@{/css/jobs-board-v35.css}">
+
 <aside th:replace="~{fragments/common :: marketSidebar('jobs')}"></aside>
-<header th:replace="~{fragments/common :: marketTopbar('jobs')}"></header>
+<header class="fm-header">
+  <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+  <form class="fm-header-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" th:value="${q}" placeholder="Tìm dự án, kỹ năng, khách hàng..." aria-label="Tìm dự án"><button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+  <nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/#pricing}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a href="#jb-categories">Danh mục nghề</a></nav>
+  <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i></a><a th:href="@{/freelancer/dashboard}" aria-label="Trang chủ"><i class="fa-regular fa-message"></i></a><a class="fm-mini-avatar" th:href="@{/freelancer/profile}" th:text="${currentUser != null ? #strings.substring(currentUser.fullName,0,1) : 'F'}">F</a><span th:text="${currentUser != null ? currentUser.fullName : 'Khách'}">Freelancer</span></div>
+</header>
 <div th:replace="~{fragments/common :: flash}"></div>
 
-<main class="market-main jb-main">
+<main class="fm-main jb-main">
   <div class="jb-wrap">
-    <div class="jb-crumb"><a th:href="@{/}">Trang chủ</a><span>/</span><strong>Tìm dự án</strong></div>
-    <div class="jb-intro">
-      <div><h1>Tìm dự án <span>phù hợp</span></h1><p><b th:text="${allJobsCount}">0</b> dự án đang mở · Cập nhật theo dữ liệu hệ thống</p></div>
-      <label class="jb-sort">Sắp xếp <select id="tm28Sort" aria-label="Sắp xếp dự án"><option value="latest" th:selected="${sort == 'latest'}">Mới nhất</option><option value="match_desc" th:selected="${sort == 'match_desc'}" sec:authorize="hasRole('FREELANCER')">Phù hợp nhất</option><option value="budget_desc" th:selected="${sort == 'budget_desc'}">Ngân sách cao nhất</option><option value="budget_asc" th:selected="${sort == 'budget_asc'}">Ngân sách thấp nhất</option><option value="deadline_asc" th:selected="${sort == 'deadline_asc'}">Hạn gần nhất</option><option value="competition_asc" th:selected="${sort == 'competition_asc'}">Ít cạnh tranh</option></select></label>
-    </div>
-    <nav class="tm28-categories jb-categories" aria-label="Danh mục dự án">
+    <section class="tm35-hero" aria-label="Tìm dự án phù hợp">
+      <img th:src="@{/images/talentmatch-projects-banner.png}" alt="Hàng ngàn dự án chất lượng đang chờ bạn" />
+      <a class="tm35-banner-link" href="#jb-search" aria-label="Tìm dự án ngay"></a>
+    </section>
+    <div class="tm35-toolbar"><div><strong>Khám phá dự án</strong><small th:text="|${allJobsCount} dự án đang mở trên TalentMatch|">Dự án đang mở</small></div><label class="jb-sort">Sắp xếp <select id="tm28Sort" aria-label="Sắp xếp dự án"><option value="latest" th:selected="${sort == 'latest'}">Mới nhất</option><option value="match_desc" th:selected="${sort == 'match_desc'}" sec:authorize="hasRole('FREELANCER')">Phù hợp nhất</option><option value="budget_desc" th:selected="${sort == 'budget_desc'}">Ngân sách cao nhất</option><option value="budget_asc" th:selected="${sort == 'budget_asc'}">Ngân sách thấp nhất</option><option value="deadline_asc" th:selected="${sort == 'deadline_asc'}">Hạn gần nhất</option><option value="competition_asc" th:selected="${sort == 'competition_asc'}">Ít cạnh tranh</option></select></label></div>
+    <nav id="jb-categories" class="tm28-categories jb-categories" aria-label="Danh mục dự án">
       <a th:href="@{/jobs}" data-category="" th:classappend="${category == null or category.isBlank()} ? ' active' : ''"><i class="fa-solid fa-cube"></i>Tất cả</a>
       <a th:each="c : ${categories}" th:href="@{/jobs(category=${c})}" th:attr="data-category=${c}" th:classappend="${category == c} ? ' active' : ''"><i class="fa-regular fa-folder"></i><span th:text="${c}">Danh mục</span></a>
     </nav>
     <form id="tm28Search" class="jb-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input id="tm28Query" name="q" type="search" th:value="${q}" placeholder="Tìm theo tên dự án, mô tả, kỹ năng..." aria-label="Tìm theo từ khóa"><button type="submit">Tìm kiếm</button></form>
-    <div class="jb-layout">
+    <div id="jb-search" class="jb-layout">
       <section class="jb-results">
-        <div class="jb-result-count">Đang hiển thị <strong th:text="${totalJobs}">0</strong> dự án phù hợp <span th:if="${totalPages > 1}" th:text="|· Trang ${currentPage}/${totalPages}|"></span></div>
+        <div class="jb-result-count">Đang hiển thị <strong th:text="${totalJobs}">0</strong> dự án phù hợp <span th:if="${totalJobs > 0}" th:text="|· Hiển thị ${#lists.size(jobs)} công việc/trang|">· 5 công việc/trang</span> <span th:if="${totalPages > 1}" th:text="|· Trang ${currentPage}/${totalPages}|"></span></div>
         <div class="jb-list">
           <article class="jb-card" th:each="job : ${jobs}">
             <div class="jb-card-top"><div class="jb-job-icon"><i class="fa-solid fa-code" th:if="${job.category != null and job.category.contains('Lập trình')}"></i><i class="fa-solid fa-briefcase" th:unless="${job.category != null and job.category.contains('Lập trình')}"></i></div>
               <div class="jb-card-head"><h2><a th:href="@{/jobs/{id}(id=${job.id})}" th:text="${job.title}">Tên dự án</a></h2><div class="jb-badges"><span class="jb-hot" th:if="${job.featured}"><i class="fa-solid fa-bolt"></i> HOT</span><span class="jb-escrow" th:if="${job.escrowFunded}"><i class="fa-solid fa-shield"></i> ĐÃ KÝ QUỸ</span><span class="jb-verified" th:if="${job.verified}"><i class="fa-solid fa-check-circle"></i> XÁC MINH</span></div></div>
-              <form sec:authorize="hasRole('FREELANCER')" class="jb-save" th:action="@{/jobs/{id}/save(id=${job.id})}" method="post"><input name="returnTo" type="hidden" th:value="${returnTo}"><button type="submit" th:attr="aria-label=${savedJobIds.contains(job.id) ? 'Bỏ lưu dự án' : 'Lưu dự án'}" th:classappend="${savedJobIds.contains(job.id)} ? ' selected' : ''"><i th:class="${savedJobIds.contains(job.id)} ? 'fa-solid fa-star' : 'fa-regular fa-star'"></i></button></form>
-              <a class="jb-save" sec:authorize="isAnonymous()" th:href="@{/login}" aria-label="Đăng nhập để lưu"><i class="fa-regular fa-star"></i></a>
+              <form sec:authorize="hasRole('FREELANCER')" class="jb-save" th:action="@{/jobs/{id}/save(id=${job.id})}" method="post"><input name="returnTo" type="hidden" th:value="${returnTo}"><button type="submit" th:attr="aria-label=${savedJobIds.contains(job.id) ? 'Bỏ lưu dự án' : 'Lưu dự án'}" th:classappend="${savedJobIds.contains(job.id)} ? ' selected' : ''"><i th:class="${savedJobIds.contains(job.id)} ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'"></i></button></form>
+              <a class="jb-save" sec:authorize="isAnonymous()" th:href="@{/login}" aria-label="Đăng nhập để lưu"><i class="fa-regular fa-bookmark"></i></a>
             </div>
             <p class="jb-description" th:text="${#strings.abbreviate(job.description == null ? '' : job.description,210)}">Mô tả</p>
             <div class="jb-tags" th:if="${job.requiredSkills != null and !job.requiredSkills.isBlank()}"><span th:each="skillItem, st : ${#strings.arraySplit(job.requiredSkills, ',')}" th:if="${st.index < 5}" th:text="${#strings.trim(skillItem)}">Kỹ năng</span></div>
             <div class="jb-card-footer"><div class="jb-company"><span class="jb-avatar"><i class="fa-solid fa-user-tie"></i></span><strong th:text="${job.customer != null ? (job.customer.companyName != null and !job.customer.companyName.isBlank() ? job.customer.companyName : job.customer.fullName) : 'Khách hàng'}">Khách hàng</strong></div><span><i class="fa-regular fa-building"></i><span th:text="${job.priceType == 'HOURLY' ? 'Theo giờ' : 'Dự án giá cố định'}">Cố định</span></span><span><i class="fa-regular fa-comment"></i><span th:text="|${proposalCounts[job.id]} chào giá|">0 chào giá</span></span><span><i class="fa-regular fa-clock"></i><span th:text="${postedAgo[job.id]}">Mới đăng</span></span><div class="jb-price"><strong th:text="${job.budget == null or job.budget.signum() == 0 ? 'Thỏa thuận' : #numbers.formatDecimal(job.budget,0,'POINT',0,'COMMA') + ' ₫'}">Thỏa thuận</strong><small th:text="${job.estimatedDurationDays != null ? 'trọn gói · ' + job.estimatedDurationDays + ' ngày' : 'trọn gói'}">trọn gói</small></div></div>
-            <div class="jb-card-links"><a th:href="@{/jobs/{id}(id=${job.id})}">Xem chi tiết <i class="fa-solid fa-arrow-right"></i></a><span sec:authorize="hasRole('FREELANCER')" th:if="${applicationStatusByJobId[job.id] != null}" class="jb-applied">Đã ứng tuyển</span></div>
+            <div class="jb-card-links"><a class="tm35-apply-action" th:href="@{/jobs/{id}(id=${job.id})}">Ứng tuyển <i class="fa-solid fa-arrow-right"></i></a><a class="tm35-detail-action" th:href="@{/jobs/{id}(id=${job.id})}">Xem chi tiết</a><span sec:authorize="hasRole('FREELANCER')" th:if="${applicationStatusByJobId[job.id] != null}" class="jb-applied">Đã ứng tuyển</span></div>
           </article>
           <div class="jb-empty" th:if="${#lists.isEmpty(jobs)}"><i class="fa-solid fa-magnifying-glass"></i><h2>Không tìm thấy dự án phù hợp</h2><p>Hãy thử bỏ bớt điều kiện hoặc dùng từ khóa khác.</p><a th:href="@{/jobs}">Xóa bộ lọc</a></div>
         </div>
@@ -43,15 +52,15 @@
         <section class="jb-filter-group"><h3>Ngân sách (trọn gói)</h3><label><input type="radio" name="budgetRange" value="all" th:checked="${minBudget == null and maxBudget == null}"> Tất cả <em th:text="${allJobsCount}">0</em></label><label><input type="radio" name="budgetRange" value="under5" th:checked="${minBudget == null and maxBudget != null and maxBudget.intValue() == 4999999}"> Dưới 5 triệu</label><label><input type="radio" name="budgetRange" value="5to15" th:checked="${minBudget != null and minBudget.intValue() == 5000000 and maxBudget != null and maxBudget.intValue() == 15000000}"> 5 – 15 triệu</label><label><input type="radio" name="budgetRange" value="over15" th:checked="${minBudget != null and minBudget.intValue() == 15000001}"> Trên 15 triệu</label><div class="jb-budget-custom"><input type="number" min="0" step="any" name="minBudget" th:value="${minBudget}" placeholder="Từ (₫)" aria-label="Ngân sách tối thiểu"><input type="number" min="0" step="any" name="maxBudget" th:value="${maxBudget}" placeholder="Đến (₫)" aria-label="Ngân sách tối đa"></div></section>
         <section class="jb-filter-group"><h3>Hình thức</h3><label><input type="checkbox" name="workType" value="REMOTE" th:checked="${#lists.contains(workType, 'REMOTE')}"> Remote</label><label><input type="checkbox" name="workType" value="HYBRID" th:checked="${#lists.contains(workType, 'HYBRID')}"> Hybrid</label><label><input type="checkbox" name="workType" value="ONSITE" th:checked="${#lists.contains(workType, 'ONSITE')}"> Onsite</label></section>
         <section class="jb-filter-group"><h3>Cấp độ</h3><label><input type="checkbox" name="levelGroup" value="BEGINNER" th:checked="${#lists.contains(levelGroup,'BEGINNER')}"> Intern / Fresher / Junior</label><label><input type="checkbox" name="levelGroup" value="MIDDLE" th:checked="${#lists.contains(levelGroup,'MIDDLE')}"> Middle – 3–4 năm KN</label><label><input type="checkbox" name="levelGroup" value="SENIOR" th:checked="${#lists.contains(levelGroup,'SENIOR')}"> Senior – từ 5 năm KN</label></section>
-        <section class="jb-filter-group"><h3>Ưu tiên</h3><label><input type="checkbox" name="escrowOnly" value="true" th:checked="${escrowOnly}"> <i class="fa-solid fa-shield-halved"></i> Đã nạp escrow</label><label sec:authorize="hasRole('FREELANCER')"><input type="checkbox" name="savedOnly" value="true" th:checked="${savedOnly}"> <i class="fa-regular fa-star"></i> Tin đã lưu</label><label><input type="checkbox" name="verifiedOnly" value="true" th:checked="${verifiedOnly}"> Client đã xác minh</label><label><input type="checkbox" name="featuredOnly" value="true" th:checked="${featuredOnly}"> Dự án nổi bật</label></section>
+        <section class="jb-filter-group"><h3>Ưu tiên</h3><label><input type="checkbox" name="escrowOnly" value="true" th:checked="${escrowOnly}"> <i class="fa-solid fa-shield-halved"></i> Đã nạp escrow</label><label sec:authorize="hasRole('FREELANCER')"><input type="checkbox" name="savedOnly" value="true" th:checked="${savedOnly}"> <i class="fa-regular fa-bookmark"></i> Tin đã lưu</label><label><input type="checkbox" name="verifiedOnly" value="true" th:checked="${verifiedOnly}"> Client đã xác minh</label><label><input type="checkbox" name="featuredOnly" value="true" th:checked="${featuredOnly}"> Dự án nổi bật</label></section>
         <section class="jb-filter-group"><h3>Kỹ năng</h3><input class="jb-skill" name="skill" th:value="${skill}" placeholder="Java, React, UI/UX..." aria-label="Kỹ năng"></section>
         <button class="jb-apply" type="submit">Áp dụng bộ lọc</button>
       </form></aside>
     </div>
   </div>
+  <footer class="fm-footer"><div class="fm-footer-top"><div class="fm-footer-intro"><a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a><p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p><div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span></div></div><div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a></div><div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/profile}">Tạo hồ sơ</a><a th:href="@{/freelancer/applications}">Ứng tuyển của tôi</a></div><div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/freelancers}">Tìm freelancer</a><a th:href="@{/freelancers}">Khám phá chuyên gia</a></div><div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/freelancer/profile}">Quản lý tài khoản</a></div></div><div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div></footer>
 </main>
 <script th:replace="~{fragments/common :: scripts}"></script>
-<link rel="stylesheet" th:href="@{/css/jobs-board-reference.css}">
 <script th:src="@{/js/jobs-board-reference.js}"></script>
 </body>
 </html>

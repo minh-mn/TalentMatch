@@ -28,7 +28,7 @@ public class MailService {
         String body = "Xin chào,\n\n"
                 + "Bạn vừa đăng ký tài khoản TalentMatch. Nhấn liên kết dưới đây để xác thực email:\n"
                 + link + "\n\n"
-                + "Liên kết có hiệu lực trong 24 giờ. Nếu bạn không thực hiện đăng ký này, hãy bỏ qua email.\n\n"
+                + "Liên kết có hiệu lực trong 5 phút. Nếu bạn không thực hiện đăng ký này, hãy bỏ qua email.\n\n"
                 + "TalentMatch";
         send(email, "Xác nhận tài khoản TalentMatch", body);
         return link;
@@ -39,11 +39,21 @@ public class MailService {
         String body = "Xin chào,\n\n"
                 + "TalentMatch nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Nhấn liên kết dưới đây:\n"
                 + link + "\n\n"
-                + "Liên kết có hiệu lực trong 30 phút và chỉ sử dụng được một lần.\n"
+                + "Liên kết có hiệu lực trong 5 phút và chỉ sử dụng được một lần.\n"
                 + "Nếu bạn không yêu cầu đặt lại mật khẩu, hãy bỏ qua email này.\n\n"
                 + "TalentMatch";
         send(email, "Đặt lại mật khẩu TalentMatch", body);
         return link;
+    }
+
+    public void sendVerificationOtp(String email, String otp) {
+        send(email, "[TalentMatch] Ma OTP xac minh dang ky", "Ma OTP xac minh tai khoan TalentMatch cua ban: " + otp
+                + "\n\nMa chi co hieu luc 5 phut, su dung mot lan. Khong chia se ma nay voi bat ky ai.");
+    }
+
+    public void sendResetOtp(String email, String otp) {
+        send(email, "[TalentMatch] Ma OTP khoi phuc mat khau", "Ma OTP khoi phuc mat khau TalentMatch cua ban: " + otp
+                + "\n\nMa chi co hieu luc 5 phut, su dung mot lan. Neu khong yeu cau, hay bo qua email nay.");
     }
 
     private void send(String to, String subject, String body) {

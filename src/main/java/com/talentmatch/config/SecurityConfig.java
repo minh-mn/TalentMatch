@@ -19,14 +19,15 @@ public class SecurityConfig {
 
             // Admin vào khu quản trị; Freelancer/Customer sau khi đăng nhập quay về Marketplace.
             // Workspace được truy cập riêng từ menu tài khoản / Bảng điều khiển.
-            res.sendRedirect(admin ? "/admin/dashboard" : "/");
+            boolean freelancer=auth.getAuthorities().stream().anyMatch(a->a.getAuthority().equals("ROLE_FREELANCER"));
+            res.sendRedirect(admin ? "/admin/dashboard" : (freelancer ? "/freelancer/dashboard" : "/customer/dashboard"));
         };
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,AuthenticationSuccessHandler successHandler)throws Exception{
         http.authorizeHttpRequests(auth->auth
-                .requestMatchers("/","/login","/register","/verify","/forgot-password","/reset-password","/css/**","/js/**","/images/**","/error").permitAll()
+                .requestMatchers("/","/login","/register","/verify","/verify-otp","/forgot-password","/reset-password","/css/**","/js/**","/images/**","/error").permitAll()
                 .requestMatchers(HttpMethod.GET,"/jobs/**","/freelancers/**","/hire","/projects").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/customer/**").hasRole("CUSTOMER")

@@ -74,8 +74,63 @@ public class TalentWorkflowController {
   ra.addFlashAttribute("success","Đã gửi lời mời đến "+f.getFullName());
  }catch(Exception e){ra.addFlashAttribute("error",e.getMessage());}return "redirect:/customer/invitations";}
  @GetMapping("/customer/invitations") public String myInvites(Authentication a,Model model){User u=me(a);customer(u);model.addAttribute("invitations",invites.findByCustomerOrderByCreatedAtDesc(u));return "customer/invitations";}
- @GetMapping("/freelancer/invitations") public String freelancerInvites(Authentication a,Model m){User u=me(a);
- m.addAttribute("invitations",invites.findByFreelancerOrderByCreatedAtDesc(u));return "freelancer/invitations";}
+ @GetMapping("/freelancer/invitations")
+ public String freelancerInvites(Authentication a, Model m,
+      @RequestParam(defaultValue="") String q,
+      @RequestParam(defaultValue="all") String status,
+      @RequestParam(defaultValue="latest") String sort,
+      @RequestParam(defaultValue="") String budget,
+      @RequestParam(required=false) java.math.BigDecimal minBudget,
+      @RequestParam(required=false) java.math.BigDecimal maxBudget,
+      @RequestParam(defaultValue="") String workType,
+      @RequestParam(defaultValue="") String category,
+      @RequestParam(defaultValue="") String skill,
+      @RequestParam(defaultValue="1") int page) {
+  User u=me(a);
+  if(u.getRole()!=Role.FREELANCER) throw new IllegalArgumentException("Chỉ Freelancer được xem lời mời.");
+  List<JobInvitation> all=invites.findByFreelancerOrderByCreatedAtDesc(u);
+  Map<String,Long> counts=new HashMap<>();
+  counts.put("all",(long)all.size());
+  counts.put("SENT",all.stream().filter(i->"SENT".equals(i.getStatus())).count());
+  counts.put("ACCEPTED",all.stream().filter(i->"ACCEPTED".equals(i.getStatus())).count());
+  counts.put("DECLINED",all.stream().filter(i->"DECLINED".equals(i.getStatus())).count());
+  List<String> categories=all.stream().map(i->i.getJob().getCategory()).filter(Objects::nonNull).distinct().sorted().toList();
+  List<JobInvitation> filtered=all.stream().filter(i->{
+   Job j=i.getJob();String searchable=norm(j.getTitle()+" "+j.getDescription()+" "+j.getRequiredSkills()+" "+i.getMessage()+" "+i.getCustomer().getFullName()+" "+i.getCustomer().getCompanyName());
+   if(!norm(q).isEmpty()&&!searchable.contains(norm(q)))return false;
+   if(!"all".equalsIgnoreCase(status)&&!status.equalsIgnoreCase(i.getStatus()))return false;
+   if(!norm(category).isEmpty()&&!norm(category).equals(norm(j.getCategory())))return false;
+   if(!norm(skill).isEmpty()&&!norm(j.getRequiredSkills()).contains(norm(skill)))return false;
+   if(!norm(workType).isEmpty()&&!norm(workType).equals(norm(String.valueOf(j.getWorkType()))))return false;
+   java.math.BigDecimal amount=j.getBudget();
+   if(amount==null && (!budget.isBlank()||minBudget!=null||maxBudget!=null))return false;
+   if(amount!=null){
+    if(minBudget!=null&&amount.compareTo(minBudget)<0)return false;
+    if(maxBudget!=null&&amount.compareTo(maxBudget)>0)return false;
+    java.math.BigDecimal m5=new java.math.BigDecimal("5000000");
+    java.math.BigDecimal m15=new java.math.BigDecimal("15000000");
+    java.math.BigDecimal m30=new java.math.BigDecimal("30000000");
+    if("under5".equals(budget)&&amount.compareTo(m5)>=0)return false;
+    if("5to15".equals(budget)&&(amount.compareTo(m5)<0||amount.compareTo(m15)>0))return false;
+    if("15to30".equals(budget)&&(amount.compareTo(m15)<=0||amount.compareTo(m30)>0))return false;
+    if("over30".equals(budget)&&amount.compareTo(m30)<=0)return false;
+   }
+   return true;
+  }).collect(Collectors.toCollection(ArrayList::new));
+  if("budget_high".equals(sort))filtered.sort(Comparator.comparing((JobInvitation i)->i.getJob().getBudget(),Comparator.nullsLast(Comparator.reverseOrder())));
+  else if("budget_low".equals(sort))filtered.sort(Comparator.comparing((JobInvitation i)->i.getJob().getBudget(),Comparator.nullsLast(Comparator.naturalOrder())));
+  else if("oldest".equals(sort))filtered.sort(Comparator.comparing(JobInvitation::getCreatedAt,Comparator.nullsLast(Comparator.naturalOrder())));
+  else filtered.sort(Comparator.comparing(JobInvitation::getCreatedAt,Comparator.nullsLast(Comparator.reverseOrder())));
+  int total=filtered.size(),pageSize=5,totalPages=Math.max(1,(total+pageSize-1)/pageSize);
+  int currentPage=Math.max(1,Math.min(page,totalPages));int start=(currentPage-1)*pageSize;
+  m.addAttribute("invitations",filtered.subList(start,Math.min(start+pageSize,total)));
+  m.addAttribute("totalInvitations",total);m.addAttribute("currentPage",currentPage);m.addAttribute("totalPages",totalPages);
+  m.addAttribute("counts",counts);m.addAttribute("categories",categories);
+  m.addAttribute("q",q);m.addAttribute("status",status);m.addAttribute("sort",sort);m.addAttribute("budget",budget);
+  m.addAttribute("minBudget",minBudget);m.addAttribute("maxBudget",maxBudget);m.addAttribute("workType",workType);
+  m.addAttribute("category",category);m.addAttribute("skill",skill);
+  return "freelancer/invitations";
+ }
  @PostMapping("/freelancer/invitations/{id}/answer") @Transactional
  public String answer(@PathVariable Long id,@RequestParam String status,Authentication a,RedirectAttributes ra){
  try{User u=me(a);JobInvitation i=invites.findById(id).orElseThrow();if(!i.getFreelancer().getId().equals(u.getId()))throw new IllegalArgumentException("Bạn không nhận được lời mời này.");

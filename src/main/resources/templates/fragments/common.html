@@ -16,6 +16,10 @@
   <link rel="stylesheet" th:href="@{/css/admin-v30.css}">
   <link rel="stylesheet" th:href="@{/css/layout-stability.css}">
   <link rel="stylesheet" th:href="@{/css/freelancer-pages-v36.css}">
+  <link rel="stylesheet" th:href="@{/css/guest-home-v1.css}">
+  <link rel="stylesheet" th:href="@{/css/auth-redesign.css}">
+  <link rel="stylesheet" th:href="@{/css/auth-compact.css}">
+  <link rel="stylesheet" th:href="@{/css/freelancer-home-v10.css}">
 </head>
 <body>
 
@@ -23,8 +27,17 @@
 <aside class="market-sidebar" th:fragment="marketSidebar(active)">
   <div class="market-brand-wrap">
     <a class="market-brand" th:href="@{/}">
-      <span class="market-brand-symbol"><i></i><i></i></span>
+      <img sec:authorize="hasRole('FREELANCER')" th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch" class="tm33-brand-logo">
+      <span class="market-brand-symbol" sec:authorize="!hasRole('FREELANCER')"><i></i><i></i></span>
       <span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span>
+    </a>
+  </div>
+
+  <div class="tm33-sidebar-profile" sec:authorize="hasRole('FREELANCER')">
+    <a th:href="@{/freelancer/profile}" class="tm33-profile-link">
+      <span class="tm33-profile-avatar" th:text="${#strings.substring(currentUser.fullName,0,1)}">F</span>
+      <span class="tm33-profile-name"><strong th:text="${currentUser.fullName}">Freelancer</strong><small>Freelancer</small></span>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
   </div>
 
@@ -73,7 +86,7 @@
 
       <!-- Freelancer: chỉ hiển thị các chức năng Freelancer thực sự sử dụng -->
       <nav class="market-side-nav market-side-nav-auth" sec:authorize="hasRole('FREELANCER')">
-        <a th:href="@{/}" th:classappend="${active == 'home'} ? ' active' : ''">
+        <a th:href="@{/freelancer/dashboard}" th:classappend="${active == 'home'} ? ' active' : ''">
           <span class="market-side-icon"><i class="fa-solid fa-house"></i></span>Trang chủ
         </a>
         <a th:href="@{/jobs}" th:classappend="${active == 'jobs'} ? ' active' : ''">
@@ -98,6 +111,9 @@
         </a>
         <a th:href="@{/freelancer/profile}" th:classappend="${active == 'profile'} ? ' active' : ''">
           <span class="market-side-icon"><i class="fa-solid fa-user"></i></span>Hồ sơ của tôi
+        </a>
+        <a th:href="@{/freelancer/reports}" th:classappend="${active == 'reports'} ? ' active' : ''">
+          <span class="market-side-icon"><i class="fa-solid fa-chart-column"></i></span>Thống kê &amp; Báo cáo
         </a>
       </nav>
 

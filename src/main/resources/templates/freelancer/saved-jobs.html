@@ -1,63 +1,65 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/common :: head('Việc quan tâm')}"></head>
-<body class="market-body freelancer-workspace-page freelancer-saved-page">
+<body class="market-body fm-dashboard tm-saved-v37">
+<link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
+<link rel="stylesheet" th:href="@{/css/freelancer-saved-v37.css}">
 <aside th:replace="~{fragments/common :: marketSidebar('saved')}"></aside>
-<header th:replace="~{fragments/common :: marketTopbar('jobs')}"></header>
+<header class="fm-header">
+  <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+  <form class="fm-header-search" th:action="@{/freelancer/saved-jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" th:value="${q}" placeholder="Tìm dự án, kỹ năng, khách hàng..." aria-label="Tìm kiếm"><button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+  <nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục nghề</a></nav>
+  <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i></a><a th:href="@{/freelancer/profile}" class="fm-mini-avatar" th:text="${#strings.substring(currentUser.fullName,0,1)}">F</a><span th:text="${currentUser.fullName}">Freelancer</span></div>
+</header>
 <div th:replace="~{fragments/common :: flash}"></div>
-
-<main class="market-main">
-  <div class="market-page-shell freelancer-shell-v23">
-    <div class="market-breadcrumb"><a th:href="@{/}">Trang chủ</a><span>/</span><b>Việc quan tâm</b></div>
-
-    <section class="freelancer-page-heading">
-      <div>
-        <span class="freelancer-page-kicker"><i class="fa-regular fa-heart"></i> CƠ HỘI ĐÃ LƯU</span>
-        <h1>Việc quan tâm</h1>
-        <p>Lưu những dự án phù hợp để theo dõi, so sánh và ứng tuyển ngay khi bạn sẵn sàng làm việc.</p>
-      </div>
-      <a class="market-primary-action freelancer-cta" th:href="@{/jobs}"><i class="fa-solid fa-magnifying-glass"></i> Tìm thêm dự án</a>
-    </section>
-
-    <section class="saved-jobs-v23" th:if="${!#lists.isEmpty(savedJobs)}">
-      <article class="saved-job-v23" th:each="s : ${savedJobs}">
-        <span class="saved-job-icon"><i class="fa-regular fa-bookmark"></i></span>
-
-        <div class="saved-job-main">
-          <span class="project-category" th:text="${s.job.category != null ? s.job.category : 'Danh mục dự án'}">Danh mục</span>
-          <h2><a th:href="@{/jobs/{id}(id=${s.job.id})}" th:text="${s.job.title}">Công việc</a></h2>
-          <p th:text="${#strings.abbreviate(s.job.description, 190)}">Mô tả dự án</p>
-
-          <div class="market-project-skills" th:if="${s.job.requiredSkills != null and !#strings.isEmpty(s.job.requiredSkills)}">
-            <span th:each="k, kStat : ${#strings.arraySplit(s.job.requiredSkills, ',')}" th:if="${kStat.index < 5}" th:text="${#strings.trim(k)}">Skill</span>
+<main class="fm-main">
+<div class="tm37-content">
+  <section class="tm37-banner" aria-label="Việc quan tâm">
+    <img th:src="@{/images/talentmatch-saved-banner.png}" alt="Những công việc bạn đã quan tâm">
+  </section>
+  <section class="tm37-layout">
+    <div class="tm37-maincol">
+      <form id="tm37-search" class="tm37-search" th:action="@{/freelancer/saved-jobs}" method="get">
+        <label><i class="fa-solid fa-magnifying-glass"></i><input name="q" th:value="${q}" placeholder="Tìm theo tên dự án, mô tả, kỹ năng..." aria-label="Từ khóa"></label>
+        <button type="submit">Tìm kiếm</button>
+        <span>Sắp xếp:</span>
+        <select name="sort" aria-label="Sắp xếp" onchange="this.form.submit()"><option value="latest" th:selected="${sort == 'latest'}">Mới nhất</option><option value="budget_desc" th:selected="${sort == 'budget_desc'}">Ngân sách cao nhất</option><option value="budget_asc" th:selected="${sort == 'budget_asc'}">Ngân sách thấp nhất</option></select>
+      </form>
+      <div class="tm37-count">Có <strong th:text="${totalJobs}">0</strong> dự án đã lưu <span th:if="${totalPages > 1}" th:text="|· Trang ${currentPage}/${totalPages}|"></span></div>
+      <section class="tm37-cards">
+        <article class="tm37-card" th:each="s : ${savedJobs}">
+          <div class="tm37-type"><i th:class="${s.job.category != null and s.job.category.contains('Lập trình') ? 'fa-solid fa-code' : (s.job.category != null and s.job.category.contains('Thiết kế') ? 'fa-solid fa-palette' : 'fa-solid fa-briefcase')}"></i></div>
+          <div class="tm37-info">
+            <span class="tm37-category" th:text="${s.job.category}">Danh mục</span>
+            <h2><a th:href="@{/jobs/{id}(id=${s.job.id})}" th:text="${s.job.title}">Tên dự án</a></h2>
+            <p class="tm37-client"><i class="fa-regular fa-user"></i> <span th:text="${s.job.customer.companyName != null and !#strings.isEmpty(s.job.customer.companyName) ? s.job.customer.companyName : s.job.customer.fullName}">Doanh nghiệp</span><span th:if="${s.job.createdAt != null}"> · Đăng <span th:text="${#temporals.format(s.job.createdAt,'dd/MM/yyyy')}"></span></span></p>
+            <p class="tm37-description" th:text="${#strings.abbreviate(s.job.description == null ? '' : s.job.description, 135)}">Mô tả</p>
+            <div class="tm37-tags" th:if="${s.job.requiredSkills != null and !#strings.isEmpty(s.job.requiredSkills)}"><span th:each="k,st : ${#strings.arraySplit(s.job.requiredSkills, ',')}" th:if="${st.index < 4}" th:text="${#strings.trim(k)}">Kỹ năng</span></div>
           </div>
-
-          <small>
-            <i class="fa-solid fa-building"></i>
-            <span th:text="${s.job.customer.companyName != null ? s.job.customer.companyName : s.job.customer.fullName}">Nova Digital</span>
-          </small>
-        </div>
-
-        <div class="saved-job-side">
-          <strong th:text="${#numbers.formatDecimal(s.job.budget,0,'POINT',0,'COMMA')} + 'đ'">0đ</strong>
-          <span th:text="${s.job.workType != null ? s.job.workType : 'REMOTE'}">REMOTE</span>
-          <a class="freelancer-btn soft" th:href="@{/jobs/{id}(id=${s.job.id})}">Xem chi tiết</a>
-          <form th:action="@{/freelancer/saved-jobs/{id}/remove(id=${s.job.id})}" method="post">
-            <button class="freelancer-btn danger" type="submit">Bỏ lưu</button>
-          </form>
-        </div>
-      </article>
-    </section>
-
-    <section class="freelancer-empty-card" th:if="${#lists.isEmpty(savedJobs)}">
-      <span><i class="fa-regular fa-heart"></i></span>
-      <h3>Chưa có công việc quan tâm</h3>
-      <p>Mở trang Tìm dự án và nhấn nút lưu để xây dựng danh sách cơ hội phù hợp với kỹ năng của bạn.</p>
-      <a class="market-primary-action" th:href="@{/jobs}"><i class="fa-solid fa-magnifying-glass"></i> Tìm dự án</a>
-    </section>
-  </div>
+          <div class="tm37-cost"><strong th:text="${s.job.budget == null ? 'Thỏa thuận' : #numbers.formatDecimal(s.job.budget,0,'POINT',0,'COMMA') + 'đ'}">0đ</strong><small><i class="fa-regular fa-clock"></i> <span th:text="${s.job.estimatedDurationDays == null ? 'Linh hoạt' : s.job.estimatedDurationDays + ' ngày'}">7 ngày</span></small><small><i class="fa-solid fa-location-dot"></i> <span th:text="${s.job.workType}">Remote</span></small></div>
+          <div class="tm37-actions"><form th:action="@{/freelancer/saved-jobs/{id}/remove(id=${s.job.id})}" method="post"><button class="tm37-unsave" type="submit" title="Bỏ lưu" aria-label="Bỏ lưu dự án"><i class="fa-solid fa-bookmark"></i></button></form><a class="tm37-apply" th:href="@{/jobs/{id}(id=${s.job.id})}">Ứng tuyển</a><a class="tm37-detail" th:href="@{/jobs/{id}(id=${s.job.id})}">Xem chi tiết</a></div>
+        </article>
+        <div class="tm37-empty" th:if="${#lists.isEmpty(savedJobs)}"><i class="fa-regular fa-heart"></i><h2>Không tìm thấy công việc đã lưu</h2><p>Thử đổi điều kiện tìm kiếm hoặc lưu thêm dự án phù hợp.</p><a th:href="@{/jobs}">Khám phá dự án</a></div>
+      </section>
+      <nav class="tm37-pagination" th:if="${totalPages > 1}" aria-label="Phân trang">
+        <a th:if="${currentPage > 1}" th:href="@{/freelancer/saved-jobs(page=${currentPage - 1},q=${q},sort=${sort},skill=${skill},minBudget=${minBudget},maxBudget=${maxBudget},workType=${workType},levelGroup=${levelGroup})}">‹</a>
+        <a th:each="n : ${#numbers.sequence(1,totalPages)}" th:href="@{/freelancer/saved-jobs(page=${n},q=${q},sort=${sort},skill=${skill},minBudget=${minBudget},maxBudget=${maxBudget},workType=${workType},levelGroup=${levelGroup})}" th:text="${n}" th:classappend="${n == currentPage} ? ' active' : ''">1</a>
+        <a th:if="${currentPage < totalPages}" th:href="@{/freelancer/saved-jobs(page=${currentPage + 1},q=${q},sort=${sort},skill=${skill},minBudget=${minBudget},maxBudget=${maxBudget},workType=${workType},levelGroup=${levelGroup})}">›</a>
+      </nav>
+    </div>
+    <aside class="tm37-filter"><form th:action="@{/freelancer/saved-jobs}" method="get">
+      <input type="hidden" name="q" th:value="${q}"><input type="hidden" name="sort" th:value="${sort}">
+      <div class="tm37-filter-top"><h2>Bộ lọc tìm kiếm</h2><a th:href="@{/freelancer/saved-jobs}">Xóa tất cả</a></div>
+      <fieldset><legend>Ngân sách (VND)</legend><label><input type="radio" name="budgetPreset" value="all" checked> Tất cả</label><label><input type="radio" name="budgetPreset" value="under5"> Dưới 5 triệu</label><label><input type="radio" name="budgetPreset" value="5to15"> 5 – 15 triệu</label><label><input type="radio" name="budgetPreset" value="15to30"> 15 – 30 triệu</label><label><input type="radio" name="budgetPreset" value="over30"> Trên 30 triệu</label><div class="tm37-range"><input id="saved-min" name="minBudget" type="number" min="0" placeholder="Từ (đ)" th:value="${minBudget}"><input id="saved-max" name="maxBudget" type="number" min="0" placeholder="Đến (đ)" th:value="${maxBudget}"></div></fieldset>
+      <fieldset><legend>Hình thức làm việc</legend><label><input type="checkbox" name="workType" value="REMOTE" th:checked="${#lists.contains(workType,'REMOTE')}"> Remote</label><label><input type="checkbox" name="workType" value="HYBRID" th:checked="${#lists.contains(workType,'HYBRID')}"> Hybrid</label><label><input type="checkbox" name="workType" value="ONSITE" th:checked="${#lists.contains(workType,'ONSITE')}"> Onsite</label></fieldset>
+      <fieldset><legend>Cấp độ</legend><label><input type="checkbox" name="levelGroup" value="BEGINNER" th:checked="${#lists.contains(levelGroup,'BEGINNER')}"> Intern / Fresher / Junior</label><label><input type="checkbox" name="levelGroup" value="MIDDLE" th:checked="${#lists.contains(levelGroup,'MIDDLE')}"> Middle – 3–4 năm KN</label><label><input type="checkbox" name="levelGroup" value="SENIOR" th:checked="${#lists.contains(levelGroup,'SENIOR')}"> Senior – từ 5 năm KN</label></fieldset>
+      <fieldset><legend>Kỹ năng</legend><input class="tm37-skill" name="skill" th:value="${skill}" placeholder="Nhập kỹ năng (Java, Figma, Excel...)"></fieldset>
+      <button type="submit" class="tm37-filter-submit">Áp dụng bộ lọc</button>
+    </form></aside>
+  </section>
+</div>
+<footer class="fm-footer"><div class="fm-footer-top"><div class="fm-footer-intro"><a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a><p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p><div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span></div></div><div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a></div><div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/profile}">Tạo hồ sơ</a><a th:href="@{/freelancer/applications}">Ứng tuyển của tôi</a></div><div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/freelancers}">Tìm freelancer</a><a th:href="@{/freelancers}">Khám phá chuyên gia</a></div><div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/freelancer/profile}">Quản lý tài khoản</a></div></div><div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div></footer>
 </main>
-
 <script th:replace="~{fragments/common :: scripts}"></script>
-</body>
-</html>
+<script th:src="@{/js/freelancer-saved-v37.js}"></script>
+</body></html>

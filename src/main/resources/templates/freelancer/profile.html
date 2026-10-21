@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/common :: head('Hồ sơ Freelancer')}"></head>
-<body class="market-body market-profile-page">
+<body class="market-body market-profile-page tm42-profile">
+<link rel="stylesheet" th:href="@{/css/freelancer-v42.css}">
   <aside th:replace="~{fragments/common :: marketSidebar('profile')}"></aside>
   <header th:replace="~{fragments/common :: marketTopbar('profile')}"></header>
   <div th:replace="~{fragments/common :: flash}"></div>
 
   <main class="market-main market-profile-main">
-    <div class="market-profile-shell">
+    <div class="market-profile-shell"><section class="tm42-profile-hero"><img th:src="@{/images/talentmatch-profile-v42-banner.png}" alt="Hồ sơ Freelancer"><button type="button" data-profile-edit-toggle><i class="fa-solid fa-camera"></i> Chỉnh sửa hồ sơ</button></section>
       <div class="profile-page-topline">
         <div class="profile-breadcrumb">
           <a th:href="@{/}">Trang chủ</a><span>/</span><b th:text="${profile.fullName}">Nguyễn Minh Anh</b>
@@ -293,6 +294,6 @@
     </div>
   </main>
 
-  <script th:replace="~{fragments/common :: scripts}"></script>
+  <footer class="tm42-profile-footer"><div><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><strong>TalentMatch</strong><span>© 2026 TalentMatch · Freelance Marketplace</span></div><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/reports}">Thống kê & Báo cáo</a></footer><script th:replace="~{fragments/common :: scripts}"></script>
 </body>
 </html>

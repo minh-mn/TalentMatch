@@ -18,12 +18,12 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model){
-        var featuredJobs = jobs.search(null,null,null,null,null,null,null).stream().limit(4).toList();
+        var featuredJobs = jobs.search(null,null,null,null,null,null,null).stream().limit(5).toList();
         Map<Long, Long> proposalCounts = new HashMap<>();
         featuredJobs.forEach(job -> proposalCounts.put(job.getId(), (long) jobs.applicants(job).size()));
         model.addAttribute("featuredJobs", featuredJobs);
         model.addAttribute("proposalCounts", proposalCounts);
-        model.addAttribute("featuredFreelancers",jobs.freelancers(null).stream().limit(3).toList());
+        model.addAttribute("featuredFreelancers",jobs.freelancers(null).stream().limit(5).toList());
         model.addAttribute("freelancerCount",users.findByRoleOrderByCreatedAtDesc(Role.FREELANCER).size());
         model.addAttribute("customerCount",users.findByRoleOrderByCreatedAtDesc(Role.CUSTOMER).size());
         model.addAttribute("openJobCount",jobRepository.countByStatus(JobStatus.OPEN));

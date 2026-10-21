@@ -82,10 +82,11 @@ public class JobController {
             filtered.sort(Comparator.comparingInt((Job j) -> matchScore(freelancer, j)).reversed()
                     .thenComparing(Job::getCreatedAt, Comparator.nullsLast(Comparator.reverseOrder())));
 
-        int totalPages = Math.max(1, (int) Math.ceil(filtered.size() / 10.0));
+        final int pageSize = 5;
+        int totalPages = Math.max(1, (int) Math.ceil(filtered.size() / (double) pageSize));
         int currentPage = Math.min(totalPages, Math.max(1, page));
-        int from = Math.min((currentPage - 1) * 10, filtered.size());
-        List<Job> pageJobs = filtered.subList(from, Math.min(from + 10, filtered.size()));
+        int from = Math.min((currentPage - 1) * pageSize, filtered.size());
+        List<Job> pageJobs = filtered.subList(from, Math.min(from + pageSize, filtered.size()));
         Map<Long, String> posted = new HashMap<>();
         Map<Long, Long> daysLeft = new HashMap<>();
         Map<Long, Integer> matching = new HashMap<>();
@@ -106,6 +107,7 @@ public class JobController {
 
         model.addAttribute("jobs", pageJobs);
         model.addAttribute("totalJobs", filtered.size());
+        model.addAttribute("pageSize", pageSize);
         model.addAttribute("allJobsCount", allOpen.size());
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("totalPages", totalPages);

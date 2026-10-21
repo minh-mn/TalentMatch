@@ -63,6 +63,8 @@ public class JobService {
         }
 
         return jobs.findByStatusOrderByCreatedAtDesc(JobStatus.OPEN).stream()
+                // Không hiển thị dự án đã quá hạn; dự án không có deadline vẫn hợp lệ.
+                .filter(j -> j.getDeadline() == null || !j.getDeadline().isBefore(LocalDate.now()))
                 .filter(j -> {
                     boolean ok = true;
                     if (!k.isBlank()) ok &= norm(j.getTitle() + " " + j.getDescription() + " " + j.getRequiredSkills()).contains(k);
@@ -70,7 +72,8 @@ public class JobService {
                     if (!s.isBlank()) ok &= norm(j.getRequiredSkills()).contains(s);
                     if (minBudget != null) ok &= j.getBudget() != null && j.getBudget().compareTo(minBudget) >= 0;
                     if (maxBudget != null) ok &= j.getBudget() != null && j.getBudget().compareTo(maxBudget) <= 0;
-                    if (deadline != null && j.getDeadline() != null) ok &= !j.getDeadline().isAfter(deadline);
+                    // Nếu lọc theo thời hạn, dự án không đặt deadline sẽ không phù hợp.
+                    if (deadline != null) ok &= j.getDeadline() != null && !j.getDeadline().isAfter(deadline);
                     if (!workTypeSet.isEmpty()) ok &= workTypeSet.contains(norm(j.getWorkType()).toUpperCase(Locale.ROOT));
                     if (!levelSet.isEmpty()) ok &= matchesLevel(j.getExperienceLevel(), levelSet);
                     return ok;
