@@ -195,7 +195,7 @@ public class UserService implements UserDetailsService {
         if (fullName.length() < 2) throw new IllegalArgumentException("Họ tên không hợp lệ.");
         user.setFullName(fullName);
         user.setPhone(limit(form.getPhone(), 25));
-        user.setAvatar(limit(form.getAvatar(), 500));
+        // Avatar updated only through validated upload endpoint; preserve existing avatar.
         user.setLocation(limit(form.getLocation(), 160));
         user.setWebsite(limit(form.getWebsite(), 255));
         user.setBio(limit(form.getBio(), 4000));

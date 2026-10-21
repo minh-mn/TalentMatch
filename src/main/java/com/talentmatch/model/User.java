@@ -31,6 +31,9 @@ public class User {
     @Column(length = 120) private String field;
     @Column(length = 160) private String location;
     @Column(length = 255) private String website;
+    @Column(length = 500) private String profileCover;
+    @Column(length = 500) private String cvFile;
+    @Column(length = 500) private String profileAvatarFile;
     @Column(length = 255) private String linkedinUrl;
     private Integer experienceYears = 0;
     @Column(precision = 15, scale = 2) private BigDecimal hourlyRate;
@@ -88,6 +91,12 @@ public class User {
     public void setField(String field) { this.field = field; }
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
+    public String getProfileCover(){return profileCover;}
+    public void setProfileCover(String v){profileCover=v;}
+    public String getProfileAvatarFile(){return profileAvatarFile;}
+    public void setProfileAvatarFile(String v){profileAvatarFile=v;}
+    public String getCvFile(){return cvFile;}
+    public void setCvFile(String v){cvFile=v;}
     public String getWebsite() { return website; }
     public void setWebsite(String website) { this.website = website; }
     public String getLinkedinUrl() { return linkedinUrl; }
