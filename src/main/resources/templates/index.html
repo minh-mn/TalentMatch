@@ -5,7 +5,7 @@
 <div th:replace="~{fragments/common :: flash}"></div>
 
 <!-- GIAO DIỆN TRƯỚC KHI ĐĂNG NHẬP -->
-<th:block th:if="${currentUser == null}">
+<th:block th:if="${true}">
   <div class="guest-home-page">
     <header class="guest-home-header">
       <div class="guest-container guest-header-inner">
@@ -78,19 +78,19 @@
         <div class="guest-container guest-stats-grid">
           <article>
             <span class="stat-icon violet"><i class="fa-solid fa-briefcase"></i></span>
-            <div><strong>2.500+</strong><small>Dự án đăng mới tháng</small></div>
+            <div><strong th:text="${openJobCount}">0</strong><small>Dự án đang mở</small></div>
           </article>
           <article>
             <span class="stat-icon green"><i class="fa-solid fa-users"></i></span>
-            <div><strong>10.000+</strong><small>Freelancer chất lượng</small></div>
+            <div><strong th:text="${freelancerCount}">0</strong><small>Freelancer tham gia</small></div>
           </article>
           <article>
             <span class="stat-icon orange"><i class="fa-solid fa-handshake-angle"></i></span>
-            <div><strong>1.200+</strong><small>Doanh nghiệp tin tưởng</small></div>
+            <div><strong th:text="${customerCount}">0</strong><small>Doanh nghiệp tham gia</small></div>
           </article>
           <article>
             <span class="stat-icon blue"><i class="fa-solid fa-star"></i></span>
-            <div><strong>4.9/5</strong><small>Đánh giá từ khách hàng</small></div>
+            <div><strong>3 vai trò</strong><small>Freelancer · Client · Admin</small></div>
           </article>
         </div>
       </section>
@@ -328,7 +328,7 @@
 </th:block>
 
 <!-- GIAO DIỆN SAU KHI ĐĂNG NHẬP: GIỮ LUỒNG MARKETPLACE HIỆN TẠI -->
-<th:block th:unless="${currentUser == null}">
+<th:block th:if="${false}">
   <aside th:replace="~{fragments/common :: marketSidebar('home')}"></aside>
   <header th:replace="~{fragments/common :: marketTopbar('jobs')}"></header>
   <main class="market-main">

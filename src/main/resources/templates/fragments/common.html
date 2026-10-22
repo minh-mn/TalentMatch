@@ -20,6 +20,7 @@
   <link rel="stylesheet" th:href="@{/css/auth-redesign.css}">
   <link rel="stylesheet" th:href="@{/css/auth-compact.css}">
   <link rel="stylesheet" th:href="@{/css/freelancer-home-v10.css}">
+  <link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}">
 </head>
 <body>
 
@@ -105,9 +106,11 @@
         <a th:href="@{/freelancer/history}" th:classappend="${active == 'history'} ? ' active' : ''">
           <span class="market-side-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>Lịch sử
         </a>
-        <a href="#" onclick="return false;">
+        <a th:href="@{/freelancer/messages}" th:classappend="${active == 'messages'} ? ' active' : ''">
           <span class="market-side-icon"><i class="fa-regular fa-message"></i></span>Tin nhắn
-          <span class="market-side-badge">2</span>
+        </a>
+        <a th:href="@{/freelancer/community}" th:classappend="${active == 'community'} ? ' active' : ''">
+          <span class="market-side-icon"><i class="fa-regular fa-circle-question"></i></span>Hỏi đáp
         </a>
         <a th:href="@{/freelancer/profile}" th:classappend="${active == 'profile'} ? ' active' : ''">
           <span class="market-side-icon"><i class="fa-solid fa-user"></i></span>Hồ sơ của tôi
@@ -126,6 +129,7 @@
         <a th:href="@{/customer/talent}" th:classappend="${active == 'talent'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>Tìm & gợi ý Freelancer</a>
         <a th:href="@{/customer/invitations}" th:classappend="${active == 'invitations'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-envelope-open-text"></i></span>Lời mời đã gửi</a>
         <a th:href="@{/customer/projects}" th:classappend="${active == 'projects'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-layer-group"></i></span>Hợp đồng & dự án</a>
+        <a th:href="@{/customer/messages}" th:classappend="${active == 'messages'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-regular fa-message"></i></span>Tin nhắn</a>
         <a th:href="@{/customer/history}" th:classappend="${active == 'history'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>Giao dịch & lịch sử</a>
         <a th:href="@{/customer/profile}" th:classappend="${active == 'profile'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-building-user"></i></span>Hồ sơ doanh nghiệp</a>
       </nav>
@@ -160,6 +164,12 @@
       </nav>
     </div>
   </th:block>
+
+  <div class="tm-freelancer-signout" sec:authorize="hasRole('FREELANCER')">
+    <form th:action="@{/logout}" method="post">
+      <button type="submit" aria-label="Đăng xuất khỏi TalentMatch"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
+    </form>
+  </div>
 
   <!-- Sau đăng nhập: không còn Ví Token, chỉ giữ CTA đăng dự án ở đáy -->
   <div class="market-side-bottom" sec:authorize="isAnonymous()">

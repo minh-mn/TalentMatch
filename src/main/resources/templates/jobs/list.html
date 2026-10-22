@@ -40,7 +40,7 @@
             <p class="jb-description" th:text="${#strings.abbreviate(job.description == null ? '' : job.description,210)}">Mô tả</p>
             <div class="jb-tags" th:if="${job.requiredSkills != null and !job.requiredSkills.isBlank()}"><span th:each="skillItem, st : ${#strings.arraySplit(job.requiredSkills, ',')}" th:if="${st.index < 5}" th:text="${#strings.trim(skillItem)}">Kỹ năng</span></div>
             <div class="jb-card-footer"><div class="jb-company"><span class="jb-avatar"><i class="fa-solid fa-user-tie"></i></span><strong th:text="${job.customer != null ? (job.customer.companyName != null and !job.customer.companyName.isBlank() ? job.customer.companyName : job.customer.fullName) : 'Khách hàng'}">Khách hàng</strong></div><span><i class="fa-regular fa-building"></i><span th:text="${job.priceType == 'HOURLY' ? 'Theo giờ' : 'Dự án giá cố định'}">Cố định</span></span><span><i class="fa-regular fa-comment"></i><span th:text="|${proposalCounts[job.id]} chào giá|">0 chào giá</span></span><span><i class="fa-regular fa-clock"></i><span th:text="${postedAgo[job.id]}">Mới đăng</span></span><div class="jb-price"><strong th:text="${job.budget == null or job.budget.signum() == 0 ? 'Thỏa thuận' : #numbers.formatDecimal(job.budget,0,'POINT',0,'COMMA') + ' ₫'}">Thỏa thuận</strong><small th:text="${job.estimatedDurationDays != null ? 'trọn gói · ' + job.estimatedDurationDays + ' ngày' : 'trọn gói'}">trọn gói</small></div></div>
-            <div class="jb-card-links"><a class="tm35-apply-action" th:href="@{/jobs/{id}(id=${job.id})}">Ứng tuyển <i class="fa-solid fa-arrow-right"></i></a><a class="tm35-detail-action" th:href="@{/jobs/{id}(id=${job.id})}">Xem chi tiết</a><span sec:authorize="hasRole('FREELANCER')" th:if="${applicationStatusByJobId[job.id] != null}" class="jb-applied">Đã ứng tuyển</span></div>
+            <div class="jb-card-links"><a class="tm35-apply-action" th:href="@{/jobs/{id}/apply(id=${job.id})}">Ứng tuyển <i class="fa-solid fa-arrow-right"></i></a><a class="tm35-detail-action" th:href="@{/jobs/{id}(id=${job.id})}">Xem chi tiết</a><span sec:authorize="hasRole('FREELANCER')" th:if="${applicationStatusByJobId[job.id] != null}" class="jb-applied">Đã ứng tuyển</span></div>
           </article>
           <div class="jb-empty" th:if="${#lists.isEmpty(jobs)}"><i class="fa-solid fa-magnifying-glass"></i><h2>Không tìm thấy dự án phù hợp</h2><p>Hãy thử bỏ bớt điều kiện hoặc dùng từ khóa khác.</p><a th:href="@{/jobs}">Xóa bộ lọc</a></div>
         </div>
@@ -62,5 +62,5 @@
 </main>
 <script th:replace="~{fragments/common :: scripts}"></script>
 <script th:src="@{/js/jobs-board-reference.js}"></script>
-</body>
+<link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"></body>
 </html>

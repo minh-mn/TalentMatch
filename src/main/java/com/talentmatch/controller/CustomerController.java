@@ -13,6 +13,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 @Controller
 @RequestMapping("/customer")
@@ -25,7 +28,19 @@ public class CustomerController {
     public String dashboard(Authentication auth,Model model,@RequestParam(required=false)@DateTimeFormat(iso=DateTimeFormat.ISO.DATE)LocalDate from,
                             @RequestParam(required=false)@DateTimeFormat(iso=DateTimeFormat.ISO.DATE)LocalDate to,
                             @RequestParam(defaultValue="projects")String metric,@RequestParam(defaultValue="status")String pieMode){
-        User u=users.byEmail(auth.getName());model.addAttribute("stats",dashboard.customerStats(u));model.addAttribute("jobs",jobRepository.findByCustomerOrderByCreatedAtDesc(u).stream().limit(5).toList());model.addAttribute("projects",projects.forCustomer(u).stream().limit(5).toList());addCharts(model,u,from,to,metric,pieMode);return "customer/dashboard";
+        User u = users.byEmail(auth.getName());
+        List<Job> allJobs = jobRepository.findByCustomerOrderByCreatedAtDesc(u);
+        List<Project> allProjects = projects.forCustomer(u);
+        model.addAttribute("companyDisplayName", u.getCompanyName() != null && !u.getCompanyName().isBlank() ? u.getCompanyName() : u.getFullName());
+        model.addAttribute("companyInitial", (u.getCompanyName() != null && !u.getCompanyName().isBlank() ? u.getCompanyName() : u.getFullName()).substring(0, 1).toUpperCase());
+        model.addAttribute("stats", dashboard.customerStats(u));
+        model.addAttribute("applicantTotal", allJobs.stream().mapToLong(job -> jobs.applicants(job).size()).sum());
+        model.addAttribute("jobs", allJobs.stream().limit(5).toList());
+        model.addAttribute("projects", allProjects.stream().limit(5).toList());
+        model.addAttribute("jobApplicantCounts", allJobs.stream().collect(java.util.stream.Collectors.toMap(Job::getId, job -> jobs.applicants(job).size())));
+        model.addAttribute("monthlyCostByCategory", Map.of());
+        addCharts(model, u, from, to, metric, pieMode);
+        return "customer/dashboard";
     }
     @GetMapping("/profile") public String profile(Authentication auth,Model model){model.addAttribute("profile",users.byEmail(auth.getName()));return "customer/profile";}
     @PostMapping("/profile") public String updateProfile(Authentication auth,@ModelAttribute User profile,RedirectAttributes ra){try{users.updateProfile(auth.getName(),profile);ra.addFlashAttribute("success","Cập nhật hồ sơ khách hàng thành công.");}catch(Exception e){ra.addFlashAttribute("error",e.getMessage());}return "redirect:/customer/profile";}

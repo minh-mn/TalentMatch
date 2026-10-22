@@ -156,37 +156,16 @@ public class JobController {
     @GetMapping("/jobs/{id}")
     public String detail(@PathVariable Long id, Authentication auth, Model model) {
         Job job = jobs.get(id);
-        model.addAttribute("job", job);
-        model.addAttribute("saved", false);
-        model.addAttribute("applied", false);
-        model.addAttribute("currentApplication", null);
-        model.addAttribute("proposalCount", jobs.applicationCount(job));
-        model.addAttribute("postedAgo", relativeTime(job.getCreatedAt()));
-        long remain = job.getDeadline() == null ? 0
-                : java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), job.getDeadline());
-        model.addAttribute("daysLeft", Math.max(0, remain));
-        model.addAttribute("matchScore", 0);
-
-        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
-            User u = users.byEmail(auth.getName());
-            if (u.getRole() == Role.FREELANCER) {
-                Optional<JobApplication> currentApplication = jobs.findApplication(job, u);
-                model.addAttribute("saved", jobs.isSaved(job, u));
-                model.addAttribute("applied", currentApplication.isPresent());
-                model.addAttribute("currentApplication", currentApplication.orElse(null));
-                model.addAttribute("matchScore", matchScore(u, job));
-            }
-        }
-
-        List<Job> similarJobs = jobs.searchAdvanced(
-                        null, job.getCategory(), null, null, null, null,
-                        List.of(), List.of(), "latest")
-                .stream()
-                .filter(item -> !Objects.equals(item.getId(), job.getId()))
-                .limit(3)
-                .toList();
-        model.addAttribute("similarJobs", similarJobs);
+        populateJobViewModel(job, auth, model);
         return "jobs/detail";
+    }
+
+    @GetMapping("/jobs/{id}/apply")
+    public String applyView(@PathVariable Long id, Authentication auth, Model model) {
+        Job job = jobs.get(id);
+        populateJobViewModel(job, auth, model);
+        model.addAttribute("pageTitle", "Ứng tuyển công việc");
+        return "jobs/apply";
     }
 
     @PostMapping("/jobs/{id}/save")
@@ -216,12 +195,16 @@ public class JobController {
                         Authentication auth,
                         RedirectAttributes ra) {
         try {
+            if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getName())) {
+                return "redirect:/login";
+            }
             jobs.apply(jobs.get(id), users.byEmail(auth.getName()), proposal, proposedPrice, estimatedDays, portfolioLink);
             ra.addFlashAttribute("success", "Ứng tuyển thành công. Proposal và báo giá đã được gửi cho khách hàng.");
+            return "redirect:/freelancer/applications";
         } catch (Exception e) {
             ra.addFlashAttribute("error", e.getMessage());
         }
-        return "redirect:/jobs/" + id;
+        return "redirect:/jobs/" + id + "/apply";
     }
 
     private List<String> sanitize(List<String> input, List<String> allowed) {
@@ -288,6 +271,148 @@ public class JobController {
         if ("REMOTE".equalsIgnoreCase(job.getWorkType())) score += 5;
 
         return Math.min(95, Math.max(0, score));
+    }
+
+    private void populateJobViewModel(Job job, Authentication auth, Model model) {
+        model.addAttribute("job", job);
+        model.addAttribute("saved", false);
+        model.addAttribute("applied", false);
+        model.addAttribute("currentApplication", null);
+        long proposalCount = jobs.applicationCount(job);
+        model.addAttribute("proposalCount", proposalCount);
+        model.addAttribute("viewCount", null);
+        model.addAttribute("postedAgo", relativeTime(job.getCreatedAt()));
+        long remain = job.getDeadline() == null ? 0
+                : java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), job.getDeadline());
+        model.addAttribute("daysLeft", Math.max(0, remain));
+        model.addAttribute("matchScore", 0);
+        model.addAttribute("customerDisplayName", displayCustomerName(job.getCustomer()));
+        model.addAttribute("customerLocation", hasText(job.getCustomer().getLocation()) ? job.getCustomer().getLocation() : "Chưa cập nhật");
+        model.addAttribute("customerInitial", safeInitial(displayCustomerName(job.getCustomer())));
+        model.addAttribute("customerSince", job.getCustomer().getCreatedAt() != null ? job.getCustomer().getCreatedAt().getMonthValue() + "/" + job.getCustomer().getCreatedAt().getYear() : "Chưa cập nhật");
+        model.addAttribute("estimatedDurationText", durationLabel(job.getEstimatedDurationDays()));
+        model.addAttribute("skillChips", new ArrayList<>(displaySkillTokens(job.getRequiredSkills())));
+        model.addAttribute("jobRequirements", buildRequirements(job));
+        model.addAttribute("desiredResults", buildDesiredResults(job));
+        model.addAttribute("jobDescriptionParagraphs", splitParagraphs(job.getDescription()));
+
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
+            User u = users.byEmail(auth.getName());
+            if (u.getRole() == Role.FREELANCER) {
+                Optional<JobApplication> currentApplication = jobs.findApplication(job, u);
+                model.addAttribute("saved", jobs.isSaved(job, u));
+                model.addAttribute("applied", currentApplication.isPresent());
+                model.addAttribute("currentApplication", currentApplication.orElse(null));
+                model.addAttribute("matchScore", matchScore(u, job));
+            }
+        }
+
+        List<Job> similarJobs = jobs.searchAdvanced(
+                        null, job.getCategory(), null, null, null, null,
+                        List.of(), List.of(), "latest")
+                .stream()
+                .filter(item -> !Objects.equals(item.getId(), job.getId()))
+                .limit(3)
+                .toList();
+        model.addAttribute("similarJobs", similarJobs);
+    }
+
+    private String displayCustomerName(User customer) {
+        if (customer == null) return "Khách hàng TalentMatch";
+        if (hasText(customer.getCompanyName())) return customer.getCompanyName();
+        return hasText(customer.getFullName()) ? customer.getFullName() : "Khách hàng TalentMatch";
+    }
+
+    private String safeInitial(String text) {
+        return hasText(text) ? text.substring(0, 1).toUpperCase(Locale.ROOT) : "A";
+    }
+
+    private String durationLabel(Integer days) {
+        if (days == null || days <= 0) return "Thời gian linh hoạt";
+        if (days <= 7) return "Khoảng 1 tuần";
+        if (days <= 14) return "Khoảng 2 tuần";
+        if (days <= 30) return "Khoảng 1 tháng";
+        return "Trên " + days + " ngày";
+    }
+
+    private Set<String> displaySkillTokens(String raw) {
+        if (!hasText(raw)) return new LinkedHashSet<>(List.of("UI/UX", "Responsive", "Website"));
+        LinkedHashSet<String> tokens = new LinkedHashSet<>();
+        for (String token : raw.split("[,;/]")) {
+            String cleaned = token == null ? "" : token.trim();
+            if (!cleaned.isBlank()) tokens.add(cleaned);
+        }
+        if (tokens.isEmpty()) tokens.addAll(List.of("UI/UX", "Responsive", "Website"));
+        return tokens;
+    }
+
+    private List<String> buildRequirements(Job job) {
+        List<String> items = new ArrayList<>();
+        if (hasText(job.getDescription())) {
+            items.addAll(splitSentences(job.getDescription()));
+        }
+        if (items.isEmpty()) {
+            items.add("Thiết kế giao diện hiện đại, dễ sử dụng và phù hợp với thương hiệu.");
+            items.add("Responsive trên desktop, tablet và mobile.");
+        }
+        if (job.getRequiredSkills() != null && !job.getRequiredSkills().isBlank()) {
+            items.add("Ưu tiên freelancer có kinh nghiệm với " + String.join(", ", displaySkillTokens(job.getRequiredSkills())) + ".");
+        }
+        if (job.getWorkType() != null) {
+            items.add("Hình thức làm việc: " + job.getWorkType().replace("REMOTE", "Làm việc từ xa").replace("HYBRID", "Linh hoạt").replace("ONSITE", "Tại văn phòng") + ".");
+        }
+        return dedupeTrim(items, 6);
+    }
+
+    private List<String> buildDesiredResults(Job job) {
+        List<String> items = new ArrayList<>();
+        if (hasText(job.getAcceptanceCriteria())) items.addAll(splitSentences(job.getAcceptanceCriteria()));
+        if (items.isEmpty()) {
+            items.add("Website hoàn chỉnh theo đúng phạm vi và yêu cầu đã thống nhất.");
+            items.add("Giao diện đồng bộ, trải nghiệm mượt và tối ưu trên nhiều thiết bị.");
+            items.add("Bàn giao source code, tài liệu hướng dẫn và hỗ trợ sau bàn giao.");
+        }
+        if (job.getEstimatedDurationDays() != null && job.getEstimatedDurationDays() > 0) {
+            items.add("Thời gian thực hiện dự kiến khoảng " + job.getEstimatedDurationDays() + " ngày.");
+        }
+        return dedupeTrim(items, 5);
+    }
+
+    private List<String> splitParagraphs(String text) {
+        if (!hasText(text)) return List.of("Khách hàng chưa cung cấp mô tả chi tiết.");
+        String normalized = text.replace("\r", "\n");
+        List<String> result = new ArrayList<>();
+        for (String part : normalized.split("\\n+")) {
+            String cleaned = part.trim();
+            if (!cleaned.isBlank()) result.add(cleaned);
+        }
+        if (result.isEmpty()) result.add(text.trim());
+        return result;
+    }
+
+    private List<String> splitSentences(String text) {
+        if (!hasText(text)) return List.of();
+        String normalized = text.replace("\n", ". ");
+        List<String> result = new ArrayList<>();
+        for (String part : normalized.split("(?<=[.!?])\\s+|;")) {
+            String cleaned = part.trim();
+            if (!cleaned.isBlank()) {
+                if (!cleaned.endsWith(".") && !cleaned.endsWith("!") && !cleaned.endsWith("?")) cleaned += ".";
+                result.add(cleaned);
+            }
+        }
+        return result;
+    }
+
+    private List<String> dedupeTrim(List<String> items, int limit) {
+        LinkedHashSet<String> unique = new LinkedHashSet<>();
+        for (String item : items) {
+            if (item == null) continue;
+            String cleaned = item.trim();
+            if (!cleaned.isBlank()) unique.add(cleaned);
+            if (unique.size() >= limit) break;
+        }
+        return new ArrayList<>(unique);
     }
 
     private Set<String> skillTokens(String raw) {

@@ -22,3 +22,31 @@
 @media(max-width:1350px){.tm44-grid{grid-template-columns:minmax(210px,.85fr) minmax(300px,1.2fr)}.tm44-grid>.tm44-col:last-child{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.tm44-identity{flex-wrap:wrap}.tm44-person-actions{margin-left:auto}}
 @media(max-width:950px){.tm44-grid{grid-template-columns:1fr}.tm44-grid>.tm44-col:last-child{grid-column:auto;display:flex}.tm44-shell{padding:12px}.tm44-person-actions{width:100%;justify-content:flex-end}.tm44-identity{padding-left:135px}}
 @media(max-width:650px){.tm44-hero{height:150px}.tm44-identity{padding:65px 14px 16px;display:block}.tm44-avatar{left:18px;bottom:auto;top:-58px;width:100px;height:100px}.tm44-person{margin:0 0 14px}.tm44-person-actions{flex-wrap:wrap}.tm44-person-actions a,.tm44-person-actions button{flex:1}.tm44-grid>.tm44-col:last-child{display:flex}.tm44-hero>p{left:10px;top:8px}.tm44-cover-upload{right:10px;top:8px}.tm44-cover-upload label{font-size:10px;padding:9px}}
+
+
+/* V45: unify Freelancer sidebar/header; prevent oversized logo hiding nav */
+.tm44-profile.fm-dashboard{--tm-sidebar-width:278px!important;background:#eef5ff!important}
+.tm44-profile.fm-dashboard .market-sidebar{position:fixed!important;top:0!important;left:0!important;bottom:0!important;width:278px!important;min-width:278px!important;max-width:278px!important;height:100vh!important;z-index:110!important;display:flex!important;flex-direction:column!important;overflow-y:auto!important;overflow-x:hidden!important;padding:0 0 12px!important;background:#fff!important;border-right:1px solid #dae6f7!important;box-shadow:2px 0 14px rgba(19,64,128,.05)!important}
+.tm44-profile.fm-dashboard .market-sidebar .market-brand-wrap{flex:0 0 auto!important;padding:18px 20px 14px!important}
+.tm44-profile.fm-dashboard .market-sidebar .market-brand{display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;height:auto!important;min-height:39px!important}
+.tm44-profile.fm-dashboard .market-sidebar .tm33-brand-logo{display:block!important;width:36px!important;height:36px!important;max-width:36px!important;max-height:36px!important;object-fit:contain!important;flex:0 0 36px!important}
+.tm44-profile.fm-dashboard .market-sidebar .market-brand>span:last-child{display:flex!important;flex-direction:column!important;min-width:0!important}
+.tm44-profile.fm-dashboard .market-sidebar .market-brand strong{font-size:18px!important;line-height:1.2!important;font-weight:900!important;white-space:nowrap!important}
+.tm44-profile.fm-dashboard .market-sidebar .market-brand small{font-size:9px!important;letter-spacing:.2px!important;white-space:nowrap!important}
+.tm44-profile.fm-dashboard .market-sidebar .tm33-sidebar-profile{flex:0 0 auto!important}
+.tm44-profile.fm-dashboard .market-sidebar .market-side-section{flex:0 0 auto!important;padding:0 18px!important}
+.tm44-profile.fm-dashboard .market-sidebar .market-side-nav{display:grid!important;gap:3px!important}
+.tm44-profile.fm-dashboard .market-sidebar .market-side-nav a{display:flex!important;align-items:center!important;min-height:41px!important;width:100%!important;font-size:13.5px!important;font-weight:700!important;color:#163774!important;white-space:nowrap!important;overflow:visible!important;padding:9px 11px!important}
+.tm44-profile.fm-dashboard .market-sidebar .market-side-nav a.active{background:#286dff!important;color:#fff!important;box-shadow:0 5px 14px rgba(41,102,233,.20)!important}
+.tm44-profile.fm-dashboard .market-sidebar .market-side-icon{width:22px!important;min-width:22px!important;flex:0 0 22px!important}
+.tm44-profile.fm-dashboard .market-sidebar .market-side-bottom{position:static!important;flex:0 0 auto!important}
+.tm44-profile.fm-dashboard .fm-header{left:278px!important;right:0!important;height:68px!important;z-index:100!important}
+.tm44-profile.fm-dashboard .market-profile-main{margin-left:278px!important;padding-top:68px!important;min-width:0!important;background:#eef5ff!important}
+.tm44-profile.fm-dashboard .tm44-profile-footer{margin-left:278px!important}
+.tm44-profile.fm-dashboard .tm44-shell{max-width:1750px!important;padding:17px 24px 27px!important}
+.tm44-profile.fm-dashboard .tm44-grid{grid-template-columns:minmax(220px,.89fr) minmax(320px,1.43fr) minmax(270px,1fr)!important;gap:14px!important}
+.tm44-profile.fm-dashboard .tm44-card{box-shadow:0 5px 20px rgba(33,91,175,.08)!important;border-color:#dce8fa!important}
+.tm44-profile.fm-dashboard .tm44-card h2{font-size:16.5px!important}
+.tm44-profile.fm-dashboard .tm44-cardhead button,.tm44-profile.fm-dashboard .tm44-cardhead a{font-size:12.5px!important}
+@media(max-width:1350px){.tm44-profile.fm-dashboard .tm44-grid{grid-template-columns:minmax(215px,.9fr) minmax(320px,1.3fr)!important}.tm44-profile.fm-dashboard .tm44-grid>.tm44-col:last-child{grid-column:1/-1!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:950px){.tm44-profile.fm-dashboard .market-sidebar{display:none!important}.tm44-profile.fm-dashboard .fm-header{left:0!important}.tm44-profile.fm-dashboard .market-profile-main,.tm44-profile.fm-dashboard .tm44-profile-footer{margin-left:0!important}.tm44-profile.fm-dashboard .tm44-grid{grid-template-columns:1fr!important}.tm44-profile.fm-dashboard .tm44-grid>.tm44-col:last-child{grid-column:auto!important;display:flex!important}}

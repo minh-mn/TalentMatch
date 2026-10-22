@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/common :: head('Hồ sơ Freelancer')}"></head>
-<body class="market-body market-profile-page tm42-profile tm44-profile">
+<body class="market-body market-profile-page tm42-profile tm44-profile fm-dashboard">
+<link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
 <link rel="stylesheet" th:href="@{/css/freelancer-v42.css}">
 <link rel="stylesheet" th:href="@{/css/freelancer-profile-v44.css}">
 <aside th:replace="~{fragments/common :: marketSidebar('profile')}"></aside>
-<header th:replace="~{fragments/common :: marketTopbar('profile')}"></header>
+<header class="fm-header">
+  <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+  <form class="fm-header-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" placeholder="Tìm dự án, kỹ năng, khách hàng..." aria-label="Tìm kiếm"><button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+  <nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục nghề</a></nav>
+  <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i></a><a th:href="@{/freelancer/profile}" class="fm-mini-avatar" th:text="${#strings.substring(currentUser.fullName,0,1)}">F</a><span th:text="${currentUser.fullName}">Freelancer</span></div>
+</header>
 <div th:replace="~{fragments/common :: flash}"></div>
 <main class="market-main market-profile-main">
 <div class="tm44-shell">
@@ -81,5 +87,5 @@
 </div>
 </main>
   <footer class="tm42-profile-footer"><div><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><strong>TalentMatch</strong><span>© 2026 TalentMatch · Freelance Marketplace</span></div><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/reports}">Thống kê & Báo cáo</a></footer><script th:replace="~{fragments/common :: scripts}"></script>
-</body>
+<link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"></body>
 </html>
