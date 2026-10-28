@@ -1,0 +1,39 @@
+/* Client feature-page header v57. Mirrors the Client dashboard header and intentionally omits the role switch. */
+.client-workspace .cd-client-header {
+  position: fixed; z-index: 110; top: 0; left: 250px; right: 0; height: 68px;
+  padding: 0 24px; display: grid;
+  grid-template-columns: minmax(240px, 1.1fr) minmax(360px, 1.8fr) minmax(150px, .8fr);
+  align-items: center; gap: clamp(12px, 1.5vw, 24px);
+  background: #fff; border-bottom: 1px solid #dce7f7;
+  box-shadow: 0 2px 12px rgba(32,79,146,.05); box-sizing: border-box;
+}
+.client-workspace .cd-client-header .cd-header-search {
+  display:flex; align-items:center; gap:10px; min-width:0; width:100%; height:42px;
+  padding:4px 5px 4px 14px; border:1px solid #dbe7f9; border-radius:24px;
+  background:#f7faff; color:#6480ad; box-sizing:border-box;
+}
+.client-workspace .cd-client-header .cd-header-search>i { flex-shrink:0; font-size:15px; }
+.client-workspace .cd-client-header .cd-header-search input {
+  flex:1; min-width:0; border:0; outline:0; background:transparent; color:#17366f; font-size:13px;
+}
+.client-workspace .cd-client-header .cd-header-search button {
+  flex-shrink:0; width:38px; height:36px; border:0; border-radius:18px; background:#286dff; color:#fff; cursor:pointer;
+}
+.client-workspace .cd-client-header .cd-header-links { display:flex; justify-content:space-between; align-items:center; gap:clamp(10px,1.2vw,22px); min-width:0; }
+.client-workspace .cd-client-header .cd-header-links a { color:#092a74; font-size:12px; font-weight:800; white-space:nowrap; text-decoration:none; }
+.client-workspace .cd-client-header .cd-header-links a:hover { color:#286dff; }
+.client-workspace .cd-client-header .cd-header-user { display:flex; align-items:center; justify-content:flex-end; gap:10px; min-width:0; color:#0c2b70; font-size:12px; font-weight:800; }
+.client-workspace .cd-client-header .cd-header-user>a:first-child { display:grid; place-items:center; width:32px; height:32px; color:#264b87; text-decoration:none; font-size:17px; flex-shrink:0; }
+.client-workspace .cd-client-header .cd-mini-avatar { display:grid; place-items:center; width:40px; height:40px; flex-shrink:0; border-radius:50%; background:#e7efff; color:#286dff; font-size:17px; font-weight:800; text-decoration:none; }
+.client-workspace .cd-client-header .cd-header-user>span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.client-workspace .client-main { padding-top: 88px; }
+@media (max-width: 1180px) {
+  .client-workspace .cd-client-header { grid-template-columns:minmax(190px,1fr) minmax(270px,1.4fr) minmax(110px,.6fr); padding:0 16px; gap:12px; }
+  .client-workspace .cd-client-header .cd-header-links { gap:10px; }
+  .client-workspace .cd-client-header .cd-header-links a { font-size:11px; }
+}
+@media (max-width: 900px) {
+  .client-workspace .cd-client-header { left:0; height:62px; grid-template-columns:minmax(0,1fr) auto; }
+  .client-workspace .cd-client-header .cd-header-links { display:none; }
+  .client-workspace .client-main { padding-top:78px; }
+}

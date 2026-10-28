@@ -1,8 +1,260 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/common :: head('TalentMatch')}"></head><body class="market-body fm-dashboard tm48"><link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}"><link rel="stylesheet" th:href="@{/css/freelancer-community-chat-v48.css}"><aside th:replace="~{fragments/common :: marketSidebar('messages')}"></aside><header class="fm-header">
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/common :: head('Tin nhắn')}"></head><body class="market-body fm-dashboard tm89"><link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}"><link rel="stylesheet" th:href="@{/css/freelancer-messages-v89.css}"><aside th:replace="~{fragments/common :: marketSidebar('messages')}"></aside><header class="fm-header">
   <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
   <form class="fm-header-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" aria-label="Tìm dự án" placeholder="Tìm dự án, kỹ năng, khách hàng..."><button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button></form>
   <nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/#pricing}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a href="#fm-category">Danh mục nghề</a></nav>
   <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i></a><a th:href="@{/freelancer/profile}" class="fm-mini-avatar" th:text="${#strings.substring(currentUser.fullName,0,1)}">F</a><span th:text="${currentUser.fullName}">Freelancer</span></div>
-</header><div th:replace="~{fragments/common :: flash}"></div><main class="fm-main tm48-main"><div class="tm48-wrap"><section class="tm48-banner tm48-messages-banner"><img th:src="@{/images/talentmatch-messages-v48.png}" alt="Tin nhắn và Trao đổi TalentMatch"></section><div class="tm48-chat-layout"><section class="tm48-panel tm48-chat-threads"><h2>Danh sách hội thoại <small th:text="${conversationCount}">0</small></h2><form th:action="${chatBase}" method="get"><input class="tm48-search" name="q" th:value="${q}" placeholder="Tìm tên khách hàng hoặc dự án..."></form><a th:each="p:${conversations}" class="tm48-thread" th:classappend="${selected != null and selected.id == p.id} ? ' active' : ''" th:href="${chatBase + '?projectId=' + p.id}"><span class="tm48-avatar" th:text="${#strings.substring(isCustomer ? p.freelancer.fullName : p.customer.fullName,0,1)}">C</span><span><b th:text="${isCustomer ? p.freelancer.fullName : (p.customer.companyName != null and !p.customer.companyName.isEmpty() ? p.customer.companyName : p.customer.fullName)}">Khách hàng</b><small th:text="${p.application.job.title}">Dự án</small></span></a><div class="tm48-empty" th:if="${#lists.isEmpty(conversations)}">Chưa có hội thoại dự án. Khi bạn được nhận vào dự án, khách hàng sẽ xuất hiện ở đây.</div></section>
-<section class="tm48-panel tm48-chat-main"><th:block th:if="${selected != null}"><div class="tm48-chat-head"><div class="tm48-avatar" th:text="${#strings.substring(isCustomer ? selected.freelancer.fullName : selected.customer.fullName,0,1)}">C</div><div><b th:text="${isCustomer ? selected.freelancer.fullName : (selected.customer.companyName != null and !selected.customer.companyName.isEmpty() ? selected.customer.companyName : selected.customer.fullName)}">Khách hàng</b><small th:text="${selected.application.job.title}">Dự án</small></div><a class="tm48-open-project" th:href="@{/projects/{id}(id=${selected.id})}" title="Chi tiết dự án"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div><div class="tm48-message-stream" id="chat-bottom"><div th:each="msg:${messages}" class="tm48-message" th:classappend="${msg.sender.id == userId} ? ' mine' : ''"><div class="tm48-message-bubble"><p th:text="${msg.content}">Tin nhắn</p><time th:text="${#temporals.format(msg.createdAt,'dd/MM HH:mm')}">10:24</time></div></div><div class="tm48-empty" th:if="${#lists.isEmpty(messages)}">Chưa có tin nhắn. Hãy bắt đầu trao đổi về dự án này.</div></div><form class="tm48-compose" th:action="${chatBase + '/' + selected.id + '/send'}" method="post"><input name="content" required maxlength="4000" placeholder="Nhập tin nhắn..." aria-label="Nội dung tin nhắn"><button class="tm48-btn" title="Gửi tin nhắn"><i class="fa-solid fa-paper-plane"></i></button></form></th:block><div class="tm48-chat-placeholder" th:if="${selected == null}"><i class="fa-regular fa-comments"></i><h2>Chọn một hội thoại</h2><p>Hội thoại sẽ xuất hiện khi bạn có dự án hợp tác với khách hàng.</p></div></section>
-<aside class="tm48-panel tm48-chat-info" th:if="${selected != null}"><h2>Thông tin liên hệ</h2><div class="tm48-avatar big" th:text="${#strings.substring(isCustomer ? selected.freelancer.fullName : selected.customer.fullName,0,1)}">C</div><h3 th:text="${isCustomer ? selected.freelancer.fullName : (selected.customer.companyName != null and !selected.customer.companyName.isEmpty() ? selected.customer.companyName : selected.customer.fullName)}">Khách hàng</h3><p>Đối tác dự án trên TalentMatch</p><hr><h2>Thông tin dự án</h2><dl><dt>Tên dự án</dt><dd th:text="${selected.application.job.title}">Dự án</dd><dt>Giá trị hợp đồng</dt><dd th:text="${#numbers.formatDecimal(selected.totalPrice,0,'POINT',0,'COMMA')} + 'đ'">10.000.000đ</dd><dt>Trạng thái</dt><dd th:text="${selected.status}">IN_PROGRESS</dd></dl><a class="tm48-link-button" th:href="@{/projects/{id}(id=${selected.id})}">Xem chi tiết dự án</a><div class="tm48-tip"><h2>Mẹo trao đổi hiệu quả</h2><p>Trình bày rõ yêu cầu và thống nhất tiến độ với khách hàng trước khi bàn giao.</p></div></aside></div></div><script>window.addEventListener('load',()=>{const s=document.querySelector('.tm48-message-stream');if(s)s.scrollTop=s.scrollHeight;});</script><footer class="fm-footer"><div class="fm-footer-top"><div class="fm-footer-intro"><a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a><p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p><div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span></div></div><div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a></div><div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/profile}">Tạo hồ sơ</a><a th:href="@{/freelancer/applications}">Ứng tuyển của tôi</a></div><div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/freelancers}">Tìm freelancer</a><a th:href="@{/freelancers}">Khám phá chuyên gia</a></div><div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/freelancer/profile}">Quản lý tài khoản</a></div></div><div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div></footer></main><script th:replace="~{fragments/common :: scripts}"></script><link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"></body></html>
+</header><div th:replace="~{fragments/common :: flash}"></div>
+<main class="fm-main tm89-main">
+    <div class="tm89-content">
+        <section class="tm89-banner" aria-label="Tin nhắn TalentMatch">
+            <img th:src="@{/images/talentmatch-messages-banner-v89.png}"
+                 src="/images/talentmatch-messages-banner-v89.png" alt="Kết nối dễ dàng hơn – Trao đổi với khách hàng">
+        </section>
+
+        <div class="tm89-layout">
+            <!-- CỘT 1: DANH SÁCH HỘI THOẠI -->
+            <section class="tm89-panel tm89-threads" aria-label="Danh sách hội thoại">
+                <div class="tm89-thread-tools">
+                    <form th:action="${chatBase}" method="get" class="tm89-thread-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="search" name="q" th:value="${q}" placeholder="Tìm kiếm cuộc trò chuyện..."
+                               aria-label="Tìm theo khách hàng hoặc dự án">
+                        <input type="hidden" name="tab" th:value="${tab}">
+                        <button type="submit" aria-label="Tìm hội thoại"><i class="fa-solid fa-arrow-right"></i></button>
+                    </form>
+                    <div class="tm89-thread-tabs" aria-label="Lọc hội thoại">
+                        <a th:href="${chatBase + '?tab=all'}" th:classappend="${tab == 'all'} ? ' is-active' : ''">
+                            Tất cả <span th:text="${conversationCount}">0</span>
+                        </a>
+                        <a th:href="${chatBase + '?tab=unread'}" th:classappend="${tab == 'unread'} ? ' is-active' : ''">
+                            Chưa đọc <span th:text="${unreadThreadCount}">0</span>
+                        </a>
+                        <a th:href="${chatBase + '?tab=projects'}" th:classappend="${tab == 'projects'} ? ' is-active' : ''">Dự án</a>
+                    </div>
+                </div>
+
+                <div class="tm89-thread-list">
+                    <a th:each="p : ${conversations}" th:href="${chatBase + '?projectId=' + p.id}"
+                       class="tm89-thread" th:classappend="${selected != null and selected.id == p.id} ? ' is-current' : ''">
+                        <span class="tm89-avatar" th:text="${#strings.substring(isCustomer ? p.freelancer.fullName : (p.customer.companyName != null and !p.customer.companyName.isBlank() ? p.customer.companyName : p.customer.fullName), 0, 1)}">N</span>
+                        <span class="tm89-thread-content">
+                            <span class="tm89-thread-title"
+                                  th:text="${isCustomer ? p.freelancer.fullName : (p.customer.companyName != null and !p.customer.companyName.isBlank() ? p.customer.companyName : p.customer.fullName)}">Nova Digital</span>
+                            <span class="tm89-thread-preview"
+                                  th:text="${latestMessages.containsKey(p.id) ? (latestMessages[p.id].sender.id == userId ? 'Bạn: ' : '') + (latestMessages[p.id].content.isBlank() ? 'Đã gửi một tệp đính kèm' : latestMessages[p.id].content) : p.application.job.title}">Nội dung cuộc trò chuyện</span>
+                        </span>
+                        <span class="tm89-thread-right">
+                            <time th:if="${latestMessages.containsKey(p.id)}" th:text="${#temporals.format(latestMessages[p.id].createdAt, 'HH:mm')}">14:30</time>
+                            <span th:if="${unreadCounts[p.id] != null and unreadCounts[p.id] > 0}"
+                                  class="tm89-unread" th:text="${unreadCounts[p.id]}">2</span>
+                        </span>
+                    </a>
+                    <div class="tm89-thread-empty" th:if="${#lists.isEmpty(conversations)}">
+                        <i class="fa-regular fa-comments"></i>
+                        <b>Chưa có hội thoại phù hợp</b>
+                        <p>Hội thoại sẽ xuất hiện khi bạn có dự án hợp tác. Hãy thử đổi bộ lọc hoặc từ khóa.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CỘT 2: NỘI DUNG CHAT -->
+            <section class="tm89-panel tm89-center" aria-label="Nội dung tin nhắn">
+                <th:block th:if="${selected != null}">
+                    <div class="tm89-chat-header">
+                        <span class="tm89-avatar tm89-avatar-large"
+                              th:text="${#strings.substring(isCustomer ? selected.freelancer.fullName : (selected.customer.companyName != null and !selected.customer.companyName.isBlank() ? selected.customer.companyName : selected.customer.fullName), 0, 1)}">N</span>
+                        <span class="tm89-chat-person">
+                            <strong th:text="${isCustomer ? selected.freelancer.fullName : (selected.customer.companyName != null and !selected.customer.companyName.isBlank() ? selected.customer.companyName : selected.customer.fullName)}">Đối tác</strong>
+                            <small><i class="fa-solid fa-circle"></i> Hội thoại dự án</small>
+                        </span>
+                        <div class="tm89-chat-actions">
+                            <button type="button" id="tm89-find-toggle" title="Tìm trong hội thoại" aria-label="Tìm tin nhắn">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                            <a th:href="@{/projects/{id}(id=${selected.id})}" title="Xem dự án" aria-label="Xem chi tiết dự án">
+                                <i class="fa-regular fa-folder-open"></i>
+                            </a>
+                            <a href="#tm89-partner-info" title="Thông tin đối tác" aria-label="Thông tin đối tác">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div id="tm89-chat-find" class="tm89-chat-find" hidden>
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input id="tm89-find-input" type="search" placeholder="Tìm nội dung trong hội thoại..." aria-label="Lọc các tin nhắn đang hiển thị">
+                        <button type="button" id="tm89-find-close" aria-label="Đóng tìm kiếm"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="tm89-message-list" id="tm89-message-list">
+                        <div th:each="msg : ${messages}" class="tm89-message" th:classappend="${msg.sender.id == userId} ? ' is-mine' : ' is-theirs'">
+                            <span class="tm89-avatar tm89-message-avatar" th:if="${msg.sender.id != userId}"
+                                  th:text="${#strings.substring(msg.sender.fullName,0,1)}">N</span>
+                            <div class="tm89-bubble">
+                                <p th:if="${msg.content != null and !msg.content.isBlank()}" th:text="${msg.content}">Tin nhắn</p>
+                                <a th:if="${msg.hasAttachment()}" class="tm89-file-in-message"
+                                   th:href="${chatBase + '/files/' + msg.id}">
+                                    <i class="fa-solid fa-file-arrow-down"></i>
+                                    <span><strong th:text="${msg.attachmentName}">Tai_lieu.pdf</strong>
+                                          <small th:text="${#numbers.formatDecimal(msg.attachmentSize / 1024.0, 1, 1)} + ' KB · Tải về'">Tải về</small></span>
+                                </a>
+                                <time th:text="${#temporals.format(msg.createdAt, 'HH:mm')}">10:24</time>
+                            </div>
+                        </div>
+                        <div th:if="${#lists.isEmpty(messages)}" class="tm89-no-messages">
+                            <i class="fa-regular fa-paper-plane"></i>
+                            <b>Chưa có tin nhắn</b>
+                            <p>Hãy bắt đầu trao đổi về dự án của bạn.</p>
+                        </div>
+                        <div id="tm89-no-search-results" class="tm89-no-search-results" hidden>Không tìm thấy tin nhắn phù hợp.</div>
+                    </div>
+                    <form class="tm89-compose" th:action="${chatBase + '/' + selected.id + '/send'}"
+                          method="post" enctype="multipart/form-data" id="tm89-compose-form">
+                        <div id="tm89-file-preview" class="tm89-file-preview" hidden>
+                            <i class="fa-solid fa-paperclip"></i><span id="tm89-file-label"></span>
+                            <button type="button" id="tm89-file-clear" title="Bỏ tệp đã chọn"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <div class="tm89-compose-row">
+                            <label class="tm89-attach" for="tm89-file" title="Đính kèm tệp (tối đa 10 MB)"><i class="fa-solid fa-paperclip"></i></label>
+                            <label class="tm89-attach" for="tm89-image" title="Đính kèm hình ảnh"><i class="fa-regular fa-image"></i></label>
+                            <input id="tm89-file" name="file" type="file"
+                                   accept=".pdf,.png,.jpg,.jpeg,.txt,.doc,.docx,.xls,.xlsx,.zip" hidden>
+                            <input id="tm89-image" type="file" accept=".png,.jpg,.jpeg" hidden>
+                            <input id="tm89-message-input" name="content" type="text" maxlength="4000"
+                                   placeholder="Nhập tin nhắn..." aria-label="Nội dung tin nhắn">
+                            <button class="tm89-send" type="submit" title="Gửi tin nhắn" aria-label="Gửi tin nhắn">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                </th:block>
+                <div th:if="${selected == null}" class="tm89-unselected">
+                    <i class="fa-regular fa-comment-dots"></i>
+                    <h2>Chọn một cuộc trò chuyện</h2>
+                    <p>Hội thoại của các dự án sẽ hiển thị ở đây khi bạn bắt đầu hợp tác.</p>
+                </div>
+            </section>
+
+            <!-- CỘT 3: THÔNG TIN ĐỐI TÁC VÀ DỰ ÁN -->
+            <aside class="tm89-panel tm89-details" id="tm89-partner-info" aria-label="Thông tin hội thoại">
+                <th:block th:if="${selected != null}">
+                    <div class="tm89-partner-top">
+                        <span class="tm89-avatar tm89-avatar-xl"
+                              th:text="${#strings.substring(isCustomer ? selected.freelancer.fullName : (selected.customer.companyName != null and !selected.customer.companyName.isBlank() ? selected.customer.companyName : selected.customer.fullName),0,1)}">N</span>
+                        <strong th:text="${isCustomer ? selected.freelancer.fullName : (selected.customer.companyName != null and !selected.customer.companyName.isBlank() ? selected.customer.companyName : selected.customer.fullName)}">Đối tác</strong>
+                        <small th:text="${isCustomer ? 'Freelancer' : 'Khách hàng / Doanh nghiệp'}">Doanh nghiệp</small>
+                        <a class="tm89-outline-link" th:if="${isCustomer}"
+                           th:href="@{/freelancers}">Tìm hồ sơ Freelancer <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        <a class="tm89-outline-link" th:unless="${isCustomer}"
+                           th:href="@{/projects/{id}(id=${selected.id})}">Xem dự án đang hợp tác <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                    </div>
+                    <div class="tm89-detail-section">
+                        <h3>Thông tin</h3>
+                        <p><i class="fa-regular fa-building"></i><span th:text="${isCustomer ? 'Tài khoản Freelancer' : 'Đối tác doanh nghiệp'}">Khách hàng</span></p>
+                        <p><i class="fa-solid fa-briefcase"></i><span>Hợp tác qua TalentMatch</span></p>
+                        <p><i class="fa-regular fa-calendar"></i><span th:text="${'Tạo dự án: ' + #temporals.format(selected.createdAt, 'dd/MM/yyyy')}">Ngày tạo</span></p>
+                    </div>
+                    <div class="tm89-detail-section">
+                        <h3>Dự án liên quan <a th:href="@{/projects/{id}(id=${selected.id})}">Xem chi tiết</a></h3>
+                        <a class="tm89-project-link" th:href="@{/projects/{id}(id=${selected.id})}">
+                            <img th:src="@{/images/fm-job-thumb-1.svg}" alt="Minh họa dự án">
+                            <span><strong th:text="${selected.application.job.title}">Dự án hợp tác</strong>
+                                  <b th:text="${#numbers.formatDecimal(selected.totalPrice,0,'POINT',0,'COMMA') + 'đ'}">0đ</b>
+                                  <small th:text="${selected.status.name() == 'IN_PROGRESS' ? 'Đang thực hiện' : (selected.status.name() == 'COMPLETED' ? 'Đã hoàn thành' : 'Xem trạng thái dự án')}">Đang thực hiện</small>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="tm89-detail-section tm89-shared-section">
+                        <h3>Tệp đã chia sẻ <span th:text="${#lists.size(sharedFiles)}">0</span></h3>
+                        <a th:each="file : ${sharedFiles}" class="tm89-shared-file" th:href="${chatBase + '/files/' + file.id}">
+                            <i class="fa-solid fa-file-pdf"></i>
+                            <span><strong th:text="${file.attachmentName}">Tệp đính kèm</strong>
+                                  <small th:text="${#numbers.formatDecimal(file.attachmentSize / 1024.0,1,1) + ' KB'}">Kích thước</small></span>
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                        <p th:if="${#lists.isEmpty(sharedFiles)}" class="tm89-no-shared">Chưa có tệp nào được chia sẻ.</p>
+                    </div>
+                </th:block>
+                <div th:if="${selected == null}" class="tm89-info-placeholder">
+                    <i class="fa-regular fa-address-card"></i>
+                    <h3>Thông tin đối tác</h3>
+                    <p>Chọn hội thoại để xem dự án và những tệp đã chia sẻ.</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var list = document.getElementById('tm89-message-list');
+            if (list) list.scrollTop = list.scrollHeight;
+
+            var findToggle = document.getElementById('tm89-find-toggle');
+            var findPanel = document.getElementById('tm89-chat-find');
+            var findInput = document.getElementById('tm89-find-input');
+            var findClose = document.getElementById('tm89-find-close');
+            var emptySearch = document.getElementById('tm89-no-search-results');
+
+            if (findToggle && findPanel) {
+                findToggle.addEventListener('click', function () {
+                    findPanel.hidden = !findPanel.hidden;
+                    if (!findPanel.hidden) findInput.focus();
+                });
+                findClose.addEventListener('click', function () {
+                    findInput.value = '';
+                    findInput.dispatchEvent(new Event('input'));
+                    findPanel.hidden = true;
+                });
+                findInput.addEventListener('input', function () {
+                    var keyword = findInput.value.toLocaleLowerCase('vi').trim();
+                    var visible = 0;
+                    list.querySelectorAll('.tm89-message').forEach(function (row) {
+                        var matched = row.textContent.toLocaleLowerCase('vi').includes(keyword);
+                        row.hidden = !matched;
+                        if (matched) visible++;
+                    });
+                    emptySearch.hidden = visible > 0 || keyword === '';
+                });
+            }
+
+            var fileInput = document.getElementById('tm89-file');
+            var imageInput = document.getElementById('tm89-image');
+            var preview = document.getElementById('tm89-file-preview');
+            var filename = document.getElementById('tm89-file-label');
+            var fileClear = document.getElementById('tm89-file-clear');
+            var composer = document.getElementById('tm89-compose-form');
+            var messageInput = document.getElementById('tm89-message-input');
+
+            function showFilename() {
+                var file = fileInput.files[0];
+                preview.hidden = !file;
+                if (file) filename.textContent = file.name;
+            }
+            if (fileInput) {
+                fileInput.addEventListener('change', showFilename);
+                imageInput.addEventListener('change', function () {
+                    if (!imageInput.files.length) return;
+                    var transfer = new DataTransfer();
+                    transfer.items.add(imageInput.files[0]);
+                    fileInput.files = transfer.files;
+                    showFilename();
+                });
+                fileClear.addEventListener('click', function () {
+                    fileInput.value = '';
+                    imageInput.value = '';
+                    showFilename();
+                });
+                composer.addEventListener('submit', function (e) {
+                    var text = messageInput.value.trim();
+                    var file = fileInput.files[0];
+                    if (!text && !file) {
+                        e.preventDefault();
+                        messageInput.focus();
+                    } else if (file && file.size > 10 * 1024 * 1024) {
+                        e.preventDefault();
+                        alert('Tệp đính kèm tối đa 10 MB.');
+                    }
+                });
+            }
+        });
+    </script>
+
+<footer class="fm-footer"><div class="fm-footer-top"><div class="fm-footer-intro"><a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a><p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p><div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span></div></div><div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a></div><div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/profile}">Tạo hồ sơ</a><a th:href="@{/freelancer/applications}">Ứng tuyển của tôi</a></div><div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/freelancers}">Tìm freelancer</a><a th:href="@{/freelancers}">Khám phá chuyên gia</a></div><div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/freelancer/profile}">Quản lý tài khoản</a></div></div><div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div></footer></main><script th:replace="~{fragments/common :: scripts}"></script><link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"></body></html>

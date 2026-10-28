@@ -1,0 +1,4 @@
+/* Reserve the full reference background; hide unrelated common UI when opening authentication pages. */
+.auth-compact-page .auth-compact-scene{background:transparent}
+.auth-compact-page .auth-compact-card{box-shadow:0 22px 70px rgba(33,89,163,.13)}
+.auth-compact-page .auth-compact-card h1{font-size:25px!important}

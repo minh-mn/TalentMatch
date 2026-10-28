@@ -1,0 +1,108 @@
+/* V87 – Trang Ứng tuyển; chỉ tác động phần nội dung chính.
+   Sidebar / Header / Footer giữ nguyên theo phiên bản dùng chung. */
+.tm-apps-v87 {--ta87-blue:#0b67f5;--ta87-navy:#0b2a6f;--ta87-border:#d9e6f7;background:#eef5ff;color:#0b2a6f;}
+.tm-apps-v87 .ta87-content {max-width:none;padding:16px 20px 22px;margin:0 auto;box-sizing:border-box;}
+.tm-apps-v87 .ta87-hero {width:100%;margin:0 0 14px;line-height:0;border:1px solid #d9e8fa;border-radius:13px;overflow:hidden;background:#e5f3ff;}
+.tm-apps-v87 .ta87-hero img {width:100%;height:auto;display:block;object-fit:contain;}
+/* Form tim kiem tren cung giong mau: 1 hang, cac dropdown doc ro. */
+.tm-apps-v87 .ta87-toolbar {display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 13px;margin:0 0 13px;background:#fff;border:1px solid var(--ta87-border);border-radius:10px;}
+.tm-apps-v87 .ta87-keyword {display:flex;gap:11px;align-items:center;min-width:240px;flex:1 1 300px;height:44px;padding:0 13px;border:1px solid #d9e6f7;border-radius:9px;color:#3e6eb7;}
+.tm-apps-v87 .ta87-keyword input {width:100%;min-width:0;font-size:14px;color:#193a77;outline:0;border:0;background:transparent;}
+.tm-apps-v87 .ta87-select-group {display:flex;gap:8px;align-items:center;white-space:nowrap;font-size:13px;color:#173e82;font-weight:700;}
+.tm-apps-v87 .ta87-select-group select {max-width:170px;height:43px;padding:0 30px 0 12px;color:#102f75;background:#fff;border:1px solid #d6e4f9;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;}
+.tm-apps-v87 .ta87-sort-group select {min-width:125px;}
+.tm-apps-v87 .ta87-search-button {display:none;}
+.tm-apps-v87 .ta87-reset {height:43px;display:inline-flex;gap:9px;align-items:center;justify-content:center;padding:0 14px;border:1px solid #88b4ff;border-radius:8px;color:#0b67f5;background:#fff;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap;}
+.tm-apps-v87 .ta87-reset:hover {background:#eaf3ff;}
+/* Ngan sach duoc thu gon, khong chiem ben phai nhu giao dien cu. */
+.tm-apps-v87 .ta87-more-filters {margin:0 0 13px;color:#1450af;font-size:13px;}
+.tm-apps-v87 .ta87-more-filters summary {display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-weight:750;list-style:none;}
+.tm-apps-v87 .ta87-more-filters summary::-webkit-details-marker {display:none;}
+.tm-apps-v87 .ta87-budget-form {display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin:10px 0 0;padding:15px;border:1px solid var(--ta87-border);border-radius:10px;background:#fff;}
+.tm-apps-v87 .ta87-budget-form label {display:grid;gap:6px;color:#284a88;font-size:12.5px;font-weight:700;}
+.tm-apps-v87 .ta87-budget-form input,.tm-apps-v87 .ta87-budget-form select {width:180px;max-width:100%;height:39px;border:1px solid #ccddf3;border-radius:7px;padding:0 10px;color:#0b2a6f;background:#fff;}
+.tm-apps-v87 .ta87-budget-form button {height:39px;border:0;border-radius:7px;padding:0 18px;background:#0b67f5;color:#fff;font-size:13px;font-weight:800;cursor:pointer;}
+.tm-apps-v87 .ta87-tabs {display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 14px;}
+.tm-apps-v87 .ta87-tabs a {min-height:42px;display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border:1px solid #d9e6f7;border-radius:8px;background:#fff;color:#0c2d72;text-decoration:none;white-space:nowrap;font-size:13px;font-weight:800;box-shadow:0 2px 6px #1c4e9b0b;}
+.tm-apps-v87 .ta87-tabs a.active {color:#fff;background:#0b67f5;border-color:#0b67f5;box-shadow:0 4px 12px #0b67f52b;}
+.tm-apps-v87 .ta87-result-count {font-size:13px;color:#5d78a8;margin:-3px 0 9px;}
+.tm-apps-v87 .ta87-result-count strong {color:#0b2a6f;}
+/* Du an dang lam v86: thong tin ten / mo ta / gia / nut duoc giu cung co chu. */
+.tm-apps-v87 .ta87-list {display:grid;gap:12px;}
+.tm-apps-v87 .ta87-job {display:grid;grid-template-columns:118px minmax(0,1fr) 245px 270px;gap:16px;align-items:center;min-height:149px;padding:13px 15px;background:#fff;border:1px solid var(--ta87-border);border-radius:11px;box-shadow:0 2px 10px #194f9510;}
+.tm-apps-v87 .ta87-job-image {width:118px;height:102px;display:block;overflow:hidden;border-radius:9px;background:#ecf3ff;text-decoration:none;}
+.tm-apps-v87 .ta87-job-image img {display:block;width:100%;height:100%;object-fit:cover;}
+.tm-apps-v87 .ta87-job-info {min-width:0;}
+.tm-apps-v87 .ta87-job-info h2 {font-size:16.5px;line-height:1.32;margin:0 0 8px;font-weight:850;letter-spacing:-.15px;}
+.tm-apps-v87 .ta87-job-info h2 a {color:#0b2a6f;text-decoration:none;font-weight:850;}
+.tm-apps-v87 .ta87-job-info h2 a:hover {color:#0b67f5;}
+.tm-apps-v87 .ta87-job-meta {display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:#4d6b9e;line-height:1.45;margin-bottom:6px;}
+.tm-apps-v87 .ta87-job-meta i {color:#1168ea;margin-right:3px;}
+.tm-apps-v87 .ta87-job-info p {font-size:13px;line-height:1.45;color:#546f9d;margin:0 0 7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.tm-apps-v87 .ta87-skills {display:flex;flex-wrap:wrap;gap:6px;}
+.tm-apps-v87 .ta87-skills span {padding:5px 8px;border-radius:6px;background:#edf4ff;color:#2b5cb1;font-size:11.5px;font-weight:600;}
+.tm-apps-v87 .ta87-finance {border-left:1px solid #e1eafa;padding-left:17px;min-width:0;display:flex;flex-direction:column;gap:9px;color:#5e79a7;}
+.tm-apps-v87 .ta87-finance strong {color:#dc2626;font-size:18px;line-height:1.25;font-weight:900;white-space:nowrap;letter-spacing:-.15px;}
+.tm-apps-v87 .ta87-finance div {font-size:12.5px;line-height:1.35;white-space:nowrap;}
+.tm-apps-v87 .ta87-finance i {color:#3676e7;margin-right:4px;}
+.tm-apps-v87 .ta87-actions {border-left:1px solid #e1eafa;padding-left:14px;min-width:0;display:grid;gap:8px;}
+.tm-apps-v87 .ta87-status {min-height:46px;border-radius:8px;padding:7px 12px;display:flex;flex-direction:column;justify-content:center;gap:4px;background:#fff0df;color:#c16b08;}
+.tm-apps-v87 .ta87-status strong {font-size:12.5px;font-weight:800;display:flex;align-items:center;gap:8px;}
+.tm-apps-v87 .ta87-status small {font-size:11.5px;color:#667fa8;padding-left:20px;line-height:1.3;}
+.tm-apps-v87 .ta87-status.review {background:#fff0df;color:#c97900;}
+.tm-apps-v87 .ta87-status.priority {background:#eaf3ff;color:#1265dc;}
+.tm-apps-v87 .ta87-status.hired {background:#e1f8ed;color:#069965;}
+.tm-apps-v87 .ta87-status.rejected {background:#ffeaee;color:#d82948;}
+.tm-apps-v87 .ta87-status.withdrawn {background:#eef2f8;color:#4e6994;}
+.tm-apps-v87 .ta87-buttons {display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.tm-apps-v87 .ta87-buttons form {margin:0;min-width:0;}
+.tm-apps-v87 .ta87-buttons a,.tm-apps-v87 .ta87-buttons button {width:100%;height:36px;border-radius:7px;font-size:12.5px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;cursor:pointer;}
+.tm-apps-v87 .ta87-detail {border:1.5px solid #5c99ff;color:#0b67f5;background:#fff;}
+.tm-apps-v87 .ta87-detail:hover {color:#fff;background:#0b67f5;}
+.tm-apps-v87 .ta87-withdraw {border:1px solid #ffb6c0;color:#df2644;background:#fff2f3;}
+.tm-apps-v87 .ta87-withdraw:hover:not(:disabled) {background:#ffe1e5;}
+.tm-apps-v87 .ta87-withdraw:disabled {opacity:.38;cursor:not-allowed;}
+.tm-apps-v87 .ta87-empty {border:1px solid #d9e6f7;background:#fff;border-radius:11px;padding:50px 20px;text-align:center;}
+.tm-apps-v87 .ta87-empty>i {font-size:42px;color:#0b67f5;}
+.tm-apps-v87 .ta87-empty h2 {margin:14px 0 8px;font-size:20px;}
+.tm-apps-v87 .ta87-empty p {font-size:14px;color:#657ca9;}
+.tm-apps-v87 .ta87-empty a {display:inline-flex;align-items:center;min-height:38px;margin-top:9px;border-radius:7px;padding:0 14px;background:#0b67f5;color:#fff;text-decoration:none;font-weight:800;}
+.tm-apps-v87 .ta87-pagination {margin:15px 0 4px;display:flex;gap:8px;justify-content:center;}
+.tm-apps-v87 .ta87-pagination a {width:38px;height:38px;border:1px solid #d9e6f7;border-radius:8px;background:#fff;color:#0b2a6f;font-size:14px;font-weight:800;text-decoration:none;display:grid;place-items:center;}
+.tm-apps-v87 .ta87-pagination a.active {background:#0b67f5;border-color:#0b67f5;color:#fff;}
+/* Co gian theo man hinh, khong lam thu hep sidebar chung. */
+@media(max-width:1500px) {
+ .tm-apps-v87 .ta87-job {grid-template-columns:100px minmax(0,1fr) 205px 220px;gap:12px;padding:12px;}
+ .tm-apps-v87 .ta87-job-image {width:100px;height:96px;}
+ .tm-apps-v87 .ta87-actions {padding-left:10px;}
+ .tm-apps-v87 .ta87-finance {padding-left:12px;}
+ .tm-apps-v87 .ta87-finance strong {font-size:17px;}
+ .tm-apps-v87 .ta87-job-info h2 {font-size:16px;}
+ .tm-apps-v87 .ta87-toolbar {gap:9px;}
+}
+@media(max-width:1180px) {
+ .tm-apps-v87 .ta87-job {grid-template-columns:90px minmax(0,1fr) 185px;}
+ .tm-apps-v87 .ta87-job-image {width:90px;height:94px;}
+ .tm-apps-v87 .ta87-actions {grid-column:2/-1;display:grid;grid-template-columns:1fr 230px;border-left:0;padding:0;}
+ .tm-apps-v87 .ta87-status {min-height:40px;}
+ .tm-apps-v87 .ta87-finance {grid-column:3;grid-row:1;}
+ .tm-apps-v87 .ta87-toolbar {align-items:stretch;}
+}
+@media(max-width:900px) {
+ .tm-apps-v87 .ta87-content {padding:12px;}
+ .tm-apps-v87 .ta87-job {grid-template-columns:90px minmax(0,1fr);}
+ .tm-apps-v87 .ta87-finance {grid-column:1/-1;grid-row:auto;border-left:0;border-top:1px solid #e3ebf7;padding:10px 0 0;display:flex;flex-direction:row;gap:14px;flex-wrap:wrap;}
+ .tm-apps-v87 .ta87-actions {grid-column:1/-1;grid-template-columns:1fr 220px;}
+ .tm-apps-v87 .ta87-keyword {flex-basis:100%;}
+}
+@media(max-width:600px) {
+ .tm-apps-v87 .ta87-hero {border-radius:8px;}
+ .tm-apps-v87 .ta87-toolbar {padding:10px;}
+ .tm-apps-v87 .ta87-select-group {flex:1 1 45%;justify-content:space-between;}
+ .tm-apps-v87 .ta87-select-group select {max-width:125px;}
+ .tm-apps-v87 .ta87-job-image {width:80px;height:85px;}
+ .tm-apps-v87 .ta87-job {grid-template-columns:80px minmax(0,1fr);padding:11px;gap:10px;}
+ .tm-apps-v87 .ta87-actions {grid-template-columns:1fr;}
+ .tm-apps-v87 .ta87-job-info h2 {font-size:15.5px;}
+ .tm-apps-v87 .ta87-status small {font-size:11px;}
+}

@@ -1,0 +1,72 @@
+/* TalentMatch Freelancer dashboard - final overrides. Footer is intentionally untouched. */
+.fm-dashboard {--tm-sidebar-width:230px!important;background:#EEF3FC!important;color:#333B4A!important;font-family:Inter,Arial,sans-serif!important}
+.fm-dashboard .market-sidebar {width:230px!important;min-width:230px!important;max-width:230px!important;background:#fff!important}
+.fm-dashboard .market-side-nav a,.fm-dashboard .market-side-nav-auth a {font-size:15px!important;font-weight:700!important;color:#111827!important;white-space:nowrap!important;min-height:40px!important}
+.fm-dashboard .market-side-nav a.active {color:white!important;background:#0967f9!important}
+.fm-dashboard .fm-header {left:230px!important;height:64px!important;min-height:64px!important;padding:0 24px!important;z-index:100!important}
+.fm-dashboard .fm-main {margin-left:230px!important;padding-top:64px!important}
+.fm-dashboard .fm-content {padding:16px 24px!important;max-width:1920px!important;margin:0 auto!important;box-sizing:border-box!important}
+.fm-dashboard .fm-hero-reference {position:relative!important;width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:16/3!important;overflow:hidden!important;border-radius:14px!important;background:#a4d6ff!important}
+.fm-dashboard .fm-reference-banner {display:block!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:fill!important}
+.fm-dashboard .fm-personal-greeting {position:absolute!important;z-index:4!important;left:6.35%!important;top:10.4%!important;margin:0!important;color:#0B2A6F!important;font-size:clamp(9px,1vw,16px)!important;font-weight:500!important;line-height:1.2!important;white-space:nowrap!important}
+.fm-dashboard .fm-personal-greeting strong {font-weight:800!important}
+.fm-dashboard .fm-banner-action {position:absolute!important;left:6.35%!important;top:73.7%!important;width:13.7%!important;height:16.2%!important;z-index:5!important;cursor:pointer!important}
+.fm-dashboard .fm-metrics {display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important;margin:16px 0!important}
+.fm-dashboard .fm-metrics article {min-height:88px!important;padding:14px 16px!important;background:#fff!important}
+.fm-dashboard .fm-metrics strong {font-size:26px!important;font-weight:800!important;color:#0B2A6F!important}
+.fm-dashboard .fm-metrics small {font-size:13px!important;color:#64748B!important}
+.fm-dashboard .fm-primary-grid {display:grid!important;grid-template-columns:minmax(0,62fr) minmax(0,36fr)!important;gap:16px!important;margin-bottom:16px!important}
+.fm-dashboard .fm-three-column-row {display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px!important;margin-bottom:16px!important}
+.fm-dashboard .fm-three-column-row .fm-overview-grid {display:contents!important}
+.fm-dashboard .fm-three-column-row .fm-recent-section {grid-column:auto!important;margin:0!important}
+.fm-dashboard .fm-panel-head h2 {font-size:20px!important;font-weight:700!important;color:#0B2A6F!important}
+.fm-dashboard .fm-job-info>a {font-size:16px!important;font-weight:700!important;color:#111827!important}
+.fm-dashboard .fm-job-right b {font-size:18px!important;font-weight:800!important;color:#DC2626!important}
+.fm-dashboard .fm-job-info small,.fm-dashboard .fm-profile-score p {color:#333B4A!important;font-size:13px!important}
+.fm-dashboard .fm-panel,.fm-dashboard .fm-metrics article {border:1px solid #dce6f4!important;border-radius:12px!important;box-shadow:0 3px 12px #0B2A6F09!important}
+.fm-dashboard .fm-account-menu {position:relative!important;z-index:500!important}
+.fm-dashboard .fm-account-menu summary {cursor:pointer!important;list-style:none!important;display:flex!important;align-items:center!important;gap:10px!important}
+.fm-dashboard .fm-account-menu summary::-webkit-details-marker {display:none}
+.fm-dashboard .fm-account-dropdown {position:absolute!important;right:0!important;top:calc(100% + 12px)!important;z-index:1000!important;background:white!important;min-width:215px!important;box-shadow:0 10px 30px #0B2A6F27!important;border:1px solid #dbe7f5!important;border-radius:12px!important;padding:7px!important}
+.fm-dashboard .fm-account-dropdown a,.fm-dashboard .fm-account-dropdown button {width:100%!important;text-align:left!important;display:flex!important;gap:10px!important;padding:12px!important;font-size:14px!important;cursor:pointer!important}
+.fm-dashboard .fm-account-dropdown button {color:#DC2626!important;background:transparent!important;border:0!important}
+/* Keep the existing .fm-footer styles and markup unchanged. */
+@media (max-width:1300px){.fm-dashboard .fm-header-links{display:none!important}.fm-dashboard .fm-header{grid-template-columns:minmax(0,1fr) auto!important}.fm-dashboard .fm-three-column-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}.fm-dashboard .fm-three-column-row .fm-recent-section{grid-column:1/-1!important}}
+@media (max-width:1050px){.fm-dashboard .fm-primary-grid{grid-template-columns:1fr!important}.fm-dashboard .fm-personal-greeting{font-size:10px!important}}
+@media (max-width:900px){.fm-dashboard .market-sidebar{display:none!important}.fm-dashboard .fm-main{margin-left:0!important}.fm-dashboard .fm-header{left:0!important}.fm-dashboard .fm-content{padding:12px!important}}
+@media (max-width:650px){.fm-dashboard .fm-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}.fm-dashboard .fm-three-column-row{grid-template-columns:1fr!important}.fm-dashboard .fm-three-column-row .fm-recent-section{grid-column:auto!important}.fm-dashboard .fm-account-label{display:none!important}.fm-dashboard .fm-panel-head h2{font-size:18px!important}}
+
+/* v2: restore chart rendering, make header menu accessible, respect reference spacing */
+.fm-dashboard .fm-live-chart{display:block!important;min-height:185px!important;padding:8px 14px 12px!important}
+.fm-dashboard .fm-live-chart-bars{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;width:100%!important;height:148px!important;align-items:end!important;gap:14px!important;overflow:visible!important}
+.fm-dashboard .fm-live-chart-item{display:flex!important;flex-direction:column!important;justify-content:flex-end!important;align-items:center!important;height:142px!important;min-height:142px!important;gap:4px!important}
+.fm-dashboard .fm-live-bar{display:block!important;flex:none!important;width:38px!important;max-height:115px!important;min-height:3px!important;border-radius:5px 5px 0 0!important}
+.fm-dashboard .fm-live-bar.applications{background:#286dff!important}
+.fm-dashboard .fm-live-bar.active{background:#16a34a!important}
+.fm-dashboard .fm-live-bar.completed{background:#fb923c!important}
+.fm-dashboard .fm-live-chart p{display:block!important;margin:8px 0!important;text-align:center!important}
+.fm-dashboard .fm-account-menu[open] .fm-account-dropdown{display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+.fm-dashboard .fm-header{overflow:visible!important}
+.fm-dashboard .fm-three-column-row .fm-recent-section{display:block!important;min-width:0!important}
+.fm-dashboard .fm-recent-list{display:block!important}
+.fm-dashboard .fm-personal-greeting{background:transparent!important}
+@media(max-width:1300px){.fm-dashboard .fm-three-column-row{grid-template-columns:repeat(3,minmax(0,1fr))!important}.fm-dashboard .fm-three-column-row .fm-recent-section{grid-column:auto!important}}
+@media(max-width:1100px){.fm-dashboard .fm-three-column-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}.fm-dashboard .fm-three-column-row .fm-recent-section{grid-column:1/-1!important}}
+@media(max-width:650px){.fm-dashboard .fm-three-column-row{grid-template-columns:1fr!important}.fm-dashboard .fm-three-column-row .fm-recent-section{grid-column:auto!important}}
+
+/* V3: direct three-column layout; keep the existing footer untouched. */
+.fm-dashboard .fm-three-column-row {display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px!important;align-items:stretch!important}
+.fm-dashboard .fm-three-column-row > .fm-panel {display:block!important;grid-column:auto!important;grid-row:auto!important;position:relative!important;min-width:0!important;width:auto!important;min-height:224px!important;visibility:visible!important;opacity:1!important}
+.fm-dashboard .fm-three-column-row > .fm-panel .fm-panel-head {min-height:41px!important}
+.fm-dashboard .fm-three-column-row > .fm-recent-section {height:auto!important;max-height:none!important;overflow:visible!important}
+.fm-dashboard .fm-recent-list {display:block!important;padding:0 14px 12px!important}
+.fm-dashboard .fm-application {display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important}
+.fm-dashboard .fm-live-chart {height:auto!important;min-height:166px!important;display:block!important;overflow:visible!important}
+.fm-dashboard .fm-live-chart-bars {height:133px!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;padding:0 8px!important;gap:8px!important;align-items:end!important;overflow:visible!important;border-bottom:1px solid #cddcf2!important}
+.fm-dashboard .fm-live-chart-item {height:128px!important;min-height:128px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-end!important;gap:4px!important;overflow:visible!important}
+.fm-dashboard .fm-live-chart-item .fm-live-bar {display:block!important;position:static!important;flex-shrink:0!important;width:38px!important;min-height:4px!important;max-height:95px!important;border-radius:4px 4px 0 0!important;opacity:1!important;visibility:visible!important}
+.fm-dashboard .fm-live-chart-item strong,.fm-dashboard .fm-live-chart-item small {display:block!important;line-height:16px!important;flex-shrink:0!important}
+.fm-dashboard .fm-live-chart p {max-width:none!important;margin:4px 0!important}
+.fm-dashboard .fm-footer {position:relative!important}
+@media (max-width:1120px) {.fm-dashboard .fm-three-column-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}.fm-dashboard .fm-three-column-row > .fm-recent-section{grid-column:1/-1!important}}
+@media (max-width:700px) {.fm-dashboard .fm-three-column-row{grid-template-columns:1fr!important}.fm-dashboard .fm-three-column-row > .fm-recent-section{grid-column:auto!important}}

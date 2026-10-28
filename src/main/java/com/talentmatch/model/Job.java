@@ -1,6 +1,7 @@
 package com.talentmatch.model;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,7 +17,8 @@ public class Job {
     @Column(length = 1000) private String requiredSkills;
     @Column(nullable = false, precision = 15, scale = 2) private BigDecimal budget;
     @Column(length = 30) private String priceType = "FIXED";
-    private LocalDate deadline;
+    // <input type="date"> gửi/hiển thị định dạng ISO yyyy-MM-dd; thiếu annotation này thì bind/hiển thị theo locale vi_VN và lỗi.
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) private LocalDate deadline;
     // Các thuộc tính riêng của bộ lọc marketplace. DDL update sẽ bổ sung cột nếu DB cũ chưa có.
     @Column(name = "estimated_duration_days") private Integer estimatedDurationDays = 14;
     @Column(name = "featured", nullable = false) private boolean featured = false;

@@ -1,0 +1,27 @@
+/* Client V71 - nội dung chính theo ảnh mẫu, không can thiệp sidebar/header/footer */
+.client-reference-v70 .cr-hero-image {background-image:url('/images/client-banner-v71.png')!important;background-size:100% 100%!important;background-position:center!important;aspect-ratio:2048 / 708;min-height:0!important;max-height:360px;margin-bottom:12px}
+.client-reference-v70 .cr-hero-image:before {display:none!important}
+.client-reference-v70 .cr-banner-hit{position:absolute;z-index:2;left:6.5%;top:73%;width:21%;height:17%;border-radius:9px}
+.client-reference-v70 .cr-kpis{margin-bottom:12px}
+.client-reference-v70 .cr-card-section,.client-reference-v70 .cr-ongoing,.client-reference-v70 .cr-freelancers,.client-reference-v70 .cr-journey{margin-bottom:13px}
+.client-reference-v70 .cr-job-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.client-reference-v70 .cr-job-card{border:1px solid #e3edfb;border-radius:10px;min-width:0;overflow:hidden;color:#0b2a6f;background:#fff;display:flex;flex-direction:column}
+.client-reference-v70 .cr-job-cover{height:132px;position:relative;background:#edf5ff}
+.client-reference-v70 .cr-job-cover img{width:100%;height:100%;object-fit:cover}
+.client-reference-v70 .cr-match-tag{position:absolute;top:8px;left:8px;padding:4px 8px;background:#e2fff0;color:#098858;font-size:12px;font-weight:700;border-radius:6px}
+.client-reference-v70 .cr-job-details{padding:11px;display:flex;flex:1;flex-direction:column;gap:7px}
+.client-reference-v70 .cr-job-details>strong{font-size:15px;line-height:1.35;min-height:41px;font-weight:800;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.client-reference-v70 .cr-job-budget{font-size:17px;color:#dc2626;font-weight:800}
+.client-reference-v70 .cr-job-meta{display:flex;justify-content:space-between;gap:5px;flex-wrap:wrap;color:#5b769f;margin-top:auto}.client-reference-v70 .cr-job-meta small{font-size:12px}
+.client-reference-v70 .cr-job-button{display:block;text-align:center;background:#0768f5;border-radius:6px;color:white;padding:9px 8px;font-size:13px;font-weight:750}
+.client-reference-v70 .cr-active-item{display:grid;grid-template-columns:65px minmax(0,1.5fr) minmax(80px,1fr) 110px 110px;gap:13px;align-items:center;color:#0b2a6f;border-top:1px solid #edf2f9;padding:11px 0}
+.client-reference-v70 .cr-active-thumb{height:48px;background:#e9f3ff;color:#0768f5;border-radius:8px;display:grid;place-items:center;font-size:22px}
+.client-reference-v70 .cr-active-title{min-width:0}.client-reference-v70 .cr-active-title strong{display:block;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;font-size:15px}.client-reference-v70 .cr-active-title small{font-size:12px;color:#6380a7;display:block;margin-top:4px}
+.client-reference-v70 .cr-active-track{height:9px;background:#eef4fc;border-radius:20px;overflow:hidden}.client-reference-v70 .cr-active-track span{display:block;width:45%;height:100%;background:#1681f7;border-radius:20px}.client-reference-v70 .cr-active-status{font-size:12px;font-weight:700;color:#0ba474}.client-reference-v70 .cr-active-button{background:#eef6ff;text-align:center;border-radius:7px;color:#0768f5;padding:12px 5px;font-size:12px;font-weight:750}
+.client-reference-v70 .cr-middle-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px}.client-reference-v70 .cr-cost-report,.client-reference-v70 .cr-activity-panel{min-height:290px}.client-reference-v70 .cr-cost-report .cr-bars{height:210px}.client-reference-v70 .cr-cost-report .cr-bar-track{height:164px}
+.client-reference-v70 .cr-talent-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.client-reference-v70 .cr-talent{border:1px solid #e3ecf9;border-radius:9px;padding:13px 9px;color:#0b2a6f;display:flex;align-items:center;text-align:center;flex-direction:column;gap:8px}.client-reference-v70 .cr-talent-avatar{width:55px;height:55px;display:grid;place-items:center;border-radius:50%;background:#e7f1ff;color:#0769f6;font-size:25px}.client-reference-v70 .cr-talent strong{font-size:15px}.client-reference-v70 .cr-talent small{font-size:12px;color:#5878aa}.client-reference-v70 .cr-talent>span:last-child{background:#0768f5;color:white;padding:8px 14px;border-radius:6px;font-size:12px;font-weight:750;margin-top:auto}
+.client-reference-v70 .cr-journey .cr-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.client-reference-v70 .cr-journey .cr-steps a{margin:0;min-height:86px}
+.client-reference-v70 .cr-panel .cr-heading h2{font-size:20px!important}.client-reference-v70 .cr-sub{font-size:14px}.client-reference-v70 .cr-kpi small{font-size:13px}
+@media(max-width:1100px){.client-reference-v70 .cr-job-cards,.client-reference-v70 .cr-talent-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.client-reference-v70 .cr-journey .cr-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:850px){.client-reference-v70 .cr-middle-grid{grid-template-columns:1fr}.client-reference-v70 .cr-active-item{grid-template-columns:48px 1fr 100px}.client-reference-v70 .cr-active-track,.client-reference-v70 .cr-active-status{display:none}}
+@media(max-width:550px){.client-reference-v70 .cr-job-cards,.client-reference-v70 .cr-talent-grid,.client-reference-v70 .cr-journey .cr-steps{grid-template-columns:1fr}.client-reference-v70 .cr-hero-image{min-height:130px!important}.client-reference-v70 .cr-banner-hit{left:6%;width:24%}}

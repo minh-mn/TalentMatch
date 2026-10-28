@@ -1,0 +1,153 @@
+/* TalentMatch Client unified blue theme v53.
+   Scoped to Client workspace so Freelancer pages keep their existing design. */
+.client-workspace {
+  --client-blue: #246dff;
+  --client-blue-strong: #1456d9;
+  --client-blue-dark: #123a78;
+  --client-blue-soft: #eaf2ff;
+  --client-blue-pale: #f4f8ff;
+  --client-ink: #19345d;
+  --client-muted: #71819b;
+  --client-border: #dce7f7;
+  --client-shadow: 0 8px 26px rgba(24, 73, 145, .07);
+  background: #f4f8ff !important;
+  color: var(--client-ink);
+}
+/* Sidebar and top navigation match the blue Freelancer workspace. */
+.client-workspace .market-sidebar { background: #fff !important; border-right: 1px solid var(--client-border) !important; box-shadow: 5px 0 24px rgba(23,75,135,.045) !important; }
+.client-workspace .market-brand strong { color: var(--client-blue-dark) !important; }
+.client-workspace .market-side-nav a { color: #34527d; border-radius: 10px; transition: background .18s ease,color .18s ease; }
+.client-workspace .market-side-nav a:hover { background: #f0f5ff !important; color: var(--client-blue-strong) !important; }
+.client-workspace .market-side-nav a.active { color: #fff !important; background: linear-gradient(135deg,#347cff,#2460e8) !important; box-shadow: 0 7px 18px rgba(36,109,255,.2); }
+.client-workspace .market-side-nav a.active .market-side-icon { color: #fff !important; }
+.client-workspace .market-topbar { background: rgba(255,255,255,.97) !important; border-bottom: 1px solid var(--client-border) !important; }
+.client-workspace .market-mode-switch a.active { color: var(--client-blue-strong) !important; background: var(--client-blue-soft) !important; }
+/* Replace the legacy purple palette used by client-v29 components. */
+.client-workspace .client-page-heading h1 span,
+.client-workspace .client-eyebrow,
+.client-workspace .client-inline-metrics,
+.client-workspace .client-app-facts strong,
+.client-workspace .client-app-facts a,
+.client-workspace .client-table a,
+.client-workspace .client-empty a,
+.client-workspace .client-mini-link,
+.client-workspace .client-match-score strong,
+.client-workspace .client-match-reason i { color: var(--client-blue-strong) !important; }
+.client-workspace .client-btn.primary,
+.client-workspace .client-status-form button,
+.client-workspace .market-primary-action,
+.client-workspace .tmc49-hero-actions .primary,
+.client-workspace .tmc49-datefilter button { background: linear-gradient(135deg,#347cff,#1f5fe0) !important; color: #fff !important; border-color: transparent !important; box-shadow: 0 5px 13px rgba(36,109,255,.18); }
+.client-workspace .client-btn.outline { border-color: #c7d9f6 !important; color: var(--client-blue-strong) !important; background: #fff !important; }
+.client-workspace .client-btn.pale,
+.client-workspace .client-tag,
+.client-workspace .client-match-score,
+.client-workspace .client-guide-step b,
+.client-workspace .client-contract-sigs>span { color: var(--client-blue-strong) !important; background: var(--client-blue-soft) !important; border-color: #d4e3ff !important; }
+.client-workspace .client-form-grid :is(input,select,textarea):focus,
+.client-workspace .client-talent-filters :is(input,select):focus,
+.client-workspace input:focus, .client-workspace select:focus, .client-workspace textarea:focus { border-color: #79a7ff !important; box-shadow: 0 0 0 3px rgba(36,109,255,.13) !important; outline: 0; }
+.client-workspace .client-job-icon,
+.client-workspace .client-stat-card.purple>i,
+.client-workspace .client-stat-card.blue>i,
+.client-workspace .client-avatar,
+.client-workspace .client-app-icon { color: var(--client-blue-strong) !important; background: #e7f0ff !important; }
+.client-workspace .client-form-grid input,
+.client-workspace .client-form-grid select,
+.client-workspace .client-form-grid textarea,
+.client-workspace .client-talent-filters input,
+.client-workspace .client-talent-filters select,
+.client-workspace .client-question-box textarea { border-color: #d5e2f6 !important; background: #fbfdff !important; }
+.client-workspace .client-application blockquote { border-left-color: var(--client-blue) !important; background: #f1f6ff !important; }
+.client-workspace .client-table th { background: #f2f6ff !important; color: #62789d !important; }
+.client-workspace .client-empty.large { border-color: #c9daf7 !important; }
+.client-workspace .client-empty.large i { color: var(--client-blue) !important; }
+.client-workspace .client-profile-cover { background: linear-gradient(110deg,#e7f0ff,#f5f9ff) !important; }
+.client-workspace .client-contract-box { background: linear-gradient(110deg,#edf4ff,#f8fbff) !important; border-color: #d7e5fb !important; }
+.client-workspace .client-contract-sigs>span { border-color: #d7e5fb !important; }
+/* Dashboard: remove the purple and pink accent variants so the visual system stays blue. */
+.client-workspace.tmc49 .tmc49-stat.violet>i,
+.client-workspace.tmc49 .tmc49-stat.pink>i { background: #e7f0ff !important; color: var(--client-blue) !important; }
+.client-workspace.tmc49 .tmc49-stat>i,
+.client-workspace.tmc49 .tmc49-quick a>i,
+.client-workspace.tmc49 .tmc49-jobicon,
+.client-workspace.tmc49 .tmc49-panel h2 i,
+.client-workspace.tmc49 .tmc49-tip i { color: var(--client-blue) !important; }
+.client-workspace.tmc49 .tmc49-stat>i,
+.client-workspace.tmc49 .tmc49-quick a>i,
+.client-workspace.tmc49 .tmc49-jobicon { background: #e7f0ff !important; }
+.client-workspace.tmc49 .tmc49-menu a.active { background: linear-gradient(135deg,#347cff,#1f5fe0) !important; }
+.client-workspace.tmc49 .tmc49-main { background: linear-gradient(180deg,#f3f7ff 0%,#f8fbff 100%) !important; }
+.client-workspace.tmc49 .tmc49-hero { background: linear-gradient(110deg,#e9f2ff,#c6ddff) !important; border-color: #d3e3fc !important; }
+.client-workspace.tmc49 .tmc49-hero-left { background: linear-gradient(90deg,#edf5ff 0%,#edf5fff2 70%,transparent) !important; }
+.client-workspace.tmc49 .tmc49-hero h1 span { color: var(--client-blue-strong) !important; }
+.client-workspace.tmc49 .tmc49-softbtn { color: var(--client-blue-strong) !important; background: var(--client-blue-soft) !important; }
+/* Shared banner/image rules: fixed visual height, no stretched images. */
+.client-workspace :is(.client-profile-cover,.client-banner,.client-hero-banner,.client-card-banner) { overflow: hidden; border-radius: 16px; background: linear-gradient(120deg,#246dff,#8dbaff); }
+.client-workspace :is(.client-profile-cover,.client-banner,.client-hero-banner,.client-card-banner) img { display:block; width:100%; height:100%; min-width:0; object-fit:cover; object-position:center; }
+.client-workspace .client-profile-cover img { max-height:220px; }
+.client-workspace .client-banner,.client-workspace .client-card-banner { aspect-ratio: 16 / 5; }
+.client-workspace .client-hero-banner { aspect-ratio: 16 / 4.5; }
+.client-workspace :is(.client-banner,.client-card-banner,.client-hero-banner) img { min-height:100%; }
+.client-workspace .client-metric-row>div,
+.client-workspace .client-job-card,
+.client-workspace .client-empty,
+.client-workspace .client-panel,
+.client-workspace .client-card,
+.client-workspace .client-table-wrap,
+.client-workspace .client-profile-card,
+.client-workspace .client-form-card { border-color: var(--client-border); box-shadow: var(--client-shadow); }
+@media (max-width: 900px) {
+  .client-workspace .client-banner,.client-workspace .client-card-banner { aspect-ratio: 16 / 7; }
+  .client-workspace .client-hero-banner { aspect-ratio: 16 / 8; }
+}
+@media (max-width: 560px) {
+  .client-workspace .client-banner,.client-workspace .client-card-banner,.client-workspace .client-hero-banner { aspect-ratio: 16 / 9; }
+}
+
+
+/* v56: Match the shared Client workspace sidebar logo to the Freelancer feature pages.
+   Keep this rule in the client stylesheet (loaded after market.css), so later cascade
+   order cannot expand the logo on non-dashboard Client pages. */
+.client-workspace .market-sidebar .market-brand {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-height: 38px !important;
+  max-width: 100%;
+}
+.client-workspace .market-sidebar .market-brand .tm33-brand-logo {
+  display: block !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+  max-width: 34px !important;
+  max-height: 34px !important;
+  object-fit: contain !important;
+  flex: 0 0 34px !important;
+  border-radius: 0 !important;
+}
+.client-workspace .market-sidebar .market-brand > span:last-child {
+  min-width: 0;
+}
+.client-workspace .market-sidebar .market-brand > span:last-child strong,
+.client-workspace .market-sidebar .market-brand > span:last-child small {
+  display: block;
+  white-space: nowrap;
+}
+.client-bottom-logout button {
+    width: 100%;
+    padding: 12px;
+    background: #fff5f5;
+    color: #c82333;
+    border: 1px solid #ffcaca;
+    border-radius: 13px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.client-bottom-logout button:hover {
+    background: #ffe8e8;
+}

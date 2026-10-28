@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TalentMatch - nền tảng kết nối Freelancer và doanh nghiệp Việt Nam">
+  <title th:text="${title} + ' | TalentMatch'">TalentMatch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/reference-ui.css}">
+  <link rel="stylesheet" th:href="@{/css/jobs-board-v28.css}">
+  <link rel="stylesheet" th:href="@{/css/client-v29.css}">
+  <link rel="stylesheet" th:href="@{/css/admin-v30.css}">
+  <link rel="stylesheet" th:href="@{/css/layout-stability.css}">
+  <link rel="stylesheet" th:href="@{/css/freelancer-pages-v36.css}">
+  <link rel="stylesheet" th:href="@{/css/guest-home-v1.css}">
+  <link rel="stylesheet" th:href="@{/css/auth-redesign.css}">
+  <link rel="stylesheet" th:href="@{/css/auth-compact.css}">
+  <link rel="stylesheet" th:href="@{/css/freelancer-home-v10.css}">
+  <link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}">
+  <link rel="stylesheet" th:href="@{/css/client-unified-v53.css}">
+</head>
+<body>
+
+<!-- PUBLIC / MARKETPLACE SIDEBAR -->
+<aside class="market-sidebar" th:fragment="marketSidebar(active)">
+  <div class="market-brand-wrap">
+    <a class="market-brand" th:href="@{/}">
+      <img sec:authorize="hasAnyRole('FREELANCER','CUSTOMER')" th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch" class="tm33-brand-logo">
+      <span class="market-brand-symbol" sec:authorize="!hasAnyRole('FREELANCER','CUSTOMER')"><i></i><i></i></span>
+      <span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span>
+    </a>
+  </div>
+
+  <div class="tm33-sidebar-profile" sec:authorize="hasRole('FREELANCER')">
+    <a th:href="@{/freelancer/profile}" class="tm33-profile-link">
+      <span class="tm33-profile-avatar" th:text="${currentUser.fullName != null and !#strings.isEmpty(currentUser.fullName) ? #strings.substring(currentUser.fullName,0,1) : 'U'}">F</span>
+      <span class="tm33-profile-name"><strong th:text="${currentUser.fullName}">Freelancer</strong><small>Freelancer</small></span>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+  </div>
+
+  <!-- Khi CHƯA đăng nhập: giữ menu marketplace gọn -->
+  <th:block sec:authorize="isAnonymous()">
+    <div class="market-side-section">
+      <div class="market-side-label">MENU CHÍNH</div>
+      <nav class="market-side-nav">
+        <a th:href="@{/}" th:classappend="${active == 'home'} ? ' active' : ''">
+          <span class="market-side-icon"><svg viewBox="0 0 24 24"><path d="M3 11.3 12 4l9 7.3V21h-6v-6H9v6H3v-9.7Zm2 1V19h2v-6h10v6h2v-6.7l-7-5.7-7 5.7Z"/></svg></span>Trang chủ
+        </a>
+        <a th:href="@{/jobs}" th:classappend="${active == 'jobs'} ? ' active' : ''">
+          <span class="market-side-icon"><svg viewBox="0 0 24 24"><path d="M10.5 4a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Zm5.6 9.7 4.2 4.2-1.4 1.4-4.2-4.2 1.4-1.4Z"/></svg></span>Tìm dự án
+        </a>
+        <a th:href="@{/freelancers}" th:classappend="${active == 'hire'} ? ' active' : ''">
+          <span class="market-side-icon"><svg viewBox="0 0 24 24"><path d="M8 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm8 1a3 3 0 1 1 0-6 3 3 0 0 1 0 6ZM2 21v-2c0-3.3 2.7-6 6-6s6 2.7 6 6v2H2Zm13 0v-2c0-1.6-.5-3.1-1.4-4.3.7-.4 1.5-.7 2.4-.7 2.8 0 5 2.2 5 5v2h-6Z"/></svg></span>Tìm ứng viên
+        </a>
+      </nav>
+    </div>
+
+    <div class="market-side-section">
+      <div class="market-side-label">TIỆN ÍCH</div>
+      <nav class="market-side-nav">
+        <a th:href="@{/register(role='FREELANCER')}">
+          <span class="market-side-icon"><svg viewBox="0 0 24 24"><path d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM4 21v-2c0-3.3 3.6-6 8-6 1.3 0 2.6.2 3.7.7a6.5 6.5 0 0 0-.7 2.8V21H4Zm15-8v3h3v2h-3v3h-2v-3h-3v-2h3v-3h2Z"/></svg></span>Tạo hồ sơ Freelancer
+        </a>
+        <a th:href="@{/register(role='CUSTOMER')}">
+          <span class="market-side-icon"><svg viewBox="0 0 24 24"><path d="M8 4V2h8v2h5v17H3V4h5Zm2 0h4V3h-4v1Zm-5 4h14V6H5v2Zm0 2v9h14v-9h-5v2h-4v-2H5Z"/></svg></span>Đăng tuyển Freelancer
+        </a>
+      </nav>
+    </div>
+
+    <div class="market-side-section">
+      <div class="market-side-label">HỖ TRỢ</div>
+      <nav class="market-side-nav">
+        <a th:href="@{/#how}"><span class="market-side-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 2a8 8 0 0 1 5.7 13.6L6.4 6.3A7.9 7.9 0 0 1 12 4Zm-7.6 3.7 11.9 11.9A8 8 0 0 1 4.4 7.7Z"/></svg></span>Cách hoạt động</a>
+        <a href="#" onclick="return false;"><span class="market-side-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 17h-2v-2h2v2Zm1.9-7.7-.9.9c-.7.7-1 1.2-1 2.8h-2v-.5c0-1.1.3-2.1 1.1-2.9l1.2-1.2a2 2 0 1 0-3.3-1.5H8a4 4 0 1 1 6.9 2.4Z"/></svg></span>Trung tâm trợ giúp</a>
+      </nav>
+    </div>
+  </th:block>
+
+  <!-- Khi ĐÃ đăng nhập: điều hướng theo đúng vai trò -->
+  <th:block sec:authorize="isAuthenticated()">
+    <div class="market-side-section market-side-section-auth">
+      <div class="market-side-label">MENU CHÍNH</div>
+
+      <!-- Freelancer: chỉ hiển thị các chức năng Freelancer thực sự sử dụng -->
+      <nav class="market-side-nav market-side-nav-auth" sec:authorize="hasRole('FREELANCER')">
+        <a th:href="@{/freelancer/dashboard}" th:classappend="${active == 'home'} ? ' active' : ''">
+          <span class="market-side-icon"><i class="fa-solid fa-house"></i></span>Trang chủ
+        </a>
+        <a th:href="@{/jobs}" th:classappend="${active == 'jobs'} ? ' active' : ''">
+          <span class="market-side-icon"><i class="fa-solid fa-magnifying-glass"></i></span>Tìm dự án
+        </a>
+        <a th:href="@{/freelancer/saved-jobs}" th:classappend="${active == 'saved'} ? ' active' : ''">
+          <span class="market-side-icon"><i class="fa-regular fa-heart"></i></span>Việc quan tâm
+        </a>
+        <a th:href="@{/freelancer/invitations}" th:classappend="${active == 'invitations'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-envelope-open-text"></i></span>Lời mời từ Client</a>
+        <a th:href="@{/freelancer/applications}" th:classappend="${active == 'applications'} ? ' active' : ''">
+          <span class="market-side-icon"><i class="fa-regular fa-file-lines"></i></span>Ứng tuyển
+        </a>
+        <a th:href="@{/freelancer/projects}" th:classappend="${active == 'projects'} ? ' active' : ''">
+          <span class="market-side-icon"><i class="fa-solid fa-briefcase"></i></span>Dự án đang làm
+        </a>
+        <a th:href="@{/freelancer/history}" th:classappend="${active == 'history'} ? ' active' : ''">
+          <span class="market-side-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>Lịch sử
+        </a>
+        <a th:href="@{/freelancer/messages}" th:classappend="${active == 'messages'} ? ' active' : ''">
+          <span class="market-side-icon"><i class="fa-regular fa-message"></i></span>Tin nhắn
+        </a>
+        <a th:href="@{/freelancer/community}" th:classappend="${active == 'community'} ? ' active' : ''">
+          <span class="market-side-icon"><i class="fa-regular fa-circle-question"></i></span>Hỏi đáp
+        </a>
+        <a th:href="@{/freelancer/profile}" th:classappend="${active == 'profile'} ? ' active' : ''">
+          <span class="market-side-icon"><i class="fa-solid fa-user"></i></span>Hồ sơ của tôi
+        </a>
+        <a th:href="@{/freelancer/reports}" th:classappend="${active == 'reports'} ? ' active' : ''">
+          <span class="market-side-icon"><i class="fa-solid fa-chart-column"></i></span>Thống kê &amp; Báo cáo
+        </a>
+      </nav>
+
+      <!-- Customer/Admin giữ luồng quản trị phù hợp vai trò -->
+      <nav class="market-side-nav market-side-nav-auth client-nav" sec:authorize="hasRole('CUSTOMER')">
+        <a th:href="@{/customer/dashboard}" th:classappend="${active == 'dashboard'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-chart-pie"></i></span>Tổng quan</a>
+        <a th:href="@{/customer/jobs}" th:classappend="${active == 'posted'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-briefcase"></i></span>Công việc đã đăng</a>
+        <a th:href="@{/customer/jobs/new}" th:classappend="${active == 'new'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-square-plus"></i></span>Đăng công việc</a>
+        <a th:href="@{/customer/applicants}" th:classappend="${active == 'applicants'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-users"></i></span>Quản lý ứng viên</a>
+        <a th:href="@{/customer/talent}" th:classappend="${active == 'talent'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>Tìm & gợi ý Freelancer</a>
+        <a th:href="@{/customer/invitations}" th:classappend="${active == 'invitations'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-envelope-open-text"></i></span>Lời mời đã gửi</a>
+        <a th:href="@{/customer/projects}" th:classappend="${active == 'projects'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-layer-group"></i></span>Hợp đồng & dự án</a>
+        <a th:href="@{/customer/messages}" th:classappend="${active == 'messages'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-regular fa-message"></i></span>Tin nhắn</a>
+        <a th:href="@{/customer/history}" th:classappend="${active == 'history'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>Giao dịch & lịch sử</a>
+        <a th:href="@{/customer/profile}" th:classappend="${active == 'profile'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-building-user"></i></span>Hồ sơ doanh nghiệp</a>
+      </nav>
+
+      <nav class="market-side-nav market-side-nav-auth admin-nav" sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/admin/dashboard}" th:classappend="${active == 'dashboard'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-chart-line"></i></span>Tổng quan</a>
+        <a th:href="@{/admin/users}" th:classappend="${active == 'users'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-users"></i></span>Người dùng</a>
+        <a th:href="@{/admin/jobs}" th:classappend="${active == 'jobs'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-briefcase"></i></span>Công việc đăng tuyển</a>
+        <a th:href="@{/admin/projects}" th:classappend="${active == 'projects'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-layer-group"></i></span>Hợp đồng &amp; dự án</a>
+        <a th:href="@{/admin/payments}" th:classappend="${active == 'payments'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-receipt"></i></span>Giao dịch</a>
+        <a th:href="@{/admin/reports}" th:classappend="${active == 'reports'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-flag"></i></span>Báo cáo</a>
+        <a th:href="@{/admin/disputes}" th:classappend="${active == 'disputes'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-scale-balanced"></i></span>Tranh chấp</a>
+        <a th:href="@{/admin/audit}" th:classappend="${active == 'audit'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>Nhật ký quản trị</a>
+      </nav>
+    </div>
+
+    <div class="market-side-section market-side-utility-auth">
+      <div class="market-side-label">TIỆN ÍCH</div>
+      <nav class="market-side-nav market-side-nav-auth">
+        <a sec:authorize="hasRole('FREELANCER')" th:href="@{/freelancer/profile}"><span class="market-side-icon"><i class="fa-solid fa-coins"></i></span>TalentCredit <b th:text="${currentUser.talentCreditBalance}">0</b></a>
+        <a href="#" onclick="return false;"><span class="market-side-icon"><i class="fa-solid fa-calculator"></i></span>Lương Gross → Net</a>
+      </nav>
+    </div>
+
+    <div class="market-side-section market-side-support-auth">
+      <div class="market-side-label">HỖ TRỢ</div>
+      <nav class="market-side-nav market-side-nav-auth">
+        <a href="#" onclick="return false;"><span class="market-side-icon"><i class="fa-regular fa-circle-question"></i></span>Trung tâm trợ giúp</a>
+        <a sec:authorize="hasRole('FREELANCER')" th:href="@{/freelancer/profile#profile-edit}"><span class="market-side-icon"><i class="fa-solid fa-gear"></i></span>Cài đặt</a>
+        <a sec:authorize="hasRole('CUSTOMER')" th:href="@{/customer/profile}"><span class="market-side-icon"><i class="fa-solid fa-gear"></i></span>Cài đặt</a>
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}"><span class="market-side-icon"><i class="fa-solid fa-gear"></i></span>Cài đặt</a>
+      </nav>
+    </div>
+  </th:block>
+
+  <div class="tm-freelancer-signout" sec:authorize="hasRole('FREELANCER')">
+    <form th:action="@{/logout}" method="post">
+      <button type="submit" aria-label="Đăng xuất khỏi TalentMatch"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
+    </form>
+  </div>
+
+
+  <!-- Sau đăng nhập: nút chức năng ở đáy sidebar -->
+  <div class="market-side-bottom market-side-bottom-auth"
+       sec:authorize="isAuthenticated()">
+
+    <!-- Client: Đăng xuất -->
+    <form sec:authorize="hasRole('CUSTOMER')"
+          th:action="@{/logout}"
+          method="post"
+          class="client-bottom-logout">
+      <button type="submit">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Đăng xuất
+      </button>
+    </form>
+
+    <!-- Freelancer: Tìm dự án -->
+    <a sec:authorize="hasRole('FREELANCER')"
+       th:href="@{/jobs}">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      Tìm dự án
+    </a>
+
+    <!-- Admin: Bảng quản trị -->
+    <a sec:authorize="hasRole('ADMIN')"
+       th:href="@{/admin/dashboard}">
+      <i class="fa-solid fa-shield-halved"></i>
+      Bảng quản trị
+    </a>
+  </div>
+</aside>
+
+<!-- CLIENT TOPBAR: Client workspace header, without the marketplace role switch -->
+
+<!-- CLIENT TOPBAR -->
+<header class="cd-header cd-client-header"
+        th:fragment="marketClientTopbar()">
+
+  <link rel="stylesheet"
+        th:href="@{/css/client-feature-header-v57.css}">
+
+  <form class="cd-header-search"
+        th:action="@{/customer/talent}"
+        method="get">
+
+    <i class="fa-solid fa-magnifying-glass"
+       aria-hidden="true"></i>
+
+    <input name="q"
+           th:value="${q}"
+           aria-label="Tìm freelancer"
+           placeholder="Tìm freelancer, kỹ năng, chuyên môn..."
+           autocomplete="off">
+
+    <button type="submit" aria-label="Tìm kiếm">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+  </form>
+
+  <nav class="cd-header-links" aria-label="Điều hướng nhanh">
+    <a th:href="@{/customer/talent}">Tìm &amp; gợi ý Freelancer</a>
+    <a th:href="@{/customer/jobs/new}">Đăng công việc</a>
+    <a th:href="@{/#pricing}">Bảng giá</a>
+    <a th:href="@{/#how}">Cách hoạt động</a>
+  </nav>
+
+  <div class="cd-header-user">
+
+    <a th:href="@{/notifications}" aria-label="Thông báo">
+      <i class="fa-regular fa-bell"></i>
+    </a>
+
+    <!-- Avatar: ưu tiên tên doanh nghiệp, dự phòng tên người dùng -->
+    <a th:href="@{/customer/profile}"
+       class="cd-mini-avatar"
+       th:text="${currentUser.companyName != null
+               and !#strings.isEmpty(currentUser.companyName)
+               ? #strings.substring(currentUser.companyName, 0, 1)
+               : (currentUser.fullName != null
+                   and !#strings.isEmpty(currentUser.fullName)
+                   ? #strings.substring(currentUser.fullName, 0, 1)
+                   : 'U')}">
+      U
+    </a>
+
+    <!-- Tên được lấy động từ dữ liệu người dùng -->
+    <span th:text="${currentUser.companyName != null
+            and !#strings.isEmpty(currentUser.companyName)
+            ? currentUser.companyName
+            : (currentUser.fullName != null
+                ? currentUser.fullName
+                : 'Người dùng')}">
+            Tên người dùng
+        </span>
+
+  </div>
+</header>
+
+
+<!-- MARKET TOPBAR -->
+<header class="market-topbar" th:fragment="marketTopbar(active)">
+  <form class="market-global-search" th:action="${currentUser!=null and currentUser.role.name()=='ADMIN' ? '/admin/users' : (currentUser!=null and currentUser.role.name()=='CUSTOMER' ? '/freelancers' : '/jobs')}" method="get">
+    <span class="market-search-icon"><svg viewBox="0 0 24 24"><path d="M10.5 4a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Zm5.6 9.7 4.2 4.2-1.4 1.4-4.2-4.2 1.4-1.4Z"/></svg></span>
+    <input name="q" th:value="${q}" th:placeholder="${currentUser!=null and currentUser.role.name()=='ADMIN' ? 'Tìm tên tài khoản hoặc email...' : (currentUser!=null and currentUser.role.name()=='CUSTOMER' ? 'Tìm Freelancer, kỹ năng...' : 'Tìm dự án, freelancer, kỹ năng...')}" autocomplete="off">
+    <kbd>Ctrl K</kbd>
+    <button type="submit">Tìm</button>
+  </form>
+
+  <div class="market-mode-switch">
+    <a th:href="@{/freelancers}" th:classappend="${active == 'hire'} ? ' active' : ''"><svg viewBox="0 0 24 24"><path d="M8 4V2h8v2h5v17H3V4h5Zm2 0h4V3h-4v1Zm-5 4h14V6H5v2Z"/></svg>Tôi muốn thuê</a>
+    <a th:href="@{/jobs}" th:classappend="${active == 'jobs'} ? ' active' : ''"><svg viewBox="0 0 24 24"><path d="m13 2-7 11h5l-1 9 8-12h-5V2Z"/></svg>Tôi muốn làm</a>
+  </div>
+
+  <div class="market-top-actions">
+    <th:block sec:authorize="isAnonymous()">
+      <a class="market-primary-action" th:href="@{/register(role='CUSTOMER')}">+ Đăng dự án</a>
+      <a class="market-primary-action" th:href="@{/login}">Đăng nhập</a>
+    </th:block>
+
+    <th:block sec:authorize="isAuthenticated()">
+      <a class="market-primary-action" sec:authorize="hasRole('CUSTOMER')" th:href="@{/customer/jobs/new}">+ Đăng dự án</a>
+      <a class="market-primary-action" sec:authorize="hasRole('FREELANCER')" th:href="@{/jobs}"><i class="fa-solid fa-magnifying-glass"></i> Tìm dự án</a>
+      <a class="market-primary-action" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}"><i class="fa-solid fa-shield-halved"></i> Quản trị</a>
+      <button class="market-notify" type="button" aria-label="Thông báo">
+        <svg viewBox="0 0 24 24"><path d="M12 22a2.4 2.4 0 0 0 2.3-2H9.7a2.4 2.4 0 0 0 2.3 2Zm7-6-2-2V9a5 5 0 0 0-4-4.9V3h-2v1.1A5 5 0 0 0 7 9v5l-2 2v2h14v-2Z"/></svg>
+        <span class="market-notify-count">2</span>
+      </button>
+      <div class="market-user-menu" data-user-menu>
+        <button class="market-user-trigger" type="button" data-user-trigger>
+          <span class="market-user-avatar" th:text="${currentUser.fullName != null and !#strings.isEmpty(currentUser.fullName) ? #strings.substring(currentUser.fullName,0,1) : 'U'}">U</span>
+        </button>
+        <div class="market-user-dropdown market-user-dropdown-v19" data-user-dropdown>
+          <div class="market-user-summary market-user-summary-v19">
+            <span class="market-user-avatar large"><i class="fa-regular fa-user"></i></span>
+            <div>
+              <b th:text="${currentUser.fullName}">User</b>
+              <small th:text="${currentUser.email}">email@example.com</small>
+            </div>
+          </div>
+          <div class="market-user-menu-list">
+            <a class="market-user-menu-item" sec:authorize="hasRole('CUSTOMER')" th:href="@{/customer/profile}"><span class="menu-icon purple"><i class="fa-solid fa-user"></i></span><span>Hồ sơ của tôi</span></a>
+            <a class="market-user-menu-item" sec:authorize="hasRole('FREELANCER')" th:href="@{/freelancer/profile}"><span class="menu-icon purple"><i class="fa-solid fa-user"></i></span><span>Hồ sơ của tôi</span></a>
+            <a class="market-user-menu-item" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}"><span class="menu-icon purple"><i class="fa-solid fa-user"></i></span><span>Hồ sơ của tôi</span></a>
+            <a class="market-user-menu-item" sec:authorize="hasRole('FREELANCER')" th:href="@{/freelancer/profile#profile-edit}"><span class="menu-icon gray"><i class="fa-solid fa-gear"></i></span><span>Cài đặt</span></a>
+            <a class="market-user-menu-item" sec:authorize="hasRole('CUSTOMER')" th:href="@{/customer/profile}"><span class="menu-icon gray"><i class="fa-solid fa-gear"></i></span><span>Cài đặt</span></a>
+            <a class="market-user-menu-item" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}"><span class="menu-icon gray"><i class="fa-solid fa-gear"></i></span><span>Cài đặt</span></a>
+          </div>
+          <div class="market-user-menu-divider"></div>
+          <form class="market-user-logout" th:action="@{/logout}" method="post"><button type="submit"><span class="menu-icon red"><i class="fa-solid fa-right-from-bracket"></i></span><span>Đăng xuất</span></button></form>
+        </div>
+      </div>
+    </th:block>
+  </div>
+</header>
+
+<div class="flash-stack market-flash" th:fragment="flash">
+  <div class="flash flash-success" th:if="${success}"><b>✓</b><span th:text="${success}"></span></div>
+  <div class="flash flash-error" th:if="${error}"><b>!</b><span th:text="${error}"></span></div>
+  <div class="flash flash-info" th:if="${devLink}"><b>DEV</b><span>Email thật đang tắt. <a th:href="${devLink}">Mở liên kết demo</a></span></div>
+</div>
+
+<!-- Existing workspace fragments kept for remaining pages -->
+<aside class="app-sidebar" th:fragment="sidebar">
+  <div class="side-logo-row"><a class="logo logo-light" th:href="@{/dashboard}"><span class="logo-symbol"><i></i><i></i><i></i><i></i></span><span class="logo-copy"><strong>Talent<span>Match</span></strong><small>WORKSPACE</small></span></a><button type="button" class="side-close" data-sidebar-close>×</button></div>
+  <div class="side-profile" th:if="${currentUser != null}"><span class="avatar avatar-lg" th:text="${currentUser.fullName != null and !#strings.isEmpty(currentUser.fullName) ? #strings.substring(currentUser.fullName,0,1) : 'U'}">U</span><div><strong th:text="${currentUser.fullName}">User</strong><small th:text="${currentUser.role}">ROLE</small></div></div>
+  <nav class="side-nav" th:if="${currentUser != null and currentUser.role.name() == 'FREELANCER'}"><a th:href="@{/freelancer/dashboard}"><span>⌂</span>Tổng quan</a><a th:href="@{/jobs}"><span>⌕</span>Tìm công việc</a><a th:href="@{/freelancer/saved-jobs}"><span>♡</span>Việc quan tâm</a><a th:href="@{/freelancer/applications}"><span>✉</span>Ứng tuyển</a><a th:href="@{/freelancer/projects}"><span>▣</span>Dự án</a><a th:href="@{/freelancer/history}"><span>◷</span>Lịch sử</a><a th:href="@{/freelancer/profile}"><span>⚙</span>Hồ sơ</a></nav>
+  <nav class="side-nav" th:if="${currentUser != null and currentUser.role.name() == 'CUSTOMER'}"><a th:href="@{/customer/dashboard}"><span>⌂</span>Tổng quan</a><a th:href="@{/customer/jobs}"><span>▤</span>Công việc của tôi</a><a th:href="@{/customer/jobs/new}"><span>＋</span>Đăng công việc</a><a th:href="@{/freelancers}"><span>⌕</span>Tìm Freelancer</a><a th:href="@{/customer/projects}"><span>▣</span>Dự án</a><a th:href="@{/customer/history}"><span>◷</span>Lịch sử</a><a th:href="@{/customer/profile}"><span>⚙</span>Hồ sơ</a></nav>
+  <nav class="side-nav" th:if="${currentUser != null and currentUser.role.name() == 'ADMIN'}"><a th:href="@{/admin/dashboard}"><span>⌂</span>Dashboard</a><a th:href="@{/admin/users}"><span>♙</span>Người dùng</a><a th:href="@{/admin/jobs}"><span>▤</span>Công việc</a><a th:href="@{/admin/projects}"><span>▣</span>Dự án</a></nav>
+  <div class="side-footer"><a th:href="@{/}">← Trang chủ</a><form th:action="@{/logout}" method="post"><button type="submit">Đăng xuất</button></form></div>
+</aside>
+
+<!-- SIDEBAR DÙNG CHUNG CHO CLIENT -->
+
+<!-- SIDEBAR DÙNG CHUNG CHO CLIENT -->
+<aside class="tmc49-sidebar"
+       th:fragment="customerSidebar(active)">
+
+  <a class="tmc49-logo" th:href="@{/customer/dashboard}">
+    <img th:src="@{/images/talentmatch-logo-mark.png}"
+         alt="TalentMatch">
+    <span>
+            <b>TalentMatch</b>
+            <small>FREELANCE MARKETPLACE</small>
+        </span>
+  </a>
+
+  <a class="tmc49-company" th:href="@{/customer/profile}">
+        <span class="tmc49-avatar"
+              th:text="${companyInitial}">C</span>
+    <span>
+            <b th:text="${companyDisplayName}">Doanh nghiệp</b>
+            <small>Doanh nghiệp</small>
+        </span>
+    <i class="fa-solid fa-chevron-down"></i>
+  </a>
+
+  <nav class="tmc49-menu" aria-label="Menu doanh nghiệp">
+
+    <a th:href="@{/customer/dashboard}"
+       th:classappend="${active == 'dashboard'} ? ' active' : ''">
+      <i class="fa-solid fa-house"></i>Trang chủ
+    </a>
+
+    <a th:href="@{/customer/jobs/new}"
+       th:classappend="${active == 'new'} ? ' active' : ''">
+      <i class="fa-regular fa-pen-to-square"></i>Đăng dự án
+    </a>
+
+    <a th:href="@{/customer/projects}"
+       th:classappend="${active == 'projects'} ? ' active' : ''">
+      <i class="fa-regular fa-calendar-check"></i>Quản lý dự án
+    </a>
+
+    <a th:href="@{/customer/applicants}"
+       th:classappend="${active == 'applicants'} ? ' active' : ''">
+      <i class="fa-solid fa-users"></i>Ứng viên
+    </a>
+
+    <a th:href="@{/customer/invitations}"
+       th:classappend="${active == 'invitations'} ? ' active' : ''">
+      <i class="fa-regular fa-envelope"></i>Lời mời
+    </a>
+
+    <a th:href="@{/customer/projects}"
+       th:classappend="${active == 'payments'} ? ' active' : ''">
+      <i class="fa-regular fa-file-lines"></i>Hợp đồng &amp; Thanh toán
+    </a>
+
+    <a th:href="@{/customer/messages}"
+       th:classappend="${active == 'messages'} ? ' active' : ''">
+      <i class="fa-regular fa-message"></i>Tin nhắn
+    </a>
+
+    <a th:href="@{/customer/talent}"
+       th:classappend="${active == 'talent'} ? ' active' : ''">
+      <i class="fa-regular fa-heart"></i>Freelancer yêu thích
+    </a>
+
+    <a th:href="@{/customer/history}"
+       th:classappend="${active == 'history'} ? ' active' : ''">
+      <i class="fa-regular fa-clock"></i>Lịch sử
+    </a>
+
+    <a th:href="@{/customer/dashboard(metric='projects',pieMode='status')}"
+       th:classappend="${active == 'reports'} ? ' active' : ''">
+      <i class="fa-solid fa-chart-column"></i>Báo cáo &amp; Thống kê
+    </a>
+
+    <span class="tmc49-menu-title">TIỆN ÍCH</span>
+
+    <a th:href="@{/customer/profile}"
+       th:classappend="${active == 'credit'} ? ' active' : ''">
+      <i class="fa-solid fa-coins"></i>TalentCredit
+    </a>
+
+    <a th:href="@{/customer/profile}"
+       th:classappend="${active == 'premium'} ? ' active' : ''">
+      <i class="fa-regular fa-star"></i>Gói Premium
+    </a>
+
+    <a th:href="@{/jobs}"
+       th:classappend="${active == 'categories'} ? ' active' : ''">
+      <i class="fa-regular fa-rectangle-list"></i>Danh mục nghề
+    </a>
+
+    <span class="tmc49-menu-title">HỖ TRỢ</span>
+
+    <a th:href="@{/customer/community}"
+       th:classappend="${active == 'community'} ? ' active' : ''">
+      <i class="fa-regular fa-circle-question"></i>Trung tâm trợ giúp
+    </a>
+
+    <a th:href="@{/customer/profile}"
+       th:classappend="${active == 'settings'} ? ' active' : ''">
+      <i class="fa-solid fa-gear"></i>Cài đặt
+    </a>
+  </nav>
+
+  <a class="tmc49-market" th:href="@{/}">
+    <i class="fa-solid fa-house"></i>Đăng xuất
+  </a>
+</aside>
+
+
+
+<header class="app-topbar" th:fragment="appTop(title)"><div><span class="app-kicker">TALENTMATCH WORKSPACE</span><h1 th:text="${title}">Dashboard</h1></div><div class="app-user" th:if="${currentUser != null}"><span class="avatar avatar-sm" th:text="${currentUser.fullName != null and !#strings.isEmpty(currentUser.fullName) ? #strings.substring(currentUser.fullName,0,1) : 'U'}">U</span><div><b th:text="${currentUser.fullName}">User</b><small th:text="${currentUser.role}">Role</small></div></div></header>
+<div class="mobile-appbar" th:fragment="mobileAppbar(title)"><button type="button" data-sidebar-open>☰</button><b th:text="${title}">TalentMatch</b><a th:href="@{/dashboard}">TM</a></div>
+
+<footer class="site-footer" th:fragment="footer"><div class="container footer-grid"><div class="footer-brand"><a class="logo logo-light" th:href="@{/}"><span class="logo-symbol"><i></i><i></i><i></i><i></i></span><span class="logo-copy"><strong>Talent<span>Match</span></strong><small>FREELANCE MARKETPLACE</small></span></a><p>Nền tảng kết nối Freelancer và doanh nghiệp, quản lý trọn vòng đời dự án.</p></div><div><h4>Dành cho Freelancer</h4><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/register(role='FREELANCER')}">Tạo hồ sơ</a></div><div><h4>Dành cho doanh nghiệp</h4><a th:href="@{/customer/talent}">Tìm &amp; gợi ý Freelancer</a><a th:href="@{/register(role='CUSTOMER')}">Đăng dự án</a></div><div><h4>Hỗ trợ</h4><a th:href="@{/forgot-password}">Quên mật khẩu</a><a href="#">Điều khoản</a></div></div><div class="container footer-bottom"><span>© 2026 TalentMatch</span><span>Việt Nam · VN</span></div></footer>
+
+<script th:fragment="scripts" th:src="@{/js/app.js}"></script>
+</body>
+</html>

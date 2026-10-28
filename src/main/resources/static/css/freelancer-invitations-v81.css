@@ -1,0 +1,29 @@
+/* V81 - Chỉ áp dụng cho trang Lời mời từ Client; không thay đổi Sidebar/Header/Footer. */
+.tm-invite-v81 .ti-content{max-width:1900px;padding:16px 20px 30px;margin:auto}
+.tm-invite-v81 .ti-banner{width:100%;height:auto;aspect-ratio:1875 / 555;margin:0 0 16px;overflow:hidden;border:0;background:transparent;border-radius:12px;box-shadow:none}
+.tm-invite-v81 .ti-banner img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;border-radius:12px}
+.tm-invite-v81 .ti-layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;align-items:start;gap:14px}
+.tm-invite-v81 .ti-search{display:flex;gap:9px;align-items:center;margin:0 0 6px;flex-wrap:nowrap}
+.tm-invite-v81 .ti-search label{height:44px;flex:1}
+.tm-invite-v81 .ti-search button{height:44px;min-width:110px;font-size:14px}
+.tm-invite-v81 .ti-search select{height:44px;font-size:13px}
+.tm-invite-v81 .ti-count{font-size:13px;margin:9px 0 12px}
+.tm-invite-v81 .ti-card{grid-template-columns:155px minmax(0,1fr) 145px 135px;gap:14px;min-height:144px;padding:15px;border-radius:10px}
+.tm-invite-v81 .ti-client-name{font-size:14px}.tm-invite-v81 .ti-client-role,.tm-invite-v81 .ti-client small{font-size:11px}
+.tm-invite-v81 .ti-desc h2{font-size:16px}.tm-invite-v81 .ti-desc p{font-size:13px}
+.tm-invite-v81 .ti-meta{padding-left:14px;gap:9px}.tm-invite-v81 .ti-meta strong{color:#dc2626;font-size:18px}
+.tm-invite-v81 .ti-actions{gap:7px}.tm-invite-v81 .ti-actions button,.tm-invite-v81 .ti-actions a,.tm-invite-v81 .ti-result{min-height:35px;font-size:12px}
+.tm-invite-v81 .ti-filter{padding:16px;position:relative}
+.tm-invite-v81 .ti-filter-head h2{font-size:17px}
+.tm-invite-v81 .ti-filter fieldset{padding:13px 0;gap:10px}
+.tm-invite-v81 .ti-filter legend{font-size:14px}
+.tm-invite-v81 .ti-filter label{font-size:13px}
+.tm-invite-v81 .ti-filter-submit{height:44px;font-size:14px}
+.tm-invite-v81 .ti-empty{min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:35px 20px}
+.tm-invite-v81 .ti-empty i{font-size:50px;color:#0867f5;margin-bottom:8px}
+.tm-invite-v81 .ti-empty h2{font-size:20px;margin:4px 0}
+.tm-invite-v81 .ti-empty p{font-size:14px;line-height:1.7;max-width:440px}
+.tm-invite-v81 .ti-empty a{padding:10px 22px;border:1px solid #0867f5;border-radius:7px;text-decoration:none;margin-top:10px}
+@media(max-width:1280px){.tm-invite-v81 .ti-layout{grid-template-columns:minmax(0,1fr) 245px}.tm-invite-v81 .ti-card{grid-template-columns:125px minmax(0,1fr) 125px;gap:10px}.tm-invite-v81 .ti-actions{grid-column:3}.tm-invite-v81 .ti-meta{grid-column:3;grid-row:1}}
+@media(max-width:1080px){.tm-invite-v81 .ti-layout{grid-template-columns:1fr}.tm-invite-v81 .ti-filter{grid-row:auto}.tm-invite-v81 .ti-card{grid-template-columns:140px minmax(0,1fr) 145px 135px}.tm-invite-v81 .ti-actions{grid-column:auto}.tm-invite-v81 .ti-meta{grid-column:auto;grid-row:auto}}
+@media(max-width:800px){.tm-invite-v81 .ti-content{padding:12px}.tm-invite-v81 .ti-card{grid-template-columns:1fr 1fr}.tm-invite-v81 .ti-client,.tm-invite-v81 .ti-desc{grid-column:1/-1}.tm-invite-v81 .ti-meta{border:0;padding:0}.tm-invite-v81 .ti-search{flex-wrap:wrap}.tm-invite-v81 .ti-search label{flex-basis:100%}}

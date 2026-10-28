@@ -1,0 +1,171 @@
+/* TalentMatch V86 - Chi tinh chinh trang /freelancer/projects.
+   Khong sua layout, Sidebar, Header, Footer hay xu ly Thymeleaf. */
+.tm-projects-v41 {
+  --tp-blue: #0b67f5;
+  --tp-navy: #0b2a6f;
+  --tp-border: #dae7f8;
+}
+
+/* Noi dung thoang hon, giu bo loc ben phai. */
+.tm-projects-v41 .tp41-content { padding: 17px 19px 25px; }
+.tm-projects-v41 .tp85-layout { grid-template-columns: minmax(0, 1fr) 246px; gap: 15px; }
+.tm-projects-v41 .tp85-stats { gap: 12px; margin-bottom: 15px; }
+.tm-projects-v41 .tp85-stat {
+  min-height: 92px;
+  padding: 12px 13px;
+  gap: 12px;
+  border-radius: 11px;
+}
+.tm-projects-v41 .tp85-stat-icon { width: 49px; height: 49px; flex: 0 0 49px; font-size: 22px; }
+.tm-projects-v41 .tp85-stat small { font-size: 12.5px; line-height: 1.3; font-weight: 800; }
+.tm-projects-v41 .tp85-stat strong { font-size: 28px; line-height: 1.12; font-weight: 900; }
+.tm-projects-v41 .tp85-stat em { font-size: 12px; line-height: 1.35; }
+
+/* Tim kiem va sap xep: chu, nut de doc hon. */
+.tm-projects-v41 .tp85-toolbar { gap: 10px; margin-bottom: 10px; }
+.tm-projects-v41 .tp85-keyword { height: 43px; padding: 0 14px; }
+.tm-projects-v41 .tp85-keyword input { font-size: 14px; }
+.tm-projects-v41 .tp85-search-btn {
+  height: 43px; min-width: 100px; font-size: 14px; font-weight: 800;
+  color: #fff; background: #0b67f5; border-radius: 7px;
+}
+.tm-projects-v41 .tp85-search-btn:hover { background: #0757d4; }
+.tm-projects-v41 .tp85-sort-label { font-size: 13px; }
+.tm-projects-v41 .tp85-toolbar select { height: 43px; width: 137px; font-size: 13px; }
+.tm-projects-v41 .tp85-count { margin: 9px 0 12px; font-size: 13px; }
+
+/* Moi du an: tang chieu cao va khoang cach giua 5 cot.
+   Anh | thong tin | gia va han | tien do | trang thai + nut. */
+.tm-projects-v41 .tp85-jobs { gap: 12px; }
+.tm-projects-v41 .tp85-job {
+  grid-template-columns: 100px minmax(0, 1fr) 158px 122px 116px;
+  column-gap: 14px;
+  min-height: 149px;
+  padding: 14px 13px;
+  border-radius: 11px;
+  align-items: center;
+}
+.tm-projects-v41 .tp85-thumb { width: 100px; height: 107px; border-radius: 9px; }
+.tm-projects-v41 .tp85-info { padding-right: 5px; min-width: 0; }
+.tm-projects-v41 .tp85-info h2 {
+  margin: 0 0 7px;
+  font-size: 16.5px;
+  font-weight: 850;
+  line-height: 1.32;
+  letter-spacing: -.15px;
+}
+.tm-projects-v41 .tp85-info h2 a { color: #0b2a6f; font-weight: 850; }
+.tm-projects-v41 .tp85-company {
+  font-size: 13px;
+  font-weight: 550;
+  line-height: 1.45;
+}
+.tm-projects-v41 .tp85-description {
+  margin: 7px 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #526b97;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tm-projects-v41 .tp85-tags { gap: 6px; }
+.tm-projects-v41 .tp85-tags span { padding: 5px 8px; font-size: 11.5px; font-weight: 550; }
+
+/* Gia do noi bat, co khoang dem voi cot tien do. */
+.tm-projects-v41 .tp85-finance {
+  padding-left: 14px;
+  padding-right: 4px;
+  min-height: 92px;
+  gap: 8px;
+  border-left: 1px solid #dfe9f9;
+}
+.tm-projects-v41 .tp85-finance > strong {
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.25;
+  color: #dc2626;
+  letter-spacing: -.15px;
+}
+.tm-projects-v41 .tp85-deadline,
+.tm-projects-v41 .tp85-remaining { font-size: 12px; gap: 6px; line-height: 1.35; }
+.tm-projects-v41 .tp85-deadline { max-width: 100%; }
+.tm-projects-v41 .tp85-progress { row-gap: 10px; column-gap: 9px; }
+.tm-projects-v41 .tp85-progress > span { font-size: 12px; font-weight: 650; }
+.tm-projects-v41 .tp85-progress-line { height: 10px; }
+.tm-projects-v41 .tp85-progress strong { font-size: 13px; font-weight: 850; }
+
+/* Mau nut theo anh mau: trang thai vang/cam, da hoan thanh xanh la,
+   cho xac nhan xanh nhat; xem chi tiet vien xanh. */
+.tm-projects-v41 .tp85-actions { gap: 9px; }
+.tm-projects-v41 .tp85-status {
+  min-height: 34px;
+  padding: 7px 6px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.tm-projects-v41 .tp85-status.in-progress { color: #bc6b00; background: #fff0db; }
+.tm-projects-v41 .tp85-status.pending { color: #2160bb; background: #e5f0ff; }
+.tm-projects-v41 .tp85-status.completed { color: #068457; background: #ddf7e9; }
+.tm-projects-v41 .tp85-detail {
+  height: 36px;
+  border: 1.5px solid #5c99ff;
+  background: #fff;
+  color: #0b67f5;
+  font-size: 12.5px;
+  font-weight: 800;
+  border-radius: 7px;
+}
+.tm-projects-v41 .tp85-detail:hover,
+.tm-projects-v41 .tp85-detail:focus-visible { color: #fff; background: #0b67f5; border-color: #0b67f5; }
+
+/* Sidebar trang noi dung: bo loc thong thoang, khong thay doi sidebar chinh. */
+.tm-projects-v41 .tp85-filter { padding: 17px 15px 18px; }
+.tm-projects-v41 .tp85-filter-head h2 { font-size: 16px; }
+.tm-projects-v41 .tp85-filter-head a { font-size: 11.5px; }
+.tm-projects-v41 .tp85-filter legend { font-size: 13.5px; margin-bottom: 10px; }
+.tm-projects-v41 .tp85-filter fieldset label { font-size: 13px; margin: 10px 0; gap: 9px; }
+.tm-projects-v41 .tp85-filter input[type=radio] { width: 15px; height: 15px; }
+.tm-projects-v41 .tp85-filter button { height: 43px; font-size: 14px; font-weight: 800; background: #0b67f5; }
+.tm-projects-v41 .tp85-filter button:hover { background: #0757d4; }
+.tm-projects-v41 .tp85-pagination a { width: 36px; height: 36px; font-size: 13px; }
+
+/* Man hinh laptop: dam bao khong tran cot khi chieu rong thap. */
+@media (max-width: 1460px) {
+  .tm-projects-v41 .tp85-layout { grid-template-columns: minmax(0, 1fr) 238px; gap: 12px; }
+  .tm-projects-v41 .tp85-job { grid-template-columns: 88px minmax(0, 1fr) 149px 110px 108px; gap: 10px; padding: 13px 11px; }
+  .tm-projects-v41 .tp85-thumb { width: 88px; height: 100px; }
+  .tm-projects-v41 .tp85-info h2 { font-size: 16px; }
+  .tm-projects-v41 .tp85-finance { padding-left: 10px; }
+  .tm-projects-v41 .tp85-finance > strong { font-size: 16.5px; }
+  .tm-projects-v41 .tp85-stat { padding: 11px 9px; gap: 8px; }
+  .tm-projects-v41 .tp85-stat-icon { width: 42px; height: 42px; flex-basis: 42px; }
+  .tm-projects-v41 .tp85-stat small { font-size: 11.5px; }
+  .tm-projects-v41 .tp85-stat strong { font-size: 25px; }
+}
+@media (max-width: 1260px) {
+  .tm-projects-v41 .tp85-job { grid-template-columns: 87px minmax(0, 1fr) 145px 108px; row-gap: 12px; }
+  .tm-projects-v41 .tp85-thumb { width: 87px; height: 104px; }
+  .tm-projects-v41 .tp85-actions { grid-column: 3 / -1; flex-direction: row; align-items: stretch; justify-content: flex-end; }
+  .tm-projects-v41 .tp85-actions > * { width: auto; min-width: 108px; flex: 1 1 0; }
+}
+@media (max-width: 990px) {
+  .tm-projects-v41 .tp85-layout { grid-template-columns: 1fr; }
+  .tm-projects-v41 .tp85-job { grid-template-columns: 92px minmax(0, 1fr) 145px 108px; }
+  .tm-projects-v41 .tp85-thumb { width: 92px; height: 104px; }
+  .tm-projects-v41 .tp85-actions { grid-column: 3 / -1; flex-direction: row; }
+}
+@media (max-width: 650px) {
+  .tm-projects-v41 .tp41-content { padding: 11px; }
+  .tm-projects-v41 .tp85-stat { min-height: 87px; }
+  .tm-projects-v41 .tp85-job { grid-template-columns: 84px minmax(0, 1fr); padding: 13px; gap: 12px; }
+  .tm-projects-v41 .tp85-thumb { width: 84px; height: 91px; }
+  .tm-projects-v41 .tp85-info h2 { font-size: 15.5px; }
+  .tm-projects-v41 .tp85-finance { grid-column: 1 / 2; border-left: 0; padding: 0; min-height: 0; }
+  .tm-projects-v41 .tp85-progress { grid-column: 2 / 3; }
+  .tm-projects-v41 .tp85-actions { grid-column: 1 / -1; }
+  .tm-projects-v41 .tp85-actions > * { min-width: 0; }
+}

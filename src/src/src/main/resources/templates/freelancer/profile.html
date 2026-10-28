@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/common :: head('Hồ sơ Freelancer')}"></head>
+<body class="market-body market-profile-page tm42-profile tm44-profile fm-dashboard">
+<link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
+<link rel="stylesheet" th:href="@{/css/freelancer-v42.css}">
+<link rel="stylesheet" th:href="@{/css/freelancer-profile-v44.css}">
+<aside th:replace="~{fragments/common :: marketSidebar('profile')}"></aside>
+<header class="fm-header">
+  <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+  <form class="fm-header-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" placeholder="Tìm dự án, kỹ năng, khách hàng..." aria-label="Tìm kiếm"><button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+  <nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục nghề</a></nav>
+  <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i></a><a th:href="@{/freelancer/profile}" class="fm-mini-avatar" th:text="${#strings.substring(currentUser.fullName,0,1)}">F</a><span th:text="${currentUser.fullName}">Freelancer</span></div>
+</header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="market-main market-profile-main">
+<div class="tm44-shell">
+  <section class="tm44-hero">
+    <img th:if="${profile.profileCover == null}" th:src="@{/images/talentmatch-profile-v42-banner.png}" alt="Ảnh bìa TalentMatch">
+    <img th:unless="${profile.profileCover == null}" th:src="@{/freelancer/profile/media/cover}" alt="Ảnh bìa của tôi">
+    <p><a th:href="@{/}">Trang chủ</a> › <strong>Hồ sơ của tôi</strong></p>
+    <form th:action="@{/freelancer/profile/upload}" method="post" enctype="multipart/form-data" class="tm44-cover-upload">
+      <input type="hidden" name="type" value="cover"><label><i class="fa-solid fa-camera"></i> Thay đổi ảnh bìa<input type="file" name="file" accept="image/png,image/jpeg" hidden required onchange="this.form.submit()"></label>
+    </form>
+  </section>
+  <section class="tm44-identity">
+    <div class="tm44-avatar">
+      <img th:if="${profile.avatar != null and !#strings.isEmpty(profile.avatar)}" th:src="${profile.avatar}" alt="Ảnh đại diện">
+      <span th:unless="${profile.avatar != null and !#strings.isEmpty(profile.avatar)}" th:text="${#strings.substring(profile.fullName,0,1)}">F</span>
+      <form th:action="@{/freelancer/profile/upload}" method="post" enctype="multipart/form-data"><input type="hidden" name="type" value="avatar"><label title="Đổi ảnh đại diện"><i class="fa-solid fa-camera"></i><input type="file" name="file" accept="image/png,image/jpeg" required hidden onchange="this.form.submit()"></label></form>
+    </div>
+    <div class="tm44-person"><h1 th:text="${profile.fullName}">Freelancer</h1><strong th:text="${profile.professionalTitle != null and !#strings.isEmpty(profile.professionalTitle) ? profile.professionalTitle : 'Freelancer'}">Frontend Developer</strong>
+      <div class="tm44-person-meta"><span><i class="fa-solid fa-star"></i> <b th:text="${profile.rating != null ? profile.rating : 0}">0</b> / 5</span><span><i class="fa-solid fa-location-dot"></i> <span th:text="${profile.location != null ? profile.location : 'Chưa cập nhật địa điểm'}">Việt Nam</span></span><span><i class="fa-regular fa-calendar"></i> Tham gia: <span th:text="${profile.createdAt != null ? #temporals.format(profile.createdAt,'MM/yyyy') : '—'}"></span></span><span class="tm44-available" th:if="${profile.available}">● Sẵn sàng nhận việc</span><span class="tm44-available busy" th:unless="${profile.available}">● Đang bận</span></div>
+    </div>
+    <div class="tm44-person-actions"><a th:href="@{/freelancers/{id}(id=${profile.id})}"><i class="fa-regular fa-eye"></i> Xem hồ sơ công khai</a><button type="button" data-profile-edit-toggle><i class="fa-solid fa-pen"></i> Chỉnh sửa hồ sơ</button></div>
+  </section>
+  <nav class="tm44-tabs" aria-label="Các mục hồ sơ"><a href="#profile-overview">Tổng quan</a><a href="#profile-intro">Giới thiệu</a><a href="#profile-skills">Kỹ năng</a><a href="#profile-experience">Kinh nghiệm</a><a href="#profile-portfolio">Portfolio</a><a href="#profile-cv">CV</a><a href="#profile-reviews">Đánh giá</a><a href="#profile-certificates">Chứng chỉ</a><a href="#profile-edit" data-profile-edit-toggle>Cài đặt hồ sơ</a></nav>
+      <section id="profile-edit" class="profile-edit-panel" hidden>
+        <div class="profile-edit-panel-head">
+          <div><h2>Chỉnh sửa hồ sơ</h2><p>Cập nhật thông tin nghề nghiệp của bạn. Các thay đổi được lưu trực tiếp vào TalentMatch.</p></div>
+          <button type="button" data-profile-edit-close aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <form th:action="@{/freelancer/profile}" method="post" th:object="${profile}" class="profile-edit-form">
+          <div class="profile-form-grid three">
+            <label><span>Họ và tên</span><input th:field="*{fullName}" required></label>
+            <label><span>Số điện thoại</span><input th:field="*{phone}" placeholder="0901 234 567"></label>
+            <label><span>Địa chỉ</span><input th:field="*{location}" placeholder="TP. Hồ Chí Minh"></label>
+          </div>
+          <div class="profile-form-grid two">
+            <label><span>Vị trí mong muốn</span><input th:field="*{professionalTitle}" placeholder="UI/UX Designer"></label>
+            <label><span>Lĩnh vực</span><input th:field="*{field}" placeholder="Thiết kế & Sáng tạo"></label>
+          </div>
+          <label class="profile-form-wide"><span>Kỹ năng chính</span><input th:field="*{skills}" placeholder="Figma, UI/UX, Prototype, Design System"></label>
+          <div class="profile-form-grid three">
+            <label><span>Số năm kinh nghiệm</span><input type="number" min="0" th:field="*{experienceYears}"></label>
+            <label><span>Đơn giá theo giờ (VNĐ)</span><input type="number" min="0" th:field="*{hourlyRate}"></label>
+            <label><span>Trạng thái</span><select th:field="*{available}"><option th:value="true">Sẵn sàng nhận việc</option><option th:value="false">Đang bận</option></select></label>
+          </div>
+          <div class="profile-form-grid two">
+            <label><span>Website / Portfolio</span><input th:field="*{website}" placeholder="https://portfolio.example"></label>
+            <label><span>LinkedIn</span><input th:field="*{linkedinUrl}" placeholder="https://linkedin.com/in/..."></label>
+          </div>
+
+          <label class="profile-form-wide"><span>Giới thiệu bản thân</span><textarea rows="5" th:field="*{bio}" placeholder="Mô tả kinh nghiệm, thế mạnh và cách bạn làm việc..."></textarea></label>
+          <div class="profile-edit-actions"><button type="button" class="secondary" data-profile-edit-close>Hủy</button><button type="submit" class="primary"><i class="fa-solid fa-check"></i> Lưu hồ sơ</button></div>
+        </form>
+      </section>
+
+  <div class="tm44-grid" id="profile-overview">
+    <div class="tm44-col">
+      <section class="tm44-card tm44-progress"><h2>Mức độ hoàn thiện hồ sơ</h2><div class="tm44-ring" th:style="|--pct:${profileCompletion}%|"><div><strong th:text="${profileCompletion + '%'}">0%</strong></div></div><b th:text="${profileCompletion >= 80 ? 'Hồ sơ của bạn đã khá đầy đủ!' : 'Tiếp tục hoàn thiện hồ sơ của bạn'}">Hoàn thiện hồ sơ</b><p>Hoàn thiện thông tin để tăng cơ hội nhận dự án phù hợp.</p><div class="tm44-checks"><div th:each="check : ${profileChecks}"><i th:class="${check.done() ? 'fa-solid fa-circle-check ok' : 'fa-regular fa-circle'}"></i><span th:text="${check.label()}">Thông tin cá nhân</span></div></div><button type="button" data-profile-edit-toggle>Bổ sung thông tin →</button></section>
+      <section class="tm44-card"><div class="tm44-cardhead"><h2>Thông tin cá nhân</h2><button type="button" data-profile-edit-toggle>✎ Chỉnh sửa</button></div><dl class="tm44-details"><dt>Họ và tên</dt><dd th:text="${profile.fullName}"></dd><dt>Email</dt><dd th:text="${profile.email}"></dd><dt>Điện thoại</dt><dd th:text="${profile.phone != null ? profile.phone : 'Chưa cập nhật'}"></dd><dt>Địa chỉ</dt><dd th:text="${profile.location != null ? profile.location : 'Chưa cập nhật'}"></dd><dt>Kinh nghiệm</dt><dd th:text="${profile.experienceYears != null ? profile.experienceYears + ' năm' : 'Chưa cập nhật'}"></dd><dt>Giá theo giờ</dt><dd th:text="${profile.hourlyRate != null ? #numbers.formatDecimal(profile.hourlyRate,0,'POINT',0,'COMMA') + 'đ' : 'Chưa cập nhật'}"></dd><dt>Website</dt><dd><a th:if="${profile.website != null and (profile.website.startsWith('https://') or profile.website.startsWith('http://'))}" th:href="${profile.website}" th:text="${profile.website}" target="_blank" rel="noopener noreferrer"></a><span th:unless="${profile.website != null and (profile.website.startsWith('https://') or profile.website.startsWith('http://'))}">Chưa cập nhật</span></dd></dl></section>
+    </div>
+    <div class="tm44-col">
+      <section class="tm44-card" id="profile-intro"><div class="tm44-cardhead"><h2>Giới thiệu bản thân</h2><button type="button" data-profile-edit-toggle>✎ Chỉnh sửa</button></div><p class="tm44-bio" th:text="${profile.bio != null and !#strings.isEmpty(profile.bio) ? profile.bio : 'Hãy viết vài dòng giới thiệu về chuyên môn, thế mạnh và kinh nghiệm của bạn.'}"></p><div class="tm44-pills"><span><i class="fa-solid fa-location-dot"></i> <span th:text="${profile.location != null ? profile.location : 'Làm việc từ xa'}"></span></span><span><i class="fa-solid fa-laptop"></i> Freelancer</span><span th:if="${profile.available}">Có thể bắt đầu ngay</span></div></section>
+      <section class="tm44-card" id="profile-skills"><div class="tm44-cardhead"><h2>Kỹ năng nổi bật</h2><button type="button" data-profile-edit-toggle>✎ Chỉnh sửa</button></div><div class="tm44-skill-tags" th:if="${!#lists.isEmpty(skillList)}"><span th:each="skill : ${skillList}" th:text="${skill}">ReactJS</span></div><p th:if="${#lists.isEmpty(skillList)}">Chưa cập nhật kỹ năng.</p></section>
+      <section class="tm44-card" id="profile-experience"><div class="tm44-cardhead"><h2>Kinh nghiệm làm việc</h2><button type="button" data-profile-edit-toggle>✎ Chỉnh sửa</button></div><div class="tm44-experience"><strong th:text="${profile.professionalTitle != null ? profile.professionalTitle : 'Chưa cập nhật vị trí'}"></strong><span th:text="${profile.experienceYears != null ? profile.experienceYears + ' năm kinh nghiệm' : 'Chưa cập nhật số năm'}"></span><p th:text="${profile.bio != null and !#strings.isEmpty(profile.bio) ? profile.bio : 'Bổ sung mô tả kinh nghiệm trong phần chỉnh sửa hồ sơ.'}"></p></div></section>
+      <section class="tm44-card" id="profile-reviews"><div class="tm44-cardhead"><h2>Đánh giá từ khách hàng</h2><a th:href="@{/freelancer/history}">Xem lịch sử →</a></div><div class="tm44-reviews"><strong th:text="${profile.rating != null ? profile.rating : 0}">0</strong><span>★ ★ ★ ★ ★</span><p>Điểm đánh giá được tổng hợp từ các dự án đã hoàn thành và được khách hàng đánh giá trên TalentMatch.</p></div></section>
+    </div>
+    <div class="tm44-col">
+      <section class="tm44-card" id="profile-portfolio"><div class="tm44-cardhead"><h2>Portfolio nổi bật</h2><a th:href="@{/freelancer/projects}">Xem tất cả →</a></div><div class="tm44-portfolios" th:if="${!#lists.isEmpty(profileProjects)}"><a th:each="project,iter : ${profileProjects}" th:if="${iter.index < 4}" th:href="@{/projects/{id}(id=${project.id})}"><span class="tm44-portfolio-art"><i class="fa-solid fa-laptop-code"></i></span><b th:text="${project.application.job.title}">Dự án</b><small th:text="${project.status}"></small></a></div><p th:if="${#lists.isEmpty(profileProjects)}">Chưa có dự án trong Portfolio. Các dự án được nhận sẽ xuất hiện ở đây.</p></section>
+      <section class="tm44-card" id="profile-cv"><div class="tm44-cardhead"><h2>CV của tôi</h2></div><div class="tm44-cv" th:if="${profile.cvFile != null}"><i class="fa-solid fa-file-pdf"></i><span>CV Freelancer (PDF)<small>Đã lưu trên hệ thống</small></span><a th:href="@{/freelancer/profile/media/cv}">Tải xuống</a></div><p th:unless="${profile.cvFile != null}">Chưa có CV. Tải lên file PDF để hoàn thiện hồ sơ.</p><form th:action="@{/freelancer/profile/upload}" method="post" enctype="multipart/form-data" class="tm44-cv-form"><input type="hidden" name="type" value="cv"><input type="file" name="file" accept="application/pdf" required><button type="submit">Tải CV lên</button></form></section>
+      <section class="tm44-card" id="profile-certificates"><div class="tm44-cardhead"><h2>Chứng chỉ</h2></div><p>Chưa có chứng chỉ được lưu. Module chứng chỉ cần bảng dữ liệu riêng để hỗ trợ thêm, chỉnh sửa, xác minh chứng chỉ.</p></section>
+      <section class="tm44-card"><div class="tm44-cardhead"><h2>Thống kê hoạt động</h2><a th:href="@{/freelancer/reports}">Xem báo cáo →</a></div><p>Xem số dự án, doanh thu, biểu đồ cột và tỷ lệ dự án theo trạng thái hoặc lĩnh vực.</p></section>
+    </div>
+  </div>
+</div>
+</main>
+  <footer class="tm42-profile-footer"><div><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><strong>TalentMatch</strong><span>© 2026 TalentMatch · Freelance Marketplace</span></div><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/reports}">Thống kê & Báo cáo</a></footer><script th:replace="~{fragments/common :: scripts}"></script>
+<link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"></body>
+</html>

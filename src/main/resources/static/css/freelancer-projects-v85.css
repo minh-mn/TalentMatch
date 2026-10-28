@@ -1,0 +1,142 @@
+/* TalentMatch V85 - trang Dự án đang làm
+   Chỉ áp dụng cho trang này, không sửa Sidebar / Header / Footer dùng chung. */
+.tm-projects-v41 { --tp-blue:#0867f5; --tp-navy:#0b2a6f; --tp-muted:#5874a6; --tp-border:#dce7f8; background:#eef5ff; }
+.tm-projects-v41 .tp41-content { max-width:none; margin:0; padding:16px 20px 18px; }
+
+/* Banner. Tách chữ thành HTML để rõ nét, ảnh gốc chỉ dùng ở bên phải. */
+.tm-projects-v41 .tp85-banner { isolation:isolate; position:relative; height:clamp(190px,16.2vw,232px); overflow:hidden; margin-bottom:12px; border-radius:13px; border:1px solid #d4e6fc; background:linear-gradient(110deg,#ecf7ff 0%,#e6f3ff 46%,#b4ddff 100%); }
+.tm-projects-v41 .tp85-banner::before { content:""; position:absolute; inset:0; z-index:-1; background:radial-gradient(ellipse at 20% 12%,#fff9,transparent 65%),linear-gradient(15deg,#68b8ff44 0%,transparent 22%); }
+.tm-projects-v41 .tp85-banner-art { position:absolute; z-index:-1; right:0; top:0; width:65%; height:100%; background-image:url('/images/talentmatch-ongoing-banner-v85.jpg'); background-repeat:no-repeat; background-size:190% auto; background-position:right 47%; -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 16%); mask-image:linear-gradient(90deg,transparent 0%,#000 16%); }
+.tm-projects-v41 .tp85-banner-copy { position:relative; z-index:1; max-width:55%; padding:23px 32px 16px 5%; }
+.tm-projects-v41 .tp85-eyebrow { display:inline-flex; align-items:center; gap:9px; padding:6px 13px; border-radius:9px; background:#d8eaff; color:#06449d; font-size:13px; font-weight:800; }
+.tm-projects-v41 .tp85-eyebrow i { color:#0867f5; font-size:14px; }
+.tm-projects-v41 .tp85-banner h1 { margin:10px 0 8px; font-size:clamp(27px,2.75vw,43px); font-weight:900; line-height:1.08; letter-spacing:-.9px; color:#081f67; }
+.tm-projects-v41 .tp85-banner h1 span { color:#0867f5; }
+.tm-projects-v41 .tp85-banner p { margin:0; font-size:clamp(13px,1.12vw,17px); line-height:1.5; font-weight:500; color:#274b8b; }
+
+/* Nội dung + bộ lọc: bộ lọc bắt đầu ngang hàng với các thẻ thống kê. */
+.tm-projects-v41 .tp85-layout { display:grid; grid-template-columns:minmax(0,1fr) 260px; gap:13px; align-items:start; }
+.tm-projects-v41 .tp85-left { min-width:0; }
+.tm-projects-v41 .tp85-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:0 0 13px; }
+.tm-projects-v41 .tp85-stat { display:flex; min-width:0; min-height:77px; align-items:center; gap:10px; padding:10px; text-decoration:none; color:var(--tp-navy); border:1px solid var(--tp-border); border-radius:10px; background:#fff; box-shadow:0 3px 10px #1d4c8910; transition:border-color .16s; }
+.tm-projects-v41 .tp85-stat:hover { border-color:#82b1ff; }
+.tm-projects-v41 .tp85-stat-icon { width:47px; height:47px; flex:0 0 47px; display:grid; place-items:center; border-radius:10px; font-size:21px; }
+.tm-projects-v41 .tp85-stat-icon.purple { background:#f2eaff; color:#8d39ed; }
+.tm-projects-v41 .tp85-stat-icon.amber { background:#fff2e4; color:#ed9400; }
+.tm-projects-v41 .tp85-stat-icon.sky { background:#e8f3ff; color:#1171e9; }
+.tm-projects-v41 .tp85-stat-icon.mint { background:#e3faf1; color:#03ae76; }
+.tm-projects-v41 .tp85-stat span:last-child { display:flex; flex-direction:column; min-width:0; }
+.tm-projects-v41 .tp85-stat small { color:#143473; font-size:11.5px; font-weight:800; line-height:1.3; }
+.tm-projects-v41 .tp85-stat strong { font-size:25px; color:#092c7b; font-weight:900; line-height:1.2; }
+.tm-projects-v41 .tp85-stat em { color:#6782ae; font-size:11px; font-style:normal; line-height:1.3; }
+
+/* Tìm kiếm / sắp xếp */
+.tm-projects-v41 .tp85-toolbar { display:flex; align-items:center; gap:8px; margin:0 0 8px; min-width:0; }
+.tm-projects-v41 .tp85-keyword { display:flex; align-items:center; gap:9px; flex:1 1 auto; min-width:0; height:38px; padding:0 12px; background:#fff; color:#467bd5; border:1px solid #d3e3fa; border-radius:8px; }
+.tm-projects-v41 .tp85-keyword input { min-width:0; flex:1; font-size:12.5px; color:#173c80; outline:0; border:0; background:transparent; }
+.tm-projects-v41 .tp85-search-btn { flex:none; min-width:88px; height:38px; cursor:pointer; border:0; background:#1167f6; color:#fff; font-size:12px; font-weight:800; border-radius:7px; }
+.tm-projects-v41 .tp85-sort-label { margin-left:6px; white-space:nowrap; color:#5273a8; font-size:12px; font-weight:700; }
+.tm-projects-v41 .tp85-toolbar select { flex:none; width:122px; height:37px; border:1px solid #d3e3fa; color:#143575; font-weight:700; font-size:12px; border-radius:8px; background:#fff; padding:0 9px; cursor:pointer; }
+.tm-projects-v41 .tp85-count { margin:7px 0 9px; color:#617cad; font-size:12px; }
+.tm-projects-v41 .tp85-count strong { color:#1d63d9; }
+
+/* Dự án: mỗi hàng cố định các cột ảnh / nội dung / ngân sách / tiến độ / thao tác */
+.tm-projects-v41 .tp85-jobs { display:flex; flex-direction:column; gap:9px; }
+.tm-projects-v41 .tp85-job { display:grid; grid-template-columns:91px minmax(0,1fr) 169px 142px 119px; align-items:center; column-gap:12px; min-height:113px; padding:10px 11px; background:#fff; border:1px solid #dce7fa; border-radius:11px; box-shadow:0 2px 9px #264d8310; }
+.tm-projects-v41 .tp85-thumb { display:block; width:91px; height:88px; border-radius:8px; overflow:hidden; background:#e9f2ff; }
+.tm-projects-v41 .tp85-thumb img { width:100%; height:100%; display:block; object-fit:cover; }
+.tm-projects-v41 .tp85-info { min-width:0; padding-right:5px; }
+.tm-projects-v41 .tp85-info h2 { font-size:14px; font-weight:850; line-height:1.3; margin:0 0 4px; }
+.tm-projects-v41 .tp85-info h2 a { text-decoration:none; color:#0a2b74; }
+.tm-projects-v41 .tp85-info h2 a:hover { color:#116ef4; }
+.tm-projects-v41 .tp85-company { font-size:11.5px; color:#4667a0; line-height:1.4; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tm-projects-v41 .tp85-company i { color:#1f73f9; }
+.tm-projects-v41 .tp85-dot { color:#8ca4c6; margin:0 3px; }
+.tm-projects-v41 .tp85-description { margin:4px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#5e78aa; font-size:11.5px; }
+.tm-projects-v41 .tp85-tags { display:flex; gap:5px; flex-wrap:wrap; }
+.tm-projects-v41 .tp85-tags span { background:#edf4ff; color:#4f72aa; padding:3px 7px; border-radius:5px; font-size:10.5px; line-height:1.1; }
+.tm-projects-v41 .tp85-finance { display:flex; flex-direction:column; gap:5px; align-items:flex-start; min-width:0; min-height:72px; justify-content:center; padding-left:12px; border-left:1px solid #e2eafb; }
+.tm-projects-v41 .tp85-finance>strong { font-weight:900; font-size:16px; line-height:1.35; white-space:nowrap; color:#dc2626; }
+.tm-projects-v41 .tp85-deadline,.tm-projects-v41 .tp85-remaining { display:flex; align-items:center; gap:5px; font-size:10.5px; color:#617cad; line-height:1.4; }
+.tm-projects-v41 .tp85-deadline i { color:#336bca; }
+.tm-projects-v41 .tp85-remaining i { color:#2d6ed5; }
+.tm-projects-v41 .tp85-remaining.urgent,.tm-projects-v41 .tp85-remaining.overdue { color:#ed2d45; font-weight:700; }
+.tm-projects-v41 .tp85-remaining.urgent i,.tm-projects-v41 .tp85-remaining.overdue i { color:#ed2d45; }
+.tm-projects-v41 .tp85-progress { display:grid; grid-template-columns:minmax(0,1fr) 36px; align-items:center; column-gap:7px; row-gap:8px; }
+.tm-projects-v41 .tp85-progress>span { grid-column:1 / -1; font-size:11px; color:#617cab; }
+.tm-projects-v41 .tp85-progress-line { width:100%; height:8px; overflow:hidden; border-radius:10px; background:#e4ebf8; }
+.tm-projects-v41 .tp85-progress-fill { height:100%; border-radius:10px; background:linear-gradient(90deg,#0d67ed,#2b82ff); }
+.tm-projects-v41 .tp85-progress strong { white-space:nowrap; color:#153681; font-size:12px; font-weight:800; }
+.tm-projects-v41 .tp85-actions { display:flex; flex-direction:column; gap:6px; align-items:stretch; min-width:0; }
+.tm-projects-v41 .tp85-status { display:flex; align-items:center; justify-content:center; border-radius:6px; min-height:28px; padding:3px; text-align:center; background:#fff1e3; color:#bd6f00; font-size:10.5px; font-weight:800; line-height:1.15; }
+.tm-projects-v41 .tp85-status.in-progress { background:#fff0e0; color:#cf7800; }
+.tm-projects-v41 .tp85-status.completed { background:#e0f8ec; color:#05915d; }
+.tm-projects-v41 .tp85-status.pending { background:#e8f1ff; color:#2264c7; }
+.tm-projects-v41 .tp85-detail { height:29px; display:flex; align-items:center; justify-content:center; border:1px solid #73a4ff; border-radius:6px; text-decoration:none; color:#1266f4; font-size:11px; font-weight:800; background:#fff; }
+.tm-projects-v41 .tp85-detail:hover { color:#fff; background:#1467ee; }
+
+/* Filter */
+.tm-projects-v41 .tp85-filter { background:#fff; border:1px solid #dce7f8; border-radius:10px; box-shadow:0 3px 12px #1d4c8910; padding:13px 14px 15px; }
+.tm-projects-v41 .tp85-filter-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid #e8effa; }
+.tm-projects-v41 .tp85-filter-head h2 { font-size:15px; font-weight:800; margin:0; color:#0b2a6f; }
+.tm-projects-v41 .tp85-filter-head a { white-space:nowrap; font-size:10.5px; text-decoration:none; color:#1269ef; }
+.tm-projects-v41 .tp85-filter fieldset { margin:0 0 13px; padding:0 0 12px; border:0; border-bottom:1px solid #e9eff9; min-width:0; }
+.tm-projects-v41 .tp85-filter legend { width:100%; font-size:12.5px; font-weight:800; margin-bottom:8px; color:#0f2f78; }
+.tm-projects-v41 .tp85-filter fieldset label { display:flex; gap:8px; align-items:center; color:#536fa4; margin:8px 0; font-size:12px; line-height:1.25; cursor:pointer; }
+.tm-projects-v41 .tp85-filter input[type=radio] { accent-color:#116cfd; flex:none; width:14px; height:14px; margin:0; }
+.tm-projects-v41 .tp85-filter button { width:100%; height:38px; color:white; background:#1266f9; border:0; border-radius:7px; font-size:12px; font-weight:800; cursor:pointer; }
+.tm-projects-v41 .tp85-filter button:hover { background:#0955d2; }
+.tm-projects-v41 .tp85-pagination { display:flex; justify-content:center; gap:6px; margin:13px 0 0; }
+.tm-projects-v41 .tp85-pagination a { width:31px; height:31px; border:1px solid #d9e6fa; background:#fff; border-radius:6px; display:grid; place-items:center; color:#0c337f; font-size:12px; font-weight:800; text-decoration:none; }
+.tm-projects-v41 .tp85-pagination a.active { color:white; background:#1269f7; border-color:#1269f7; }
+.tm-projects-v41 .tp85-empty { padding:40px 20px; background:white; border:1px solid #dce7f8; text-align:center; border-radius:11px; }
+.tm-projects-v41 .tp85-empty i { color:#2377f3; font-size:30px; }
+.tm-projects-v41 .tp85-empty h3 { font-size:17px; color:#153579; margin:12px 0 7px; }
+.tm-projects-v41 .tp85-empty p { font-size:12px; color:#6783b3; }
+.tm-projects-v41 .tp85-empty a { display:inline-block; color:#0e6afb; font-weight:800; text-decoration:none; }
+
+@media(max-width:1430px) {
+  .tm-projects-v41 .tp85-layout { grid-template-columns:minmax(0,1fr) 238px; gap:11px; }
+  .tm-projects-v41 .tp85-job { grid-template-columns:78px minmax(0,1fr) 145px 116px 105px; gap:9px; padding:9px; }
+  .tm-projects-v41 .tp85-thumb { width:78px; height:79px; }
+  .tm-projects-v41 .tp85-finance { padding-left:9px; }
+  .tm-projects-v41 .tp85-finance>strong { font-size:14px; }
+  .tm-projects-v41 .tp85-stat-icon { width:40px; height:40px; flex-basis:40px; }
+  .tm-projects-v41 .tp85-stat { gap:7px; padding:8px; }
+  .tm-projects-v41 .tp85-stat small { font-size:10.5px; }
+  .tm-projects-v41 .tp85-stat strong { font-size:22px; }
+}
+@media(max-width:1180px) {
+  .tm-projects-v41 .tp85-layout { grid-template-columns:minmax(0,1fr) 225px; }
+  .tm-projects-v41 .tp85-job { grid-template-columns:75px minmax(0,1fr) 134px 105px; }
+  .tm-projects-v41 .tp85-thumb { width:75px; height:78px; }
+  .tm-projects-v41 .tp85-actions { grid-column:2/-1; flex-direction:row; justify-content:flex-end; }
+  .tm-projects-v41 .tp85-actions>* { width:125px; flex:none; }
+}
+@media(max-width:990px) {
+  .tm-projects-v41 .tp85-layout { grid-template-columns:1fr; }
+  .tm-projects-v41 .tp85-filter { grid-row:2; }
+  .tm-projects-v41 .tp85-filter fieldset { display:inline-block; vertical-align:top; width:32%; padding-right:12px; border:0; }
+  .tm-projects-v41 .tp85-job { grid-template-columns:85px minmax(0,1fr) 140px 120px; }
+  .tm-projects-v41 .tp85-actions { grid-column:auto; flex-direction:column; }
+  .tm-projects-v41 .tp85-thumb { width:85px; height:83px; }
+}
+@media(max-width:650px) {
+  .tm-projects-v41 .tp41-content { padding:11px; }
+  .tm-projects-v41 .tp85-banner { height:175px; }
+  .tm-projects-v41 .tp85-banner-art { width:62%; opacity:.60; }
+  .tm-projects-v41 .tp85-banner-copy { max-width:78%; padding:15px 12px; }
+  .tm-projects-v41 .tp85-banner h1 { font-size:24px; }
+  .tm-projects-v41 .tp85-banner p { font-size:12px; }
+  .tm-projects-v41 .tp85-stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .tm-projects-v41 .tp85-toolbar { flex-wrap:wrap; }
+  .tm-projects-v41 .tp85-keyword { flex-basis:calc(100% - 96px); }
+  .tm-projects-v41 .tp85-sort-label { margin-left:auto; }
+  .tm-projects-v41 .tp85-job { grid-template-columns:72px minmax(0,1fr); row-gap:10px; }
+  .tm-projects-v41 .tp85-thumb { width:72px; height:76px; }
+  .tm-projects-v41 .tp85-finance { grid-column:1/2; border:0; padding:0; }
+  .tm-projects-v41 .tp85-progress { grid-column:2/3; }
+  .tm-projects-v41 .tp85-actions { grid-column:1/-1; flex-direction:row; }
+  .tm-projects-v41 .tp85-actions>* { flex:1; width:auto; }
+  .tm-projects-v41 .tp85-filter fieldset { display:block; width:100%; border-bottom:1px solid #ebf0fa; }
+}

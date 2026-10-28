@@ -1,0 +1,15 @@
+/* TalentMatch V50: thống nhất khung trang, không làm méo banner và hiện nút đăng xuất. */
+.fm-dashboard { --tm-sidebar-width:264px!important; }
+.fm-dashboard .market-sidebar {width:var(--tm-sidebar-width)!important; min-width:var(--tm-sidebar-width)!important; max-width:var(--tm-sidebar-width)!important; box-sizing:border-box!important;}
+.fm-dashboard .fm-header {left:var(--tm-sidebar-width)!important;right:0!important;box-sizing:border-box!important;}
+.fm-dashboard .fm-main {margin-left:var(--tm-sidebar-width)!important;min-width:0!important;max-width:calc(100% - var(--tm-sidebar-width))!important;box-sizing:border-box!important;}
+.fm-dashboard .fm-content,.fm-dashboard .tm37-content,.fm-dashboard .ta39-content,.fm-dashboard .tm42-shell,.fm-dashboard .tm48-wrap {padding-left:24px!important;padding-right:24px!important;max-width:100%!important;box-sizing:border-box!important;}
+.fm-dashboard .fm-main img {max-width:100%;}
+.fm-dashboard .tm37-banner,.fm-dashboard .ta39-banner,.fm-dashboard .tm42-banner,.fm-dashboard .tm48-banner {height:auto!important;max-height:none!important;aspect-ratio:3/1;overflow:hidden;}
+.fm-dashboard .tm37-banner img,.fm-dashboard .ta39-banner img,.fm-dashboard .tm42-banner img,.fm-dashboard .tm48-banner img {display:block;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;}
+.tm-freelancer-signout{margin:12px 18px 16px;padding-top:12px;border-top:1px solid #e2eaf8;}
+.tm-freelancer-signout form{margin:0;}
+.tm-freelancer-signout button{width:100%;min-height:43px;display:flex;align-items:center;gap:12px;text-align:left;padding:10px 13px;border:1px solid #fecaca;border-radius:10px;background:#fff5f5;color:#b42332;font-size:14px;font-weight:750;cursor:pointer;}
+.tm-freelancer-signout button:hover{background:#fee2e2;}
+@media(max-width:900px){.fm-dashboard .fm-main{margin-left:0!important;max-width:100%!important}.fm-dashboard .fm-header{left:0!important}.fm-dashboard .fm-content,.fm-dashboard .tm37-content,.fm-dashboard .ta39-content,.fm-dashboard .tm42-shell,.fm-dashboard .tm48-wrap{padding-left:14px!important;padding-right:14px!important}}
+@media(max-width:600px){.fm-dashboard .tm37-banner,.fm-dashboard .ta39-banner,.fm-dashboard .tm42-banner,.fm-dashboard .tm48-banner{aspect-ratio:3/1}}

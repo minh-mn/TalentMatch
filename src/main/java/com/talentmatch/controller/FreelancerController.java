@@ -418,12 +418,22 @@ public class FreelancerController {
                            @RequestParam(required = false) String q,
                            @RequestParam(defaultValue = "ALL") String due,
                            @RequestParam(defaultValue = "ALL") String completion,
+                           @RequestParam(defaultValue = "NEWEST") String sort,
                            @RequestParam(defaultValue = "1") int page,
                            Model model) {
         User u = users.byEmail(auth.getName());
         List<Project> all = projects.forFreelancer(u);
         String safeStatus = status == null ? "ALL" : status.trim().toUpperCase(Locale.ROOT);
         String keyword = q == null ? "" : q.trim().toLowerCase(Locale.ROOT);
+        String safeSort = sort == null ? "NEWEST" : sort.trim().toUpperCase(Locale.ROOT);
+        Comparator<Project> projectOrder = switch (safeSort) {
+            case "OLDEST" -> Comparator.comparing(Project::getCreatedAt, Comparator.nullsLast(Comparator.naturalOrder()));
+            case "DEADLINE" -> Comparator.comparing(p -> p.getApplication().getJob().getDeadline(), Comparator.nullsLast(Comparator.naturalOrder()));
+            case "PRICE_HIGH" -> Comparator.comparing(Project::getTotalPrice, Comparator.nullsLast(Comparator.reverseOrder()));
+            case "PRICE_LOW" -> Comparator.comparing(Project::getTotalPrice, Comparator.nullsLast(Comparator.naturalOrder()));
+            default -> Comparator.comparing(Project::getCreatedAt, Comparator.nullsLast(Comparator.reverseOrder()));
+        };
+        if (!Set.of("OLDEST", "DEADLINE", "PRICE_HIGH", "PRICE_LOW").contains(safeSort)) safeSort = "NEWEST";
 
         Map<Long, Integer> allProgress = new HashMap<>();
         for (Project p : all) {
@@ -450,7 +460,7 @@ public class FreelancerController {
                     if ("GT75".equalsIgnoreCase(completion)) return pct > 75;
                     return true;
                 })
-                .sorted(Comparator.comparing(Project::getCreatedAt, Comparator.nullsLast(Comparator.reverseOrder())))
+                .sorted(projectOrder)
                 .toList();
         int totalFiltered = filtered.size();
         int totalPages = Math.max(1, (totalFiltered + 4) / 5);
@@ -458,6 +468,13 @@ public class FreelancerController {
         int from = (currentPage - 1) * 5;
         List<Project> displayed = filtered.subList(from, Math.min(from + 5, totalFiltered));
 
+        Map<Long, Long> daysLeft = new HashMap<>();
+        for (Project p : displayed) {
+            LocalDate deadline = p.getApplication().getJob().getDeadline();
+            if (deadline != null) daysLeft.put(p.getId(), java.time.temporal.ChronoUnit.DAYS.between(today, deadline));
+        }
+        model.addAttribute("daysLeft", daysLeft);
+        model.addAttribute("sort", safeSort);
         Map<Long, Integer> milestoneTotal = new HashMap<>();
         Map<Long, Integer> milestoneDone = new HashMap<>();
         Map<Long, Integer> progress = new HashMap<>();
@@ -523,6 +540,12 @@ public class FreelancerController {
         if ("ALL".equals(status)) return true;
         if ("ACTIVE".equals(status)) {
             return project.getStatus() == ProjectStatus.IN_PROGRESS;
+        }
+        if ("SOON".equals(status)) {
+            LocalDate d = project.getApplication().getJob().getDeadline();
+            LocalDate now = LocalDate.now();
+            return d != null && !d.isBefore(now) && !d.isAfter(now.plusDays(7))
+                    && project.getStatus() != ProjectStatus.COMPLETED;
         }
         try {
             return project.getStatus() == ProjectStatus.valueOf(status);

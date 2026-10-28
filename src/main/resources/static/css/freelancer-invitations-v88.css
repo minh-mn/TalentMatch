@@ -1,0 +1,135 @@
+/* TalentMatch V88 – Lời mời từ Client.
+ * Chỉ can thiệp nội dung trong .ti88-content.
+ * Sidebar/Header/Footer và các trang khác giữ nguyên.
+ */
+.tm-invite-v88 {--ti88-blue:#0968f5;--ti88-navy:#0b2a6f;--ti88-border:#dce8f9;background:#edf5ff;color:var(--ti88-navy);}
+.tm-invite-v88 .fm-main{background:#eef5ff;}
+.tm-invite-v88 .ti88-content{box-sizing:border-box;width:100%;max-width:1920px;padding:16px 20px 24px;margin:0 auto;}
+.tm-invite-v88 .ti88-content *{box-sizing:border-box;}
+.tm-invite-v88 .ti88-banner{margin:0 0 14px;overflow:hidden;border-radius:12px;border:1px solid #d5e8fb;background:#d9edff;line-height:0;}
+.tm-invite-v88 .ti88-banner img{display:block;width:100%;height:auto;max-width:none;aspect-ratio:16 / 3;object-fit:contain;}
+/* Bộ công cụ phía trên – giống ảnh mẫu. */
+.tm-invite-v88 .ti88-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 12px;padding:11px 12px;border:1px solid var(--ti88-border);border-radius:10px;background:#fff;box-shadow:0 2px 10px #1c4f9510;}
+.tm-invite-v88 .ti88-search{height:44px;display:flex;flex:1 1 295px;min-width:220px;align-items:center;gap:10px;padding:0 13px;border:1px solid #d8e5f8;border-radius:8px;color:#4d77b7;background:#fff;}
+.tm-invite-v88 .ti88-search input{height:100%;min-width:0;flex:1;outline:0;border:0;background:transparent;font-size:14px;font-weight:500;line-height:1.4;color:#0b2a6f;}
+.tm-invite-v88 .ti88-control{display:flex;gap:9px;align-items:center;color:#163779;font-size:13px;font-weight:800;white-space:nowrap;}
+.tm-invite-v88 .ti88-control select{height:42px;min-width:112px;max-width:155px;padding:0 9px;border:1px solid #d3e1f6;background:#fff;border-radius:8px;font-size:13px;font-weight:750;color:var(--ti88-navy);cursor:pointer;}
+.tm-invite-v88 .ti88-reset{flex:0 0 42px;width:42px;height:42px;display:grid;place-items:center;border:1px solid #ccdcf4;border-radius:8px;color:#0c64ed;background:#f7fbff;text-decoration:none;}
+.tm-invite-v88 .ti88-reset:hover{background:#e8f2ff;}
+.tm-invite-v88 .ti88-sort{margin-left:auto;}
+.tm-invite-v88 .ti88-search-submit{height:42px;display:none;padding:0 15px;color:white;border:0;border-radius:8px;background:var(--ti88-blue);font-size:13px;font-weight:800;cursor:pointer;}
+/* Danh sách và bộ lọc. */
+.tm-invite-v88 .ti88-layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:15px;align-items:start;}
+.tm-invite-v88 .ti88-results{min-width:0;}
+.tm-invite-v88 .ti88-count{font-size:13.5px;color:#5875a6;margin:3px 0 10px;}
+.tm-invite-v88 .ti88-count strong{font-weight:900;color:#0b67f5;}
+.tm-invite-v88 .ti88-list{display:grid;gap:12px;}
+.tm-invite-v88 .ti88-card{position:relative;min-height:163px;display:grid;grid-template-columns:132px minmax(0,1fr) 258px;gap:15px;align-items:center;background:#fff;border:1px solid var(--ti88-border);border-radius:11px;padding:13px 15px;box-shadow:0 3px 12px #1a46900e;}
+.tm-invite-v88 .ti88-card:hover{border-color:#b4d3fd;box-shadow:0 7px 22px #1b4e9419;}
+.tm-invite-v88 .ti88-picture{width:132px;height:106px;display:block;overflow:hidden;border-radius:8px;background:#edf4ff;}
+.tm-invite-v88 .ti88-picture img{display:block;width:100%;height:100%;object-fit:cover;}
+.tm-invite-v88 .ti88-details{min-width:0;}
+.tm-invite-v88 .ti88-details h2{font-size:16.5px;line-height:1.34;font-weight:850;letter-spacing:-.1px;margin:0 0 8px;}
+.tm-invite-v88 .ti88-details h2 a{color:var(--ti88-navy);text-decoration:none;font-weight:850;}
+.tm-invite-v88 .ti88-details h2 a:hover{color:var(--ti88-blue);}
+.tm-invite-v88 .ti88-company{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:12.8px;line-height:1.35;color:#4d6b9f;margin:0 0 5px;}
+.tm-invite-v88 .ti88-company i{color:#1466ed;margin-right:5px;}
+.tm-invite-v88 .ti88-sender{display:flex;align-items:center;gap:6px;color:#738ab2;font-size:12px;line-height:1.35;margin:0 0 6px;}
+.tm-invite-v88 .ti88-dot{color:#a4b9dc;}
+.tm-invite-v88 .ti88-message{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.4;min-height:20px;background:#f1f7ff;border-radius:7px;padding:6px 9px;color:#4c6d9f;font-size:12.5px;margin:0 0 7px;}
+.tm-invite-v88 .ti88-tags{display:flex;gap:5px;flex-wrap:wrap;}
+.tm-invite-v88 .ti88-tags span{font-size:11.5px;font-weight:650;line-height:1.3;color:#2a5da9;border-radius:5px;background:#edf4ff;padding:4px 8px;}
+/* Giá + nút nằm riêng, không đè lên phần nội dung. */
+.tm-invite-v88 .ti88-offer{position:relative;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:center;gap:9px;border-left:1px solid #e2ebf8;padding-left:16px;}
+.tm-invite-v88 .ti88-budget{display:flex;align-items:center;gap:9px;color:#456da9;}
+.tm-invite-v88 .ti88-budget i{font-size:14px;}
+.tm-invite-v88 .ti88-budget strong{font-size:17.5px;font-weight:900;line-height:1.2;letter-spacing:-.1px;color:#dc2626;white-space:nowrap;}
+.tm-invite-v88 .ti88-duration{display:flex;align-items:center;gap:8px;color:#5976a5;font-size:12.5px;line-height:1.3;}
+.tm-invite-v88 .ti88-duration i{color:#366ddb;}
+.tm-invite-v88 .ti88-duration b{font-weight:700;}
+.tm-invite-v88 .ti88-status{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;max-width:max-content;padding:5px 9px;border-radius:6px;}
+.tm-invite-v88 .ti88-status.sent{color:#c27411;background:#fff1df;}
+.tm-invite-v88 .ti88-status.accepted{color:#078a5c;background:#e1f7ec;}
+.tm-invite-v88 .ti88-status.declined{color:#d1324f;background:#ffedf0;}
+.tm-invite-v88 .ti88-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.tm-invite-v88 .ti88-detail,.tm-invite-v88 .ti88-reply summary,.tm-invite-v88 .ti88-replied{min-width:0;height:37px;display:flex;align-items:center;justify-content:center;gap:7px;border-radius:7px;font-size:12.5px;font-weight:800;text-align:center;white-space:nowrap;text-decoration:none;}
+.tm-invite-v88 .ti88-detail{border:1.5px solid #7daaff;color:#0a65ef;background:#fff;}
+.tm-invite-v88 .ti88-detail:hover{background:#e9f3ff;}
+.tm-invite-v88 .ti88-reply{position:relative;min-width:0;}
+.tm-invite-v88 .ti88-reply summary{list-style:none;cursor:pointer;border:1px solid var(--ti88-blue);background:var(--ti88-blue);color:white;}
+.tm-invite-v88 .ti88-reply summary::-webkit-details-marker{display:none;}
+.tm-invite-v88 .ti88-reply[open] summary{background:#0558d4;}
+.tm-invite-v88 .ti88-reply-menu{position:absolute;z-index:30;top:calc(100% + 7px);right:0;width:196px;display:grid;gap:8px;padding:12px;border:1px solid #d6e5f6;border-radius:9px;box-shadow:0 8px 30px #0d2e7340;background:#fff;}
+.tm-invite-v88 .ti88-reply-menu>span{font-size:12px;color:#284a88;font-weight:800;}
+.tm-invite-v88 .ti88-reply-menu form{margin:0;}
+.tm-invite-v88 .ti88-reply-menu button{width:100%;min-height:36px;border-radius:7px;font-size:12.5px;font-weight:800;cursor:pointer;}
+.tm-invite-v88 .ti88-accept{background:#0fb887;color:#fff;border:1px solid #0fb887;}
+.tm-invite-v88 .ti88-decline{background:#fff1f2;color:#d62b49;border:1px solid #ffc7d0;}
+.tm-invite-v88 .ti88-replied{background:#eef2f9;color:#53739e;border:1px solid #dce7f6;}
+/* Bộ lọc chỉ có Trạng thái và Ngân sách theo yêu cầu. */
+.tm-invite-v88 .ti88-sidebar{align-self:start;background:#fff;border:1px solid var(--ti88-border);border-radius:11px;padding:15px 15px 16px;box-shadow:0 3px 12px #1a46900e;}
+.tm-invite-v88 .ti88-filter-header{display:flex;gap:10px;align-items:center;justify-content:space-between;border-bottom:1px solid #e6eefb;padding:0 0 12px;}
+.tm-invite-v88 .ti88-filter-header h2{font-size:17px;color:var(--ti88-navy);font-weight:850;margin:0;}
+.tm-invite-v88 .ti88-filter-header a{font-size:11.5px;color:#0c66f5;text-decoration:none;white-space:nowrap;}
+.tm-invite-v88 .ti88-fieldset{display:grid;gap:12px;border:0;border-bottom:1px solid #e6eefb;padding:13px 0;margin:0;}
+.tm-invite-v88 .ti88-fieldset legend{font-size:14px;color:#0b2a6f;font-weight:850;padding:0;margin:0 0 3px;}
+.tm-invite-v88 .ti88-fieldset label{display:flex;align-items:center;gap:9px;color:#4e6fa4;cursor:pointer;font-size:13px;line-height:1.35;}
+.tm-invite-v88 .ti88-fieldset input[type=radio]{width:15px;height:15px;margin:0;accent-color:var(--ti88-blue);}
+.tm-invite-v88 .ti88-budget-range{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.tm-invite-v88 .ti88-budget-range input{height:38px;width:100%;min-width:0;padding:0 8px;border:1px solid #d8e5f8;border-radius:7px;background:#fff;font-size:12px;color:#0b2a6f;}
+.tm-invite-v88 .ti88-apply{height:42px;width:100%;border:0;border-radius:7px;background:var(--ti88-blue);color:white;cursor:pointer;margin-top:13px;font-size:13px;font-weight:850;}
+.tm-invite-v88 .ti88-apply:hover{background:#0558d4;}
+/* Trường hợp người dùng chưa nhận lời mời: không hiển thị bản ghi giả. */
+.tm-invite-v88 .ti88-empty{min-height:305px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;background:#fff;border:1px solid var(--ti88-border);border-radius:11px;padding:38px 22px;}
+.tm-invite-v88 .ti88-empty-icon{width:76px;height:76px;display:grid;place-items:center;border-radius:22px;background:#e9f3ff;color:#0b67f5;font-size:34px;}
+.tm-invite-v88 .ti88-empty h2{font-size:20px;font-weight:850;margin:2px 0 0;color:#0b2a6f;}
+.tm-invite-v88 .ti88-empty p{font-size:14px;color:#5d78a6;line-height:1.6;max-width:430px;margin:0;}
+.tm-invite-v88 .ti88-empty a{display:inline-flex;align-items:center;justify-content:center;min-height:38px;margin-top:6px;padding:0 17px;border-radius:7px;border:1px solid #0b67f5;color:#0b67f5;font-weight:800;font-size:13px;text-decoration:none;}
+.tm-invite-v88 .ti88-empty a:hover{background:#eaf3ff;}
+.tm-invite-v88 .ti88-pages{margin:14px 0;display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;}
+.tm-invite-v88 .ti88-pages a{min-width:36px;height:36px;display:grid;place-items:center;padding:0 8px;border:1px solid #d6e5fa;border-radius:7px;text-decoration:none;color:#0b2a6f;background:#fff;font-size:13px;font-weight:800;}
+.tm-invite-v88 .ti88-pages a.active{color:#fff;background:#0b67f5;border-color:#0b67f5;}
+@media(max-width:1550px){
+ .tm-invite-v88 .ti88-toolbar{gap:9px;}
+ .tm-invite-v88 .ti88-card{grid-template-columns:112px minmax(0,1fr) 230px;gap:12px;padding:12px;}
+ .tm-invite-v88 .ti88-picture{width:112px;height:100px;}
+ .tm-invite-v88 .ti88-offer{padding-left:12px;}
+ .tm-invite-v88 .ti88-budget strong{font-size:16.5px;}
+ .tm-invite-v88 .ti88-details h2{font-size:16px;}
+}
+@media(max-width:1230px){
+ .tm-invite-v88 .ti88-layout{grid-template-columns:minmax(0,1fr) 240px;gap:11px;}
+ .tm-invite-v88 .ti88-card{grid-template-columns:98px minmax(0,1fr);gap:11px;}
+ .tm-invite-v88 .ti88-picture{width:98px;height:90px;}
+ .tm-invite-v88 .ti88-offer{grid-column:2;grid-row:2;border-left:0;border-top:1px solid #e6eef9;padding:9px 0 0;display:grid;grid-template-columns:1fr auto;gap:5px 12px;}
+ .tm-invite-v88 .ti88-buttons{grid-column:2;grid-row:1/4;width:230px;align-self:center;}
+ .tm-invite-v88 .ti88-budget strong{font-size:17px;}
+}
+@media(max-width:1050px){
+ .tm-invite-v88 .ti88-layout{grid-template-columns:1fr;}
+ .tm-invite-v88 .ti88-sidebar{width:100%;}
+ .tm-invite-v88 .ti88-card{grid-template-columns:115px minmax(0,1fr) 250px;}
+ .tm-invite-v88 .ti88-picture{width:115px;height:100px;}
+ .tm-invite-v88 .ti88-offer{grid-column:auto;grid-row:auto;border-top:0;border-left:1px solid #e6eef9;padding:0 0 0 13px;display:flex;}
+ .tm-invite-v88 .ti88-buttons{width:auto;display:grid;grid-column:auto;grid-row:auto;}
+ .tm-invite-v88 .ti88-fieldset{grid-template-columns:repeat(2,minmax(0,1fr));}
+ .tm-invite-v88 .ti88-fieldset legend{grid-column:1/-1;}
+}
+@media(max-width:800px){
+ .tm-invite-v88 .ti88-content{padding:12px;}
+ .tm-invite-v88 .ti88-toolbar{align-items:stretch;}
+ .tm-invite-v88 .ti88-search{flex-basis:100%;}
+ .tm-invite-v88 .ti88-control{flex:1 1 auto;justify-content:space-between;}
+ .tm-invite-v88 .ti88-card{grid-template-columns:94px minmax(0,1fr);}
+ .tm-invite-v88 .ti88-picture{width:94px;height:90px;}
+ .tm-invite-v88 .ti88-offer{grid-column:1/-1;border-left:0;border-top:1px solid #e6eef9;padding:11px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+ .tm-invite-v88 .ti88-buttons{grid-column:1/-1;grid-row:auto;}
+ .tm-invite-v88 .ti88-details h2{font-size:15.5px;}
+}
+@media(max-width:500px){
+ .tm-invite-v88 .ti88-card{grid-template-columns:1fr;}
+ .tm-invite-v88 .ti88-picture{width:100%;height:150px;}
+ .tm-invite-v88 .ti88-offer{grid-column:1;}
+ .tm-invite-v88 .ti88-company{gap:6px;}
+ .tm-invite-v88 .ti88-fieldset{grid-template-columns:1fr;}
+}

@@ -1,0 +1,38 @@
+/* TalentMatch V65 - Freelancer dashboard, design specification 230 / 64 / 24 */
+.fm-dashboard{--fm-navy:#0B2A6F;--fm-blue:#2F6FED;background:#EEF3FC!important;color:#111827!important;font-family:Arial,sans-serif!important}
+.fm-dashboard .market-sidebar{width:230px!important;min-width:230px!important;background:#f8fbff!important;border-right:1px solid #dae5f6!important}
+.fm-dashboard .fm-header{height:64px!important;left:230px!important;padding:0 24px!important;background:#fff!important;gap:20px!important}
+.fm-dashboard .fm-main{margin-left:230px!important;padding-top:64px!important;background:#EEF3FC!important}
+.fm-dashboard .fm-content{max-width:none!important;padding:0 24px 16px!important;margin:0 auto!important}
+.fm-dashboard .market-side-nav a{font-size:15px!important;font-weight:700!important;min-height:40px!important;color:#111827}
+.fm-dashboard .market-side-nav a.active{background:#2F6FED!important;color:#fff!important}
+.fm-dashboard .fm-hero-reference{height:auto!important;aspect-ratio:5.333333 / 1!important;max-height:none!important;min-height:0!important;margin-top:16px!important;border-radius:10px!important;position:relative!important;overflow:hidden!important;background:#a9d5ff!important;border:0!important;box-shadow:none!important;padding:0!important}
+.fm-dashboard .tm-reference-hero-image{display:block!important;width:100%!important;height:100%!important;object-fit:fill!important}
+.fm-dashboard .fm-hero-reference .tm-dynamic-greeting{position:absolute;left:6%;top:6.5%;z-index:2;font-size:clamp(9px,.8vw,13px);font-weight:600;color:#09286a;background:rgba(220,240,255,.88);padding:2px 6px;border-radius:4px}
+.fm-dashboard .fm-hero-reference .tm-banner-click{position:absolute;left:5%;top:73%;height:20%;width:20%;z-index:3;border-radius:8px}
+.fm-dashboard .fm-hero-reference .tm-banner-click:focus-visible{outline:3px solid #f59e0b;outline-offset:3px}
+.fm-dashboard .fm-metrics{margin:12px 0 16px!important;gap:12px!important;grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.fm-dashboard .fm-metrics article{min-height:77px!important;border:1px solid #dbe5f5!important;background:#fff!important;padding:12px!important;border-radius:10px!important}
+.fm-dashboard .fm-metrics strong{font-size:26px!important;color:#0B2A6F!important;font-weight:800!important}
+.fm-dashboard .fm-primary-grid{display:grid!important;grid-template-columns:minmax(0,62fr) minmax(0,36fr)!important;gap:16px!important;margin:0 0 16px!important}
+.fm-dashboard .fm-panel{border:1px solid #dbe5f5!important;border-radius:10px!important;box-shadow:none!important;background:#fff!important;min-width:0}
+.fm-dashboard .fm-panel-head h2{font-size:20px!important;color:#0B2A6F!important;font-weight:700!important}
+.fm-dashboard .fm-job-info>a,.fm-dashboard .fm-application a{font-size:16px!important;font-weight:700!important;color:#111827!important}
+.fm-dashboard .fm-job-right b{font-size:18px!important;font-weight:800!important;color:#DC2626!important}
+.fm-dashboard .fm-job-info small,.fm-dashboard .fm-job-right small,.fm-dashboard .fm-profile p{color:#64748B!important;font-size:13px!important}
+.fm-dashboard .fm-apply,.fm-dashboard .fm-header-search button{background:#2F6FED!important}
+.fm-dashboard .tm-dash-three{display:grid!important;grid-template-columns:1fr 1fr 1fr!important;gap:16px!important;margin-bottom:16px!important;align-items:stretch!important}
+.fm-dashboard .tm-dash-three .fm-overview-grid{display:contents!important}
+.fm-dashboard .tm-dash-three .fm-recent-section{margin:0!important;min-width:0!important}
+.fm-dashboard .tm-dash-three .fm-recent-list{display:block!important;padding:0 12px 10px!important}
+.fm-dashboard .tm-dash-three .fm-application{padding:7px 0!important}
+.fm-dashboard .fm-summary-chart{display:block!important;padding:10px 15px!important}
+.fm-dashboard .fm-summary-bars{height:94px!important;min-width:0!important;display:flex!important;align-items:flex-end!important;gap:5px!important}
+.fm-dashboard .fm-summary-bars .tm-live-bar{background:#2F6FED!important;border-radius:3px 3px 0 0!important;flex:1;min-width:2px;max-width:22px}
+.fm-dashboard .fm-summary-bars .tm-chart-empty{font-size:12px;color:#64748B;align-self:center}
+.fm-dashboard .fm-summary-chart p{font-size:12px!important;max-width:none!important}
+.fm-dashboard .fm-bottom-grid{display:grid!important;gap:16px!important;margin-bottom:16px!important}
+.fm-dashboard .fm-footer{background:#0B2A6F!important;color:#fff!important}
+@media(max-width:1250px){.fm-dashboard .tm-dash-three{grid-template-columns:repeat(2,minmax(0,1fr))!important}.fm-dashboard .tm-dash-three .fm-recent-section{grid-column:1/-1!important}.fm-dashboard .fm-primary-grid{grid-template-columns:1fr!important}}
+@media(max-width:900px){.fm-dashboard .market-sidebar{display:none!important}.fm-dashboard .fm-header{left:0!important}.fm-dashboard .fm-main{margin-left:0!important}.fm-dashboard .fm-content{padding:0 16px 16px!important}}
+@media(max-width:650px){.fm-dashboard .fm-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}.fm-dashboard .tm-dash-three{grid-template-columns:1fr!important}.fm-dashboard .tm-dash-three .fm-recent-section{grid-column:auto!important}.fm-dashboard .fm-content{padding:0 12px 12px!important}}

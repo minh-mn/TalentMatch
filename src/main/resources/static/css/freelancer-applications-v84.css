@@ -1,0 +1,44 @@
+/* V84: cải thiện độ đọc cho trang Ứng tuyển, không thay đổi nghiệp vụ. */
+@media (min-width:901px) {
+  body.tm-apps-v39.fm-dashboard {--tm-sidebar-width:250px!important;}
+  body.tm-apps-v39 .market-sidebar {width:250px!important;min-width:250px!important;max-width:250px!important;}
+  body.tm-apps-v39 .fm-main {margin-left:250px!important;}
+  body.tm-apps-v39 .fm-header {left:250px!important;}
+}
+body.tm-apps-v39 .market-sidebar a {font-size:14px!important;line-height:1.35!important;}
+body.tm-apps-v39 .market-sidebar .market-nav-item {min-height:41px;}
+body.tm-apps-v39 .ta39-content {padding:17px 20px 26px!important;}
+body.tm-apps-v39 .ta39-layout {grid-template-columns:minmax(0,1fr) 278px!important;gap:17px!important;}
+body.tm-apps-v39 .ta39-list {gap:12px!important;}
+body.tm-apps-v39 .ta39-card {
+ grid-template-columns:76px minmax(0,1fr) 273px!important;
+ gap:17px!important; min-height:142px!important;
+ padding:16px 16px!important;align-items:center!important;
+ border-radius:12px!important;
+}
+body.tm-apps-v39 .ta39-thumb {width:76px!important;height:84px!important;font-size:32px!important;}
+body.tm-apps-v39 .ta39-info h2 {font-size:16px!important;line-height:1.4!important;margin-bottom:8px!important;}
+body.tm-apps-v39 .ta39-meta {font-size:12px!important;line-height:1.45!important;gap:6px 13px!important;margin-bottom:7px!important;}
+body.tm-apps-v39 .ta39-info p {font-size:13px!important;line-height:1.55!important;margin-bottom:7px!important;-webkit-line-clamp:2;}
+body.tm-apps-v39 .ta39-tags {gap:6px!important;}
+body.tm-apps-v39 .ta39-tags span {font-size:11.5px!important;padding:4px 8px!important;}
+body.tm-apps-v39 .ta39-side {grid-template-columns:116px minmax(0,1fr)!important;gap:14px!important;padding-left:15px!important;}
+body.tm-apps-v39 .ta83-price-group strong {font-size:17px!important;}
+body.tm-apps-v39 .ta83-price-group small {font-size:12px!important;line-height:1.55!important;}
+body.tm-apps-v39 .ta39-stage {min-height:32px!important;height:auto!important;font-size:11px!important;}
+body.tm-apps-v39 .ta39-actions a,body.tm-apps-v39 .ta39-actions button {min-height:31px!important;height:31px!important;font-size:12px!important;}
+body.tm-apps-v39 .ta39-topnav a {font-size:13px!important;min-height:41px!important;}
+body.tm-apps-v39 .ta39-search label,body.tm-apps-v39 .ta39-search select {height:44px!important;}
+body.tm-apps-v39 .ta39-search label input {font-size:13px!important;}
+body.tm-apps-v39 .ta39-stats,body.tm-apps-v39 .ta39-filter {padding:15px!important;}
+body.tm-apps-v39 .ta39-stats-head h2,body.tm-apps-v39 .ta39-filter-head h2 {font-size:16px!important;}
+body.tm-apps-v39 .ta39-filter fieldset label {font-size:13px!important;line-height:1.65!important;}
+@media(max-width:1250px) and (min-width:981px) {
+  body.tm-apps-v39 .ta39-layout {grid-template-columns:minmax(0,1fr) 255px!important;gap:12px!important;}
+  body.tm-apps-v39 .ta39-card {grid-template-columns:68px minmax(0,1fr) 235px!important;gap:11px!important;padding:12px!important;}
+  body.tm-apps-v39 .ta39-thumb {width:68px!important;height:75px!important;}
+  body.tm-apps-v39 .ta39-side {grid-template-columns:101px minmax(0,1fr)!important;gap:8px!important;padding-left:9px!important;}
+  body.tm-apps-v39 .ta83-price-group strong {font-size:15px!important;}
+}
+@media(max-width:980px){body.tm-apps-v39 .ta39-layout{grid-template-columns:1fr!important;}}
+@media(max-width:680px){body.tm-apps-v39 .ta39-card{grid-template-columns:64px minmax(0,1fr)!important;min-height:0!important;}body.tm-apps-v39 .ta39-thumb{width:64px!important;height:70px!important;}body.tm-apps-v39 .ta39-side{grid-column:1/-1;grid-template-columns:minmax(0,1fr) 135px!important;border-left:0!important;border-top:1px solid #e4ebf7;padding:10px 0 0!important;}}

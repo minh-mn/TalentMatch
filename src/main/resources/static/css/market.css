@@ -3641,3 +3641,33 @@ body.jobboard-match-home .compact-process-footer a.primary {
     }
 }
 
+
+/* v55: Keep the shared workspace sidebar logo compact on every feature page. */
+.market-sidebar .market-brand .tm33-brand-logo {
+  display: block !important;
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  min-height: 30px !important;
+  max-width: 30px !important;
+  max-height: 30px !important;
+  object-fit: contain !important;
+  flex: 0 0 30px !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+.market-sidebar .market-brand {
+  align-items: center;
+  min-width: 0;
+}
+.market-sidebar .market-brand > span:last-child {
+  min-width: 0;
+}
+.market-sidebar .market-brand > span:last-child strong,
+.market-sidebar .market-brand > span:last-child small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+

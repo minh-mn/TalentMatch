@@ -1,0 +1,3673 @@
+/* ============================================================
+   TALENTMATCH PUBLIC MARKETPLACE UI
+   Bám sát bố cục/màu/kích thước từ ảnh JobBoard tham chiếu,
+   nhưng giữ thương hiệu và nghiệp vụ TalentMatch.
+   ============================================================ */
+
+:root {
+    --mk-sidebar: 230px;
+    --mk-topbar: 66px;
+    --mk-bg: #f3f4fa;
+    --mk-card: #ffffff;
+    --mk-text: #111426;
+    --mk-muted: #6f7384;
+    --mk-line: #e3e5ed;
+    --mk-purple: #7c31f4;
+    --mk-purple-2: #6324d8;
+    --mk-purple-soft: #f0e8ff;
+    --mk-navy: #11152d;
+    --mk-navy-2: #17193f;
+    --mk-lime: #c8f619;
+    --mk-green: #087d64;
+    --mk-yellow: #ffe89a;
+    --mk-red: #f44646;
+    --mk-blue: #246bfa;
+    --mk-radius: 16px;
+    --mk-shadow: 0 8px 28px rgba(28, 31, 50, .06);
+}
+
+* { box-sizing: border-box; }
+
+body.market-page,
+body.auth-market-page {
+    margin: 0;
+    font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    color: var(--mk-text);
+    background: var(--mk-bg);
+}
+
+body.market-page a,
+body.auth-market-page a { text-decoration: none; }
+
+/* ========================= SIDEBAR ========================= */
+.market-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: var(--mk-sidebar);
+    background: #111524;
+    color: #fff;
+    z-index: 1000;
+    padding: 24px 14px 18px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.market-brand-wrap { padding: 0 10px 22px; }
+.market-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+}
+.market-brand-symbol {
+    position: relative;
+    width: 30px;
+    height: 16px;
+    display: inline-block;
+}
+.market-brand-symbol span {
+    position: absolute;
+    top: 3px;
+    width: 17px;
+    height: 10px;
+    border: 3px solid;
+    border-radius: 12px;
+}
+.market-brand-symbol span:first-child { left: 0; border-color: #8a45ff; }
+.market-brand-symbol span:last-child { right: 0; border-color: #ffc928; }
+.market-brand strong {
+    display: block;
+    font-size: 17px;
+    line-height: 1.05;
+    letter-spacing: -.2px;
+}
+.market-brand small {
+    display: block;
+    margin-top: 4px;
+    color: #9ea5c2;
+    font-size: 8px;
+    letter-spacing: .45px;
+}
+
+.market-side-section { margin-top: 8px; }
+.market-side-label {
+    display: block;
+    padding: 0 10px 8px;
+    font-size: 10px;
+    font-weight: 800;
+    color: #6e769a;
+    letter-spacing: 1.1px;
+}
+.market-side-nav { display: grid; gap: 4px; }
+.market-side-nav a {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 0 11px;
+    color: #e9ebf7;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    transition: .16s ease;
+}
+.market-side-nav a:hover { background: rgba(255,255,255,.07); color: #fff; }
+.market-side-nav a.active {
+    background: #fff;
+    color: #1b1d2d;
+    box-shadow: 0 4px 16px rgba(0,0,0,.12);
+}
+.market-side-icon {
+    width: 19px;
+    text-align: center;
+    font-size: 18px;
+    color: #cdd2e8;
+}
+.market-side-nav a.active .market-side-icon { color: var(--mk-purple); }
+
+.market-side-bottom {
+    margin-top: auto;
+    padding: 14px;
+    border: 1px solid #2c3354;
+    border-radius: 14px;
+    background: #1b2139;
+    box-shadow: inset 0 0 30px rgba(124,49,244,.06);
+}
+.market-side-bottom-kicker {
+    font-size: 9px;
+    color: #a8afcc;
+    font-weight: 800;
+    letter-spacing: .5px;
+}
+.market-side-bottom strong {
+    display: block;
+    margin-top: 7px;
+    font-size: 16px;
+}
+.market-side-bottom p {
+    margin: 7px 0 12px;
+    color: #aeb4cc;
+    font-size: 11px;
+    line-height: 1.45;
+}
+.market-side-bottom-btn {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    color: #fff;
+    background: linear-gradient(135deg, #7d31f4, #7028e8);
+    font-size: 12px;
+    font-weight: 800;
+    box-shadow: 0 8px 18px rgba(124,49,244,.25);
+}
+
+/* ========================= TOPBAR ========================= */
+.market-topbar {
+    position: fixed;
+    z-index: 990;
+    left: var(--mk-sidebar);
+    top: 0;
+    right: 0;
+    height: var(--mk-topbar);
+    background: rgba(255,255,255,.98);
+    border-bottom: 1px solid #e6e7ee;
+    display: grid;
+    grid-template-columns: minmax(340px, 470px) auto 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 0 36px;
+}
+.market-global-search {
+    height: 39px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #e2e4ec;
+    background: #fafbfe;
+    border-radius: 11px;
+    overflow: hidden;
+}
+.market-search-icon { padding-left: 12px; color: #9096aa; }
+.market-global-search input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    padding: 0 8px;
+    font: inherit;
+    color: var(--mk-text);
+    font-size: 12px;
+}
+.market-shortcut {
+    padding: 3px 7px;
+    margin-right: 6px;
+    border: 1px solid #dfe2eb;
+    border-radius: 7px;
+    color: #9aa0b2;
+    font-size: 10px;
+    background: #fff;
+}
+.market-global-search button {
+    height: 33px;
+    margin-right: 4px;
+    padding: 0 15px;
+    border: 0;
+    border-radius: 9px;
+    background: #12172b;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+}
+.market-mode-switch {
+    height: 39px;
+    display: inline-flex;
+    padding: 3px;
+    border-radius: 11px;
+    background: #f0ebff;
+    justify-self: start;
+}
+.market-mode-switch a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 16px;
+    border-radius: 9px;
+    color: #6631d9;
+    font-size: 12px;
+    font-weight: 800;
+}
+.market-mode-switch a.active {
+    color: #202333;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(27,29,45,.13);
+}
+.market-top-actions {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+.market-primary-action,
+.market-login-action {
+    min-height: 38px;
+    padding: 0 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 800;
+}
+.market-primary-action {
+    background: var(--mk-purple);
+    color: #fff;
+    box-shadow: 0 7px 20px rgba(124,49,244,.25);
+}
+.market-login-action { background: #7930ea; color: #fff; }
+.market-user-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+    border: 1px solid #e5e6ee;
+    border-radius: 11px;
+    color: var(--mk-text);
+    background: #fff;
+}
+.market-user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: var(--mk-purple);
+    font-weight: 900;
+    font-size: 11px;
+}
+.market-user-chip b { display: block; max-width: 110px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10px; }
+.market-user-chip small { display: block; margin-top: 1px; color: #8a8fa2; font-size: 8px; }
+.market-logout-form { margin: 0; }
+.market-logout-form button {
+    border: 0;
+    background: transparent;
+    color: #777e91;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* ========================= GENERIC MARKET SHELL ========================= */
+.market-main {
+    min-height: 100vh;
+    margin-left: var(--mk-sidebar);
+    padding-top: var(--mk-topbar);
+    background: var(--mk-bg);
+}
+.market-home-shell,
+.list-page-shell {
+    width: min(1288px, calc(100% - 72px));
+    margin: 0 auto;
+}
+.market-home-shell { padding: 18px 0 34px; }
+.list-page-shell { padding: 22px 0 40px; }
+.market-card {
+    background: #fff;
+    border: 1px solid var(--mk-line);
+    border-radius: var(--mk-radius);
+    box-shadow: 0 2px 2px rgba(27,29,45,.01);
+}
+.market-card-head {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 17px;
+    border-bottom: 1px solid #eceef4;
+}
+.market-card-head.simple { justify-content: flex-start; border-bottom: 0; }
+.market-card-head h3 { margin: 0; font-size: 14px; font-weight: 900; color: #101323; }
+.market-card-head a { color: var(--mk-purple); font-size: 11px; font-weight: 800; }
+.market-empty { padding: 28px; text-align: center; color: var(--mk-muted); }
+.market-empty h3 { margin: 0 0 6px; color: var(--mk-text); }
+
+/* ========================= HOME ========================= */
+.market-dual-hero {
+    overflow: hidden;
+    border-radius: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 218px;
+}
+.dual-hero-panel { padding: 31px 28px 26px; color: #fff; }
+.dual-hero-hire { background: linear-gradient(125deg, #7a2ee9 0%, #6f29d4 64%, #6021bf 100%); }
+.dual-hero-work { background: linear-gradient(125deg, #17183b, #11142e); }
+.dual-eyebrow { display: block; margin-bottom: 18px; font-size: 10px; font-weight: 900; letter-spacing: .3px; opacity: .92; }
+.dual-hero-panel h1,
+.dual-hero-panel h2 {
+    max-width: 560px;
+    margin: 0 0 8px;
+    font-size: clamp(25px, 2.1vw, 31px);
+    line-height: 1.2;
+    letter-spacing: -.7px;
+}
+.dual-hero-panel p { max-width: 560px; margin: 0 0 16px; font-size: 12px; line-height: 1.55; color: rgba(255,255,255,.88); }
+.dual-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-light-solid,
+.btn-light-outline,
+.btn-lime {
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 17px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 900;
+}
+.btn-light-solid { background: #fff; color: #6530cf; }
+.btn-light-outline { border: 1px solid rgba(255,255,255,.8); color: #fff; }
+.btn-lime { background: var(--mk-lime); color: #101524; padding-inline: 20px; }
+
+.market-stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+}
+.market-stat-row article {
+    min-height: 64px;
+    background: #fff;
+    border: 1px solid var(--mk-line);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 18px;
+}
+.stat-icon {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+}
+.stat-purple { color: #7433dc; background: #efe7ff; }
+.stat-blue { color: #2764e7; background: #eaf1ff; }
+.stat-green { color: #148b5d; background: #e3f9ec; }
+.market-stat-row strong { display: block; font-size: 17px; line-height: 1.1; }
+.market-stat-row small { display: block; margin-top: 4px; color: #787e90; font-size: 10px; }
+
+.market-home-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.75fr) minmax(270px, .95fr);
+    gap: 13px;
+    margin-top: 13px;
+}
+.home-primary-column,
+.home-secondary-column { display: grid; gap: 13px; align-content: start; }
+.recommended-list { padding: 2px 17px 10px; }
+.recommended-row {
+    min-height: 66px;
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr) auto auto;
+    gap: 10px;
+    align-items: center;
+    border-bottom: 1px solid #eceef4;
+}
+.recommended-row:last-child { border-bottom: 0; }
+.recommended-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    color: #6b2bdd;
+    background: #efe7ff;
+}
+.recommended-icon.amber { background: #fff2c7; color: #bd6811; }
+.recommended-icon.green { background: #daf7e7; color: #168451; }
+.recommended-copy { min-width: 0; }
+.recommended-copy > a { display: block; color: #121524; font-size: 12px; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.recommended-copy > div { display: flex; gap: 12px; margin-top: 6px; color: #858a9a; font-size: 9px; }
+.recommended-price { color: #7831ef; font-size: 13px; white-space: nowrap; }
+.recommended-apply {
+    min-width: 78px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    color: #fff;
+    background: var(--mk-purple);
+    font-size: 10px;
+    font-weight: 900;
+    box-shadow: 0 6px 14px rgba(124,49,244,.22);
+}
+.category-card { padding-bottom: 14px; }
+.category-pill-wrap { padding: 0 17px; display: flex; flex-wrap: wrap; gap: 7px; }
+.category-pill-wrap a,
+.category-scroll a {
+    min-height: 31px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 12px;
+    border: 1px solid #dfe2eb;
+    border-radius: 999px;
+    color: #222636;
+    background: #fff;
+    font-size: 10px;
+    font-weight: 700;
+}
+.category-pill-wrap a:hover,
+.category-scroll a:hover,
+.category-scroll a.active { border-color: #8e4eff; color: #7132df; background: #faf7ff; }
+.home-side-cta {
+    min-height: 116px;
+    padding: 17px;
+    border: 1px solid #f3c84f;
+    border-radius: 15px;
+    background: linear-gradient(120deg, #fff9dd, #ffe796);
+}
+.home-side-cta h3,
+.home-tip-card h3 { margin: 0 0 8px; font-size: 13px; }
+.home-side-cta p,
+.home-tip-card p { margin: 0 0 12px; font-size: 10px; line-height: 1.55; }
+.home-side-cta a {
+    min-height: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #12172b;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+}
+.home-tip-card {
+    min-height: 96px;
+    padding: 18px;
+    border-radius: 15px;
+    background: #121728;
+    color: #fff;
+}
+.home-tip-card p { color: #e4e7f0; }
+.home-talent-strip,
+.home-how-card { margin-top: 13px; }
+.talent-mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 12px 17px 16px; }
+.talent-mini-card {
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #e6e8ef;
+    border-radius: 12px;
+    padding: 9px 11px;
+    color: var(--mk-text);
+}
+.talent-mini-avatar,
+.hire-rank {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    flex: 0 0 34px;
+    background: #efe7ff;
+    color: #7333e0;
+    font-weight: 900;
+}
+.talent-mini-info { min-width: 0; }
+.talent-mini-info b { display: block; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.talent-mini-info small { display: block; margin-top: 3px; color: #84899a; font-size: 9px; }
+.talent-mini-link { margin-left: auto; color: var(--mk-purple); font-size: 9px; font-weight: 900; white-space: nowrap; }
+.how-three-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 17px 17px; }
+.how-three-grid article { min-height: 110px; border: 1px solid #e4e6ef; border-radius: 13px; padding: 16px; background: #faf9ff; }
+.how-three-grid strong { color: #7434ea; font-size: 18px; }
+.how-three-grid h4 { margin: 12px 0 6px; font-size: 12px; }
+.how-three-grid p { margin: 0; color: #74798b; font-size: 10px; line-height: 1.5; }
+
+/* ========================= LIST / PROJECTS ========================= */
+.market-breadcrumb { display: flex; align-items: center; gap: 8px; color: #8b90a2; font-size: 11px; margin-bottom: 10px; }
+.market-breadcrumb a { color: #366eee; }
+.market-breadcrumb b { color: #1b1e2d; }
+.list-title-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
+.list-title-row h1 { margin: 0; font-size: 27px; line-height: 1.1; letter-spacing: -.5px; }
+.list-title-row h1 span { color: #8240ef; }
+.list-title-row p { margin: 7px 0 0; color: #777c8e; font-size: 11px; }
+.sort-control { display: flex; align-items: center; gap: 8px; color: #797e8f; font-size: 10px; }
+.sort-control select { height: 36px; border: 1px solid #8a47f4; border-radius: 10px; background: #fff; padding: 0 12px; color: #25283a; font-weight: 700; }
+.category-scroll { display: flex; gap: 7px; overflow-x: auto; padding: 14px 0 16px; scrollbar-width: none; }
+.category-scroll::-webkit-scrollbar { display: none; }
+.job-results-layout { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(300px, .95fr); gap: 13px; align-items: start; }
+.project-list { display: grid; gap: 12px; }
+.project-card {
+    background: #fff;
+    border: 1px solid #e3e5ed;
+    border-radius: 15px;
+    padding: 16px;
+    transition: .16s ease;
+}
+.project-card:hover { border-color: #c7b0fa; box-shadow: var(--mk-shadow); }
+.project-card.highlighted { border-color: #8f4cf7; }
+.project-card-head { display: grid; grid-template-columns: 38px minmax(0,1fr) auto; gap: 10px; align-items: start; }
+.project-card-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    display: grid;
+    place-items: center;
+    background: #fbe7f3;
+    color: #d12e8a;
+    font-weight: 900;
+}
+.project-card-icon.green { background: #dcf8e6; color: #168950; }
+.project-card-icon.amber { background: #fff1c8; color: #c16b11; }
+.project-card-icon.blue { background: #e3efff; color: #2367e8; }
+.project-card-heading > a { color: #101322; font-size: 14px; line-height: 1.35; font-weight: 900; }
+.project-badges { display: flex; gap: 6px; margin-top: 7px; }
+.project-hot,
+.project-budget-badge { display: inline-flex; align-items: center; min-height: 21px; padding: 0 8px; border-radius: 999px; color: #fff; font-size: 8px; font-weight: 900; }
+.project-hot { background: #f24636; }
+.project-budget-badge { background: #087f69; }
+.project-save { color: #afb4c2; font-size: 22px; }
+.project-description { margin: 12px 0 10px; color: #5d6374; font-size: 10.5px; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.project-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+.project-skills span { min-height: 24px; display: inline-flex; align-items: center; padding: 0 10px; border-radius: 999px; background: #f3f4f8; color: #474c5e; font-size: 9px; }
+.project-card-footer { margin-top: 12px; padding-top: 11px; border-top: 1px dashed #e3e5ec; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.project-owner { min-width: 0; display: flex; align-items: center; gap: 8px; color: #7b8192; font-size: 9px; }
+.project-owner b { color: #171a2b; font-size: 10px; white-space: nowrap; }
+.project-owner span { white-space: nowrap; }
+.project-owner i { font-style: normal; }
+.owner-avatar { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: #7935f3; font-size: 8px; font-weight: 900; }
+.project-price { text-align: right; white-space: nowrap; }
+.project-price strong { display: block; color: #7a31ef; font-size: 14px; }
+.project-price small { display: block; margin-top: 3px; color: #7c8191; font-size: 8.5px; }
+.simple-pager { display: flex; justify-content: center; gap: 7px; padding: 6px 0 0; }
+.simple-pager button { width: 36px; height: 36px; border: 1px solid #e1e3eb; border-radius: 9px; background: #fff; color: #7d8292; font-weight: 800; }
+.simple-pager button.active { background: var(--mk-purple); color: #fff; border-color: var(--mk-purple); }
+.filter-card { position: sticky; top: calc(var(--mk-topbar) + 14px); background: #fff; border: 1px solid #e2e4ec; border-radius: 15px; padding: 17px; }
+.filter-title-row { display: flex; justify-content: space-between; align-items: center; }
+.filter-title-row h3 { margin: 0; font-size: 13px; }
+.filter-title-row a { color: var(--mk-purple); font-size: 9px; font-weight: 800; }
+.filter-group { margin: 14px 0 0; padding: 13px 0 0; border: 0; border-top: 1px solid #eceef3; }
+.filter-group legend { padding: 0; margin-bottom: 9px; font-size: 10px; font-weight: 900; }
+.filter-group label { min-height: 30px; display: flex; align-items: center; gap: 8px; color: #4f5567; font-size: 10px; cursor: pointer; }
+.filter-group input[type="radio"] { accent-color: #843df2; }
+.filter-text-input { width: 100%; height: 37px; border: 1px solid #dfe2e9; border-radius: 9px; padding: 0 10px; outline: none; font: inherit; font-size: 10px; }
+.filter-text-input:focus { border-color: #8b4af3; box-shadow: 0 0 0 3px rgba(124,49,244,.08); }
+.filter-submit { width: 100%; height: 38px; margin-top: 15px; border: 0; border-radius: 9px; background: #7a32ef; color: #fff; font-size: 10px; font-weight: 900; cursor: pointer; }
+.filter-reset-link { color: var(--mk-purple); font-weight: 800; }
+
+/* ========================= HIRE / FREELANCER ========================= */
+.hire-hero {
+    min-height: 226px;
+    border-radius: 16px;
+    padding: 30px 27px;
+    color: #fff;
+    background: linear-gradient(105deg, #6229cb 0%, #8f2dff 100%);
+}
+.hire-hero-pill { display: inline-flex; align-items: center; min-height: 30px; padding: 0 12px; border: 1px solid rgba(255,255,255,.45); border-radius: 999px; font-size: 9px; font-weight: 900; }
+.hire-hero h1 { margin: 14px 0 8px; font-size: 28px; letter-spacing: -.5px; }
+.hire-hero p { max-width: 610px; margin: 0; font-size: 11px; line-height: 1.55; color: rgba(255,255,255,.9); }
+.hire-hero-actions { display: flex; gap: 8px; margin-top: 18px; }
+.hire-stats { margin-top: 12px; }
+.hire-steps-card,
+.freelancer-board { margin-top: 13px; }
+.freelancer-board { padding-bottom: 16px; }
+.talent-search-inline { display: flex; align-items: center; gap: 7px; }
+.talent-search-inline input { width: 210px; height: 30px; border: 1px solid #dfe2eb; border-radius: 8px; padding: 0 9px; font-size: 9px; outline: 0; }
+.talent-search-inline button { height: 30px; border: 0; border-radius: 8px; background: #7b34ef; color: #fff; padding: 0 12px; font-size: 9px; font-weight: 800; }
+.hire-talent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; padding: 12px 17px 0; }
+.hire-talent-card { border: 1px solid #e4e6ed; border-radius: 12px; padding: 13px; }
+.hire-talent-top { display: flex; align-items: center; gap: 9px; }
+.hire-talent-copy { min-width: 0; }
+.hire-talent-copy h4 { margin: 0; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hire-talent-copy p { margin: 4px 0 0; color: #828799; font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hire-available { margin-left: auto; color: #15885e; font-size: 8px; white-space: nowrap; }
+.hire-talent-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; color: #717789; font-size: 8.5px; }
+.hire-talent-meta b { color: #f59a12; }
+.hire-talent-card .project-skills { margin-top: 10px; min-height: 24px; }
+.hire-talent-bottom { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 12px; padding-top: 10px; border-top: 1px solid #eceef3; }
+.hire-talent-bottom strong { font-size: 10px; }
+.hire-talent-bottom a { color: #7b34ef; font-size: 9px; font-weight: 900; }
+.hire-bottom-cta { margin-top: 13px; min-height: 95px; border-radius: 16px; padding: 19px 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; color: #fff; background: linear-gradient(110deg, #321176, #8632f0); }
+.hire-bottom-cta > div { display: flex; align-items: center; gap: 14px; }
+.hire-bottom-cta > div > span { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.13); font-size: 20px; }
+.hire-bottom-cta b { display: block; font-size: 15px; }
+.hire-bottom-cta p { margin: 5px 0 0; color: #dfd4fa; font-size: 9.5px; }
+.hire-bottom-cta > a { min-height: 38px; padding: 0 16px; border-radius: 9px; display: inline-flex; align-items: center; background: #fff; color: #6b2ed6; font-size: 10px; font-weight: 900; white-space: nowrap; }
+
+/* ========================= AUTH LOGIN / REGISTER ========================= */
+body.auth-market-page { min-height: 100vh; overflow: hidden; background: #eef0f6; }
+.auth-background { position: fixed; inset: 0; display: grid; grid-template-columns: 230px 1fr; filter: blur(3.5px); transform: scale(1.012); }
+.auth-bg-sidebar { background: #111524; padding: 30px 25px; }
+.auth-bg-logo { color: #fff; font-weight: 900; font-size: 18px; margin-bottom: 45px; }
+.auth-bg-line { height: 24px; width: 150px; border-radius: 8px; background: #252b45; margin: 12px 0; }
+.auth-bg-line.wide { height: 40px; width: 180px; background: #f7f7fb; }
+.auth-bg-line.short { width: 120px; }
+.auth-bg-bottom { position: absolute; bottom: 20px; left: 20px; width: 188px; height: 110px; border-radius: 14px; background: #1d243d; }
+.auth-bg-stage { background: #f4f5fa; padding: 22px 38px; }
+.auth-bg-topbar { height: 45px; background: #fff; border-radius: 10px; }
+.auth-bg-title { width: 330px; height: 36px; background: #e4e5ed; margin-top: 50px; border-radius: 8px; }
+.auth-bg-pills { display: flex; gap: 10px; margin: 20px 0; }
+.auth-bg-pills span { width: 150px; height: 28px; border-radius: 999px; background: #fff; border: 1px solid #dddfe8; }
+.auth-bg-content { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; }
+.auth-bg-content > div { display: grid; gap: 12px; }
+.auth-bg-content article { height: 130px; border-radius: 15px; background: #fff; border: 1px solid #e2e4ec; }
+.auth-bg-content aside { height: 420px; border-radius: 15px; background: #fff; border: 1px solid #e2e4ec; }
+.auth-dim { position: fixed; inset: 0; background: rgba(18,22,43,.58); backdrop-filter: blur(1px); }
+.auth-modal-wrap { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 20px; }
+.auth-modal {
+    width: min(770px, calc(100vw - 40px));
+    min-height: 430px;
+    display: grid;
+    grid-template-columns: 286px 1fr;
+    overflow: hidden;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: 0 24px 70px rgba(13,16,36,.32);
+    border: 1px solid rgba(255,255,255,.45);
+}
+.auth-register-modal { min-height: 490px; }
+.auth-promo-panel {
+    position: relative;
+    overflow: hidden;
+    padding: 32px 24px 24px;
+    color: #fff;
+    background: linear-gradient(145deg, #38137f 0%, #7421e7 58%, #c73bd8 100%);
+}
+.auth-promo-panel::after { content: ""; position: absolute; width: 250px; height: 250px; border-radius: 50%; right: -130px; bottom: -120px; background: rgba(255,255,255,.08); }
+.auth-promo-brand { display: inline-flex; align-items: center; gap: 10px; color: #fff; }
+.auth-promo-brand strong { font-size: 16px; }
+.auth-promo-panel h1 { margin: 26px 0 10px; font-size: 23px; line-height: 1.18; letter-spacing: -.4px; }
+.auth-promo-panel > p { margin: 0; color: #eee7ff; font-size: 10.5px; line-height: 1.55; }
+.auth-promo-panel ul { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; }
+.auth-promo-panel li { font-size: 10px; font-weight: 700; line-height: 1.4; }
+.auth-promo-stats { position: absolute; left: 24px; right: 24px; bottom: 24px; display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; z-index: 2; }
+.auth-promo-stats b { display: block; font-size: 16px; }
+.auth-promo-stats small { display: block; margin-top: 3px; color: #e2d8fb; font-size: 8px; }
+.auth-form-panel { padding: 19px 22px 20px; }
+.auth-tabs { height: 38px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; padding: 3px; border-radius: 10px; background: #eef0f6; }
+.auth-tabs a { display: grid; place-items: center; border-radius: 8px; color: #6d7282; font-size: 10px; font-weight: 900; }
+.auth-tabs a.active { background: #fff; color: #6c29da; box-shadow: 0 2px 6px rgba(27,29,45,.15); }
+.auth-jobboard-form { margin-top: 15px; }
+.auth-field { margin-bottom: 12px; }
+.auth-field label { display: block; margin-bottom: 6px; color: #454958; font-size: 9.5px; font-weight: 700; }
+.auth-field label span { color: #f23f54; }
+.auth-field > input,
+.auth-input-wrap input {
+    width: 100%;
+    height: 40px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    outline: 0;
+    background: #f5f5f7;
+    padding: 0 11px;
+    font: inherit;
+    color: #252838;
+    font-size: 10px;
+}
+.auth-field > input:focus,
+.auth-input-wrap input:focus { background: #fff; border-color: #8b48f3; box-shadow: 0 0 0 3px rgba(124,49,244,.08); }
+.auth-input-wrap { position: relative; }
+.auth-input-wrap input { padding-right: 36px; }
+.auth-input-icon,
+.password-eye { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #a2a6b3; font-size: 12px; }
+.password-eye { border: 0; background: transparent; cursor: pointer; }
+.auth-form-line { margin-top: -2px; display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 9px; }
+.auth-form-line a { color: #ff563f; font-weight: 800; }
+.remember-line { display: flex; align-items: center; gap: 5px; color: #6e7382; }
+.auth-submit { width: 100%; height: 41px; margin-top: 13px; border: 0; border-radius: 9px; background: linear-gradient(90deg, #7f2ef1, #8531f3); color: #fff; font-size: 11px; font-weight: 900; cursor: pointer; box-shadow: 0 7px 17px rgba(124,49,244,.18); }
+.auth-demo-note { margin-top: 11px; padding: 9px 10px; border: 1px dashed #ddd9ee; border-radius: 9px; color: #777c8d; font-size: 8px; line-height: 1.5; }
+.auth-demo-note b,
+.auth-demo-note span { display: block; }
+.auth-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.register-role-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.register-role-switch label { margin: 0; cursor: pointer; }
+.register-role-switch input { position: absolute; opacity: 0; pointer-events: none; }
+.register-role-switch span { height: 36px; display: grid; place-items: center; border: 1px solid #e0e2e8; border-radius: 9px; color: #4f5363; background: #fff; font-size: 9px; font-weight: 800; }
+.register-role-switch input:checked + span { border-color: #8b48f3; color: #6f2dd8; background: #f7f2ff; box-shadow: 0 0 0 2px rgba(124,49,244,.06); }
+.terms-line { display: flex; align-items: center; gap: 7px; color: #686d7d; font-size: 9px; }
+.terms-line a { color: #6f2ee0; text-decoration: underline !important; }
+.inline-alert { margin-top: 10px; padding: 8px 10px; border-radius: 8px; font-size: 9px; }
+.inline-alert.error { background: #fff0f2; color: #c63248; }
+.inline-alert.success { background: #eaf9ef; color: #187c48; }
+
+/* ========================= CHAT ========================= */
+.market-chat-fab {
+    position: fixed;
+    right: 20px;
+    bottom: 22px;
+    z-index: 1200;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: #ff4b10;
+    border: 3px solid rgba(255,255,255,.9);
+    box-shadow: 0 8px 20px rgba(255,75,16,.28);
+    font-size: 20px;
+}
+
+/* ========================= FLASH ABOVE FIXED LAYOUT ========================= */
+body.market-page .flash-stack,
+body.auth-market-page .flash-stack { z-index: 5000; }
+
+/* ========================= RESPONSIVE ========================= */
+@media (max-width: 1180px) {
+    :root { --mk-sidebar: 205px; }
+    .market-topbar { grid-template-columns: minmax(260px, 1fr) auto; padding: 0 18px; }
+    .market-mode-switch { display: none; }
+    .market-home-shell,
+    .list-page-shell { width: min(100% - 34px, 1100px); }
+    .job-results-layout { grid-template-columns: minmax(0, 1.55fr) minmax(270px, .8fr); }
+    .hire-talent-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+    :root { --mk-sidebar: 0px; }
+    .market-sidebar { display: none; }
+    .market-topbar { left: 0; grid-template-columns: 1fr auto; }
+    .market-global-search { min-width: 0; }
+    .market-shortcut { display: none; }
+    .market-primary-action { display: none; }
+    .market-main { margin-left: 0; }
+    .market-dual-hero { grid-template-columns: 1fr; }
+    .market-home-grid,
+    .job-results-layout { grid-template-columns: 1fr; }
+    .filter-card { position: static; }
+    .home-secondary-column { grid-template-columns: 1fr 1fr; }
+    .market-stat-row { grid-template-columns: repeat(3, 1fr); }
+    .project-owner span:nth-of-type(n+3) { display: none; }
+}
+
+@media (max-width: 680px) {
+    :root { --mk-topbar: 58px; }
+    .market-topbar { padding: 0 10px; grid-template-columns: 1fr auto; }
+    .market-global-search { height: 36px; }
+    .market-global-search button { padding: 0 10px; }
+    .market-login-action { min-height: 36px; padding: 0 10px; }
+    .market-user-chip span:last-child { display: none; }
+    .market-home-shell,
+    .list-page-shell { width: calc(100% - 20px); }
+    .market-home-shell { padding-top: 10px; }
+    .dual-hero-panel { padding: 24px 20px; }
+    .dual-hero-panel h1,
+    .dual-hero-panel h2 { font-size: 24px; }
+    .market-stat-row { grid-template-columns: 1fr; }
+    .recommended-row { grid-template-columns: 34px minmax(0,1fr) auto; }
+    .recommended-apply { display: none; }
+    .recommended-copy > div span:nth-child(n+2) { display: none; }
+    .home-secondary-column { grid-template-columns: 1fr; }
+    .talent-mini-grid,
+    .how-three-grid,
+    .hire-talent-grid { grid-template-columns: 1fr; }
+    .list-title-row { align-items: flex-start; flex-direction: column; }
+    .sort-control { align-self: flex-end; }
+    .project-card-footer { align-items: flex-end; }
+    .project-owner { flex-wrap: wrap; }
+    .project-owner span { display: none; }
+    .hire-hero { padding: 24px 20px; }
+    .hire-hero h1 { font-size: 24px; }
+    .hire-bottom-cta { align-items: flex-start; flex-direction: column; }
+
+    body.auth-market-page { overflow-y: auto; }
+    .auth-modal-wrap { position: relative; min-height: 100vh; }
+    .auth-modal { grid-template-columns: 1fr; width: min(520px, 100%); }
+    .auth-promo-panel { display: none; }
+    .auth-form-panel { padding: 20px; }
+    .auth-two-col { grid-template-columns: 1fr; gap: 0; }
+}
+
+/* ============================================================
+   V5 - HOME PIXEL MATCH
+   Canh lại trang chủ theo ảnh tham chiếu người dùng gửi:
+   typography, khoảng cách, icon, kích thước, vị trí.
+   ============================================================ */
+
+:root {
+    --mk-sidebar: 230px;
+    --mk-topbar: 66px;
+    --mk-bg: #f4f5fa;
+    --mk-text: #111426;
+    --mk-muted: #74798a;
+    --mk-line: #e2e4ec;
+    --mk-purple: #7a35ef;
+    --mk-purple-2: #6427cf;
+    --mk-navy: #101423;
+    --mk-lime: #c6f135;
+}
+
+body.market-page,
+body.auth-market-page {
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    font-size: 13px;
+    background: var(--mk-bg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+}
+
+body.market-page svg,
+body.auth-market-page svg {
+    display: block;
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+}
+
+/* ---------- LEFT SIDEBAR ---------- */
+.market-sidebar {
+    width: 230px;
+    padding: 22px 14px 16px;
+    background: #101423;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+.market-brand-wrap {
+    padding: 2px 10px 25px;
+}
+
+.market-brand {
+    gap: 10px;
+    min-height: 38px;
+}
+
+.market-brand-symbol {
+    width: 30px;
+    height: 17px;
+    flex: 0 0 30px;
+}
+
+.market-brand-symbol span {
+    top: 3px;
+    width: 18px;
+    height: 10px;
+    border-width: 3px;
+}
+
+.market-brand-symbol span:first-child {
+    left: 0;
+    border-color: #8c52ff;
+}
+
+.market-brand-symbol span:last-child {
+    right: 0;
+    border-color: #f7bf25;
+}
+
+.market-brand-copy strong,
+.market-brand strong {
+    font-size: 17px;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -.25px;
+}
+
+.market-brand-copy small,
+.market-brand small {
+    margin-top: 4px;
+    color: #98a0be;
+    font-size: 8px;
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: .55px;
+}
+
+.market-side-section {
+    margin-top: 9px;
+}
+
+.market-side-section-main {
+    margin-top: 0;
+}
+
+.market-side-label {
+    padding: 0 11px 8px;
+    color: #697293;
+    font-size: 9px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 1.15px;
+}
+
+.market-side-nav {
+    gap: 3px;
+}
+
+.market-side-nav a {
+    min-height: 40px;
+    padding: 0 11px;
+    gap: 10px;
+    border-radius: 10px;
+    color: #e4e7f2;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 600;
+}
+
+.market-side-nav a.active {
+    background: #fff;
+    color: #1a1d2d;
+    box-shadow: none;
+}
+
+.market-side-icon {
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+    display: grid;
+    place-items: center;
+    color: #c8cde0;
+}
+
+.market-side-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.market-side-nav a.active .market-side-icon {
+    color: #8138f0;
+}
+
+.market-side-bottom-simple {
+    padding: 13px 13px 14px;
+    border: 1px solid #2a3150;
+    border-radius: 14px;
+    background: #1a2037;
+    box-shadow: inset 0 0 28px rgba(124,49,244,.05);
+}
+
+.market-side-bottom-simple .market-side-bottom-kicker {
+    font-size: 8px;
+    line-height: 1.2;
+    letter-spacing: .4px;
+}
+
+.market-side-bottom-simple strong {
+    margin-top: 7px;
+    font-size: 14px;
+    line-height: 1.25;
+}
+
+.market-side-bottom-simple p {
+    display: none;
+}
+
+.market-side-bottom-simple .market-side-bottom-btn {
+    min-height: 37px;
+    margin-top: 12px;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #7f33ef 0%, #762dec 100%);
+}
+
+/* ---------- TOP BAR ---------- */
+.market-topbar {
+    left: 230px;
+    height: 66px;
+    padding: 0 36px;
+    grid-template-columns: 468px auto 1fr;
+    gap: 11px;
+    background: rgba(255,255,255,.98);
+    border-bottom: 1px solid #e5e7ee;
+}
+
+.market-global-search {
+    height: 39px;
+    border-radius: 11px;
+    border-color: #e1e4ec;
+    background: #fafbfe;
+}
+
+.market-search-icon {
+    padding-left: 12px;
+    color: #9197a9;
+}
+
+.market-search-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.market-global-search input {
+    padding: 0 8px;
+    color: #343849;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.market-global-search input::placeholder {
+    color: #a0a5b5;
+    opacity: 1;
+}
+
+.market-shortcut {
+    margin-right: 5px;
+    padding: 3px 8px;
+    border-color: #dfe2ea;
+    border-radius: 7px;
+    color: #9aa0af;
+    font-size: 9px;
+    font-weight: 500;
+}
+
+.market-global-search button {
+    height: 33px;
+    margin-right: 4px;
+    padding: 0 15px;
+    border-radius: 9px;
+    background: #111629;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.market-mode-switch {
+    height: 39px;
+    padding: 3px;
+    border-radius: 11px;
+    background: #f0eaff;
+}
+
+.market-mode-switch a {
+    height: 33px;
+    gap: 6px;
+    padding: 0 15px;
+    border-radius: 8px;
+    color: #6d32d8;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.market-mode-switch a svg {
+    width: 14px;
+    height: 14px;
+}
+
+.market-mode-switch a.active {
+    color: #1d2030;
+    background: #fff;
+    box-shadow: 0 2px 7px rgba(24,28,46,.11);
+}
+
+.market-top-actions {
+    gap: 8px;
+}
+
+.market-primary-action,
+.market-login-action {
+    min-height: 38px;
+    padding: 0 15px;
+    border-radius: 10px;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.market-primary-action {
+    gap: 6px;
+    background: #7a35ef;
+    box-shadow: 0 7px 20px rgba(122,53,239,.24);
+}
+
+.market-primary-action svg {
+    width: 14px;
+    height: 14px;
+}
+
+.market-login-action {
+    background: #7a35ef;
+    color: #fff;
+}
+
+/* ---------- PAGE / HOME SHELL ---------- */
+.market-main {
+    margin-left: 230px;
+    padding-top: 66px;
+    min-height: 100vh;
+    background: #f4f5fa;
+}
+
+.market-home-shell.home-reference-shell {
+    width: min(1288px, calc(100% - 72px));
+    margin: 0 auto;
+    padding: 18px 0 34px;
+}
+
+/* ---------- HERO ---------- */
+.reference-dual-hero {
+    min-height: 219px;
+    grid-template-columns: 1fr 1fr;
+    border-radius: 18px;
+    box-shadow: none;
+}
+
+.reference-dual-hero .dual-hero-panel {
+    padding: 31px 27px 25px;
+}
+
+.reference-dual-hero .dual-hero-hire {
+    background: linear-gradient(120deg, #7b36ea 0%, #672bc8 70%, #5e26bb 100%);
+}
+
+.reference-dual-hero .dual-hero-work {
+    background: linear-gradient(120deg, #17183c 0%, #11152f 100%);
+}
+
+.reference-dual-hero .dual-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 19px;
+    color: rgba(255,255,255,.96);
+    font-size: 9px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: .22px;
+}
+
+.reference-dual-hero .dual-eyebrow svg {
+    width: 12px;
+    height: 12px;
+}
+
+.reference-dual-hero h1,
+.reference-dual-hero h2 {
+    max-width: 555px;
+    margin: 0 0 8px;
+    color: #fff;
+    font-size: 27px;
+    line-height: 1.18;
+    font-weight: 800;
+    letter-spacing: -.72px;
+}
+
+.reference-dual-hero p {
+    max-width: 535px;
+    margin: 0 0 16px;
+    color: rgba(255,255,255,.88);
+    font-size: 11px;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.reference-dual-hero .dual-actions {
+    gap: 8px;
+}
+
+.reference-dual-hero .btn-light-solid,
+.reference-dual-hero .btn-light-outline,
+.reference-dual-hero .btn-lime {
+    min-height: 38px;
+    padding: 0 16px;
+    gap: 7px;
+    border-radius: 9px;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 700;
+}
+
+.reference-dual-hero .btn-light-solid svg,
+.reference-dual-hero .btn-light-outline svg,
+.reference-dual-hero .btn-lime svg {
+    width: 14px;
+    height: 14px;
+}
+
+.reference-dual-hero .btn-light-solid {
+    color: #6a2fd3;
+    background: #fff;
+}
+
+.reference-dual-hero .btn-light-outline {
+    border: 1px solid rgba(255,255,255,.72);
+    color: #fff;
+    background: rgba(255,255,255,.03);
+}
+
+.reference-dual-hero .btn-lime {
+    width: max-content;
+    color: #111626;
+    background: #c6f135;
+    padding-inline: 18px;
+}
+
+/* ---------- STATS ---------- */
+.reference-stat-row {
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.reference-stat-row article {
+    min-height: 65px;
+    padding: 11px 18px;
+    gap: 12px;
+    border: 1px solid #e1e4eb;
+    border-radius: 15px;
+    background: #fff;
+}
+
+.reference-stat-row .stat-icon {
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+    border-radius: 10px;
+}
+
+.reference-stat-row .stat-icon svg {
+    width: 19px;
+    height: 19px;
+}
+
+.reference-stat-row strong {
+    font-size: 16px;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -.18px;
+}
+
+.reference-stat-row small {
+    margin-top: 4px;
+    color: #7a8091;
+    font-size: 9px;
+    line-height: 1.2;
+    font-weight: 400;
+}
+
+/* ---------- MAIN HOME GRID ---------- */
+.reference-home-grid {
+    grid-template-columns: minmax(0, 1.75fr) minmax(270px, .95fr);
+    gap: 13px;
+    margin-top: 13px;
+}
+
+.reference-home-grid .home-primary-column,
+.reference-home-grid .home-secondary-column {
+    gap: 13px;
+}
+
+.reference-recommended-card,
+.reference-category-card {
+    border-color: #e0e3ea;
+    border-radius: 15px;
+}
+
+.reference-recommended-card .market-card-head,
+.reference-category-card .market-card-head {
+    min-height: 46px;
+    padding: 0 17px;
+}
+
+.reference-recommended-card .market-card-head h3,
+.reference-category-card .market-card-head h3 {
+    color: #101321;
+    font-size: 13px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.reference-recommended-card .market-card-head a {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: #7b32ec;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 700;
+}
+
+.reference-recommended-card .recommended-list {
+    padding: 2px 17px 10px;
+}
+
+.reference-recommended-card .recommended-row {
+    min-height: 66px;
+    grid-template-columns: 35px minmax(0, 1fr) auto 79px;
+    gap: 10px;
+    border-bottom-color: #eceef3;
+}
+
+.reference-recommended-card .recommended-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+}
+
+.reference-recommended-card .recommended-icon svg {
+    width: 17px;
+    height: 17px;
+}
+
+.reference-recommended-card .recommended-copy > a {
+    color: #121524;
+    font-size: 11px;
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -.08px;
+}
+
+.reference-recommended-card .recommended-copy > div {
+    gap: 12px;
+    margin-top: 5px;
+    color: #7d8393;
+    font-size: 8.5px;
+    line-height: 1;
+}
+
+.reference-recommended-card .recommended-price {
+    color: #7a32ef;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -.1px;
+}
+
+.reference-recommended-card .recommended-apply {
+    min-width: 79px;
+    height: 34px;
+    border-radius: 9px;
+    background: #7b34ef;
+    color: #fff;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 800;
+    box-shadow: 0 6px 14px rgba(124,49,244,.2);
+}
+
+/* ---------- CATEGORY ---------- */
+.reference-category-card {
+    min-height: 171px;
+    padding-bottom: 14px;
+}
+
+.reference-category-card .market-card-head.simple {
+    min-height: 44px;
+    border-bottom: 0;
+}
+
+.reference-category-card .category-pill-wrap {
+    padding: 0 17px;
+    gap: 7px 7px;
+}
+
+.reference-category-card .category-pill-wrap a {
+    min-height: 30px;
+    padding: 0 12px;
+    gap: 6px;
+    border: 1px solid #dde1e9;
+    border-radius: 999px;
+    color: #242736;
+    background: #fff;
+    font-size: 9.5px;
+    line-height: 1;
+    font-weight: 600;
+}
+
+.reference-category-card .category-pill-wrap a svg {
+    width: 13px;
+    height: 13px;
+    color: #242736;
+}
+
+/* ---------- RIGHT CARDS ---------- */
+.reference-side-cta {
+    min-height: 116px;
+    padding: 17px;
+    border: 1px solid #f0ca5a;
+    border-radius: 15px;
+    background: linear-gradient(120deg, #fff9df 0%, #ffe89b 100%);
+}
+
+.side-cta-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 7px;
+}
+
+.side-cta-title h3 {
+    margin: 0;
+    color: #171a29;
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+.side-cta-icon {
+    font-size: 13px;
+    line-height: 1;
+}
+
+.reference-side-cta p {
+    margin: 0 0 11px;
+    color: #655a3b;
+    font-size: 9.5px;
+    line-height: 1.45;
+}
+
+.reference-side-cta a {
+    min-height: 33px;
+    gap: 5px;
+    border-radius: 8px;
+    background: #111629;
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 800;
+}
+
+.reference-tip-card {
+    min-height: 96px;
+    padding: 17px;
+    border-radius: 15px;
+    background: #111626;
+}
+
+.reference-tip-card h3 {
+    margin: 0 0 8px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+.reference-tip-card p {
+    margin: 0;
+    color: #e3e6ef;
+    font-size: 9.5px;
+    line-height: 1.5;
+}
+
+/* ---------- LOWER HOME CONTENT ---------- */
+.below-fold-section {
+    margin-top: 13px;
+}
+
+/* ---------- CHAT ---------- */
+.market-chat-fab {
+    right: 18px;
+    bottom: 22px;
+    width: 44px;
+    height: 44px;
+    border: 3px solid rgba(255,255,255,.9);
+    background: #f1531d;
+    box-shadow: 0 8px 20px rgba(241,83,29,.25);
+}
+
+.market-chat-fab svg {
+    width: 19px;
+    height: 19px;
+}
+
+/* ---------- RESPONSIVE ALIGNMENT ---------- */
+@media (max-width: 1180px) {
+    .market-topbar {
+        left: var(--mk-sidebar);
+        grid-template-columns: minmax(300px, 1fr) auto;
+    }
+}
+
+@media (max-width: 900px) {
+    .market-main { margin-left: 0; }
+    .reference-dual-hero { grid-template-columns: 1fr; }
+    .reference-home-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 680px) {
+    .market-home-shell.home-reference-shell { width: calc(100% - 20px); }
+    .reference-dual-hero .dual-hero-panel { padding: 24px 20px; }
+    .reference-dual-hero h1,
+    .reference-dual-hero h2 { font-size: 24px; }
+    .reference-recommended-card .recommended-row { grid-template-columns: 34px minmax(0, 1fr) auto; }
+    .reference-recommended-card .recommended-apply { display: none; }
+}
+
+/* ======================================================================
+   V6 — VISUAL PARITY PASS
+   Typography, spacing, colors and icon treatment are tuned against the
+   supplied 1920×1152 JobBoard reference screenshots.
+   ====================================================================== */
+:root{
+    --mk-sidebar:230px;
+    --mk-topbar:66px;
+    --mk-bg:#f4f5fa;
+    --mk-card:#ffffff;
+    --mk-text:#101423;
+    --mk-muted:#73798a;
+    --mk-line:#e2e4eb;
+    --mk-purple:#7c3aed;
+    --mk-purple-2:#6e2fd8;
+    --mk-purple-soft:#f0e9ff;
+    --mk-navy:#101423;
+    --mk-navy-2:#13162e;
+    --mk-lime:#c7f21f;
+    --mk-green:#0d8a5b;
+    --mk-yellow:#fef3c9;
+    --mk-blue:#2f6ff3;
+    --mk-radius:15px;
+}
+
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body.market-page,body.auth-market-page{
+    font-family:"Inter","Segoe UI",Arial,sans-serif;
+    font-size:13px;
+    line-height:1.45;
+    color:var(--mk-text);
+    letter-spacing:-.01em;
+    background:var(--mk-bg);
+}
+
+/* outline icon language used across V6 */
+.app-nav-icon svg,
+.side-close svg,
+.side-footer svg,
+.mobile-appbar svg,
+.cat-pill-icon svg,
+.project-card-icon svg,
+.project-save svg,
+.meta-inline-icon,
+.filter-title-row h3 svg,
+.section-title-icon,
+.hire-hero-pill svg,
+.hire-hero-actions svg,
+.hire-bottom-cta svg,
+.rating-inline svg,
+.auth-promo-panel li svg,
+.auth-input-icon svg,
+.password-eye svg,
+.register-role-switch svg,
+.side-cta-icon svg,
+.tip-icon svg,
+.title-fire svg,
+.reference-stat-row .stat-icon svg,
+.hire-stats .stat-icon svg{
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+/* Sidebar */
+.market-sidebar{
+    width:230px;
+    padding:23px 14px 18px;
+    background:#101423;
+}
+.market-brand-wrap{padding:0 10px 24px}
+.market-brand{gap:10px}
+.market-brand-symbol{width:29px;height:15px}
+.market-brand-symbol span{width:17px;height:10px;border-width:3px;top:2px}
+.market-brand strong{font-size:16px;line-height:1;font-weight:800;letter-spacing:-.25px}
+.market-brand small{margin-top:4px;color:#98a0bc;font-size:7.5px;line-height:1;font-weight:600;letter-spacing:.42px}
+.market-side-section{margin-top:7px}
+.market-side-section-main{margin-top:0}
+.market-side-label{padding:0 11px 7px;color:#697292;font-size:9px;line-height:1.1;font-weight:700;letter-spacing:1px}
+.market-side-nav{gap:4px}
+.market-side-nav a{
+    min-height:40px;
+    gap:10px;
+    padding:0 11px;
+    border-radius:10px;
+    color:#e3e7f5;
+    font-size:12px;
+    line-height:1;
+    font-weight:650;
+}
+.market-side-nav a.active{color:#171a2a;background:#fff;box-shadow:none}
+.market-side-icon{width:18px;height:18px;display:grid;place-items:center;color:#c9cfe3}
+.market-side-icon svg{width:18px;height:18px}
+.market-side-nav a.active .market-side-icon{color:#7c3aed}
+.market-side-bottom{
+    padding:13px;
+    border-color:#2b324e;
+    border-radius:14px;
+    background:#1a2037;
+    box-shadow:none;
+}
+.market-side-bottom-kicker{color:#9ca5c2;font-size:8px;font-weight:700;letter-spacing:.55px}
+.market-side-bottom strong{margin-top:7px;font-size:14px;line-height:1.2;font-weight:700}
+.market-side-bottom-btn{min-height:35px;margin-top:11px;border-radius:8px;background:#7c3aed;font-size:10.5px;font-weight:700;box-shadow:0 6px 16px rgba(124,58,237,.23)}
+
+/* Topbar */
+.market-topbar{
+    left:230px;
+    height:66px;
+    padding:0 36px;
+    grid-template-columns:minmax(370px,470px) auto 1fr;
+    gap:12px;
+    background:#fff;
+    border-bottom:1px solid #e8e9ef;
+}
+.market-global-search{height:39px;border-color:#e1e3ea;border-radius:11px;background:#fff}
+.market-search-icon{padding-left:11px;color:#9ba1b0}
+.market-search-icon svg{width:16px;height:16px}
+.market-global-search input{padding:0 8px;color:#333747;font-size:11px;font-weight:400}
+.market-global-search input::placeholder{color:#a3a8b6}
+.market-shortcut{padding:3px 7px;margin-right:6px;border-color:#e0e3ea;border-radius:7px;color:#9da3b1;background:#fff;font-size:9px;line-height:1}
+.market-global-search button{height:33px;padding:0 15px;border-radius:9px;background:#151a2d;font-size:10.5px;font-weight:700}
+.market-mode-switch{height:39px;padding:3px;border-radius:11px;background:#f2edff}
+.market-mode-switch a{height:33px;gap:6px;padding:0 15px;border-radius:8px;color:#7135da;font-size:10.5px;font-weight:700}
+.market-mode-switch a svg{width:13px;height:13px}
+.market-mode-switch a.active{color:#1b1e2d;background:#fff;box-shadow:0 2px 8px rgba(26,30,48,.12)}
+.market-top-actions{gap:8px}
+.market-primary-action,.market-login-action{min-height:38px;padding:0 15px;border-radius:10px;background:#7c3aed;color:#fff;font-size:10.5px;font-weight:700;box-shadow:0 7px 18px rgba(124,58,237,.22)}
+.market-primary-action{gap:6px}.market-primary-action svg{width:13px;height:13px}
+.market-user-chip{border-radius:10px;border-color:#e5e7ed;padding:4px 7px}
+.market-user-avatar{width:28px;height:28px;background:#7c3aed;font-size:10px}
+.market-user-chip b{font-size:9.5px;font-weight:700}.market-user-chip small{font-size:7.5px}
+
+/* Main geometry */
+.market-main{margin-left:230px;padding-top:66px;background:#f4f5fa}
+.market-home-shell.home-reference-shell,.list-page-shell{width:min(1288px,calc(100% - 72px));margin-inline:auto}
+.market-home-shell.home-reference-shell{padding:18px 0 34px}
+.list-page-shell{padding:22px 0 40px}
+.market-card{border-color:#e2e4eb;border-radius:15px;box-shadow:none}
+.market-card-head{min-height:46px;padding:0 17px;border-bottom-color:#eceef2}
+.market-card-head h3{font-size:12.5px;font-weight:750;letter-spacing:-.12px}
+.market-card-head a{font-size:10px;font-weight:700}
+
+/* Home hero */
+.reference-dual-hero{min-height:219px;border-radius:18px;overflow:hidden}
+.reference-dual-hero .dual-hero-panel{padding:31px 27px 25px}
+.reference-dual-hero .dual-hero-hire{background:linear-gradient(120deg,#7935e7 0%,#7033d7 56%,#6227c1 100%)}
+.reference-dual-hero .dual-hero-work{background:linear-gradient(120deg,#171a3b 0%,#13162e 100%)}
+.reference-dual-hero .dual-eyebrow{gap:6px;margin-bottom:18px;font-size:8.8px;font-weight:750;letter-spacing:.18px}
+.reference-dual-hero .dual-eyebrow svg{width:11px;height:11px;fill:currentColor}
+.reference-dual-hero h1,.reference-dual-hero h2{margin:0 0 8px;max-width:555px;font-size:26.5px;line-height:1.18;font-weight:800;letter-spacing:-.7px}
+.reference-dual-hero p{max-width:535px;margin:0 0 16px;font-size:10.8px;line-height:1.55;font-weight:400;color:rgba(255,255,255,.89)}
+.reference-dual-hero .btn-light-solid,.reference-dual-hero .btn-light-outline,.reference-dual-hero .btn-lime{min-height:38px;padding:0 16px;gap:7px;border-radius:9px;font-size:10.5px;font-weight:700}
+.reference-dual-hero .btn-lime{background:#c7f21f;color:#111525}
+
+/* Stats */
+.reference-stat-row{gap:12px;margin-top:12px}
+.reference-stat-row article{min-height:65px;padding:11px 18px;gap:12px;border-color:#e1e4ea;border-radius:15px}
+.reference-stat-row .stat-icon,.hire-stats .stat-icon{width:38px;height:38px;flex-basis:38px;border-radius:10px}
+.reference-stat-row .stat-icon svg,.hire-stats .stat-icon svg{width:18px;height:18px}
+.reference-stat-row strong,.hire-stats strong{font-size:15.5px;font-weight:750;letter-spacing:-.15px}
+.reference-stat-row small,.hire-stats small{font-size:8.8px;color:#7b8191}
+
+/* Home cards */
+.reference-home-grid{grid-template-columns:minmax(0,1.75fr) minmax(270px,.95fr);gap:13px;margin-top:13px}
+.reference-recommended-card,.reference-category-card{border-radius:15px}
+.reference-recommended-card .market-card-head h3,.reference-category-card .market-card-head h3{font-size:12.5px;font-weight:750}
+.title-fire{width:17px;height:17px;display:inline-grid;place-items:center;color:#ff6a28;vertical-align:-3px}
+.title-fire svg{width:15px;height:15px;fill:#ff6a28;stroke:none}
+.reference-recommended-card .recommended-row{min-height:66px;grid-template-columns:35px minmax(0,1fr) auto 79px;gap:10px}
+.reference-recommended-card .recommended-copy>a{font-size:10.8px;font-weight:650;line-height:1.25}
+.reference-recommended-card .recommended-copy>div{margin-top:5px;gap:12px;color:#7d8393;font-size:8.2px}
+.reference-recommended-card .recommended-price{font-size:11.8px;font-weight:750}
+.reference-recommended-card .recommended-apply{min-width:79px;height:34px;border-radius:9px;background:#7c3aed;font-size:9.7px;font-weight:700;box-shadow:0 6px 14px rgba(124,58,237,.2)}
+.reference-category-card .category-pill-wrap a{min-height:30px;padding:0 12px;gap:6px;border-color:#dde0e7;color:#222634;font-size:9.2px;font-weight:550}
+.reference-category-card .category-pill-wrap a svg{width:13px;height:13px}
+.reference-side-cta{min-height:116px;padding:17px;border-color:#f3ce60;background:linear-gradient(120deg,#fff9df,#fef0b2)}
+.side-cta-title h3,.reference-tip-card h3{font-size:11.5px;font-weight:750}
+.side-cta-icon,.tip-icon{width:16px;height:16px;display:grid;place-items:center}
+.side-cta-icon svg,.tip-icon svg{width:15px;height:15px}
+.reference-side-cta p,.reference-tip-card p{font-size:9.2px;line-height:1.5}
+.reference-side-cta a{min-height:33px;border-radius:8px;background:#12172a;font-size:9.2px;font-weight:700}
+.reference-tip-card{min-height:96px;padding:17px;background:#131828}
+.tip-icon{color:#d7ff3f;vertical-align:-3px;display:inline-grid}
+
+/* Job list */
+.market-breadcrumb{font-size:10px;color:#7a8090}.market-breadcrumb a{color:#4a75e9}
+.list-title-row h1{font-size:26px;line-height:1.1;font-weight:800;letter-spacing:-.65px;color:#151827}.list-title-row h1 span{color:#7c3aed}.list-title-row p{font-size:10.5px;color:#747a8c}
+.sort-control{font-size:10px;color:#6f7484}.sort-control select{height:34px;border-color:#8f54ef;border-radius:9px;font-size:10px;font-weight:650}
+.category-scroll{gap:8px;margin:14px 0 18px}.category-scroll a{min-height:32px;padding:0 13px;display:inline-flex;align-items:center;gap:6px;border-color:#dfe2e9;border-radius:999px;background:#fff;color:#232633;font-size:9.8px;font-weight:600}.category-scroll a.active{border-color:#8d50ef;color:#7130db;background:#fbf8ff}
+.cat-pill-icon{width:14px;height:14px;display:grid;place-items:center}.cat-pill-icon svg{width:14px;height:14px}
+.job-results-layout{grid-template-columns:minmax(0,1.95fr) minmax(300px,.95fr);gap:14px}
+.project-list{gap:12px}
+.project-card{padding:16px 17px;border-color:#e0e3ea;border-radius:15px;background:#fff}
+.project-card-heading>a{font-size:13.5px;font-weight:750;line-height:1.35;color:#121523}
+.project-description{font-size:10.3px;line-height:1.55;color:#535a6d}
+.project-card-icon{width:38px;height:38px;border-radius:11px}.project-card-icon svg{width:18px;height:18px}
+.project-hot,.project-budget-badge{height:24px;display:inline-flex;align-items:center;gap:4px;padding:0 9px;border-radius:999px;font-size:8.4px;font-weight:700}
+.project-budget-badge svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.project-save{width:24px;height:24px;display:grid;place-items:center;color:#a4abb9}.project-save svg{width:16px;height:16px}
+.project-skills span{font-size:8.7px;font-weight:500}
+.project-owner{font-size:8.8px;color:#747b8d}.project-owner b{font-size:9.5px;color:#151827}.project-owner span{display:inline-flex;align-items:center;gap:4px}.meta-inline-icon{width:12px;height:12px}
+.project-price strong{font-size:13px;font-weight:750;color:#7c3aed}.project-price small{font-size:8.3px;color:#7b8190}
+.filter-card{padding:16px;border-color:#e0e3ea;border-radius:15px;background:#fff}
+.filter-title-row h3{font-size:12px;font-weight:750}.filter-title-row h3 svg{width:15px;height:15px;color:#7c3aed;vertical-align:-3px}.filter-title-row a{font-size:9px;color:#7c3aed;font-weight:600}
+.filter-group legend{font-size:10px;font-weight:700;color:#1c1f2d}.filter-group label{font-size:9.5px;color:#4e5465}.filter-text-input{height:37px;font-size:9.5px}.filter-submit{height:36px;border-radius:9px;background:#7c3aed;font-size:9.8px;font-weight:700}
+
+/* Hire page */
+.hire-hero{padding:28px 26px 27px;border-radius:16px;background:linear-gradient(110deg,#6d31d6,#8c37f5)}
+.hire-hero-pill{min-height:29px;gap:6px;padding:0 11px;font-size:8.5px;font-weight:700}.hire-hero-pill svg{width:12px;height:12px}
+.hire-hero h1{margin:13px 0 8px;font-size:27px;font-weight:800;letter-spacing:-.65px}.hire-hero p{font-size:10.5px;line-height:1.55}.hire-hero-actions a{display:inline-flex;align-items:center;gap:6px;font-weight:700}.hire-hero-actions svg{width:13px;height:13px}
+.hire-steps-card,.freelancer-board{border-radius:15px}.section-title-icon{width:15px;height:15px;color:#7c3aed;vertical-align:-3px}
+.hire-talent-card{border-radius:12px}.hire-talent-copy h4{font-size:10.7px;font-weight:700}.hire-talent-copy p{font-size:8.8px}.hire-available{font-size:7.8px}.rating-inline{display:inline-flex;align-items:center;gap:3px}.rating-inline svg{width:11px;height:11px;color:#f59a12;fill:#f59a12;stroke:none}
+.hire-bottom-cta>div>span svg{width:20px;height:20px}
+
+/* Auth modal */
+.auth-dim{background:rgba(17,20,35,.60);backdrop-filter:blur(2px)}
+.auth-modal{width:min(770px,calc(100vw - 40px));grid-template-columns:286px 1fr;border-radius:13px;box-shadow:0 25px 75px rgba(10,13,29,.34)}
+.auth-promo-panel{padding:32px 24px 24px;background:linear-gradient(150deg,#3b157d 0%,#6923d1 52%,#a32be4 100%)}
+.auth-promo-brand strong{font-size:15.5px;font-weight:800}.auth-promo-panel h1{margin:26px 0 10px;font-size:22.5px;line-height:1.18;font-weight:800}.auth-promo-panel>p{font-size:10.2px;line-height:1.55}.auth-promo-panel ul{gap:10px}.auth-promo-panel li{display:flex;align-items:flex-start;gap:7px;font-size:9.8px;font-weight:600}.auth-promo-panel li svg{width:15px;height:15px;flex:0 0 15px;margin-top:0;color:#fff;stroke-width:2}.auth-promo-stats b{font-size:15.5px;font-weight:750}.auth-promo-stats small{font-size:7.8px}
+.auth-form-panel{padding:19px 22px 20px}.auth-tabs{height:38px}.auth-tabs a{font-size:9.8px;font-weight:700}.auth-tabs a.active{color:#6e2fd8}
+.auth-field{margin-bottom:12px}.auth-field label{font-size:9.5px;font-weight:600;color:#424756}.auth-field>input,.auth-input-wrap input{height:40px;border-radius:10px;background:#f5f5f7;color:#252938;font-size:9.8px}.auth-field>input::placeholder,.auth-input-wrap input::placeholder{color:#b0b4be}.auth-input-icon svg,.password-eye svg{width:14px;height:14px}.password-eye{width:25px;height:30px;display:grid;place-items:center;padding:0}
+.auth-form-line{font-size:8.8px}.auth-form-line a{color:#ff563f}.auth-submit{height:41px;border-radius:9px;background:#7c3aed;font-size:10.8px;font-weight:700;box-shadow:0 7px 17px rgba(124,58,237,.18)}
+.register-role-switch span{height:36px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:9px;font-weight:650}.register-role-switch svg{width:13px;height:13px}
+.terms-line{font-size:8.8px}
+
+/* Chat */
+.market-chat-fab{right:18px;bottom:22px;width:44px;height:44px;border:3px solid rgba(255,255,255,.9);background:#ff4b10;box-shadow:0 8px 20px rgba(255,75,16,.24)}
+
+@media(max-width:1180px){.market-topbar{grid-template-columns:minmax(300px,1fr) auto}.market-home-shell.home-reference-shell,.list-page-shell{width:min(100% - 34px,1100px)}}
+@media(max-width:900px){.market-main{margin-left:0}.job-results-layout{grid-template-columns:1fr}.reference-dual-hero{grid-template-columns:1fr}.reference-home-grid{grid-template-columns:1fr}}
+@media(max-width:680px){.market-home-shell.home-reference-shell,.list-page-shell{width:calc(100% - 20px)}.reference-dual-hero h1,.reference-dual-hero h2{font-size:24px}.market-topbar{height:auto}}
+
+/* Public detail pages */
+.market-detail-grid{display:grid;grid-template-columns:minmax(0,1.95fr) minmax(300px,.85fr);gap:14px;margin-top:14px}.detail-main-column,.detail-side-column{display:grid;gap:14px;align-content:start}
+.market-job-hero{padding:20px}.job-detail-topline{display:flex;align-items:center;justify-content:space-between;gap:12px}.job-detail-topline small{font-size:8.8px;color:#8b90a0}.market-job-hero h1{margin:13px 0 6px;font-size:23px;line-height:1.25;font-weight:800;letter-spacing:-.5px}.market-company-line{margin:0;color:#6f7586;font-size:10px}.market-job-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:18px}.market-job-stats>div{padding:11px;border:1px solid #e6e8ee;border-radius:11px;background:#fafbfc}.market-job-stats small{display:block;color:#8a90a0;font-size:8px}.market-job-stats b{display:block;margin-top:4px;font-size:10px;font-weight:700;color:#202433}.market-detail-card{padding:18px}.market-detail-card h2{margin:0 0 10px;font-size:15px;font-weight:750}.market-detail-card h3{margin:0 0 12px;font-size:12.5px;font-weight:750}.market-detail-card .text-body{font-size:10px;line-height:1.65;color:#555c6e}.market-detail-card .chip{font-size:8.7px}.market-detail-card .muted{font-size:9.5px}.market-detail-card .customer-mini b{font-size:10px}.market-detail-card .customer-mini small{font-size:8.5px}.market-detail-card.sticky{position:sticky;top:84px}
+.market-profile-hero{margin-top:14px;padding:22px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px}.market-profile-avatar{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#6f31d7,#963cf6);color:#fff;font-size:25px;font-weight:800}.market-profile-copy .verified{display:inline-flex;align-items:center;gap:5px;color:#0e8a5d;font-size:8.5px;font-weight:700}.market-profile-copy .verified svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.market-profile-copy h1{margin:6px 0 3px;font-size:22px;font-weight:800;letter-spacing:-.45px}.market-profile-copy>p{margin:0 0 9px;color:#6f7586;font-size:10px}.market-profile-rate{text-align:right}.market-profile-rate>b{display:block;font-size:14px;font-weight:750}.market-profile-rate>span{margin-top:6px;display:inline-flex;align-items:center;justify-content:flex-end;gap:4px;color:#f59a12;font-size:10px}.market-profile-rate svg{width:13px;height:13px;fill:#f59a12}.profile-detail-grid{margin-top:14px}.profile-detail-grid .info-grid{gap:9px}.profile-detail-grid .info-grid>div{border-radius:10px;background:#fafbfc;border-color:#e6e8ee}.profile-detail-grid .info-grid small{font-size:8px}.profile-detail-grid .info-grid b{font-size:9.8px}
+@media(max-width:900px){.market-detail-grid{grid-template-columns:1fr}.market-detail-card.sticky{position:static}.market-profile-hero{grid-template-columns:auto 1fr}.market-profile-rate{grid-column:1/-1;text-align:left}.market-job-stats{grid-template-columns:1fr 1fr}}
+.auth-compact-modal{min-height:430px}.auth-compact-panel{display:flex;flex-direction:column;justify-content:center}.auth-tabs.single{grid-template-columns:1fr}.auth-form-heading{margin:18px 0 4px}.auth-form-heading h2{margin:0 0 7px;font-size:20px;font-weight:800;letter-spacing:-.35px}.auth-form-heading p{margin:0;color:#777d8d;font-size:9.5px;line-height:1.5}.auth-back-link{margin:14px 0 0;text-align:center;font-size:9px}.auth-back-link a{color:#6f31d7;font-weight:700}
+
+
+/* ============================================================
+   TALENTMATCH HOME MATCH V7
+   Chỉ tác động trang chủ có class .home-match-v7.
+   Mục tiêu: khớp tỷ lệ/spacing/typography của ảnh tham chiếu
+   ở cùng mức zoom trình duyệt mà người dùng đang sử dụng.
+   ============================================================ */
+
+/* ---------- KHUNG TỔNG ---------- */
+body.jobboard-match-home {
+    --mk-sidebar: 276px;
+    --mk-topbar: 78px;
+    --mk-bg: #f4f5fa;
+    --mk-text: #101426;
+    --mk-muted: #71778a;
+    --mk-line: #e2e4ec;
+    --mk-purple: #7c31f4;
+    --mk-purple-2: #6324d8;
+    --mk-navy: #11152d;
+    --mk-lime: #c8f619;
+    --mk-radius: 19px;
+    font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 16px;
+    background: var(--mk-bg);
+    color: var(--mk-text);
+}
+
+body.jobboard-match-home * {
+    box-sizing: border-box;
+}
+
+body.jobboard-match-home svg {
+    display: block;
+}
+
+/* ---------- SIDEBAR ---------- */
+body.jobboard-match-home .market-sidebar {
+    width: 276px !important;
+    padding: 29px 17px 22px !important;
+    background: #111524 !important;
+}
+
+body.jobboard-match-home .market-brand-wrap {
+    padding: 0 12px 26px !important;
+}
+
+body.jobboard-match-home .market-brand {
+    gap: 12px !important;
+}
+
+body.jobboard-match-home .market-brand-symbol {
+    width: 36px !important;
+    height: 19px !important;
+}
+
+body.jobboard-match-home .market-brand-symbol span {
+    top: 3.5px !important;
+    width: 20px !important;
+    height: 12px !important;
+    border-width: 3.5px !important;
+}
+
+body.jobboard-match-home .market-brand strong {
+    font-size: 20px !important;
+    line-height: 1.05 !important;
+    letter-spacing: -.25px !important;
+    font-weight: 800 !important;
+}
+
+body.jobboard-match-home .market-brand small {
+    margin-top: 4px !important;
+    font-size: 9.5px !important;
+    letter-spacing: .55px !important;
+    color: #9fa6c1 !important;
+    font-weight: 600 !important;
+}
+
+body.jobboard-match-home .market-side-section {
+    margin-top: 10px !important;
+}
+
+body.jobboard-match-home .market-side-label {
+    padding: 0 12px 10px !important;
+    font-size: 12px !important;
+    line-height: 1 !important;
+    letter-spacing: 1.25px !important;
+    color: #6e7699 !important;
+    font-weight: 700 !important;
+}
+
+body.jobboard-match-home .market-side-nav {
+    gap: 5px !important;
+}
+
+body.jobboard-match-home .market-side-nav a {
+    min-height: 50px !important;
+    gap: 13px !important;
+    padding: 0 13px !important;
+    border-radius: 12px !important;
+    color: #edf0fb !important;
+    font-size: 15.5px !important;
+    line-height: 1.15 !important;
+    font-weight: 700 !important;
+}
+
+body.jobboard-match-home .market-side-nav a.active {
+    color: #171a2a !important;
+    background: #fff !important;
+    box-shadow: 0 5px 18px rgba(0,0,0,.12) !important;
+}
+
+body.jobboard-match-home .market-side-icon {
+    width: 23px !important;
+    height: 23px !important;
+    flex: 0 0 23px !important;
+    color: #c9cfe6 !important;
+}
+
+body.jobboard-match-home .market-side-icon svg {
+    width: 23px !important;
+    height: 23px !important;
+    fill: currentColor !important;
+}
+
+body.jobboard-match-home .market-side-nav a.active .market-side-icon {
+    color: #7c31f4 !important;
+}
+
+body.jobboard-match-home .market-side-bottom {
+    padding: 17px !important;
+    border-radius: 17px !important;
+    border-color: #303757 !important;
+    background: #1b2139 !important;
+}
+
+body.jobboard-match-home .market-side-bottom-kicker {
+    font-size: 10.5px !important;
+    line-height: 1.25 !important;
+    color: #9fa7c4 !important;
+    letter-spacing: .55px !important;
+}
+
+body.jobboard-match-home .market-side-bottom strong {
+    margin-top: 8px !important;
+    font-size: 18px !important;
+    line-height: 1.2 !important;
+}
+
+body.jobboard-match-home .market-side-bottom-btn {
+    min-height: 46px !important;
+    margin-top: 14px !important;
+    border-radius: 11px !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+}
+
+/* ---------- TOPBAR ---------- */
+body.jobboard-match-home .market-topbar {
+    left: 276px !important;
+    height: 78px !important;
+    grid-template-columns: 560px auto 1fr !important;
+    gap: 14px !important;
+    padding: 0 43px !important;
+    background: rgba(255,255,255,.99) !important;
+    border-bottom: 1px solid #e5e7ee !important;
+}
+
+body.jobboard-match-home .market-global-search {
+    height: 47px !important;
+    border-radius: 13px !important;
+    background: #fafbfe !important;
+    border-color: #e0e3eb !important;
+}
+
+body.jobboard-match-home .market-search-icon {
+    padding-left: 14px !important;
+    color: #9198aa !important;
+}
+
+body.jobboard-match-home .market-search-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+    fill: currentColor !important;
+}
+
+body.jobboard-match-home .market-global-search input {
+    padding: 0 10px !important;
+    font-size: 14px !important;
+    color: #242839 !important;
+}
+
+body.jobboard-match-home .market-global-search input::placeholder {
+    color: #a0a6b5 !important;
+}
+
+body.jobboard-match-home .market-shortcut {
+    margin-right: 7px !important;
+    padding: 4px 8px !important;
+    border-radius: 8px !important;
+    font-size: 11.5px !important;
+}
+
+body.jobboard-match-home .market-global-search button {
+    height: 40px !important;
+    margin-right: 4px !important;
+    padding: 0 18px !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+}
+
+body.jobboard-match-home .market-mode-switch {
+    height: 47px !important;
+    padding: 4px !important;
+    border-radius: 13px !important;
+    background: #f0ebff !important;
+}
+
+body.jobboard-match-home .market-mode-switch a {
+    gap: 8px !important;
+    padding: 0 19px !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+}
+
+body.jobboard-match-home .market-mode-switch svg,
+body.jobboard-match-home .market-primary-action svg {
+    width: 16px !important;
+    height: 16px !important;
+    fill: currentColor !important;
+}
+
+body.jobboard-match-home .market-top-actions {
+    gap: 11px !important;
+}
+
+body.jobboard-match-home .market-primary-action,
+body.jobboard-match-home .market-login-action {
+    min-height: 46px !important;
+    padding: 0 20px !important;
+    border-radius: 12px !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+}
+
+body.jobboard-match-home .market-primary-action,
+body.jobboard-match-home .market-login-action {
+    background: #7b31ef !important;
+    color: #fff !important;
+    box-shadow: 0 9px 22px rgba(124,49,244,.25) !important;
+}
+
+/* ---------- MAIN + CONTAINER ---------- */
+body.jobboard-match-home .market-main {
+    margin-left: 276px !important;
+    padding-top: 78px !important;
+    background: #f4f5fa !important;
+}
+
+body.jobboard-match-home .market-home-shell.home-reference-shell {
+    width: calc(100% - 100px) !important;
+    max-width: none !important;
+    margin-left: 44px !important;
+    margin-right: 56px !important;
+    padding: 22px 0 42px !important;
+}
+
+/* ---------- HERO ---------- */
+body.jobboard-match-home .reference-dual-hero {
+    min-height: 264px !important;
+    border-radius: 22px !important;
+    overflow: hidden !important;
+    grid-template-columns: 1fr 1fr !important;
+}
+
+body.jobboard-match-home .reference-dual-hero .dual-hero-panel {
+    padding: 37px 34px 31px !important;
+}
+
+body.jobboard-match-home .reference-dual-hero .dual-hero-hire {
+    background: linear-gradient(125deg,#7b2fe9 0%,#6d29d1 68%,#6122c3 100%) !important;
+}
+
+body.jobboard-match-home .reference-dual-hero .dual-hero-work {
+    background: linear-gradient(125deg,#191a42 0%,#11142f 100%) !important;
+}
+
+body.jobboard-match-home .reference-dual-hero .dual-eyebrow {
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    margin-bottom: 22px !important;
+    font-size: 12px !important;
+    line-height: 1.1 !important;
+    letter-spacing: .28px !important;
+    font-weight: 800 !important;
+    color: rgba(255,255,255,.94) !important;
+}
+
+body.jobboard-match-home .reference-dual-hero .dual-eyebrow svg {
+    width: 14px !important;
+    height: 14px !important;
+    fill: currentColor !important;
+}
+
+body.jobboard-match-home .reference-dual-hero h1,
+body.jobboard-match-home .reference-dual-hero h2 {
+    max-width: 680px !important;
+    margin: 0 0 10px !important;
+    font-size: 34px !important;
+    line-height: 1.16 !important;
+    letter-spacing: -1px !important;
+    color: #fff !important;
+    font-weight: 800 !important;
+}
+
+body.jobboard-match-home .reference-dual-hero p {
+    max-width: 650px !important;
+    margin: 0 0 20px !important;
+    font-size: 14.5px !important;
+    line-height: 1.55 !important;
+    color: rgba(255,255,255,.88) !important;
+    font-weight: 400 !important;
+}
+
+body.jobboard-match-home .dual-actions {
+    gap: 10px !important;
+}
+
+body.jobboard-match-home .btn-light-solid,
+body.jobboard-match-home .btn-light-outline,
+body.jobboard-match-home .btn-lime {
+    min-height: 46px !important;
+    padding: 0 20px !important;
+    border-radius: 11px !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+    font-weight: 800 !important;
+    gap: 8px !important;
+}
+
+body.jobboard-match-home .btn-light-solid svg,
+body.jobboard-match-home .btn-light-outline svg,
+body.jobboard-match-home .btn-lime svg {
+    width: 16px !important;
+    height: 16px !important;
+    fill: currentColor !important;
+}
+
+body.jobboard-match-home .btn-light-solid {
+    background: #fff !important;
+    color: #6530cf !important;
+}
+
+body.jobboard-match-home .btn-light-outline {
+    border: 1.2px solid rgba(255,255,255,.85) !important;
+    color: #fff !important;
+}
+
+body.jobboard-match-home .btn-lime {
+    background: #c8f619 !important;
+    color: #101524 !important;
+    padding-inline: 24px !important;
+}
+
+/* ---------- STATS ---------- */
+body.jobboard-match-home .reference-stat-row {
+    gap: 15px !important;
+    margin-top: 15px !important;
+}
+
+body.jobboard-match-home .reference-stat-row article {
+    min-height: 77px !important;
+    gap: 14px !important;
+    padding: 13px 22px !important;
+    border-radius: 18px !important;
+    border-color: #e2e4ec !important;
+    background: #fff !important;
+}
+
+body.jobboard-match-home .reference-stat-row .stat-icon {
+    width: 46px !important;
+    height: 46px !important;
+    flex: 0 0 46px !important;
+    border-radius: 12px !important;
+}
+
+body.jobboard-match-home .reference-stat-row .stat-icon svg {
+    width: 22px !important;
+    height: 22px !important;
+    fill: currentColor !important;
+}
+
+body.jobboard-match-home .reference-stat-row strong {
+    font-size: 20.5px !important;
+    line-height: 1.05 !important;
+    font-weight: 800 !important;
+    color: #111426 !important;
+}
+
+body.jobboard-match-home .reference-stat-row small {
+    margin-top: 5px !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    color: #7b8091 !important;
+}
+
+/* ---------- HOME GRID ---------- */
+body.jobboard-match-home .reference-home-grid {
+    grid-template-columns: minmax(0,1.75fr) minmax(324px,.95fr) !important;
+    gap: 16px !important;
+    margin-top: 16px !important;
+}
+
+body.jobboard-match-home .home-primary-column,
+body.jobboard-match-home .home-secondary-column {
+    gap: 16px !important;
+}
+
+body.jobboard-match-home .market-card {
+    border-radius: 19px !important;
+    border: 1px solid #e2e4ec !important;
+    background: #fff !important;
+    box-shadow: none !important;
+}
+
+body.jobboard-match-home .market-card-head {
+    min-height: 55px !important;
+    padding: 0 20px !important;
+    gap: 14px !important;
+    border-bottom: 1px solid #eceef3 !important;
+}
+
+body.jobboard-match-home .market-card-head h3 {
+    font-size: 16.5px !important;
+    line-height: 1.2 !important;
+    color: #111426 !important;
+    font-weight: 800 !important;
+}
+
+body.jobboard-match-home .market-card-head a {
+    font-size: 13px !important;
+    color: #7c31f4 !important;
+    font-weight: 800 !important;
+}
+
+body.jobboard-match-home .title-fire svg {
+    width: 15px !important;
+    height: 15px !important;
+}
+
+/* ---------- JOB GỢI Ý ---------- */
+body.jobboard-match-home .reference-recommended-card .recommended-list {
+    padding: 2px 20px 12px !important;
+}
+
+body.jobboard-match-home .reference-recommended-card .recommended-row {
+    min-height: 79px !important;
+    grid-template-columns: 46px minmax(0,1fr) auto auto !important;
+    gap: 13px !important;
+    border-bottom: 1px solid #eceef3 !important;
+}
+
+body.jobboard-match-home .reference-recommended-card .recommended-row:last-child {
+    border-bottom: 0 !important;
+}
+
+body.jobboard-match-home .recommended-icon {
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 13px !important;
+}
+
+body.jobboard-match-home .recommended-icon svg {
+    width: 22px !important;
+    height: 22px !important;
+    fill: currentColor !important;
+}
+
+body.jobboard-match-home .recommended-copy > a {
+    display: block !important;
+    margin-bottom: 5px !important;
+    font-size: 16px !important;
+    line-height: 1.25 !important;
+    color: #111426 !important;
+    font-weight: 700 !important;
+}
+
+body.jobboard-match-home .recommended-copy > div {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 13px !important;
+}
+
+body.jobboard-match-home .recommended-copy > div span {
+    font-size: 11.5px !important;
+    line-height: 1.25 !important;
+    color: #777d8d !important;
+    font-weight: 400 !important;
+}
+
+body.jobboard-match-home .recommended-price {
+    min-width: 170px !important;
+    text-align: right !important;
+    font-size: 15.5px !important;
+    line-height: 1.2 !important;
+    color: #7b31ef !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+}
+
+body.jobboard-match-home .recommended-apply {
+    min-width: 105px !important;
+    min-height: 42px !important;
+    padding: 0 15px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 11px !important;
+    background: #7c31f4 !important;
+    color: #fff !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    box-shadow: 0 8px 18px rgba(124,49,244,.23) !important;
+}
+
+/* ---------- CARD PHẢI ---------- */
+body.jobboard-match-home .reference-side-cta {
+    border-radius: 19px !important;
+    padding: 20px 20px 18px !important;
+}
+
+body.jobboard-match-home .reference-side-cta h3 {
+    margin: 0 0 7px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-size: 16px !important;
+    line-height: 1.25 !important;
+    font-weight: 800 !important;
+}
+
+body.jobboard-match-home .reference-side-cta p {
+    margin: 0 !important;
+    font-size: 12px !important;
+    line-height: 1.55 !important;
+}
+
+body.jobboard-match-home .reference-side-cta > a {
+    min-height: 41px !important;
+    margin-top: 14px !important;
+    border-radius: 10px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+}
+
+body.jobboard-match-home .reference-tip-card {
+    min-height: 114px !important;
+}
+
+/* ---------- DANH MỤC: SỬA LỖI CHỮ PHÓNG TO ---------- */
+body.jobboard-match-home .reference-category-card {
+    padding-bottom: 18px !important;
+}
+
+body.jobboard-match-home .reference-category-card .market-card-head {
+    min-height: 52px !important;
+    border-bottom: 0 !important;
+}
+
+body.jobboard-match-home .reference-category-card .market-card-head h3 {
+    font-size: 15.5px !important;
+    font-weight: 800 !important;
+}
+
+body.jobboard-match-home .reference-category-card .category-pill-wrap {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 9px 10px !important;
+    padding: 0 20px 2px !important;
+}
+
+body.jobboard-match-home .reference-category-card .category-pill-wrap a {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: max-content !important;
+    min-height: 37px !important;
+    height: 37px !important;
+    padding: 0 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    border: 1px solid #dfe2e9 !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+    color: #222634 !important;
+    font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif !important;
+    font-size: 15px !important;
+    line-height: 1 !important;
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap !important;
+    text-decoration: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+body.jobboard-match-home .reference-category-card .category-pill-wrap a:hover {
+    border-color: #bfa8f7 !important;
+    color: #6732d3 !important;
+    background: #fbf9ff !important;
+}
+
+body.jobboard-match-home .reference-category-card .category-pill-wrap a svg {
+    width: 15px !important;
+    height: 15px !important;
+    flex: 0 0 15px !important;
+    fill: currentColor !important;
+}
+
+/* ---------- FREELANCER: đẩy xuống đúng như ảnh tham chiếu ---------- */
+body.jobboard-match-home .home-freelancer-card {
+    margin-top: 0 !important;
+}
+
+body.jobboard-match-home .home-freelancer-card .market-card-head {
+    min-height: 55px !important;
+}
+
+/* ---------- CHAT ---------- */
+body.jobboard-match-home .market-chat-fab {
+    right: 26px !important;
+    bottom: 20px !important;
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 50% !important;
+    background: #ff4b0b !important;
+    box-shadow: 0 9px 22px rgba(255,75,11,.28) !important;
+}
+
+body.jobboard-match-home .market-chat-fab svg {
+    width: 23px !important;
+    height: 23px !important;
+    fill: #fff !important;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1180px) {
+    body.jobboard-match-home .market-topbar {
+        grid-template-columns: minmax(300px,1fr) auto !important;
+    }
+    body.jobboard-match-home .market-mode-switch {
+        display: none !important;
+    }
+    body.jobboard-match-home .market-home-shell.home-reference-shell {
+        width: min(100% - 34px, 1100px) !important;
+    }
+}
+
+@media (max-width: 900px) {
+    body.jobboard-match-home .market-sidebar {
+        display: none !important;
+    }
+    body.jobboard-match-home .market-topbar {
+        left: 0 !important;
+        grid-template-columns: 1fr auto !important;
+        padding: 0 15px !important;
+    }
+    body.jobboard-match-home .market-main {
+        margin-left: 0 !important;
+    }
+    body.jobboard-match-home .reference-dual-hero,
+    body.jobboard-match-home .reference-home-grid {
+        grid-template-columns: 1fr !important;
+    }
+    body.jobboard-match-home .reference-stat-row {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 680px) {
+    body.jobboard-match-home .market-topbar {
+        position: static !important;
+        height: auto !important;
+        padding: 10px !important;
+        grid-template-columns: 1fr !important;
+    }
+    body.jobboard-match-home .market-main {
+        padding-top: 0 !important;
+    }
+    body.jobboard-match-home .market-top-actions {
+        display: none !important;
+    }
+    body.jobboard-match-home .market-home-shell.home-reference-shell {
+        width: calc(100% - 20px) !important;
+        padding-top: 10px !important;
+    }
+    body.jobboard-match-home .reference-dual-hero .dual-hero-panel {
+        padding: 24px 20px !important;
+    }
+    body.jobboard-match-home .reference-dual-hero h1,
+    body.jobboard-match-home .reference-dual-hero h2 {
+        font-size: 25px !important;
+    }
+    body.jobboard-match-home .reference-recommended-card .recommended-row {
+        grid-template-columns: 42px minmax(0,1fr) !important;
+        gap: 10px !important;
+        padding: 12px 0 !important;
+    }
+    body.jobboard-match-home .recommended-price,
+    body.jobboard-match-home .recommended-apply {
+        grid-column: 2 !important;
+        justify-self: start !important;
+        text-align: left !important;
+    }
+}
+
+
+/* ---------- V7 EXTRA PIXEL FIXES ---------- */
+body.jobboard-match-home .reference-category-card .market-card-head.simple {
+    justify-content: flex-start !important;
+    text-align: left !important;
+}
+body.jobboard-match-home .reference-category-card .market-card-head.simple h3 {
+    width: auto !important;
+    text-align: left !important;
+    margin: 0 !important;
+}
+body.jobboard-match-home .reference-side-cta {
+    min-height: 139px !important;
+    padding: 20px !important;
+    border: 1px solid #f0ca5a !important;
+    border-radius: 18px !important;
+    background: linear-gradient(120deg,#fff9df 0%,#ffe89b 100%) !important;
+}
+body.jobboard-match-home .reference-side-cta .side-cta-title {
+    gap: 9px !important;
+    margin-bottom: 9px !important;
+}
+body.jobboard-match-home .reference-side-cta .side-cta-icon,
+body.jobboard-match-home .reference-tip-card .tip-icon {
+    width: 18px !important;
+    height: 18px !important;
+    display: inline-grid !important;
+    place-items: center !important;
+    color: #161a2a !important;
+}
+body.jobboard-match-home .reference-side-cta .side-cta-icon svg,
+body.jobboard-match-home .reference-tip-card .tip-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+    fill: currentColor !important;
+}
+body.jobboard-match-home .reference-side-cta .side-cta-title h3 {
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+    font-weight: 800 !important;
+}
+body.jobboard-match-home .reference-side-cta p {
+    margin: 0 0 13px !important;
+    color: #675c3d !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+}
+body.jobboard-match-home .reference-side-cta > a {
+    min-height: 40px !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    border-radius: 10px !important;
+    background: #111629 !important;
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+}
+body.jobboard-match-home .reference-tip-card {
+    min-height: 115px !important;
+    padding: 20px !important;
+    border-radius: 18px !important;
+    background: #111626 !important;
+}
+body.jobboard-match-home .reference-tip-card h3 {
+    margin: 0 0 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    color: #fff !important;
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+    font-weight: 800 !important;
+}
+body.jobboard-match-home .reference-tip-card .tip-icon {
+    color: #c8f619 !important;
+}
+body.jobboard-match-home .reference-tip-card p {
+    margin: 0 !important;
+    color: #e4e7f0 !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+}
+body.jobboard-match-home .below-fold-section {
+    margin-top: 16px !important;
+}
+
+/* Giữ đúng tỷ lệ khi cửa sổ nhỏ hơn desktop lớn */
+@media (max-width: 1500px) {
+    body.jobboard-match-home .market-home-shell.home-reference-shell {
+        width: calc(100% - 42px) !important;
+        margin: 0 21px !important;
+    }
+}
+
+/* ========================================================================== */
+/* V8 — REDESIGN CATEGORY / FEATURED FREELANCER / HOW IT WORKS               */
+/* ========================================================================== */
+body.jobboard-match-home .v8-section {
+    margin-top: 22px;
+    padding: 25px 26px 28px;
+    border: 1px solid #e4e7ef;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 8px 30px rgba(20, 24, 45, .035);
+}
+body.jobboard-match-home .v8-section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+body.jobboard-match-home .v8-section-title-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+}
+body.jobboard-match-home .v8-section-icon {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+}
+body.jobboard-match-home .v8-section-icon.purple { background: #f0e8ff; color: #7433ea; }
+body.jobboard-match-home .v8-section-icon.blue { background: #e7f0ff; color: #2169f3; }
+body.jobboard-match-home .v8-section-icon svg { width: 22px; height: 22px; fill: currentColor; }
+body.jobboard-match-home .v8-eyebrow {
+    display: block;
+    margin: 0 0 5px;
+    color: #7a3aeb;
+    font-size: 10px;
+    line-height: 1.2;
+    font-weight: 850;
+    letter-spacing: .08em;
+}
+body.jobboard-match-home .v8-section-head h2 {
+    margin: 0;
+    color: #171b2e;
+    font-size: 22px;
+    line-height: 1.18;
+    font-weight: 820;
+    letter-spacing: -.35px;
+}
+body.jobboard-match-home .v8-section-head p {
+    margin: 6px 0 0;
+    color: #7c8294;
+    font-size: 11.5px;
+    line-height: 1.55;
+}
+body.jobboard-match-home .v8-view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding-bottom: 2px;
+    color: #7834eb;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+body.jobboard-match-home .v8-view-all svg { width: 15px; height: 15px; fill: currentColor; transition: transform .2s ease; }
+body.jobboard-match-home .v8-view-all:hover svg { transform: translateX(3px); }
+
+/* CATEGORY */
+body.jobboard-match-home .v8-category-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 11px;
+}
+body.jobboard-match-home .v8-category-card {
+    min-height: 78px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 14px;
+    border: 1px solid #e4e7ef;
+    border-radius: 15px;
+    background: #fff;
+    color: #1d2234;
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    overflow: hidden;
+}
+body.jobboard-match-home .v8-category-card:hover {
+    transform: translateY(-2px);
+    border-color: #cfb9ff;
+    box-shadow: 0 12px 26px rgba(101, 58, 205, .10);
+    background: #fefcff;
+}
+body.jobboard-match-home .v8-category-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+}
+body.jobboard-match-home .v8-category-icon svg { width: 21px; height: 21px; fill: currentColor; }
+body.jobboard-match-home .cat-blue .v8-category-icon { background:#e8f1ff; color:#246cf3; }
+body.jobboard-match-home .cat-pink .v8-category-icon { background:#ffe9f1; color:#f23a81; }
+body.jobboard-match-home .cat-green .v8-category-icon { background:#e5fbf2; color:#18a66c; }
+body.jobboard-match-home .cat-violet .v8-category-icon { background:#f0eaff; color:#7742ea; }
+body.jobboard-match-home .cat-orange .v8-category-icon { background:#fff0df; color:#e67b19; }
+body.jobboard-match-home .cat-cyan .v8-category-icon { background:#e7f8fb; color:#16a2bd; }
+body.jobboard-match-home .cat-navy .v8-category-icon { background:#eceef5; color:#27304c; }
+body.jobboard-match-home .cat-lime .v8-category-icon { background:#effbdc; color:#6a9821; }
+body.jobboard-match-home .v8-category-copy { min-width:0; display:flex; flex-direction:column; gap:4px; }
+body.jobboard-match-home .v8-category-copy b {
+    display:block;
+    overflow:hidden;
+    color:#202438;
+    font-size:12px;
+    line-height:1.25;
+    font-weight:800;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+body.jobboard-match-home .v8-category-copy small {
+    display:block;
+    overflow:hidden;
+    color:#8a8fa0;
+    font-size:9.5px;
+    line-height:1.3;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+body.jobboard-match-home .v8-category-arrow {
+    margin-left:auto;
+    color:#a6abbb;
+    font-size:16px;
+    font-weight:700;
+    transition:transform .2s ease,color .2s ease;
+}
+body.jobboard-match-home .v8-category-card:hover .v8-category-arrow { color:#7834eb; transform:translateX(2px); }
+
+/* FEATURED FREELANCERS */
+body.jobboard-match-home .home-freelancer-showcase {
+    background: linear-gradient(180deg,#ffffff 0%,#fafbff 100%);
+}
+body.jobboard-match-home .v8-freelancer-grid {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:13px;
+}
+body.jobboard-match-home .v8-freelancer-card {
+    position:relative;
+    min-height:246px;
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    border:1px solid #e3e6ef;
+    border-radius:17px;
+    background:#fff;
+    color:#202438;
+    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+}
+body.jobboard-match-home .v8-freelancer-card:hover {
+    transform:translateY(-4px);
+    border-color:#c9b3f9;
+    box-shadow:0 16px 34px rgba(59,40,113,.10);
+}
+body.jobboard-match-home .v8-freelancer-top { position:relative; width:max-content; margin-bottom:12px; }
+body.jobboard-match-home .v8-avatar {
+    width:54px;
+    height:54px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:linear-gradient(145deg,#7d3bf0,#5422bf);
+    color:#fff;
+    font-size:20px;
+    font-weight:850;
+    box-shadow:0 7px 18px rgba(103,50,213,.20);
+}
+body.jobboard-match-home .v8-online-dot {
+    position:absolute;
+    right:1px;
+    bottom:2px;
+    width:12px;
+    height:12px;
+    border:2px solid #fff;
+    border-radius:50%;
+    background:#1fc77a;
+}
+body.jobboard-match-home .v8-verified {
+    position:absolute;
+    right:-27px;
+    top:4px;
+    width:18px;
+    height:18px;
+    color:#2770f5;
+}
+body.jobboard-match-home .v8-verified svg { width:100%;height:100%;fill:currentColor; }
+body.jobboard-match-home .v8-freelancer-main h3 { margin:0; color:#181d30; font-size:14px; line-height:1.25; font-weight:820; }
+body.jobboard-match-home .v8-freelancer-main > p { margin:4px 0 7px; color:#70768a; font-size:10.5px; line-height:1.35; }
+body.jobboard-match-home .v8-rating-line { display:flex;align-items:center;gap:5px;color:#8a8fa0;font-size:9.5px; }
+body.jobboard-match-home .v8-rating-line .star { color:#f5a400;font-size:12px; }
+body.jobboard-match-home .v8-rating-line b { color:#41465a;font-size:10px; }
+body.jobboard-match-home .v8-skill-row { display:flex;flex-wrap:wrap;gap:6px;margin-top:13px; }
+body.jobboard-match-home .v8-skill-row span {
+    min-height:24px;
+    padding:0 8px;
+    display:inline-flex;
+    align-items:center;
+    border-radius:7px;
+    background:#f1ecff;
+    color:#6f38d8;
+    font-size:8.8px;
+    font-weight:720;
+}
+body.jobboard-match-home .v8-freelancer-footer {
+    margin-top:auto;
+    padding-top:15px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:10px;
+    border-top:1px solid #edf0f5;
+}
+body.jobboard-match-home .v8-freelancer-footer small { display:block;color:#9a9fae;font-size:8.5px;margin-bottom:3px; }
+body.jobboard-match-home .v8-freelancer-footer strong { display:block;color:#1b2033;font-size:11px;font-weight:820; }
+body.jobboard-match-home .v8-profile-btn {
+    min-height:31px;
+    padding:0 10px;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    border:1px solid #8b4cf0;
+    border-radius:8px;
+    color:#7434e5;
+    font-size:9px;
+    font-weight:800;
+    white-space:nowrap;
+}
+body.jobboard-match-home .v8-profile-btn svg { width:12px;height:12px;fill:currentColor; }
+body.jobboard-match-home .v8-empty-card { grid-column:1/-1;padding:28px;border:1px dashed #d9dce6;border-radius:14px;text-align:center;color:#858a9b;font-size:11px; }
+
+/* HOW IT WORKS — primary highlight */
+body.jobboard-match-home .home-process-showcase {
+    position:relative;
+    margin:24px 0 8px;
+    padding:34px 30px 28px;
+    overflow:hidden;
+    border-radius:22px;
+    background:linear-gradient(118deg,#6930dd 0%,#7b31ee 43%,#171a42 100%);
+    box-shadow:0 16px 42px rgba(62,36,128,.17);
+    isolation:isolate;
+}
+body.jobboard-match-home .v8-process-glow { position:absolute;border-radius:50%;filter:blur(1px);opacity:.22;z-index:-1; }
+body.jobboard-match-home .glow-one { width:260px;height:260px;right:-70px;top:-100px;background:#c8f619; }
+body.jobboard-match-home .glow-two { width:240px;height:240px;left:-90px;bottom:-130px;background:#68a1ff; }
+body.jobboard-match-home .v8-process-head { max-width:740px;margin:0 auto 25px;text-align:center;color:#fff; }
+body.jobboard-match-home .v8-process-kicker {
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    min-height:27px;
+    padding:0 10px;
+    margin-bottom:10px;
+    border:1px solid rgba(255,255,255,.20);
+    border-radius:999px;
+    background:rgba(255,255,255,.10);
+    color:#fff;
+    font-size:9px;
+    font-weight:850;
+    letter-spacing:.07em;
+}
+body.jobboard-match-home .v8-process-kicker svg { width:13px;height:13px;fill:#ccf82a; }
+body.jobboard-match-home .v8-process-head h2 { margin:0;color:#fff;font-size:26px;line-height:1.22;font-weight:850;letter-spacing:-.5px; }
+body.jobboard-match-home .v8-process-head h2 em { color:#d3fa37;font-style:normal; }
+body.jobboard-match-home .v8-process-head p { margin:10px auto 0;max-width:650px;color:rgba(255,255,255,.78);font-size:11px;line-height:1.6; }
+body.jobboard-match-home .v8-process-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;position:relative; }
+body.jobboard-match-home .v8-process-card {
+    position:relative;
+    min-height:224px;
+    padding:22px 20px 18px;
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:17px;
+    background:rgba(255,255,255,.96);
+    box-shadow:0 14px 30px rgba(24,18,61,.12);
+    color:#1d2235;
+}
+body.jobboard-match-home .v8-process-card.featured { transform:translateY(-5px);box-shadow:0 20px 38px rgba(20,17,55,.20); }
+body.jobboard-match-home .v8-step-number {
+    position:absolute;
+    right:15px;
+    top:12px;
+    color:#ede9f7;
+    font-size:34px;
+    line-height:1;
+    font-weight:900;
+    letter-spacing:-2px;
+}
+body.jobboard-match-home .v8-process-icon {
+    width:47px;
+    height:47px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    margin-bottom:15px;
+}
+body.jobboard-match-home .v8-process-icon svg { width:23px;height:23px;fill:currentColor; }
+body.jobboard-match-home .v8-process-icon.purple { background:#efe7ff;color:#7135dd; }
+body.jobboard-match-home .v8-process-icon.lime { background:#eefacb;color:#5f8f13; }
+body.jobboard-match-home .v8-process-icon.blue { background:#e6f1ff;color:#246bf1; }
+body.jobboard-match-home .v8-process-card h3 { margin:0 0 8px;color:#171c2f;font-size:14px;line-height:1.28;font-weight:830; }
+body.jobboard-match-home .v8-process-card p { margin:0;color:#747b8d;font-size:10px;line-height:1.6; }
+body.jobboard-match-home .v8-step-note {
+    display:inline-flex;
+    align-items:center;
+    min-height:25px;
+    margin-top:14px;
+    padding:0 9px;
+    border-radius:999px;
+    background:#f6f4fb;
+    color:#6e7284;
+    font-size:8.6px;
+    font-weight:700;
+}
+body.jobboard-match-home .v8-process-card:not(:last-child)::after {
+    content:'→';
+    position:absolute;
+    right:-24px;
+    top:50%;
+    z-index:4;
+    width:32px;
+    height:32px;
+    display:grid;
+    place-items:center;
+    transform:translateY(-50%);
+    border:4px solid #7a32ea;
+    border-radius:50%;
+    background:#fff;
+    color:#7934e6;
+    font-size:15px;
+    font-weight:900;
+}
+body.jobboard-match-home .v8-process-cta {
+    margin-top:18px;
+    padding:15px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:14px;
+    background:rgba(13,16,43,.23);
+    backdrop-filter:blur(5px);
+}
+body.jobboard-match-home .v8-process-cta > div:first-child { display:flex;flex-direction:column;gap:3px; }
+body.jobboard-match-home .v8-process-cta b { color:#fff;font-size:12px;font-weight:800; }
+body.jobboard-match-home .v8-process-cta span { color:rgba(255,255,255,.72);font-size:9.5px; }
+body.jobboard-match-home .v8-process-actions { display:flex;align-items:center;gap:9px; }
+body.jobboard-match-home .v8-btn-light,
+body.jobboard-match-home .v8-btn-lime {
+    min-height:37px;
+    padding:0 14px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    border-radius:9px;
+    font-size:9.5px;
+    font-weight:850;
+    white-space:nowrap;
+}
+body.jobboard-match-home .v8-btn-light { border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.10);color:#fff; }
+body.jobboard-match-home .v8-btn-lime { background:#c9f51f;color:#17200a; }
+body.jobboard-match-home .v8-btn-lime svg { width:13px;height:13px;fill:currentColor; }
+
+@media (max-width:1100px) {
+    body.jobboard-match-home .v8-category-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    body.jobboard-match-home .v8-freelancer-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    body.jobboard-match-home .v8-freelancer-card:last-child { grid-column:1/-1; }
+}
+@media (max-width:760px) {
+    body.jobboard-match-home .v8-section { padding:20px 16px; }
+    body.jobboard-match-home .v8-section-head { align-items:flex-start;flex-direction:column;gap:12px; }
+    body.jobboard-match-home .v8-category-grid,
+    body.jobboard-match-home .v8-freelancer-grid,
+    body.jobboard-match-home .v8-process-grid { grid-template-columns:1fr; }
+    body.jobboard-match-home .v8-freelancer-card:last-child { grid-column:auto; }
+    body.jobboard-match-home .v8-process-card.featured { transform:none; }
+    body.jobboard-match-home .v8-process-card:not(:last-child)::after { display:none; }
+    body.jobboard-match-home .home-process-showcase { padding:27px 16px 18px; }
+    body.jobboard-match-home .v8-process-head h2 { font-size:22px; }
+    body.jobboard-match-home .v8-process-cta { align-items:flex-start;flex-direction:column; }
+    body.jobboard-match-home .v8-process-actions { width:100%;flex-wrap:wrap; }
+}
+
+
+/* =========================================================
+   V9 — HOME TYPOGRAPHY / HEADER / ICONS MATCHING REFERENCE
+   Mục tiêu: nhỏ gọn, rõ, nhẹ như giao diện ảnh tham chiếu.
+   ========================================================= */
+
+body.jobboard-match-home {
+    --ref-purple: #7c36ee;
+    --ref-purple-dark: #6c2fdd;
+    --ref-navy: #12162f;
+    --ref-text: #171a2b;
+    --ref-muted: #74798a;
+    --ref-line: #e3e5ec;
+    --ref-bg: #f4f5fa;
+    background: var(--ref-bg);
+    color: var(--ref-text);
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    font-size: 13px;
+}
+
+/* HEADER / SIDEBAR */
+body.jobboard-match-home .market-sidebar {
+    width: 230px;
+    padding: 25px 15px 18px;
+    background: #101423;
+}
+body.jobboard-match-home .market-brand-wrap { padding: 0 10px 24px; }
+body.jobboard-match-home .market-brand { gap: 10px; }
+body.jobboard-match-home .market-brand-symbol { width: 29px; height: 15px; }
+body.jobboard-match-home .market-brand-symbol span {
+    width: 17px;
+    height: 9px;
+    border-width: 3px;
+}
+body.jobboard-match-home .market-brand strong {
+    color: #fff;
+    font-size: 17px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -.25px;
+}
+body.jobboard-match-home .market-brand small {
+    margin-top: 4px;
+    color: #9aa2bf;
+    font-size: 7.5px;
+    font-weight: 600;
+    letter-spacing: .45px;
+}
+body.jobboard-match-home .market-side-section { margin-top: 7px; }
+body.jobboard-match-home .market-side-label {
+    padding: 0 10px 8px;
+    color: #747d9e;
+    font-size: 9.5px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+body.jobboard-match-home .market-side-nav { gap: 3px; }
+body.jobboard-match-home .market-side-nav a {
+    min-height: 40px;
+    gap: 10px;
+    padding: 0 11px;
+    border-radius: 10px;
+    color: #e7eaf5;
+    font-size: 12.5px;
+    font-weight: 700;
+}
+body.jobboard-match-home .market-side-nav a.active {
+    background: #fff;
+    color: #151827;
+}
+body.jobboard-match-home .market-side-icon {
+    width: 18px;
+    height: 18px;
+    display: grid;
+    place-items: center;
+}
+body.jobboard-match-home .market-side-icon svg {
+    width: 17px;
+    height: 17px;
+    fill: currentColor;
+}
+body.jobboard-match-home .market-side-bottom {
+    padding: 14px;
+    border-radius: 13px;
+    background: #1a2038;
+}
+body.jobboard-match-home .market-side-bottom-kicker { font-size: 8px; }
+body.jobboard-match-home .market-side-bottom strong { font-size: 14px; }
+body.jobboard-match-home .market-side-bottom-btn {
+    min-height: 36px;
+    border-radius: 8px;
+    font-size: 11px;
+}
+
+/* topbar proportions copied from the visual rhythm of the reference */
+body.jobboard-match-home .market-topbar {
+    left: 230px;
+    height: 66px;
+    grid-template-columns: minmax(380px, 470px) auto 1fr;
+    gap: 12px;
+    padding: 0 36px;
+    border-bottom: 1px solid #e4e6ed;
+    background: rgba(255,255,255,.99);
+}
+body.jobboard-match-home .market-global-search {
+    height: 40px;
+    border-color: #e0e3eb;
+    border-radius: 11px;
+    background: #fff;
+}
+body.jobboard-match-home .market-search-icon {
+    display: grid;
+    place-items: center;
+    padding-left: 12px;
+    color: #8c93a6;
+}
+body.jobboard-match-home .market-search-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+body.jobboard-match-home .market-global-search input {
+    padding: 0 8px;
+    color: #303445;
+    font-size: 12px;
+    font-weight: 500;
+}
+body.jobboard-match-home .market-global-search input::placeholder { color: #a2a8b7; }
+body.jobboard-match-home .market-shortcut {
+    padding: 2px 7px;
+    border-radius: 6px;
+    color: #9ba1b1;
+    font-size: 9.5px;
+}
+body.jobboard-match-home .market-global-search button {
+    height: 32px;
+    min-width: 50px;
+    padding: 0 14px;
+    border-radius: 8px;
+    background: #11172b;
+    font-size: 11px;
+    font-weight: 800;
+}
+body.jobboard-match-home .market-mode-switch {
+    height: 40px;
+    padding: 3px;
+    border-radius: 11px;
+    background: #efeaff;
+}
+body.jobboard-match-home .market-mode-switch a {
+    gap: 6px;
+    padding: 0 15px;
+    border-radius: 9px;
+    color: #7138dc;
+    font-size: 11.5px;
+    font-weight: 800;
+}
+body.jobboard-match-home .market-mode-switch a svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+}
+body.jobboard-match-home .market-mode-switch a.active {
+    color: #202332;
+    background: #fff;
+}
+body.jobboard-match-home .market-primary-action,
+body.jobboard-match-home .market-login-action {
+    min-height: 38px;
+    padding: 0 15px;
+    border-radius: 10px;
+    font-size: 11.5px;
+    font-weight: 800;
+}
+body.jobboard-match-home .market-primary-action svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+}
+
+/* main width / vertical rhythm */
+body.jobboard-match-home .market-main {
+    margin-left: 230px;
+    padding-top: 66px;
+}
+body.jobboard-match-home .market-home-shell {
+    width: min(1288px, calc(100% - 72px));
+    padding: 18px 0 36px;
+}
+
+/* HERO */
+body.jobboard-match-home .reference-dual-hero {
+    min-height: 218px;
+    border-radius: 18px;
+}
+body.jobboard-match-home .reference-dual-hero .dual-hero-panel {
+    padding: 31px 28px 26px;
+}
+body.jobboard-match-home .reference-dual-hero .dual-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 17px;
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: .15px;
+}
+body.jobboard-match-home .reference-dual-hero .dual-eyebrow svg {
+    width: 13px;
+    height: 13px;
+    fill: currentColor;
+}
+body.jobboard-match-home .reference-dual-hero h1,
+body.jobboard-match-home .reference-dual-hero h2 {
+    margin: 0 0 8px;
+    color: #fff;
+    font-size: 27px;
+    line-height: 1.18;
+    font-weight: 800;
+    letter-spacing: -.55px;
+}
+body.jobboard-match-home .reference-dual-hero p {
+    margin: 0 0 16px;
+    color: rgba(255,255,255,.9);
+    font-size: 12px;
+    line-height: 1.55;
+}
+body.jobboard-match-home .dual-actions { gap: 8px; }
+body.jobboard-match-home .btn-light-solid,
+body.jobboard-match-home .btn-light-outline,
+body.jobboard-match-home .btn-lime {
+    min-height: 38px;
+    padding: 0 17px;
+    border-radius: 9px;
+    font-size: 11.5px;
+    font-weight: 800;
+}
+body.jobboard-match-home .btn-light-solid svg,
+body.jobboard-match-home .btn-light-outline svg,
+body.jobboard-match-home .btn-lime svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+}
+
+/* STATS / JOBS / SIDE CARDS */
+body.jobboard-match-home .reference-stat-row {
+    gap: 12px;
+    margin-top: 12px;
+}
+body.jobboard-match-home .reference-stat-row article {
+    min-height: 64px;
+    padding: 10px 18px;
+    border-radius: 15px;
+}
+body.jobboard-match-home .reference-stat-row .stat-icon {
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+    border-radius: 10px;
+}
+body.jobboard-match-home .reference-stat-row .stat-icon svg {
+    width: 19px;
+    height: 19px;
+    fill: currentColor;
+}
+body.jobboard-match-home .reference-stat-row strong {
+    color: #171a2b;
+    font-size: 17px;
+    font-weight: 800;
+}
+body.jobboard-match-home .reference-stat-row small {
+    margin-top: 4px;
+    color: #777d8e;
+    font-size: 10px;
+}
+body.jobboard-match-home .reference-home-grid { gap: 13px; margin-top: 13px; }
+body.jobboard-match-home .market-card-head h3 {
+    color: #111524;
+    font-size: 13.5px;
+    font-weight: 800;
+}
+body.jobboard-match-home .market-card-head a {
+    color: #7934e8;
+    font-size: 10.5px;
+    font-weight: 800;
+}
+body.jobboard-match-home .recommended-row { min-height: 65px; }
+body.jobboard-match-home .recommended-copy > a {
+    color: #171a2a;
+    font-size: 12.5px;
+    font-weight: 750;
+}
+body.jobboard-match-home .recommended-copy div span {
+    color: #7d8291;
+    font-size: 9.5px;
+}
+body.jobboard-match-home .recommended-price {
+    color: #7b35e9;
+    font-size: 12.5px;
+    font-weight: 800;
+}
+body.jobboard-match-home .recommended-apply {
+    min-width: 88px;
+    min-height: 36px;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 800;
+}
+body.jobboard-match-home .reference-side-cta {
+    border-radius: 15px;
+}
+body.jobboard-match-home .reference-side-cta h3,
+body.jobboard-match-home .reference-tip-card h3 {
+    font-size: 13px;
+    font-weight: 800;
+}
+body.jobboard-match-home .reference-side-cta p,
+body.jobboard-match-home .reference-tip-card p {
+    font-size: 10.5px;
+    line-height: 1.55;
+}
+
+/* COMPACT CATEGORY SECTION */
+body.jobboard-match-home .home-compact-categories,
+body.jobboard-match-home .home-compact-freelancers,
+body.jobboard-match-home .home-compact-process {
+    margin-top: 13px;
+    border-radius: 15px;
+}
+body.jobboard-match-home .compact-section-head {
+    min-height: 47px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 0 17px;
+    border-bottom: 1px solid #eceef4;
+}
+body.jobboard-match-home .compact-section-head h3 {
+    margin: 0;
+    color: #111524;
+    font-size: 13.5px;
+    line-height: 1.3;
+    font-weight: 800;
+}
+body.jobboard-match-home .compact-section-head p {
+    margin: 3px 0 0;
+    color: #7c8190;
+    font-size: 10px;
+    line-height: 1.45;
+}
+body.jobboard-match-home .compact-section-head > a {
+    color: #7934e8;
+    font-size: 10.5px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+body.jobboard-match-home .compact-category-list {
+    padding: 14px 17px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+body.jobboard-match-home .compact-category-list a {
+    min-height: 31px;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid #dfe2e9;
+    border-radius: 999px;
+    background: #fff;
+    color: #242735;
+    font-size: 10.5px;
+    line-height: 1;
+    font-weight: 600;
+    transition: .16s ease;
+}
+body.jobboard-match-home .compact-category-list a:hover {
+    border-color: #a86cf5;
+    color: #7131dc;
+    background: #fbf9ff;
+}
+body.jobboard-match-home .compact-category-list svg {
+    width: 13px;
+    height: 13px;
+    fill: currentColor;
+}
+
+/* COMPACT FREELANCERS */
+body.jobboard-match-home .compact-freelancer-grid {
+    padding: 13px 17px 16px;
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 10px;
+}
+body.jobboard-match-home .compact-freelancer-card {
+    min-height: 174px;
+    padding: 13px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e2e5ec;
+    border-radius: 13px;
+    background: #fff;
+    color: #171a2a;
+    transition: .16s ease;
+}
+body.jobboard-match-home .compact-freelancer-card:hover {
+    border-color: #bea1f7;
+    box-shadow: 0 8px 20px rgba(74,50,127,.08);
+    transform: translateY(-2px);
+}
+body.jobboard-match-home .compact-freelancer-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+body.jobboard-match-home .compact-avatar {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(145deg,#7d38ef,#6426d3);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+}
+body.jobboard-match-home .compact-freelancer-info { min-width: 0; }
+body.jobboard-match-home .compact-name-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+body.jobboard-match-home .compact-name-row strong {
+    overflow: hidden;
+    color: #171a2a;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+body.jobboard-match-home .compact-freelancer-info > span {
+    display: block;
+    margin-top: 2px;
+    overflow: hidden;
+    color: #7b8190;
+    font-size: 9.5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+body.jobboard-match-home .compact-verified {
+    width: 14px;
+    height: 14px;
+    color: #2b71f3;
+}
+body.jobboard-match-home .compact-verified svg { width: 100%; height: 100%; fill: currentColor; }
+body.jobboard-match-home .compact-rating {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+body.jobboard-match-home .compact-rating > span { color: #f4a000; font-size: 11px; }
+body.jobboard-match-home .compact-rating b { color: #343849; font-size: 10px; }
+body.jobboard-match-home .compact-rating small { color: #858a99; font-size: 9px; }
+body.jobboard-match-home .compact-skills {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+body.jobboard-match-home .compact-skills span {
+    min-height: 21px;
+    padding: 0 7px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 6px;
+    background: #f1ecff;
+    color: #6f35d9;
+    font-size: 8.5px;
+    font-weight: 700;
+}
+body.jobboard-match-home .compact-freelancer-bottom {
+    margin-top: auto;
+    padding-top: 10px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px;
+    border-top: 1px solid #edf0f4;
+}
+body.jobboard-match-home .compact-freelancer-bottom small {
+    display: block;
+    margin-bottom: 2px;
+    color: #979baa;
+    font-size: 8px;
+}
+body.jobboard-match-home .compact-freelancer-bottom b {
+    color: #171a2a;
+    font-size: 10px;
+    font-weight: 800;
+}
+body.jobboard-match-home .compact-profile-link {
+    color: #7332de;
+    font-size: 9px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+body.jobboard-match-home .compact-empty {
+    grid-column: 1/-1;
+    padding: 24px;
+    color: #828797;
+    text-align: center;
+    font-size: 10.5px;
+}
+
+/* COMPACT HOW-IT-WORKS */
+body.jobboard-match-home .home-compact-process {
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+body.jobboard-match-home .process-head { border-bottom: 0; padding-top: 4px; }
+body.jobboard-match-home .compact-process-grid {
+    padding: 0 17px 16px;
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 10px;
+}
+body.jobboard-match-home .compact-process-grid article {
+    position: relative;
+    min-height: 128px;
+    padding: 16px 15px 14px;
+    border: 1px solid #e3e5ec;
+    border-radius: 13px;
+    background: #faf9ff;
+}
+body.jobboard-match-home .compact-step {
+    position: absolute;
+    right: 14px;
+    top: 12px;
+    color: #7c37eb;
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 800;
+}
+body.jobboard-match-home .compact-process-icon {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 10px;
+    border-radius: 9px;
+}
+body.jobboard-match-home .compact-process-icon svg {
+    width: 17px;
+    height: 17px;
+    fill: currentColor;
+}
+body.jobboard-match-home .compact-process-icon.purple { color: #7135dc; background: #eee7ff; }
+body.jobboard-match-home .compact-process-icon.blue { color: #2d6de8; background: #eaf1ff; }
+body.jobboard-match-home .compact-process-icon.green { color: #16845b; background: #e7f7ef; }
+body.jobboard-match-home .compact-process-grid h4 {
+    margin: 0 0 6px;
+    color: #171a2a;
+    font-size: 11.5px;
+    font-weight: 800;
+}
+body.jobboard-match-home .compact-process-grid p {
+    margin: 0;
+    color: #767c8d;
+    font-size: 9.5px;
+    line-height: 1.55;
+}
+body.jobboard-match-home .compact-process-footer {
+    min-height: 54px;
+    padding: 10px 17px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: 1px solid #eceef4;
+    background: #fbfbfe;
+}
+body.jobboard-match-home .compact-process-footer > span {
+    color: #777d8e;
+    font-size: 9.5px;
+    font-weight: 600;
+}
+body.jobboard-match-home .compact-process-footer > div {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+body.jobboard-match-home .compact-process-footer a {
+    min-height: 32px;
+    padding: 0 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dcdfe8;
+    border-radius: 8px;
+    background: #fff;
+    color: #303446;
+    font-size: 9.5px;
+    font-weight: 800;
+}
+body.jobboard-match-home .compact-process-footer a.primary {
+    border-color: #7b35eb;
+    background: #7b35eb;
+    color: #fff;
+}
+
+/* CHAT FAB REMOVED GLOBALLY */
+.market-chat-fab { display: none !important; }
+
+@media (max-width: 1100px) {
+    body.jobboard-match-home .compact-freelancer-grid,
+    body.jobboard-match-home .compact-process-grid {
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 900px) {
+    body.jobboard-match-home .market-sidebar { display: none; }
+    body.jobboard-match-home .market-topbar { left: 0; padding: 0 14px; grid-template-columns: 1fr auto; }
+    body.jobboard-match-home .market-mode-switch { display: none; }
+    body.jobboard-match-home .market-main { margin-left: 0; }
+    body.jobboard-match-home .market-home-shell { width: min(100% - 24px, 1288px); }
+}
+@media (max-width: 680px) {
+    body.jobboard-match-home .market-topbar { grid-template-columns: 1fr; }
+    body.jobboard-match-home .market-top-actions { display: none; }
+    body.jobboard-match-home .market-global-search { width: 100%; }
+    body.jobboard-match-home .market-dual-hero { grid-template-columns: 1fr; }
+    body.jobboard-match-home .market-stat-row { grid-template-columns: 1fr; }
+    body.jobboard-match-home .market-home-grid { grid-template-columns: 1fr; }
+    body.jobboard-match-home .compact-section-head {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 12px 14px;
+    }
+    body.jobboard-match-home .compact-category-list { padding: 12px 14px 14px; }
+    body.jobboard-match-home .compact-freelancer-grid,
+    body.jobboard-match-home .compact-process-grid { padding-inline: 14px; }
+    body.jobboard-match-home .compact-process-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+
+/* v55: Keep the shared workspace sidebar logo compact on every feature page. */
+.market-sidebar .market-brand .tm33-brand-logo {
+  display: block !important;
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  min-height: 30px !important;
+  max-width: 30px !important;
+  max-height: 30px !important;
+  object-fit: contain !important;
+  flex: 0 0 30px !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+.market-sidebar .market-brand {
+  align-items: center;
+  min-width: 0;
+}
+.market-sidebar .market-brand > span:last-child {
+  min-width: 0;
+}
+.market-sidebar .market-brand > span:last-child strong,
+.market-sidebar .market-brand > span:last-child small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+

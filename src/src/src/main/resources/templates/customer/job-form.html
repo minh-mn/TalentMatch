@@ -1,0 +1,219 @@
+```html
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/common :: head('Đăng công việc')}"></head>
+
+<body class="market-body client-workspace">
+
+<aside th:replace="~{fragments/common :: marketSidebar('new')}"></aside>
+<header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+
+<main class="market-main client-main">
+    <div class="client-shell">
+
+        <div class="client-breadcrumb">
+            Workspace /
+            <a th:href="@{/customer/jobs}">Công việc đã đăng</a> /
+            <b th:text="${editing ? 'Chỉnh sửa' : 'Đăng mới'}">Đăng mới</b>
+        </div>
+
+        <div class="client-page-heading">
+            <div>
+                <span class="client-eyebrow">ĐĂNG TUYỂN</span>
+                <h1 th:text="${editing ? 'Chỉnh sửa công việc' : 'Tạo công việc mới'}">
+                    Tạo công việc mới
+                </h1>
+                <p>
+                    Mô tả dự án, ngân sách và sản phẩm số cần bàn giao
+                    để tìm Freelancer phù hợp.
+                </p>
+            </div>
+        </div>
+
+        <div class="client-form-layout">
+
+            <form class="client-panel client-form"
+                  th:action="${editing} ? @{/customer/jobs/{id}(id=${job.id})} : @{/customer/jobs}"
+                  method="post"
+                  th:object="${job}">
+
+                <!-- THÔNG TIN CÔNG VIỆC -->
+                <div class="client-panel-head">
+                    <div>
+                        <h2>1. Thông tin công việc</h2>
+                        <p>Các trường đánh dấu * là bắt buộc.</p>
+                    </div>
+                </div>
+
+                <div class="client-form-grid">
+
+                    <label class="wide">
+                        Tên dự án <em>*</em>
+                        <input th:field="*{title}"
+                               required
+                               minlength="5"
+                               maxlength="220"
+                               placeholder="VD: Xây dựng dashboard quản lý bán hàng">
+                    </label>
+
+                    <label>
+                        Lĩnh vực <em>*</em>
+                        <select th:field="*{category}" required>
+                            <option value="">Chọn danh mục</option>
+                            <option value="Lập trình & CNTT">Lập trình & CNTT</option>
+                            <option value="Thiết kế & Sáng tạo">Thiết kế & Sáng tạo</option>
+                            <option value="Marketing & Bán hàng">Marketing & Bán hàng</option>
+                            <option value="Viết lách & Nội dung">Viết lách & Nội dung</option>
+                            <option value="Viết lách & Dịch thuật">Viết lách & Dịch thuật</option>
+                            <option value="Âm thanh & Video">Âm thanh & Video</option>
+                            <option value="Kỹ thuật & Kiến trúc">Kỹ thuật & Kiến trúc</option>
+                            <option value="Hành chính & Nhân sự">Hành chính & Nhân sự</option>
+                            <option value="Luật & Pháp lý">Luật & Pháp lý</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Kỹ năng yêu cầu
+                        <input th:field="*{requiredSkills}"
+                               maxlength="1000"
+                               placeholder="Java, Spring Boot, Figma...">
+                    </label>
+
+                    <label class="wide">
+                        Mô tả chi tiết công việc <em>*</em>
+                        <textarea th:field="*{description}"
+                                  minlength="30"
+                                  rows="6"
+                                  required
+                                  placeholder="Mục tiêu dự án, chức năng cần thực hiện, phạm vi công việc và yêu cầu kỹ thuật..."></textarea>
+                    </label>
+
+                </div>
+
+                <!-- NGÂN SÁCH VÀ THỜI HẠN -->
+                <div class="client-panel-head divider">
+                    <div>
+                        <h2>2. Ngân sách &amp; thời hạn</h2>
+                    </div>
+                </div>
+
+                <div class="client-form-grid three">
+
+                    <label>
+                        Ngân sách (VNĐ) <em>*</em>
+                        <input type="number"
+                               min="1"
+                               max="100000000000"
+                               th:field="*{budget}"
+                               required>
+                    </label>
+
+                    <label>
+                        Cách tính phí
+                        <select th:field="*{priceType}">
+                            <option value="FIXED">Giá cố định</option>
+                            <option value="NEGOTIABLE">Thương lượng</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Hạn hoàn thành
+                        <input type="date" th:field="*{deadline}">
+                    </label>
+
+                    <label>
+                        Cấp kinh nghiệm
+                        <select th:field="*{experienceLevel}">
+                            <option value="JUNIOR">Mới bắt đầu</option>
+                            <option value="MIDDLE">Trung cấp</option>
+                            <option value="SENIOR">Chuyên gia</option>
+                            <option value="ENTRY">Entry</option>
+                            <option value="INTERMEDIATE">Intermediate</option>
+                            <option value="EXPERT">Expert</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Số ngày dự kiến
+                        <input type="number"
+                               min="1"
+                               max="3650"
+                               th:field="*{estimatedDurationDays}">
+                    </label>
+
+                    <label class="wide">
+                        Tiêu chí nghiệm thu <em>*</em>
+                        <textarea th:field="*{acceptanceCriteria}"
+                                  rows="4"
+                                  required
+                                  minlength="10"
+                                  maxlength="3000"
+                                  placeholder="Mô tả điều kiện hoàn thành, chức năng cần đạt, định dạng tệp, tài liệu đi kèm và số lần chỉnh sửa..."></textarea>
+                    </label>
+
+                </div>
+
+                <div class="client-form-actions">
+                    <a class="client-btn outline"
+                       th:href="@{/customer/jobs}">
+                        Quay lại
+                    </a>
+
+                    <button class="client-btn primary"
+                            type="submit"
+                            th:text="${editing ? 'Lưu công việc' : 'Đăng công việc & nhận Proposal'}">
+                        Đăng công việc
+                    </button>
+                </div>
+
+            </form>
+
+            <!-- CỘT GỢI Ý -->
+            <aside class="client-side-help">
+
+                <div class="client-panel">
+                    <span class="client-eyebrow">MẸO TUYỂN DỤNG</span>
+
+                    <h3>Tạo tin hấp dẫn</h3>
+
+                    <p>
+                        Mô tả rõ mục tiêu, kỹ năng, ngân sách và sản phẩm
+                        cần bàn giao để Freelancer hiểu yêu cầu trước khi báo giá.
+                    </p>
+
+                    <div class="client-guide-step">
+                        <b>01</b> Mô tả công việc cụ thể
+                    </div>
+
+                    <div class="client-guide-step">
+                        <b>02</b> Ghi rõ kỹ năng thiết yếu
+                    </div>
+
+                    <div class="client-guide-step">
+                        <b>03</b> Liệt kê sản phẩm bàn giao
+                    </div>
+
+                    <div class="client-guide-step">
+                        <b>04</b> Đặt tiêu chí nghiệm thu rõ ràng
+                    </div>
+                </div>
+
+                <a class="client-btn outline"
+                   th:href="@{/customer/talent}">
+                    Tìm Freelancer phù hợp →
+                </a>
+
+            </aside>
+
+        </div>
+    </div>
+</main>
+
+<script th:replace="~{fragments/common :: scripts}"></script>
+
+</body>
+</html>
+```

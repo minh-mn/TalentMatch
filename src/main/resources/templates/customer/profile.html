@@ -1,4 +1,203 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/common :: head('Hồ sơ doanh nghiệp')}"></head>
-<body class="market-body client-workspace"><aside th:replace="~{fragments/common :: marketSidebar('profile')}"></aside><header th:replace="~{fragments/common :: marketTopbar('hire')}"></header><div th:replace="~{fragments/common :: flash}"></div><main class="market-main client-main"><div class="client-shell"><div class="client-breadcrumb">Workspace / Hồ sơ doanh nghiệp</div><div class="client-page-heading"><div><span class="client-eyebrow">THÔNG TIN DOANH NGHIỆP</span><h1>Hồ sơ <span>Client</span></h1><p>Cập nhật thông tin để Freelancer đánh giá độ tin cậy trước khi ứng tuyển.</p></div></div>
-<div class="client-form-layout"><form th:action="@{/customer/profile}" th:object="${profile}" method="post" class="client-panel client-form"><div class="client-profile-cover"><span class="client-avatar huge" th:text="${#strings.substring(profile.fullName,0,1)}">C</span><div><h2 th:text="${profile.companyName!=null?profile.companyName:profile.fullName}">Công ty</h2><p th:text="${profile.email}">Email</p></div></div><div class="client-panel-head"><div><h2>Thông tin người đại diện</h2></div></div><div class="client-form-grid"><label>Họ tên <em>*</em><input th:field="*{fullName}" required maxlength="120"></label><label>Số điện thoại<input th:field="*{phone}" maxlength="25"></label><label>Địa điểm<input th:field="*{location}" maxlength="160"></label><label>Người liên hệ<input th:field="*{contactName}" maxlength="120"></label></div><div class="client-panel-head divider"><div><h2>Thông tin doanh nghiệp</h2></div></div><div class="client-form-grid"><label>Tên doanh nghiệp<input th:field="*{companyName}" maxlength="160"></label><label>Lĩnh vực<input th:field="*{field}" maxlength="120"></label><label>Quy mô<select th:field="*{companySize}"><option value="">Chọn quy mô</option><option>1-10</option><option>11-50</option><option>51-100</option><option>101-500</option><option>500+</option></select></label><label>Mã số thuế<input th:field="*{taxCode}" maxlength="40"></label><label class="wide">Website<input th:field="*{website}" type="url" maxlength="255"></label><label class="wide">Giới thiệu<textarea th:field="*{bio}" rows="6"></textarea></label></div><div class="client-form-actions"><button class="client-btn primary">Lưu thay đổi</button></div></form><aside class="client-side-help"><div class="client-panel"><h3><i class="fa-solid fa-shield-heart"></i> Hồ sơ đáng tin cậy</h3><p>Thông tin doanh nghiệp đầy đủ giúp Freelancers hiểu rõ mục tiêu hợp tác và giảm thời gian trao đổi.</p><div class="client-guide-step"><b>✓</b> Tên và lĩnh vực rõ ràng</div><div class="client-guide-step"><b>✓</b> Thông tin người liên hệ</div><div class="client-guide-step"><b>✓</b> Mô tả hoạt động của công ty</div></div></aside></div>
-</div></main><script th:replace="~{fragments/common :: scripts}"></script></body></html>
+
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/common :: head('Hồ sơ doanh nghiệp')}"></head>
+
+<body class="market-body client-workspace client-v52-page">
+
+<!-- Sidebar dành cho Client -->
+<aside th:replace="~{fragments/common :: marketSidebar('profile')}"></aside>
+
+<!-- Header dành cho Client -->
+<header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
+
+<!-- Thông báo thành công hoặc lỗi -->
+<div th:replace="~{fragments/common :: flash}"></div>
+
+<main class="market-main client-main">
+    <div class="client-shell">
+
+        <!-- Breadcrumb -->
+        <div class="client-breadcrumb">
+            Workspace / Hồ sơ doanh nghiệp
+        </div>
+
+        <!-- Tiêu đề trang -->
+        <div class="client-page-heading">
+            <div>
+                <span class="client-eyebrow">THÔNG TIN DOANH NGHIỆP</span>
+                <h1>Hồ sơ <span>Client</span></h1>
+                <p>
+                    Cập nhật thông tin để Freelancer đánh giá độ tin cậy
+                    trước khi ứng tuyển.
+                </p>
+            </div>
+        </div>
+
+        <div class="client-form-layout">
+
+            <!-- Form cập nhật hồ sơ -->
+            <form th:action="@{/customer/profile}"
+                  th:object="${profile}"
+                  method="post"
+                  class="client-panel client-form">
+
+                <!-- Thông tin đại diện -->
+                <div class="client-profile-cover">
+
+                        <span class="client-avatar huge"
+                              th:text="${profile.fullName != null and !#strings.isEmpty(profile.fullName)
+                                  ? #strings.substring(profile.fullName, 0, 1)
+                                  : 'C'}">C</span>
+
+                    <div>
+                        <h2 th:text="${profile.companyName != null and !#strings.isEmpty(profile.companyName)
+                                ? profile.companyName
+                                : (profile.fullName != null ? profile.fullName : 'Doanh nghiệp')}">
+                            Công ty
+                        </h2>
+
+                        <p th:text="${profile.email}">Email</p>
+                    </div>
+                </div>
+
+                <div class="client-panel-head">
+                    <div>
+                        <h2>Thông tin người đại diện</h2>
+                    </div>
+                </div>
+
+                <div class="client-form-grid">
+
+                    <label>
+                        Họ tên <em>*</em>
+                        <input th:field="*{fullName}"
+                               required
+                               maxlength="120">
+                    </label>
+
+                    <label>
+                        Số điện thoại
+                        <input th:field="*{phone}"
+                               maxlength="25">
+                    </label>
+
+                    <label>
+                        Địa điểm
+                        <input th:field="*{location}"
+                               maxlength="160">
+                    </label>
+
+                    <label>
+                        Người liên hệ
+                        <input th:field="*{contactName}"
+                               maxlength="120">
+                    </label>
+
+                </div>
+
+                <!-- Thông tin doanh nghiệp -->
+                <div class="client-panel-head divider">
+                    <div>
+                        <h2>Thông tin doanh nghiệp</h2>
+                    </div>
+                </div>
+
+                <div class="client-form-grid">
+
+                    <label>
+                        Tên doanh nghiệp
+                        <input th:field="*{companyName}"
+                               maxlength="160">
+                    </label>
+
+                    <label>
+                        Lĩnh vực
+                        <input th:field="*{field}"
+                               maxlength="120">
+                    </label>
+
+                    <label>
+                        Quy mô
+                        <select th:field="*{companySize}">
+                            <option value="">Chọn quy mô</option>
+                            <option value="1-10">1-10</option>
+                            <option value="11-50">11-50</option>
+                            <option value="51-100">51-100</option>
+                            <option value="101-500">101-500</option>
+                            <option value="500+">500+</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Mã số thuế
+                        <input th:field="*{taxCode}"
+                               maxlength="40">
+                    </label>
+
+                    <label class="wide">
+                        Website
+                        <input th:field="*{website}"
+                               type="url"
+                               maxlength="255">
+                    </label>
+
+                    <label class="wide">
+                        Giới thiệu
+                        <textarea th:field="*{bio}"
+                                  rows="6"></textarea>
+                    </label>
+
+                </div>
+
+                <!-- Nút lưu -->
+                <div class="client-form-actions">
+                    <button type="submit" class="client-btn primary">
+                        Lưu thay đổi
+                    </button>
+                </div>
+
+            </form>
+
+            <!-- Khung hướng dẫn bên phải -->
+            <aside class="client-side-help">
+                <div class="client-panel">
+
+                    <h3>
+                        <i class="fa-solid fa-shield-heart"></i>
+                        Hồ sơ đáng tin cậy
+                    </h3>
+
+                    <p>
+                        Thông tin doanh nghiệp đầy đủ giúp Freelancers
+                        hiểu rõ mục tiêu hợp tác và giảm thời gian trao đổi.
+                    </p>
+
+                    <div class="client-guide-step">
+                        <b>✓</b>
+                        Tên và lĩnh vực rõ ràng
+                    </div>
+
+                    <div class="client-guide-step">
+                        <b>✓</b>
+                        Thông tin người liên hệ
+                    </div>
+
+                    <div class="client-guide-step">
+                        <b>✓</b>
+                        Mô tả hoạt động của công ty
+                    </div>
+
+                </div>
+            </aside>
+
+        </div>
+    </div>
+</main>
+
+<!-- JavaScript dùng chung -->
+<script th:replace="~{fragments/common :: scripts}"></script>
+
+</body>
+</html>

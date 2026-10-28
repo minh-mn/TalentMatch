@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/common :: head('Trang chủ')}"></head>
+<body>
+<div th:replace="~{fragments/common :: flash}"></div>
+
+<!-- GIAO DIỆN TRƯỚC KHI ĐĂNG NHẬP -->
+<th:block th:if="${true}">
+  <div class="guest-home-page">
+    <header class="guest-home-header">
+      <div class="guest-container guest-header-inner">
+        <a class="guest-logo" th:href="@{/}">
+          <span class="guest-logo-mark"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch logo"></span>
+          <span class="guest-logo-copy">
+            <strong>TalentMatch</strong>
+            <small>FREELANCE MARKETPLACE</small>
+          </span>
+        </a>
+
+        <nav class="guest-main-nav">
+          <a th:href="@{/jobs}">Tìm dự án</a>
+          <a th:href="@{/freelancers}">Tìm freelancer</a>
+          <a href="#guest-categories">Danh mục nghề</a>
+          <a href="#guest-how">Cách hoạt động</a>
+          <a href="#guest-pricing">Bảng giá</a>
+          <a href="#guest-footer">Về chúng tôi</a>
+        </nav>
+
+        <form class="guest-header-search" th:action="@{/jobs}" method="get" role="search">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input type="search" name="q" placeholder="Tìm dự án, kỹ năng..." aria-label="Tìm kiếm nhanh">
+          <button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-arrow-right"></i></button>
+        </form>
+
+        <div class="guest-header-actions">
+          <a class="guest-btn ghost" th:href="@{/login}">Đăng nhập</a>
+          <a class="guest-btn primary" th:href="@{/register}">Đăng ký miễn phí</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="guest-home-main">
+      <section class="guest-hero-section">
+        <div class="guest-container guest-hero-wrap">
+          <div class="guest-hero-copy">
+            <span class="guest-kicker"><i class="fa-solid fa-circle-check"></i> KẾT NỐI NHÂN TÀI - KIẾN TẠO GIÁ TRỊ</span>
+            <h1>Tìm freelancer phù hợp <span>Biến ý tưởng thành hiện thực</span></h1>
+            <p>Hàng ngàn freelancer chất lượng sẵn sàng đồng hành cùng bạn để phát triển dự án, tiết kiệm thời gian và chi phí.</p>
+
+            <form class="guest-hero-search" th:action="@{/freelancers}" method="get">
+              <div class="guest-search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" name="q" placeholder="Bạn cần tìm gì? (ví dụ: thiết kế website, lập trình Java, marketing...)" autocomplete="off">
+              </div>
+              <button type="submit" class="guest-btn primary lg">Tìm kiếm</button>
+            </form>
+
+            <div class="guest-keywords">
+              <span>Từ khóa phổ biến:</span>
+              <a th:href="@{/freelancers(q='Thiết kế website')}">Thiết kế website</a>
+              <a th:href="@{/freelancers(q='Java')}">Java</a>
+              <a th:href="@{/freelancers(q='Python')}">Python</a>
+              <a th:href="@{/freelancers(q='UI/UX')}">UI/UX</a>
+              <a th:href="@{/freelancers(q='Marketing')}">Marketing</a>
+              <a th:href="@{/freelancers(q='Content')}">Content</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="guest-stats-strip">
+        <div class="guest-container guest-stats-grid">
+          <article>
+            <span class="stat-icon violet"><i class="fa-solid fa-briefcase"></i></span>
+            <div><strong th:text="${openJobCount}">0</strong><small>Dự án đang mở</small></div>
+          </article>
+          <article>
+            <span class="stat-icon green"><i class="fa-solid fa-users"></i></span>
+            <div><strong th:text="${freelancerCount}">0</strong><small>Freelancer tham gia</small></div>
+          </article>
+          <article>
+            <span class="stat-icon orange"><i class="fa-solid fa-handshake-angle"></i></span>
+            <div><strong th:text="${customerCount}">0</strong><small>Doanh nghiệp tham gia</small></div>
+          </article>
+          <article>
+            <span class="stat-icon blue"><i class="fa-solid fa-star"></i></span>
+            <div><strong>3 vai trò</strong><small>Freelancer · Client · Admin</small></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="guest-section" id="guest-categories">
+        <div class="guest-container">
+          <div class="guest-section-head">
+            <div>
+              <h2>Khám phá danh mục nghề nghiệp</h2>
+              <p>Chọn lĩnh vực bạn quan tâm để tìm đúng freelancer hoặc dự án phù hợp.</p>
+            </div>
+            <a th:href="@{/jobs}">Xem tất cả <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+
+          <div class="guest-category-grid">
+            <a class="guest-category-card" th:href="@{/jobs(category='Lập trình & CNTT')}"><span class="cat-icon blue"><i class="fa-solid fa-code"></i></span><div><strong>Lập trình & CNTT</strong><small>1.200+ dự án</small></div></a>
+            <a class="guest-category-card" th:href="@{/jobs(category='Thiết kế & Sáng tạo')}"><span class="cat-icon pink"><i class="fa-solid fa-palette"></i></span><div><strong>Thiết kế & Sáng tạo</strong><small>850+ dự án</small></div></a>
+            <a class="guest-category-card" th:href="@{/jobs(category='Marketing')}"><span class="cat-icon orange"><i class="fa-solid fa-bullhorn"></i></span><div><strong>Marketing & Bán hàng</strong><small>720+ dự án</small></div></a>
+            <a class="guest-category-card" th:href="@{/jobs(category='Tài chính & Kế toán')}"><span class="cat-icon green"><i class="fa-solid fa-chart-column"></i></span><div><strong>Tài chính & Kế toán</strong><small>430+ dự án</small></div></a>
+            <a class="guest-category-card" th:href="@{/jobs(category='Viết lách & Dịch thuật')}"><span class="cat-icon purple"><i class="fa-solid fa-file-pen"></i></span><div><strong>Viết lách & Dịch thuật</strong><small>320+ dự án</small></div></a>
+            <a class="guest-category-card" th:href="@{/jobs(category='Đào tạo & Giáo dục')}"><span class="cat-icon indigo"><i class="fa-solid fa-graduation-cap"></i></span><div><strong>Đào tạo & Giáo dục</strong><small>280+ dự án</small></div></a>
+            <a class="guest-category-card" th:href="@{/jobs(category='Video & Âm thanh')}"><span class="cat-icon red"><i class="fa-solid fa-circle-play"></i></span><div><strong>Video & Âm thanh</strong><small>210+ dự án</small></div></a>
+            <a class="guest-category-card" th:href="@{/jobs(category='Khác')}"><span class="cat-icon gray"><i class="fa-solid fa-ellipsis"></i></span><div><strong>Khác</strong><small>150+ dự án</small></div></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="guest-section">
+        <div class="guest-container">
+          <div class="guest-section-head">
+            <div>
+              <h2>Dự án nổi bật</h2>
+              <p>Cơ hội việc làm chất lượng từ các doanh nghiệp uy tín.</p>
+            </div>
+            <a th:href="@{/jobs}">Xem tất cả dự án <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+
+          <div class="guest-job-grid">
+            <article class="guest-job-card" th:each="job,stat : ${featuredJobs}">
+              <div class="job-thumb" th:classappend="${stat.index % 5 == 1} ? ' thumb-2' : (${stat.index % 5 == 2} ? ' thumb-3' : (${stat.index % 5 == 3} ? ' thumb-4' : (${stat.index % 5 == 4} ? ' thumb-5' : ' thumb-1')))">
+                <span class="job-badge" th:if="${stat.index == 0}">Ưu tiên</span>
+                <i class="fa-solid fa-briefcase"></i>
+              </div>
+              <div class="guest-job-body">
+                <a class="guest-job-title" th:href="@{/jobs/{id}(id=${job.id})}" th:text="${job.title}">Thiết kế website thương mại điện tử</a>
+                <div class="guest-job-budget" th:text="${#numbers.formatDecimal(job.budget,0,'POINT',0,'COMMA')} + ' VND'">15.000.000 - 25.000.000 VND</div>
+                <div class="guest-chip-row">
+                  <span th:text="${job.category}">UI/UX</span>
+                  <span th:if="${job.requiredSkills != null and !#strings.isEmpty(job.requiredSkills)}" th:text="${#strings.arraySplit(job.requiredSkills, ',')[0]}">Figma</span>
+                  <span th:text="${job.priceType == 'HOURLY' ? 'Theo giờ' : 'Trọn gói'}">Responsive</span>
+                </div>
+                <div class="guest-job-meta">
+                  <span><i class="fa-regular fa-file-lines"></i><span th:text="${proposalCounts[job.id]} + ' ứng tuyển'">10 ứng tuyển</span></span>
+                  <span><i class="fa-regular fa-clock"></i><span th:text="${job.deadline != null ? 'Còn ' + T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), job.deadline) + ' ngày' : 'Không giới hạn'}">Còn 5 ngày</span></span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="guest-section guest-section-soft">
+        <div class="guest-container">
+          <div class="guest-section-head">
+            <div>
+              <h2>Freelancer nổi bật</h2>
+              <p>Những freelancer tài năng và giàu kinh nghiệm sẵn sàng nhận dự án mới.</p>
+            </div>
+            <a th:href="@{/freelancers}">Xem tất cả freelancer <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+
+          <div class="guest-freelancer-grid">
+            <article class="guest-freelancer-card" th:each="f,stat : ${featuredFreelancers}">
+              <div class="guest-freelancer-top">
+                <span class="guest-avatar-lg" th:text="${#strings.substring(f.fullName,0,1)}">A</span>
+                <a class="save-profile" th:href="@{/freelancers/{id}(id=${f.id})}"><i class="fa-regular fa-bookmark"></i></a>
+              </div>
+              <a class="guest-freelancer-name" th:href="@{/freelancers/{id}(id=${f.id})}" th:text="${f.fullName}">Trần Minh Quân</a>
+              <div class="guest-freelancer-role" th:text="${f.professionalTitle != null ? f.professionalTitle : 'Freelancer chuyên nghiệp'}">Fullstack Developer</div>
+              <div class="guest-freelancer-rating"><i class="fa-solid fa-star"></i><span th:text="${f.rating != null ? #numbers.formatDecimal(f.rating,1,'POINT',1,'COMMA') : '4.9'}">4.9</span><em>(<span th:text="${f.completedProjects != null ? f.completedProjects : 12}">12</span>)</em></div>
+              <div class="guest-chip-row compact">
+                <span th:text="${f.field != null and !#strings.isEmpty(f.field) ? f.field : 'Chuyên môn'}">Chuyên môn</span>
+                <span th:text="${f.experienceYears != null ? f.experienceYears + ' năm KN' : 'Kinh nghiệm'}">Kinh nghiệm</span>
+                <span th:text="${f.location != null and !#strings.isEmpty(f.location) ? f.location : 'Việt Nam'}">Việt Nam</span>
+              </div>
+              <div class="guest-freelancer-status"><i class="fa-solid fa-circle"></i><span th:text="${f.available ? 'Đang rảnh' : 'Đang bận'}">Đang rảnh</span></div>
+              <div class="guest-freelancer-bottom">
+                <strong th:text="${f.hourlyRate != null ? #numbers.formatDecimal(f.hourlyRate,0,'POINT',0,'COMMA') + 'đ/giờ' : 'Thỏa thuận'}">300.000đ/giờ</strong>
+                <a class="guest-btn tiny primary" th:href="@{/freelancers/{id}(id=${f.id})}">Xem hồ sơ</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="guest-section" id="guest-how">
+        <div class="guest-container">
+          <div class="guest-section-head no-link">
+            <div>
+              <h2>Cách TalentMatch hoạt động</h2>
+              <p>Chỉ với 4 bước đơn giản để biến ý tưởng của bạn thành hiện thực.</p>
+            </div>
+          </div>
+          <div class="guest-how-grid">
+            <article><b>1</b><span class="how-icon blue"><i class="fa-regular fa-user"></i></span><div><h3>Tạo tài khoản</h3><p>Đăng ký miễn phí trong vài phút.</p></div></article>
+            <article><b>2</b><span class="how-icon purple"><i class="fa-solid fa-magnifying-glass"></i></span><div><h3>Tìm dự án / Freelancer</h3><p>Khám phá hàng ngàn cơ hội phù hợp.</p></div></article>
+            <article><b>3</b><span class="how-icon orange"><i class="fa-regular fa-comments"></i></span><div><h3>Trao đổi & làm việc</h3><p>Thống nhất yêu cầu, bắt đầu dự án an toàn.</p></div></article>
+            <article><b>4</b><span class="how-icon green"><i class="fa-solid fa-shield-heart"></i></span><div><h3>Hoàn thành & thanh toán</h3><p>Nghiệm thu an toàn qua nền tảng.</p></div></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="guest-section guest-section-soft">
+        <div class="guest-container guest-bottom-grid">
+          <div class="guest-testimonials">
+            <div class="guest-section-head no-link">
+              <div>
+                <h2>Khách hàng nói về TalentMatch</h2>
+                <p>Phản hồi thực tế từ doanh nghiệp và freelancer đã sử dụng nền tảng.</p>
+              </div>
+            </div>
+            <div class="guest-testimonial-list">
+              <article>
+                <div class="quote-avatar">N</div>
+                <p>"Tôi đã tìm được freelancer thiết kế website rất chuyên nghiệp. Quy trình làm việc rõ ràng và rất tiện lợi."</p>
+                <strong>Nguyễn Hoàng Nam</strong>
+                <small>CEO, Công ty ABC</small>
+                <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+              </article>
+              <article>
+                <div class="quote-avatar">H</div>
+                <p>"Nền tảng giúp tôi có thêm nhiều dự án phù hợp với kỹ năng. Hệ thống bảo vệ quyền lợi rất tốt."</p>
+                <strong>Lê Thu Hà</strong>
+                <small>Freelancer Designer</small>
+                <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+              </article>
+            </div>
+          </div>
+
+          <div class="guest-blog-box">
+            <div class="guest-section-head">
+              <div>
+                <h2>Bài viết & Kiến thức</h2>
+                <p>Cập nhật xu hướng và kinh nghiệm thực chiến.</p>
+              </div>
+              <span class="guest-blog-label">Góc chia sẻ</span>
+            </div>
+            <div class="guest-blog-list">
+              <article>
+                <div class="blog-thumb thumb-a"></div>
+                <div><strong>5 xu hướng thiết kế logo năm 2026</strong><small>10 Tháng 10, 2026</small></div>
+              </article>
+              <article>
+                <div class="blog-thumb thumb-b"></div>
+                <div><strong>Kinh nghiệm viết proposal ấn tượng</strong><small>08 Tháng 10, 2026</small></div>
+              </article>
+              <article>
+                <div class="blog-thumb thumb-c"></div>
+                <div><strong>Cách quản lý dự án freelancer hiệu quả</strong><small>05 Tháng 10, 2026</small></div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="guest-section guest-trusted-section" id="guest-pricing">
+        <div class="guest-container">
+          <div class="guest-section-head no-link">
+            <div>
+              <h2>Được tin tưởng bởi nhiều doanh nghiệp</h2>
+              <p>TalentMatch là cầu nối giữa freelancer chất lượng và các thương hiệu lớn tại Việt Nam.</p>
+            </div>
+          </div>
+          <div class="guest-brand-row">
+            <span>FPT</span><span>viettel</span><span>VNPT</span><span>Shopee</span><span>TIKI</span><span>Grab</span><span>VNG</span><span>MB</span><span>TECHCOMBANK</span><span>ACB</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="guest-home-footer" id="guest-footer">
+      <div class="guest-container guest-footer-grid">
+        <div class="guest-footer-brand">
+          <a class="guest-logo footer" th:href="@{/}">
+            <span class="guest-logo-mark"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch logo"></span>
+            <span class="guest-logo-copy">
+              <strong>TalentMatch</strong>
+              <small>FREELANCE MARKETPLACE</small>
+            </span>
+          </a>
+          <p>Kết nối nhân tài - Kiến tạo giá trị. Nền tảng freelancer hàng đầu Việt Nam.</p>
+          <div class="guest-socials">
+            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          </div>
+        </div>
+        <div>
+          <h4>Về TalentMatch</h4>
+          <a href="#">Giới thiệu</a>
+          <a href="#guest-how">Cách hoạt động</a>
+          <a href="#guest-pricing">Bảng giá</a>
+          <a href="#">Điều khoản sử dụng</a>
+          <a href="#">Chính sách bảo mật</a>
+        </div>
+        <div>
+          <h4>Dành cho Freelancer</h4>
+          <a th:href="@{/jobs}">Tìm dự án</a>
+          <a th:href="@{/register(role='FREELANCER')}">Tạo hồ sơ</a>
+          <a th:href="@{/freelancers}">Kỹ năng nổi bật</a>
+          <a href="#">Câu hỏi thường gặp</a>
+        </div>
+        <div>
+          <h4>Dành cho Doanh nghiệp</h4>
+          <a th:href="@{/register(role='CUSTOMER')}">Đăng dự án</a>
+          <a th:href="@{/freelancers}">Tìm freelancer</a>
+          <a href="#">Giải pháp cho doanh nghiệp</a>
+          <a href="#">Liên hệ</a>
+        </div>
+        <div>
+          <h4>Nhận thông tin mới nhất</h4>
+          <p>Đăng ký để nhận các cơ hội việc làm và bài viết hữu ích từ TalentMatch.</p>
+          <div class="guest-newsletter">
+            <a th:href="@{/register}" class="guest-btn primary">Tạo tài khoản miễn phí <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="guest-container guest-footer-bottom">
+        <span>© 2026 TalentMatch. All rights reserved.</span>
+        <div><a href="#">Điều khoản</a><a href="#">Bảo mật</a><a href="#">Hỗ trợ</a></div>
+      </div>
+    </footer>
+  </div>
+</th:block>
+
+<!-- GIAO DIỆN SAU KHI ĐĂNG NHẬP: GIỮ LUỒNG MARKETPLACE HIỆN TẠI -->
+<th:block th:if="${false}">
+  <aside th:replace="~{fragments/common :: marketSidebar('home')}"></aside>
+  <header th:replace="~{fragments/common :: marketTopbar('jobs')}"></header>
+  <main class="market-main">
+    <div class="market-home-shell">
+      <section class="market-dual-hero">
+        <div class="market-hero-panel market-hero-hire">
+          <div class="market-hero-eyebrow">
+            <svg viewBox="0 0 24 24"><path d="M8 4V2h8v2h5v17H3V4h5Zm2 0h4V3h-4v1Zm-5 4h14V6H5v2Z"/></svg>
+            DÀNH CHO NGƯỜI THUÊ • MIỄN PHÍ ĐĂNG
+          </div>
+          <h1>Đăng dự án, nhận chào giá sau 5 phút</h1>
+          <p>Mô tả nhu cầu, AI gợi ý freelancer khớp nhất, tiền giữ escrow an toàn.</p>
+          <div class="market-hero-actions">
+            <a class="market-btn white" sec:authorize="hasRole('CUSTOMER')" th:href="@{/customer/jobs/new}">+ Đăng dự án ngay</a>
+            <a class="market-btn outline" th:href="@{/freelancers}">Xem freelancer gợi ý →</a>
+          </div>
+        </div>
+        <div class="market-hero-panel market-hero-work">
+          <div class="market-hero-eyebrow">
+            <svg viewBox="0 0 24 24"><path d="m13 2-7 11h5l-1 9 8-12h-5V2Z"/></svg>
+            DÀNH CHO FREELANCER • 0Đ BẮT ĐẦU
+          </div>
+          <h2>Việc xịn mỗi ngày, rút tiền trong 1 nốt nhạc</h2>
+          <p>Hoàn thiện hồ sơ một lần, AI tự gợi ý job hợp với bạn.</p>
+          <a class="market-btn lime" th:href="@{/jobs}">Tìm việc ngay →</a>
+        </div>
+      </section>
+
+      <section class="market-stat-row">
+        <article><span class="market-stat-icon purple"><svg viewBox="0 0 24 24"><path d="M8 4V2h8v2h5v17H3V4h5Zm2 0h4V3h-4v1Zm-5 4h14V6H5v2Z"/></svg></span><div><strong th:text="${openJobCount}">0</strong><small>dự án đang mở</small></div></article>
+        <article><span class="market-stat-icon blue"><svg viewBox="0 0 24 24"><path d="M8 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm8 1a3 3 0 1 1 0-6 3 3 0 0 1 0 6ZM2 21v-2c0-3.3 2.7-6 6-6s6 2.7 6 6v2H2Zm13 0v-2c0-1.6-.5-3.1-1.4-4.3.7-.4 1.5-.7 2.4-.7 2.8 0 5 2.2 5 5v2h-6Z"/></svg></span><div><strong th:text="${freelancerCount + customerCount}">0</strong><small>thành viên</small></div></article>
+        <article><span class="market-stat-icon green"><svg viewBox="0 0 24 24"><path d="M3 12 12 3h7l2 2v7l-9 9-9-9Zm13-4a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg></span><div><strong>10</strong><small>danh mục công việc</small></div></article>
+      </section>
+
+      <section class="market-home-grid">
+        <div class="market-card market-recommended-card">
+          <div class="market-card-head"><h3><span class="fire-dot">🔥</span> Dự án gợi ý cho bạn</h3><a th:href="@{/jobs}">Xem tất cả →</a></div>
+          <div class="market-recommended-list">
+            <article class="market-recommended-row" th:each="job : ${featuredJobs}">
+              <span class="market-job-icon" th:classappend="${job.category != null and #strings.contains(job.category,'Marketing')} ? ' orange' : (${job.category != null and #strings.contains(job.category,'Thiết kế')} ? ' green' : '')"><svg viewBox="0 0 24 24"><path d="M8 4V2h8v2h5v17H3V4h5Zm2 0h4V3h-4v1Zm-5 4h14V6H5v2Zm0 2v9h14v-9h-5v2h-4v-2H5Z"/></svg></span>
+              <div class="market-recommended-copy"><a th:href="@{/jobs/{id}(id=${job.id})}" th:text="${job.title}">Tên dự án</a><div><span th:text="${job.priceType == 'HOURLY' ? 'Dự án giá theo giờ' : 'Dự án giá cố định'}">Dự án giá cố định</span><span th:text="|${proposalCounts[job.id]} chào giá|">0 chào giá</span><span th:text="${job.deadline != null ? 'Đến ' + #temporals.format(job.deadline,'dd/MM/yyyy') : 'Không giới hạn'}">Đến 20/10/2026</span></div></div>
+              <div class="market-recommended-action"><strong th:text="${#numbers.formatDecimal(job.budget,0,'POINT',0,'COMMA')} + ' VND'">9.000.000 VND</strong><a th:href="@{/jobs/{id}(id=${job.id})}">Ứng tuyển</a></div>
+            </article>
+          </div>
+        </div>
+
+        <div class="market-side-promos">
+          <article class="market-promo market-promo-yellow"><h3><i class="fa-solid fa-gift"></i>Tạo tài khoản miễn phí</h3><p>Đăng ký để lưu công việc, gửi proposal hoặc đăng dự án tuyển Freelancer.</p><a th:href="@{/dashboard}">Vào bảng điều khiển →</a></article>
+          <article class="market-promo market-promo-dark"><h3><i class="fa-solid fa-lightbulb"></i>Mẹo hôm nay</h3><p>Hồ sơ có video giới thiệu 60s được thuê cao gấp 2.3 lần. Quay bằng điện thoại là đủ!</p></article>
+        </div>
+      </section>
+
+      <section class="market-card market-category-card">
+        <div class="market-card-head compact market-category-head"><div><h3>Danh mục công việc</h3><p>Khám phá nhanh các lĩnh vực đang có nhiều dự án trên TalentMatch</p></div></div>
+        <div class="market-category-pills">
+          <a th:href="@{/jobs(category='Hành chính & Nhân sự')}"><i class="fa-solid fa-building-user"></i> Hành chính & Nhân sự</a>
+          <a th:href="@{/jobs(category='Khác')}"><i class="fa-regular fa-paper-plane"></i> Khác</a>
+          <a th:href="@{/jobs(category='Kỹ thuật & Kiến trúc')}"><i class="fa-solid fa-compass-drafting"></i> Kỹ thuật & Kiến trúc</a>
+          <a th:href="@{/jobs(category='Luật & Pháp lý')}"><i class="fa-solid fa-scale-balanced"></i> Luật & Pháp lý</a>
+          <a th:href="@{/jobs(category='Lập trình & CNTT')}"><i class="fa-solid fa-code"></i> Lập trình & CNTT</a>
+          <a th:href="@{/jobs(category='Marketing')}"><i class="fa-solid fa-bullhorn"></i> Marketing & Bán hàng</a>
+          <a th:href="@{/jobs(category='Thiết kế & Sáng tạo')}"><i class="fa-solid fa-pen-ruler"></i> Thiết kế & Sáng tạo</a>
+          <a th:href="@{/jobs(category='Tài chính & Kế toán')}"><i class="fa-solid fa-chart-line"></i> Tài chính & Kế toán</a>
+          <a th:href="@{/jobs(category='Viết lách & Dịch thuật')}"><i class="fa-solid fa-language"></i> Viết lách & Dịch thuật</a>
+          <a th:href="@{/jobs(category='Đào tạo & Giáo dục')}"><i class="fa-solid fa-graduation-cap"></i> Đào tạo & Giáo dục</a>
+        </div>
+      </section>
+
+      <section class="market-card market-featured-freelancers">
+        <div class="market-card-head"><h3>Freelancer nổi bật</h3><a th:href="@{/freelancers}">Xem tất cả →</a></div>
+        <div class="market-freelancer-grid">
+          <a class="market-freelancer-mini" th:each="f : ${featuredFreelancers}" th:href="@{/freelancers/{id}(id=${f.id})}">
+            <div class="market-freelancer-top"><span class="market-avatar" th:text="${#strings.substring(f.fullName,0,1)}">F</span><div class="market-freelancer-identity"><strong th:text="${f.fullName}">Freelancer</strong><small th:text="${f.professionalTitle != null ? f.professionalTitle : 'Freelancer chuyên nghiệp'}">Freelancer chuyên nghiệp</small><span class="market-rating"><i class="fa-solid fa-star"></i><b th:text="${f.rating != null ? f.rating : 5.0}">4.9</b> · <span th:text="${f.completedProjects != null ? f.completedProjects : 0}">0</span> dự án hoàn thành</span></div></div>
+            <div class="market-freelancer-meta"><span><i class="fa-solid fa-location-dot"></i><b th:text="${f.location != null ? f.location : 'Việt Nam'}">Việt Nam</b></span><span><i class="fa-solid fa-briefcase"></i><b th:text="${f.experienceYears != null ? f.experienceYears : 0}">0</b> năm kinh nghiệm</span></div>
+            <p class="market-freelancer-skills" th:text="${f.skills != null ? f.skills : 'Kỹ năng đang được cập nhật'}">Kỹ năng đang được cập nhật</p>
+            <div class="market-freelancer-bottom"><strong th:if="${f.hourlyRate != null}" th:text="${#numbers.formatDecimal(f.hourlyRate,0,'POINT',0,'COMMA')} + ' VND/giờ'">250.000 VND/giờ</strong><strong th:unless="${f.hourlyRate != null}">Thỏa thuận theo dự án</strong><em>Xem hồ sơ <i class="fa-solid fa-arrow-right"></i></em></div>
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+</th:block>
+
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+/* V62 - trang chu Freelancer, thong so theo anh mau 22/10/2026 */
+.fm-dashboard{--tm-sidebar-width:230px!important;--fm-navy:#0B2A6F;--fm-blue:#2F6FED;color:#111827;background:#EEF3FC!important;font-family:Inter,Arial,sans-serif!important}
+.fm-dashboard .market-sidebar{width:230px!important;min-width:230px!important;max-width:230px!important;box-sizing:border-box!important}
+.fm-dashboard .market-side-nav a{font-size:15px!important;font-weight:700!important;color:#111827!important;min-height:43px!important}
+.fm-dashboard .market-side-nav a.active{background:#2F6FED!important;color:#fff!important}
+.fm-dashboard .fm-header{left:230px!important;right:0!important;height:64px!important;min-height:64px!important;padding:0 24px!important;gap:18px!important;box-sizing:border-box!important}
+.fm-dashboard .fm-header-search{height:40px!important;border-radius:9px!important;max-width:none!important}
+.fm-dashboard .fm-header-links a{color:#0B2A6F!important;font-weight:700!important}
+.fm-dashboard .fm-main{margin-left:230px!important;max-width:calc(100% - 230px)!important;padding-top:64px!important;background:#EEF3FC!important}
+.fm-dashboard .fm-content{box-sizing:border-box!important;width:100%!important;max-width:1920px!important;margin:auto!important;padding:16px 24px!important}
+/* Anh banner tu nguoi dung: 2048x384, dung ti le 5.333:1, khong cat anh */
+.fm-dashboard .fm-hero-reference{position:relative!important;width:100%!important;height:auto!important;max-height:none!important;min-height:0!important;aspect-ratio:2048/384!important;border:0!important;border-radius:14px!important;overflow:hidden!important;box-shadow:0 5px 16px #2563eb14!important}
+.fm-dashboard .fm-reference-banner{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;display:block!important;object-fit:fill!important;max-width:none!important}
+.fm-dashboard .fm-banner-action{position:absolute!important;z-index:6!important;left:6.35%!important;top:73.4%!important;width:13.55%!important;height:16.5%!important;border-radius:9px!important}
+.fm-dashboard .fm-banner-action:focus-visible{outline:3px solid #F59E0B!important;outline-offset:3px!important}
+.fm-dashboard .fm-metrics{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important;margin:16px 0!important}
+.fm-dashboard .fm-metrics article{box-sizing:border-box!important;min-width:0!important;min-height:92px!important;padding:14px 16px!important;border-radius:12px!important}
+.fm-dashboard .fm-metrics strong{font-size:26px!important;font-weight:800!important;line-height:1.15!important;color:#0B2A6F!important;overflow-wrap:anywhere}
+.fm-dashboard .fm-metrics small{font-size:13px!important;color:#64748B!important}
+.fm-dashboard .fm-primary-grid{display:grid!important;grid-template-columns:minmax(0,62fr) minmax(0,36fr)!important;gap:16px!important;align-items:stretch!important;margin-bottom:16px!important}
+.fm-dashboard .fm-panel{background:#fff!important;border:1px solid #DFE8F6!important;border-radius:12px!important;box-shadow:0 2px 9px #0B2A6F0a!important;min-width:0!important}
+.fm-dashboard .fm-panel-head h2{font-size:20px!important;font-weight:700!important;color:#0B2A6F!important;line-height:1.3!important}
+.fm-dashboard .fm-panel-head a{font-size:13px!important;color:#2F6FED!important}
+.fm-dashboard .fm-job{min-height:62px!important;gap:12px!important;padding:8px 2px!important}
+.fm-dashboard .fm-job-info{min-width:0!important}
+.fm-dashboard .fm-job-info>a{font-size:16px!important;font-weight:700!important;color:#111827!important}
+.fm-dashboard .fm-job-info small{font-size:13px!important;color:#64748B!important}
+.fm-dashboard .fm-job-right b{font-size:18px!important;font-weight:800!important;color:#DC2626!important;white-space:nowrap!important}
+.fm-dashboard .fm-job-right small{font-size:12px!important;color:#64748B!important}
+.fm-dashboard .fm-apply{background:#2F6FED!important;color:#fff!important;font-weight:700!important;border-radius:7px!important}
+.fm-dashboard .fm-apply:hover{background:#1958D9!important}
+.fm-dashboard .fm-profile-score strong{font-size:16px!important;color:#111827!important}
+.fm-dashboard .fm-profile-score p{font-size:15px!important;color:#333B4A!important}
+.fm-dashboard .fm-checklist li{font-size:15px!important;color:#333B4A!important}
+.fm-dashboard .fm-three-column-row{display:grid!important;grid-template-columns:1.1fr 1.1fr 1fr!important;gap:16px!important;margin-bottom:16px!important;align-items:stretch!important}
+.fm-dashboard .fm-three-column-row .fm-overview-grid{display:contents!important}
+.fm-dashboard .fm-three-column-row .fm-recent-section{grid-column:auto!important;grid-row:auto!important;margin:0!important}
+.fm-dashboard .fm-fast-metrics{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.fm-dashboard .fm-fast-metrics strong{font-size:26px!important;font-weight:800!important;color:#0B2A6F!important}
+.fm-dashboard .fm-fast-metrics small{font-size:13px!important;color:#64748B!important}
+.fm-dashboard .fm-bottom-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:16px!important;margin:0!important}
+.fm-dashboard .fm-account-dropdown{z-index:2000!important}
+/* Footer theo kich thuoc mau, khong an cac thanh phan */
+.fm-dashboard .fm-footer{box-sizing:border-box!important;margin-top:16px!important;min-height:180px!important;padding:24px 32px 12px!important;background:#0B2050!important;color:#fff!important}
+.fm-dashboard .fm-footer-top{gap:18px!important}
+.fm-dashboard .fm-footer-top h3{color:#fff!important}
+.fm-dashboard .fm-footer-line{margin-top:16px!important}
+@media(min-width:1451px){.fm-dashboard .fm-header-links{display:flex!important}}
+@media(max-width:1450px){.fm-dashboard .fm-header-links{display:none!important}}
+@media(max-width:1180px){.fm-dashboard .fm-primary-grid{grid-template-columns:1.35fr 1fr!important}.fm-dashboard .fm-three-column-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}.fm-dashboard .fm-three-column-row .fm-recent-section{grid-column:1/-1!important}}
+@media(max-width:900px){.fm-dashboard .market-sidebar{display:none!important}.fm-dashboard .fm-header{left:0!important}.fm-dashboard .fm-main{margin-left:0!important;max-width:100%!important}.fm-dashboard .fm-primary-grid,.fm-dashboard .fm-bottom-grid,.fm-dashboard .fm-three-column-row{grid-template-columns:1fr!important}.fm-dashboard .fm-three-column-row .fm-recent-section{grid-column:auto!important}.fm-dashboard .fm-content{padding:14px!important}}
+@media(max-width:600px){.fm-dashboard .fm-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}.fm-dashboard .fm-metrics strong{font-size:21px!important}.fm-dashboard .fm-panel-head h2{font-size:18px!important}.fm-dashboard .fm-job{flex-wrap:wrap!important}.fm-dashboard .fm-footer{padding:22px 16px 12px!important}}

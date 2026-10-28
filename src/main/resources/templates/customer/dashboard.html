@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/common :: head('Trang chủ doanh nghiệp')}"></head>
-<body class="tmc49">
+<body class="market-body client-workspace client-v52-page tmc49 cd-dashboard">
 <link rel="stylesheet" th:href="@{/css/customer-dashboard-v49.css}">
-<aside class="tmc49-sidebar">
+<link rel="stylesheet" th:href="@{/css/client-unified-v53.css}">
+<link rel="stylesheet" th:href="@{/css/customer-dashboard-matched-v54.css}">
+<link rel="stylesheet" th:href="@{/css/customer-reference-v70.css}">
+<link rel="stylesheet" th:href="@{/css/customer-reference-v71.css}">
+<link rel="stylesheet" th:href="@{/css/customer-footer-banner-v72.css(v=72)}">
+<aside th:replace="~{fragments/common :: marketSidebar('dashboard')}"></aside>
+<!-- legacy dashboard sidebar replaced by shared Client navigation -->
+<!-- <aside class="tmc49-sidebar">
   <a class="tmc49-logo" th:href="@{/customer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><b>TalentMatch</b><small>FREELANCE MARKETPLACE</small></span></a>
   <a class="tmc49-company" th:href="@{/customer/profile}"><span class="tmc49-avatar" th:text="${companyInitial}">C</span><span><b th:text="${companyDisplayName}">Công ty</b><small>Doanh nghiệp</small></span><i class="fa-solid fa-chevron-down"></i></a>
   <nav class="tmc49-menu" aria-label="Menu doanh nghiệp">
@@ -26,44 +33,96 @@
     <a th:href="@{/customer/profile}"><i class="fa-solid fa-gear"></i>Cài đặt</a>
   </nav>
   <a class="tmc49-market" th:href="@{/}"><i class="fa-solid fa-house"></i>Quay về Marketplace</a>
-</aside>
-<header class="tmc49-header">
+</aside> -->
+<header class="cd-header">
+  <a class="cd-brand" th:href="@{/customer/dashboard}">
+    <span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span>
+  </a>
+  <form class="cd-header-search" th:action="@{/freelancers}" method="get">
+    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+    <input name="q" aria-label="Tìm freelancer" placeholder="Tìm freelancer, kỹ năng, chuyên môn...">
+    <button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button>
+  </form>
+  <nav class="cd-header-links" aria-label="Điều hướng nhanh">
+    <a th:href="@{/freelancers}">Tìm Freelancer</a>
+    <a th:href="@{/customer/jobs/new}">Đăng dự án</a>
+    <a th:href="@{/#pricing}">Bảng giá</a>
+    <a th:href="@{/#how}">Cách hoạt động</a>
+  </nav>
+  <div class="cd-header-user">
+    <a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i></a>
+    <a th:href="@{/customer/profile}" class="cd-mini-avatar" th:text="${companyInitial}">C</a>
+    <span th:text="${companyDisplayName}">Doanh nghiệp</span>
+  </div>
+</header>
+<!-- <header class="tmc49-header">
   <form th:action="@{/freelancers}" method="get" class="tmc49-search"><i class="fa-solid fa-magnifying-glass"></i><input name="q" placeholder="Tìm freelancer, kỹ năng, dự án, dịch vụ..." aria-label="Tìm kiếm Freelancer"><button aria-label="Tìm kiếm" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button></form>
   <nav><a th:href="@{/freelancers}">Tìm freelancer</a><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/#pricing}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a></nav>
   <div class="tmc49-account"><a aria-label="Thông báo" th:href="@{/notifications}"><i class="fa-regular fa-bell"></i></a><a aria-label="Tin nhắn" th:href="@{/customer/messages}"><i class="fa-regular fa-message"></i></a><a th:href="@{/customer/profile}" class="tmc49-user"><span class="tmc49-avatar small" th:text="${companyInitial}">C</span><span><b th:text="${companyDisplayName}">Công ty</b><small>Doanh nghiệp</small></span><i class="fa-solid fa-chevron-down"></i></a></div>
-</header>
+</header> -->
 <div th:replace="~{fragments/common :: flash}"></div>
-<main class="tmc49-main">
- <section class="tmc49-hero">
-   <div class="tmc49-hero-left"><h1>Chào mừng trở lại,<br><span th:text="${companyDisplayName}">Doanh nghiệp</span>! 👋</h1><p>Đăng dự án ngay hôm nay để tìm đúng freelancer,<br> hoàn thành công việc hiệu quả và tối ưu chi phí.</p><div class="tmc49-hero-actions"><a class="primary" th:href="@{/customer/jobs/new}"><i class="fa-solid fa-plus"></i>Đăng dự án mới</a><a class="outline" th:href="@{/customer/talent}">Tìm freelancer phù hợp</a></div></div>
-   <div class="tmc49-hero-image" role="img" aria-label="Doanh nhân sử dụng laptop"><div class="tmc49-bubble first"><i class="fa-solid fa-user"></i><span>Tiếp cận<br>hàng nghìn freelancer<br>chất lượng</span></div><div class="tmc49-bubble second"><i class="fa-solid fa-layer-group"></i><span>Đăng ký kỹ năng<br>và lĩnh vực</span></div><div class="tmc49-bubble third"><i class="fa-solid fa-chart-column"></i><span>Quản lý dự án<br>đơn giản, hiệu quả</span></div></div>
- </section>
- <section class="tmc49-stats" aria-label="Chỉ số tổng quan">
-   <a th:href="@{/customer/jobs}" class="tmc49-stat blue"><i class="fa-regular fa-file-lines"></i><div><span>Tổng dự án đã đăng</span><strong th:text="${stats.jobs}">0</strong><small>Quản lý tin đã đăng</small></div></a>
-   <a th:href="@{/customer/applicants}" class="tmc49-stat violet"><i class="fa-solid fa-users"></i><div><span>Tổng ứng viên</span><strong th:text="${applicantTotal}">0</strong><small>Đã nộp hồ sơ</small></div></a>
-   <a th:href="@{/customer/projects}" class="tmc49-stat green"><i class="fa-solid fa-circle-check"></i><div><span>Đang thực hiện</span><strong th:text="${stats.activeProjects}">0</strong><small>Dự án</small></div></a>
-   <a th:href="@{/customer/projects}" class="tmc49-stat amber"><i class="fa-solid fa-flag"></i><div><span>Đã hoàn thành</span><strong th:text="${stats.completedProjects}">0</strong><small>Dự án</small></div></a>
-   <a th:href="@{/customer/history}" class="tmc49-stat pink"><i class="fa-solid fa-wallet"></i><div><span>Tổng chi phí</span><strong class="tmc49-money" th:text="${#numbers.formatDecimal(stats.cost,0,'POINT',0,'COMMA')} + 'đ'">0đ</strong><small>Đã thanh toán</small></div></a>
- </section>
- <div class="tmc49-grid">
-   <div class="tmc49-left">
-     <section class="tmc49-panel"><h2><i class="fa-solid fa-bolt"></i>Thao tác nhanh</h2><div class="tmc49-quick">
-       <a th:href="@{/customer/jobs/new}"><i class="fa-regular fa-file-lines"></i><b>Đăng dự án mới</b><span>Tìm freelancer phù hợp</span></a>
-       <a th:href="@{/customer/talent}"><i class="fa-solid fa-users"></i><b>Tìm freelancer</b><span>Khám phá hồ sơ</span></a>
-       <a th:href="@{/customer/projects}"><i class="fa-solid fa-wallet"></i><b>Quản lý dự án</b><span>Theo dõi tiến độ</span></a>
-       <a th:href="@{/customer/history}"><i class="fa-regular fa-credit-card"></i><b>Thanh toán</b><span>Quản lý giao dịch</span></a>
-     </div></section>
-     <div class="tmc49-chartrow">
-       <section class="tmc49-panel"><div class="tmc49-panel-head"><h2><i class="fa-solid fa-chart-column"></i>Thống kê dự án theo thời gian</h2><a th:href="@{/customer/dashboard(from=${from},to=${to},metric='projects',pieMode=${pieMode})}">Số dự án</a></div><form class="tmc49-datefilter" th:action="@{/customer/dashboard}" method="get"><input type="date" name="from" th:value="${from}" aria-label="Từ ngày"><input type="date" name="to" th:value="${to}" aria-label="Đến ngày"><select name="metric" aria-label="Chỉ số"><option value="projects" th:selected="${metric=='projects'}">Số dự án</option><option value="revenue" th:selected="${metric=='revenue'}">Chi phí</option></select><button type="submit">Xem</button></form><div class="tmc49-bars"><div th:each="point : ${barData}"><b th:text="${metric=='revenue' ? #numbers.formatDecimal(point.value,0,'POINT',0,'COMMA') : #numbers.formatDecimal(point.value,0,'POINT',0,'COMMA')}">0</b><i th:style="|height:${(point.value / barMax) * 116 + 4}px|"></i><small th:text="${point.label}">T1</small></div></div></section>
-       <section class="tmc49-panel"><div class="tmc49-panel-head"><h2><i class="fa-solid fa-chart-pie"></i>Cơ cấu dự án</h2><form th:action="@{/customer/dashboard}" method="get"><select name="pieMode" onchange="this.form.submit()"><option value="status" th:selected="${pieMode=='status'}">Trạng thái</option><option value="category" th:selected="${pieMode=='category'}">Lĩnh vực</option></select></form></div><div class="tmc49-pierow"><div class="tmc49-donut" th:style="|background:${pieGradient}|"><span th:text="${stats.activeProjects + stats.completedProjects}">0</span></div><div class="tmc49-legend"><p th:if="${#lists.isEmpty(pieData)}">Chưa có dữ liệu phù hợp.</p><p th:each="slice : ${pieData}"><span th:text="${slice.label}">Dự án</span><b th:text="${#numbers.formatDecimal(slice.percent,1,1)} + '%'">0%</b></p></div></div></section>
-     </div>
-     <section class="tmc49-panel"><div class="tmc49-panel-head"><h2><i class="fa-solid fa-user-group"></i>Freelancer dành cho bạn</h2><a th:href="@{/customer/talent}">Xem tất cả →</a></div><p class="tmc49-freelancers-empty">Khám phá và lọc Freelancer theo kỹ năng, kinh nghiệm và lĩnh vực chuyên môn.</p><a class="tmc49-softbtn" th:href="@{/customer/talent}">Tìm Freelancer phù hợp <i class="fa-solid fa-arrow-right"></i></a></section>
-   </div>
-   <div class="tmc49-right">
-     <section class="tmc49-panel"><div class="tmc49-panel-head"><h2><i class="fa-regular fa-clipboard"></i>Dự án gần đây</h2><a th:href="@{/customer/jobs}">Xem tất cả →</a></div><a th:each="job : ${jobs}" class="tmc49-jobrow" th:href="@{/customer/jobs/{id}/applicants(id=${job.id})}"><span class="tmc49-jobicon"><i class="fa-regular fa-file-lines"></i></span><span><b th:text="${job.title}">Dự án</b><small th:text="|${job.category} · ${jobApplicantCounts[job.id]} ứng viên|">Dự án</small></span><em th:text="${job.status}">OPEN</em></a><p th:if="${#lists.isEmpty(jobs)}" class="tmc49-empty">Chưa có dự án. <a th:href="@{/customer/jobs/new}">Đăng dự án đầu tiên</a></p></section>
-     <section class="tmc49-panel"><div class="tmc49-panel-head"><h2><i class="fa-regular fa-lightbulb"></i>Bài viết &amp; Mẹo tuyển dụng</h2></div><a th:href="@{/customer/community}" class="tmc49-tip"><i class="fa-regular fa-circle-question"></i>Hỏi đáp về tuyển dụng freelancer</a><a th:href="@{/customer/applicants}" class="tmc49-tip"><i class="fa-solid fa-list-check"></i>Hướng dẫn chọn ứng viên phù hợp</a><a th:href="@{/customer/projects}" class="tmc49-tip"><i class="fa-regular fa-handshake"></i>Quy trình làm việc với Freelancer</a></section>
-   </div>
+<main class="market-main client-main tmc49-main"><div class="client-shell tmc49-shell client-reference-v70">
+<section class="cr-hero cr-hero-image" aria-label="TalentMatch - Tìm đúng người cho dự án của bạn">
+ <a th:href="@{/customer/jobs/new}" class="cr-banner-hit" aria-label="Đăng dự án ngay"></a>
+</section>
+<section class="cr-kpis">
+ <a class="cr-kpi" th:href="@{/customer/jobs}"><span class="cr-ico purple"><i class="fa-solid fa-briefcase"></i></span><div><strong th:text="${stats.jobs}">0</strong><small>Dự án đã đăng</small></div></a>
+ <a class="cr-kpi" th:href="@{/customer/applicants}"><span class="cr-ico blue"><i class="fa-solid fa-users"></i></span><div><strong th:text="${applicantTotal}">0</strong><small>Hồ sơ ứng tuyển</small></div></a>
+ <a class="cr-kpi" th:href="@{/customer/projects}"><span class="cr-ico green"><i class="fa-solid fa-circle-check"></i></span><div><strong th:text="${stats.completedProjects}">0</strong><small>Dự án hoàn thành</small></div></a>
+ <a class="cr-kpi" th:href="@{/customer/history}"><span class="cr-ico orange"><i class="fa-solid fa-wallet"></i></span><div><strong th:text="${#numbers.formatDecimal(stats.cost,0,'POINT',0,'COMMA')} + 'đ'">0đ</strong><small>Tổng chi phí thanh toán</small></div></a>
+</section>
+
+<section class="cr-panel cr-card-section">
+ <div class="cr-heading"><h2><i class="fa-solid fa-fire-flame-curved"></i> Dự án đang tuyển freelancer</h2><a th:href="@{/customer/jobs}">Xem tất cả →</a></div>
+ <p class="cr-sub">Quản lý các dự án đang mở và xem số lượng ứng tuyển mới nhất.</p>
+ <div class="cr-job-cards">
+  <a class="cr-job-card" th:each="job,iter : ${jobs}" th:if="${iter.index < 4}" th:href="@{/customer/jobs/{id}/applicants(id=${job.id})}">
+    <div class="cr-job-cover"><img th:src="@{/images/{n}(n=${'fm-job-thumb-'+ ((iter.index % 5) + 1) + '.svg'})}" alt="Hình minh họa dự án"><span class="cr-match-tag">Đang tuyển</span></div>
+    <div class="cr-job-details"><strong th:text="${job.title}">Tên dự án</strong><div class="cr-tags"><span th:text="${job.category}">Lĩnh vực</span><span th:if="${job.workType!=null}" th:text="${job.workType}">Remote</span></div>
+    <b class="cr-job-budget" th:text="${job.budget!=null ? #numbers.formatDecimal(job.budget,0,'POINT',0,'COMMA')+'đ' : 'Thỏa thuận'}">0đ</b>
+    <div class="cr-job-meta"><small><i class="fa-solid fa-users"></i> <span th:text="${jobApplicantCounts[job.id]}">0</span> ứng tuyển</small><small th:if="${job.deadline!=null}"><i class="fa-regular fa-clock"></i> Hạn <span th:text="${#temporals.format(job.deadline,'dd/MM/yyyy')}">--</span></small></div>
+    <span class="cr-job-button">Xem hồ sơ <i class="fa-solid fa-arrow-right"></i></span></div>
+  </a>
  </div>
- <footer class="tmc49-footer"><div><a th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch">TalentMatch</a><small>Kết nối nhân tài · Kiến tạo giá trị</small></div><div><strong>Về chúng tôi</strong><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a></div><div><strong>Dành cho doanh nghiệp</strong><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a></div><div><strong>Hỗ trợ</strong><a th:href="@{/customer/community}">Hỏi đáp</a><a th:href="@{/customer/profile}">Tài khoản</a></div></footer>
-</main><script th:replace="~{fragments/common :: scripts}"></script>
+ <p th:if="${#lists.isEmpty(jobs)}" class="cr-empty">Chưa có dự án đang tuyển. <a th:href="@{/customer/jobs/new}">Đăng dự án mới →</a></p>
+</section>
+<section class="cr-panel cr-ongoing">
+ <div class="cr-heading"><h2><i class="fa-solid fa-briefcase"></i> Dự án đang thực hiện</h2><a th:href="@{/customer/projects}">Xem tất cả →</a></div>
+ <p class="cr-sub">Theo dõi tiến độ và quản lý các dự án đang triển khai.</p>
+ <div class="cr-active-list">
+  <a class="cr-active-item" th:each="project,iter : ${projects}" th:if="${iter.index < 3}" th:href="@{/customer/projects}">
+    <span class="cr-active-thumb"><i class="fa-solid fa-folder-open"></i></span><span class="cr-active-title"><strong th:text="${project.application != null and project.application.job != null ? project.application.job.title : 'Dự án đang thực hiện'}">Dự án</strong><small>Quản lý và theo dõi tiến độ</small></span><span class="cr-active-track"><span></span></span><span class="cr-active-status">Đang thực hiện</span><span class="cr-active-button">Xem chi tiết →</span>
+  </a>
+  <p class="cr-empty" th:if="${#lists.isEmpty(projects)}">Chưa có dự án đang thực hiện. <a th:href="@{/customer/projects}">Xem danh sách dự án</a></p>
+ </div>
+</section>
+<div class="cr-middle-grid">
+ <section class="cr-panel cr-report cr-cost-report"><div class="cr-heading"><h2><i class="fa-solid fa-chart-column"></i> Thống kê chi phí</h2><a th:href="@{/customer/dashboard(metric='revenue')}">Xem chi tiết →</a></div>
+ <p class="cr-sub">Dữ liệu theo thời gian từ hệ thống</p><div class="cr-bars"><div th:each="point : ${barData}" class="cr-bar"><div class="cr-bar-track"><span th:style="|height:${(point.value / barMax) * 100}%|"></span></div><small th:text="${point.label}">T1</small></div></div><div class="cr-chart-footer"><span class="cr-dot"></span><span th:text="${metric=='revenue' ? 'Chi phí (VND)' : 'Số dự án'}">Số dự án</span><a th:href="@{/customer/dashboard(metric='revenue')}">Xem chi phí →</a></div></section>
+ <section class="cr-panel cr-activity-panel"><div class="cr-heading"><h2><i class="fa-solid fa-bell"></i> Hoạt động gần đây</h2><a th:href="@{/customer/applicants}">Xem tất cả →</a></div>
+  <a class="cr-activity" th:href="@{/customer/applicants}"><span class="cr-ico blue"><i class="fa-solid fa-users"></i></span><div><b>Hồ sơ ứng tuyển mới</b><small><span th:text="${applicantTotal}">0</span> hồ sơ đã ứng tuyển vào dự án của bạn</small></div></a>
+  <a class="cr-activity" th:href="@{/customer/projects}"><span class="cr-ico green"><i class="fa-solid fa-shield-halved"></i></span><div><b>Dự án đang thực hiện</b><small><span th:text="${stats.activeProjects}">0</span> dự án đang theo dõi</small></div></a>
+  <a class="cr-activity" th:href="@{/customer/messages}"><span class="cr-ico purple"><i class="fa-solid fa-comment-dots"></i></span><div><b>Tin nhắn của freelancer</b><small>Kiểm tra và phản hồi tin nhắn</small></div></a>
+  <a class="cr-activity" th:href="@{/customer/history}"><span class="cr-ico orange"><i class="fa-solid fa-wallet"></i></span><div><b>Lịch sử thanh toán</b><small>Xem các khoản chi và giao dịch</small></div></a>
+ </section>
+</div>
+<section class="cr-panel cr-freelancers"><div class="cr-heading"><h2><i class="fa-solid fa-user-group"></i> Freelancer gợi ý cho bạn</h2><a th:href="@{/customer/talent}">Xem tất cả →</a></div><p class="cr-sub">Tìm nhân sự phù hợp với nhu cầu và lĩnh vực dự án.</p>
+ <div class="cr-talent-grid"><a th:href="@{/customer/talent(q='UI/UX')}" class="cr-talent"><span class="cr-talent-avatar"><i class="fa-solid fa-palette"></i></span><strong>Thiết kế UI/UX</strong><small>Figma · Web Design</small><span>Xem Freelancer →</span></a><a th:href="@{/customer/talent(q='Developer')}" class="cr-talent"><span class="cr-talent-avatar"><i class="fa-solid fa-code"></i></span><strong>Lập trình viên</strong><small>Web · Mobile App</small><span>Xem Freelancer →</span></a><a th:href="@{/customer/talent(q='Data')}" class="cr-talent"><span class="cr-talent-avatar"><i class="fa-solid fa-chart-line"></i></span><strong>Phân tích dữ liệu</strong><small>Excel · Dashboard</small><span>Xem Freelancer →</span></a><a th:href="@{/customer/talent(q='Content')}" class="cr-talent"><span class="cr-talent-avatar"><i class="fa-solid fa-pen-nib"></i></span><strong>Content Marketing</strong><small>SEO · Writing</small><span>Xem Freelancer →</span></a></div>
+</section>
+<section class="cr-panel cr-journey"><div class="cr-heading"><h2><i class="fa-solid fa-list-check"></i> Cách TalentMatch hoạt động</h2><a th:href="@{/customer/jobs/new}">Xem chi tiết →</a></div><p class="cr-sub">Chỉ với 4 bước đơn giản để tìm được freelancer phù hợp.</p><div class="cr-steps"><a th:href="@{/customer/jobs/new}"><b>1</b><span><strong>Đăng dự án</strong><small>Mô tả nhu cầu, ngân sách và thời gian</small></span></a><a th:href="@{/customer/applicants}"><b>2</b><span><strong>Nhận hồ sơ</strong><small>Xem và đánh giá các đề xuất</small></span></a><a th:href="@{/customer/talent}"><b>3</b><span><strong>Chọn freelancer</strong><small>Trao đổi và lựa chọn nhân sự</small></span></a><a th:href="@{/customer/projects}"><b>4</b><span><strong>Quản lý & thanh toán</strong><small>Theo dõi tiến độ và chi phí</small></span></a></div></section>
+<footer class="fm-footer client-same-footer">
+  <div class="fm-footer-top">
+    <div class="fm-footer-intro">
+      <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+      <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
+      <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span></div>
+    </div>
+    <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a></div>
+    <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/freelancers}">Khám phá Freelancer</a></div>
+    <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a></div>
+    <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a></div>
+  </div>
+  <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
+</footer>
+</div></main><script th:replace="~{fragments/common :: scripts}"></script>
 </body></html>

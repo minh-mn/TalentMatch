@@ -4,6 +4,8 @@
 <body class="market-body fm-dashboard tm-saved-v37">
 <link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
 <link rel="stylesheet" th:href="@{/css/freelancer-saved-v37.css}">
+<link rel="stylesheet" th:href="@{/css/freelancer-saved-v79.css}">
+<link rel="stylesheet" th:href="@{/css/freelancer-banners-spacing-v82.css?v=82}">
 <aside th:replace="~{fragments/common :: marketSidebar('saved')}"></aside>
 <header class="fm-header">
   <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
@@ -15,7 +17,7 @@
 <main class="fm-main">
 <div class="tm37-content">
   <section class="tm37-banner" aria-label="Việc quan tâm">
-    <img th:src="@{/images/talentmatch-saved-banner.png}" alt="Những công việc bạn đã quan tâm">
+    <img th:src="@{/images/talentmatch-saved-banner-v79.png}" alt="Những công việc bạn đã quan tâm">
   </section>
   <section class="tm37-layout">
     <div class="tm37-maincol">
@@ -27,17 +29,28 @@
       </form>
       <div class="tm37-count">Có <strong th:text="${totalJobs}">0</strong> dự án đã lưu <span th:if="${totalPages > 1}" th:text="|· Trang ${currentPage}/${totalPages}|"></span></div>
       <section class="tm37-cards">
-        <article class="tm37-card" th:each="s : ${savedJobs}">
-          <div class="tm37-type"><i th:class="${s.job.category != null and s.job.category.contains('Lập trình') ? 'fa-solid fa-code' : (s.job.category != null and s.job.category.contains('Thiết kế') ? 'fa-solid fa-palette' : 'fa-solid fa-briefcase')}"></i></div>
+        <article class="tm37-card" th:each="s, stat : ${savedJobs}">
+          <div class="tm79-thumbnail">
+            <img th:src="@{/images/{name}(name=${'fm-job-thumb-' + ((stat.index % 5) + 1) + '.svg'})}" alt="Ảnh minh họa dự án">
+            <span class="tm79-image-tag"><i class="fa-solid fa-briefcase"></i> Đã lưu</span>
+          </div>
           <div class="tm37-info">
-            <span class="tm37-category" th:text="${s.job.category}">Danh mục</span>
             <h2><a th:href="@{/jobs/{id}(id=${s.job.id})}" th:text="${s.job.title}">Tên dự án</a></h2>
-            <p class="tm37-client"><i class="fa-regular fa-user"></i> <span th:text="${s.job.customer.companyName != null and !#strings.isEmpty(s.job.customer.companyName) ? s.job.customer.companyName : s.job.customer.fullName}">Doanh nghiệp</span><span th:if="${s.job.createdAt != null}"> · Đăng <span th:text="${#temporals.format(s.job.createdAt,'dd/MM/yyyy')}"></span></span></p>
-            <p class="tm37-description" th:text="${#strings.abbreviate(s.job.description == null ? '' : s.job.description, 135)}">Mô tả</p>
+            <p class="tm37-client"><i class="fa-solid fa-circle-user"></i> <span th:text="${s.job.customer.companyName != null and !#strings.isEmpty(s.job.customer.companyName) ? s.job.customer.companyName : s.job.customer.fullName}">Doanh nghiệp</span><span th:if="${s.job.createdAt != null}"> · Đăng <span th:text="${#temporals.format(s.job.createdAt,'dd/MM/yyyy')}"></span></span></p>
+            <p class="tm37-description" th:text="${#strings.abbreviate(s.job.description == null ? '' : s.job.description, 165)}">Mô tả</p>
             <div class="tm37-tags" th:if="${s.job.requiredSkills != null and !#strings.isEmpty(s.job.requiredSkills)}"><span th:each="k,st : ${#strings.arraySplit(s.job.requiredSkills, ',')}" th:if="${st.index < 4}" th:text="${#strings.trim(k)}">Kỹ năng</span></div>
           </div>
-          <div class="tm37-cost"><strong th:text="${s.job.budget == null ? 'Thỏa thuận' : #numbers.formatDecimal(s.job.budget,0,'POINT',0,'COMMA') + 'đ'}">0đ</strong><small><i class="fa-regular fa-clock"></i> <span th:text="${s.job.estimatedDurationDays == null ? 'Linh hoạt' : s.job.estimatedDurationDays + ' ngày'}">7 ngày</span></small><small><i class="fa-solid fa-location-dot"></i> <span th:text="${s.job.workType}">Remote</span></small></div>
-          <div class="tm37-actions"><form th:action="@{/freelancer/saved-jobs/{id}/remove(id=${s.job.id})}" method="post"><button class="tm37-unsave" type="submit" title="Bỏ lưu" aria-label="Bỏ lưu dự án"><i class="fa-solid fa-bookmark"></i></button></form><a class="tm37-apply" th:href="@{/jobs/{id}(id=${s.job.id})}">Ứng tuyển</a><a class="tm37-detail" th:href="@{/jobs/{id}(id=${s.job.id})}">Xem chi tiết</a></div>
+          <div class="tm37-cost">
+            <strong th:text="${s.job.budget == null ? 'Thỏa thuận' : #numbers.formatDecimal(s.job.budget,0,'POINT',0,'COMMA') + 'đ'}">0đ</strong>
+            <small><i class="fa-regular fa-clock"></i> <span th:text="${s.job.estimatedDurationDays == null ? 'Linh hoạt' : s.job.estimatedDurationDays + ' ngày'}">Linh hoạt</span></small>
+            <small><i class="fa-solid fa-location-dot"></i> <span th:text="${s.job.workType}">REMOTE</span></small>
+            <small th:if="${s.job.createdAt != null}"><i class="fa-regular fa-calendar"></i> Đã đăng <span th:text="${#temporals.format(s.job.createdAt,'dd/MM/yyyy')}"></span></small>
+          </div>
+          <div class="tm37-actions">
+            <form th:action="@{/freelancer/saved-jobs/{id}/remove(id=${s.job.id})}" method="post"><button class="tm37-unsave" type="submit" title="Bỏ lưu dự án" aria-label="Bỏ lưu dự án"><i class="fa-solid fa-bookmark"></i></button></form>
+            <a class="tm37-apply" th:href="@{/jobs/{id}(id=${s.job.id})}">Ứng tuyển <i class="fa-solid fa-arrow-right"></i></a>
+            <a class="tm37-detail" th:href="@{/jobs/{id}(id=${s.job.id})}">Xem chi tiết</a>
+          </div>
         </article>
         <div class="tm37-empty" th:if="${#lists.isEmpty(savedJobs)}"><i class="fa-regular fa-heart"></i><h2>Không tìm thấy công việc đã lưu</h2><p>Thử đổi điều kiện tìm kiếm hoặc lưu thêm dự án phù hợp.</p><a th:href="@{/jobs}">Khám phá dự án</a></div>
       </section>

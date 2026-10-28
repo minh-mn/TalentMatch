@@ -1,0 +1,38 @@
+/* V79 - Chi phan noi dung viec quan tam; khong thay sidebar va footer */
+.tm-saved-v37 .tm37-content{max-width:none;padding:14px 18px 20px}
+.tm-saved-v37 .tm37-banner{height:auto;aspect-ratio:2048 / 384;border:0;border-radius:13px;margin-bottom:14px;box-shadow:none;background:#d7ecff}
+.tm-saved-v37 .tm37-banner img{width:100%;height:100%;object-fit:contain;display:block}
+.tm-saved-v37 .tm37-layout{grid-template-columns:minmax(0,1fr) 260px;gap:16px;align-items:start}
+.tm-saved-v37 .tm37-maincol{min-width:0}
+.tm-saved-v37 .tm37-search{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:0 0 12px}
+.tm-saved-v37 .tm37-search label{height:42px;min-width:220px;flex:1 1 260px;background:#fff}
+.tm-saved-v37 .tm37-search button{height:42px;min-width:104px;font-weight:700}
+.tm-saved-v37 .tm37-search>span{margin-left:auto;font-size:13px;font-weight:600}
+.tm-saved-v37 .tm37-search select{height:42px}
+.tm-saved-v37 .tm37-count{font-size:13px;margin:0 0 9px}
+.tm-saved-v37 .tm37-cards{gap:11px}
+.tm-saved-v37 .tm37-card{display:grid;grid-template-columns:140px minmax(0,1fr) 128px 118px;align-items:center;gap:13px;min-height:132px;padding:11px 12px;border-radius:11px}
+.tm-saved-v37 .tm79-thumbnail{height:107px;position:relative;overflow:hidden;border-radius:8px;background:#eaf2ff}
+.tm-saved-v37 .tm79-thumbnail img{width:100%;height:100%;object-fit:cover;display:block}
+.tm-saved-v37 .tm79-image-tag{position:absolute;top:7px;left:6px;background:#0b5bbe;color:#fff;padding:4px 6px;border-radius:5px;font-size:10px;font-weight:750}
+.tm-saved-v37 .tm37-info h2{font-size:16px;line-height:1.3;margin:0 0 5px;font-weight:800}
+.tm-saved-v37 .tm37-client{font-size:12px;margin:0 0 5px;color:#617bb1}
+.tm-saved-v37 .tm37-client i{color:#7943e9}
+.tm-saved-v37 .tm37-description{font-size:12px;white-space:normal;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:0 0 6px}
+.tm-saved-v37 .tm37-tags{gap:5px}
+.tm-saved-v37 .tm37-tags span{font-size:11px;padding:4px 7px}
+.tm-saved-v37 .tm37-cost{border-left:1px solid #e2eafa;min-height:100px;padding:3px 0 3px 12px;gap:8px;justify-content:center}
+.tm-saved-v37 .tm37-cost strong{font-size:17px;color:#dc2626;font-weight:800;white-space:nowrap}
+.tm-saved-v37 .tm37-cost small{font-size:11px;white-space:nowrap}
+.tm-saved-v37 .tm37-actions{padding:37px 0 0;gap:7px;align-self:stretch;justify-content:center;display:flex;flex-direction:column}
+.tm-saved-v37 .tm37-actions form{right:0;top:0}
+.tm-saved-v37 .tm37-unsave{width:32px;height:31px;background:#eff5ff;border:1px solid #d5e6ff;border-radius:8px;color:#1167ee}
+.tm-saved-v37 .tm37-apply,.tm-saved-v37 .tm37-detail{width:100%;height:34px;font-size:12px;border-radius:7px;gap:6px}
+.tm-saved-v37 .tm37-apply{display:flex;align-items:center;justify-content:center}
+.tm-saved-v37 .tm37-filter{padding:14px;border-radius:11px}
+.tm-saved-v37 .tm37-filter-top h2{font-size:17px}
+.tm-saved-v37 .tm37-filter label{font-size:12px}
+.tm-saved-v37 .tm37-filter-submit{font-size:13px}
+@media(max-width:1250px){.tm-saved-v37 .tm37-layout{grid-template-columns:minmax(0,1fr) 245px}.tm-saved-v37 .tm37-card{grid-template-columns:112px minmax(0,1fr) 118px 108px;gap:9px}.tm-saved-v37 .tm79-thumbnail{height:94px}.tm-saved-v37 .tm37-cost strong{font-size:15px}.tm-saved-v37 .tm37-info h2{font-size:14px}}
+@media(max-width:990px){.tm-saved-v37 .tm37-layout{grid-template-columns:1fr}.tm-saved-v37 .tm37-filter{grid-row:auto}.tm-saved-v37 .tm37-card{grid-template-columns:135px minmax(0,1fr) 128px 118px}.tm-saved-v37 .tm79-thumbnail{height:102px}}
+@media(max-width:700px){.tm-saved-v37 .tm37-content{padding:10px}.tm-saved-v37 .tm37-card{grid-template-columns:98px minmax(0,1fr);align-items:start;padding:10px}.tm-saved-v37 .tm79-thumbnail{height:92px}.tm-saved-v37 .tm37-cost{grid-column:2;min-height:0;border:0;padding:0;gap:4px}.tm-saved-v37 .tm37-cost small:last-child{display:none}.tm-saved-v37 .tm37-actions{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;padding:0;gap:8px}.tm-saved-v37 .tm37-actions form{position:absolute;top:-115px;right:3px}.tm-saved-v37 .tm37-search>span{margin-left:0}}

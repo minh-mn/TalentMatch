@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/common :: head('Tìm dự án')}"></head>
-<body class="market-body fm-dashboard tm35-jobs">
+<body class="market-body fm-dashboard tm35-jobs tm76-jobs">
 <link rel="stylesheet" th:href="@{/css/jobs-board-reference.css}">
 <link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
 <link rel="stylesheet" th:href="@{/css/jobs-board-v35.css}">
@@ -18,7 +18,7 @@
 <main class="fm-main jb-main">
   <div class="jb-wrap">
     <section class="tm35-hero" aria-label="Tìm dự án phù hợp">
-      <img th:src="@{/images/talentmatch-projects-banner.png}" alt="Hàng ngàn dự án chất lượng đang chờ bạn" />
+      <img th:src="@{/images/talentmatch-projects-banner-v76.png}" alt="Hàng ngàn dự án chất lượng đang chờ bạn" />
       <a class="tm35-banner-link" href="#jb-search" aria-label="Tìm dự án ngay"></a>
     </section>
     <div class="tm35-toolbar"><div><strong>Khám phá dự án</strong><small th:text="|${allJobsCount} dự án đang mở trên TalentMatch|">Dự án đang mở</small></div><label class="jb-sort">Sắp xếp <select id="tm28Sort" aria-label="Sắp xếp dự án"><option value="latest" th:selected="${sort == 'latest'}">Mới nhất</option><option value="match_desc" th:selected="${sort == 'match_desc'}" sec:authorize="hasRole('FREELANCER')">Phù hợp nhất</option><option value="budget_desc" th:selected="${sort == 'budget_desc'}">Ngân sách cao nhất</option><option value="budget_asc" th:selected="${sort == 'budget_asc'}">Ngân sách thấp nhất</option><option value="deadline_asc" th:selected="${sort == 'deadline_asc'}">Hạn gần nhất</option><option value="competition_asc" th:selected="${sort == 'competition_asc'}">Ít cạnh tranh</option></select></label></div>
@@ -31,16 +31,38 @@
       <section class="jb-results">
         <div class="jb-result-count">Đang hiển thị <strong th:text="${totalJobs}">0</strong> dự án phù hợp <span th:if="${totalJobs > 0}" th:text="|· Hiển thị ${#lists.size(jobs)} công việc/trang|">· 5 công việc/trang</span> <span th:if="${totalPages > 1}" th:text="|· Trang ${currentPage}/${totalPages}|"></span></div>
         <div class="jb-list">
-          <article class="jb-card" th:each="job : ${jobs}">
-            <div class="jb-card-top"><div class="jb-job-icon"><i class="fa-solid fa-code" th:if="${job.category != null and job.category.contains('Lập trình')}"></i><i class="fa-solid fa-briefcase" th:unless="${job.category != null and job.category.contains('Lập trình')}"></i></div>
-              <div class="jb-card-head"><h2><a th:href="@{/jobs/{id}(id=${job.id})}" th:text="${job.title}">Tên dự án</a></h2><div class="jb-badges"><span class="jb-hot" th:if="${job.featured}"><i class="fa-solid fa-bolt"></i> HOT</span><span class="jb-escrow" th:if="${job.escrowFunded}"><i class="fa-solid fa-shield"></i> ĐÃ KÝ QUỸ</span><span class="jb-verified" th:if="${job.verified}"><i class="fa-solid fa-check-circle"></i> XÁC MINH</span></div></div>
-              <form sec:authorize="hasRole('FREELANCER')" class="jb-save" th:action="@{/jobs/{id}/save(id=${job.id})}" method="post"><input name="returnTo" type="hidden" th:value="${returnTo}"><button type="submit" th:attr="aria-label=${savedJobIds.contains(job.id) ? 'Bỏ lưu dự án' : 'Lưu dự án'}" th:classappend="${savedJobIds.contains(job.id)} ? ' selected' : ''"><i th:class="${savedJobIds.contains(job.id)} ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'"></i></button></form>
-              <a class="jb-save" sec:authorize="isAnonymous()" th:href="@{/login}" aria-label="Đăng nhập để lưu"><i class="fa-regular fa-bookmark"></i></a>
+          <article class="jb-card tm76-job" th:each="job, st : ${jobs}">
+            <a class="tm76-thumb" th:href="@{/jobs/{id}(id=${job.id})}" aria-label="Xem dự án">
+              <img th:src="@{/images/{name}(name=${'fm-job-thumb-' + ((st.index % 5) + 1) + '.svg'})}" alt="Hình minh họa dự án" loading="lazy">
+              <span class="tm76-featured" th:if="${job.featured}"><i class="fa-solid fa-star"></i> Nổi bật</span>
+              <span class="tm76-featured tm76-open" th:if="${!job.featured}"><i class="fa-solid fa-briefcase"></i> Đang tuyển</span>
+            </a>
+            <div class="tm76-job-body">
+              <div class="tm76-job-title-row">
+                <div class="tm76-main-info">
+                  <h2><a th:href="@{/jobs/{id}(id=${job.id})}" th:text="${job.title}">Tên dự án</a></h2>
+                  <p class="tm76-desc" th:text="${#strings.abbreviate(job.description == null ? '' : job.description,115)}">Mô tả ngắn</p>
+                </div>
+                <form sec:authorize="hasRole('FREELANCER')" class="jb-save" th:action="@{/jobs/{id}/save(id=${job.id})}" method="post">
+                  <input name="returnTo" type="hidden" th:value="${returnTo}">
+                  <button type="submit" th:attr="aria-label=${savedJobIds.contains(job.id) ? 'Bỏ lưu dự án' : 'Lưu dự án'}" th:classappend="${savedJobIds.contains(job.id)} ? ' selected' : ''"><i th:class="${savedJobIds.contains(job.id)} ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'"></i></button>
+                </form>
+              </div>
+              <div class="jb-tags" th:if="${job.requiredSkills != null and !job.requiredSkills.isBlank()}">
+                <span th:each="skillItem, si : ${#strings.arraySplit(job.requiredSkills, ',')}" th:if="${si.index < 4}" th:text="${#strings.trim(skillItem)}">Kỹ năng</span>
+              </div>
+              <div class="tm76-job-meta"><span><i class="fa-regular fa-clock"></i> <span th:text="${postedAgo[job.id]}">Mới đăng</span></span><span><i class="fa-regular fa-comment"></i> <span th:text="|${proposalCounts[job.id]} chào giá|">0 chào giá</span></span></div>
             </div>
-            <p class="jb-description" th:text="${#strings.abbreviate(job.description == null ? '' : job.description,210)}">Mô tả</p>
-            <div class="jb-tags" th:if="${job.requiredSkills != null and !job.requiredSkills.isBlank()}"><span th:each="skillItem, st : ${#strings.arraySplit(job.requiredSkills, ',')}" th:if="${st.index < 5}" th:text="${#strings.trim(skillItem)}">Kỹ năng</span></div>
-            <div class="jb-card-footer"><div class="jb-company"><span class="jb-avatar"><i class="fa-solid fa-user-tie"></i></span><strong th:text="${job.customer != null ? (job.customer.companyName != null and !job.customer.companyName.isBlank() ? job.customer.companyName : job.customer.fullName) : 'Khách hàng'}">Khách hàng</strong></div><span><i class="fa-regular fa-building"></i><span th:text="${job.priceType == 'HOURLY' ? 'Theo giờ' : 'Dự án giá cố định'}">Cố định</span></span><span><i class="fa-regular fa-comment"></i><span th:text="|${proposalCounts[job.id]} chào giá|">0 chào giá</span></span><span><i class="fa-regular fa-clock"></i><span th:text="${postedAgo[job.id]}">Mới đăng</span></span><div class="jb-price"><strong th:text="${job.budget == null or job.budget.signum() == 0 ? 'Thỏa thuận' : #numbers.formatDecimal(job.budget,0,'POINT',0,'COMMA') + ' ₫'}">Thỏa thuận</strong><small th:text="${job.estimatedDurationDays != null ? 'trọn gói · ' + job.estimatedDurationDays + ' ngày' : 'trọn gói'}">trọn gói</small></div></div>
-            <div class="jb-card-links"><a class="tm35-apply-action" th:href="@{/jobs/{id}/apply(id=${job.id})}">Ứng tuyển <i class="fa-solid fa-arrow-right"></i></a><a class="tm35-detail-action" th:href="@{/jobs/{id}(id=${job.id})}">Xem chi tiết</a><span sec:authorize="hasRole('FREELANCER')" th:if="${applicationStatusByJobId[job.id] != null}" class="jb-applied">Đã ứng tuyển</span></div>
+            <div class="tm76-job-side">
+              <div class="jb-price"><strong th:text="${job.budget == null or job.budget.signum() == 0 ? 'Thỏa thuận' : #numbers.formatDecimal(job.budget,0,'POINT',0,'COMMA') + ' ₫'}">Thỏa thuận</strong></div>
+              <div class="tm76-company"><i class="fa-solid fa-circle-user"></i><strong th:text="${job.customer != null ? (job.customer.companyName != null and !job.customer.companyName.isBlank() ? job.customer.companyName : job.customer.fullName) : 'Khách hàng'}">Khách hàng</strong></div>
+              <span class="tm76-duration" th:text="${job.estimatedDurationDays != null ? 'Dự kiến ' + job.estimatedDurationDays + ' ngày' : (job.priceType == 'HOURLY' ? 'Theo giờ' : 'Trọn gói')}">Trọn gói</span>
+            </div>
+            <div class="jb-card-links tm76-job-actions">
+              <a class="tm35-apply-action" th:href="@{/jobs/{id}/apply(id=${job.id})}">Ứng tuyển <i class="fa-solid fa-arrow-right"></i></a>
+              <a class="tm35-detail-action" th:href="@{/jobs/{id}(id=${job.id})}">Xem chi tiết</a>
+              <span sec:authorize="hasRole('FREELANCER')" th:if="${applicationStatusByJobId[job.id] != null}" class="jb-applied">Đã ứng tuyển</span>
+            </div>
           </article>
           <div class="jb-empty" th:if="${#lists.isEmpty(jobs)}"><i class="fa-solid fa-magnifying-glass"></i><h2>Không tìm thấy dự án phù hợp</h2><p>Hãy thử bỏ bớt điều kiện hoặc dùng từ khóa khác.</p><a th:href="@{/jobs}">Xóa bộ lọc</a></div>
         </div>
@@ -62,5 +84,5 @@
 </main>
 <script th:replace="~{fragments/common :: scripts}"></script>
 <script th:src="@{/js/jobs-board-reference.js}"></script>
-<link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"></body>
+<link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"><link rel="stylesheet" th:href="@{/css/jobs-board-v76.css}"><link rel="stylesheet" th:href="@{/css/jobs-board-v77.css}"><link rel="stylesheet" th:href="@{/css/jobs-board-v78.css}"></body>
 </html>

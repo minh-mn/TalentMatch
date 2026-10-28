@@ -1,0 +1,38 @@
+/* V72: đồng bộ banner + footer Client với Freelancer, không sửa Sidebar */
+.cd-dashboard .client-reference-v70 .cr-hero.cr-hero-image {
+ display:block!important; width:100%!important; max-width:none!important;
+ min-width:0!important; height:auto!important; min-height:0!important; max-height:none!important;
+ aspect-ratio:2048 / 708!important; margin:0 0 14px!important;
+ background-image:url('/images/client-banner-v71.png')!important;
+ background-position:center center!important; background-size:100% 100%!important;
+ background-repeat:no-repeat!important; border-radius:12px; overflow:hidden;
+}
+.cd-dashboard .client-reference-v70 .cr-hero.cr-hero-image::before {content:none!important;display:none!important}
+.cd-dashboard .client-reference-v70 .cr-banner-hit{left:6.5%;top:72%;width:20%;height:17%;}
+.cd-dashboard .client-reference-v70{width:100%!important;max-width:none!important;}
+/* Dùng cùng style footer như Freelancer, tất cả bên trong content chứ không đè sidebar */
+.cd-dashboard .client-same-footer{
+ box-sizing:border-box;width:100%;margin:18px 0 0!important;padding:32px 26px 16px!important;
+ background:linear-gradient(112deg,#07172f,#0b1d4c 56%,#10225b)!important;
+ color:#fff!important;border:0!important;border-radius:0!important;
+ font-family:Inter,'Segoe UI',Arial,sans-serif;
+}
+.cd-dashboard .client-same-footer .fm-footer-top{
+ display:grid!important;grid-template-columns:minmax(220px,1.5fr) repeat(4,minmax(100px,1fr))!important;
+ gap:24px!important;align-items:start!important;
+}
+.cd-dashboard .client-same-footer .fm-footer-intro{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.cd-dashboard .client-same-footer .fm-footer-brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:white!important}
+.cd-dashboard .client-same-footer .fm-footer-brand img{width:39px;height:39px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
+.cd-dashboard .client-same-footer .fm-footer-brand span{display:flex;flex-direction:column;gap:2px}
+.cd-dashboard .client-same-footer .fm-footer-brand strong{font-size:19px;font-weight:900;line-height:1.1}
+.cd-dashboard .client-same-footer .fm-footer-brand small{font-size:8px;font-weight:750;letter-spacing:.45px;color:#d7e1f6}
+.cd-dashboard .client-same-footer .fm-footer-intro p{font-size:12px;line-height:1.6;color:#c6d4ee!important;margin:0}
+.cd-dashboard .client-same-footer .fm-footer-top h3{font-size:13px;font-weight:850;color:white!important;margin:0 0 11px}
+.cd-dashboard .client-same-footer .fm-footer-top>div>a:not(.fm-footer-brand){display:block;color:#d7e1f6!important;font-size:12px;font-weight:600;line-height:1.55;text-decoration:none;margin:5px 0}
+.cd-dashboard .client-same-footer .fm-footer-top a:hover{color:white!important;text-decoration:underline}
+.cd-dashboard .client-same-footer .fm-socials{display:flex;gap:8px;margin-top:3px}
+.cd-dashboard .client-same-footer .fm-socials span{width:27px;height:27px;border-radius:50%;background:#294777;color:#fff;display:grid;place-items:center;font-size:12px}
+.cd-dashboard .client-same-footer .fm-footer-line{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:22px;padding-top:12px;border-top:1px solid rgba(255,255,255,.18);font-size:11px;color:#c6d4ee!important}
+@media(max-width:1100px){.cd-dashboard .client-same-footer .fm-footer-top{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:720px){.cd-dashboard .client-same-footer .fm-footer-top{grid-template-columns:repeat(2,minmax(0,1fr))!important}.cd-dashboard .client-same-footer .fm-footer-intro{grid-column:1/-1}.cd-dashboard .client-same-footer .fm-footer-line{flex-wrap:wrap}}
