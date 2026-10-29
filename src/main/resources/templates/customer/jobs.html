@@ -1,7 +1,139 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/common :: head('Việc đã đăng')}"></head>
-<body class="market-body client-workspace client-v52-page"><aside th:replace="~{fragments/common :: marketSidebar('posted')}"></aside><header th:replace="~{fragments/common :: marketClientTopbar()}"></header><div th:replace="~{fragments/common :: flash}"></div><main class="market-main client-main"><div class="client-shell">
-    <div class="client-breadcrumb">Workspace / Công việc của tôi</div><div class="client-page-heading"><div><span class="client-eyebrow">QUẢN LÝ TUYỂN DỤNG</span><h1>Công việc <span>đã đăng</span></h1><p>Theo dõi tin tuyển, phản hồi proposal, cập nhật trạng thái và tuyển chọn Freelancer.</p></div><a class="client-btn primary" th:href="@{/customer/jobs/new}"><i class="fa-solid fa-plus"></i> Đăng công việc</a></div>
-    <div class="client-metric-row"><div><b th:text="${allCount}">0</b><span>Tổng tin</span></div><div><b th:text="${openCount}">0</b><span>Đang tuyển</span></div><div><b th:text="${pausedCount}">0</b><span>Tạm dừng</span></div><div><b th:text="${closedCount}">0</b><span>Đã đóng</span></div></div>
-    <nav class="client-pills"><a th:href="@{/customer/jobs(status='ALL')}" th:classappend="${status=='ALL'}?'selected':''">Tất cả</a><a th:href="@{/customer/jobs(status='OPEN')}" th:classappend="${status=='OPEN'}?'selected':''">Đang tuyển</a><a th:href="@{/customer/jobs(status='PAUSED')}" th:classappend="${status=='PAUSED'}?'selected':''">Tạm dừng</a><a th:href="@{/customer/jobs(status='CLOSED')}" th:classappend="${status=='CLOSED'}?'selected':''">Đã đóng</a><a th:href="@{/customer/jobs(status='CANCELLED')}" th:classappend="${status=='CANCELLED'}?'selected':''">Đã hủy</a></nav>
-    <div class="client-cards"><article th:each="j:${jobs}" class="client-job-card"><div class="client-job-leading"><span class="client-job-icon"><i class="fa-solid fa-briefcase"></i></span><div><span class="client-tag" th:text="${j.category}">Thiết kế</span><h2><a th:text="${j.title}" th:href="@{/jobs/{id}(id=${j.id})}">Công việc</a></h2><p th:text="${#strings.abbreviate(j.description,175)}">Mô tả...</p><div class="client-job-tags"><span th:text="${j.workType}">REMOTE</span><span th:text="${j.experienceLevel}">MIDDLE</span><span th:text="${j.deadline!=null?#temporals.format(j.deadline,'dd/MM/yyyy'):'Thời hạn linh hoạt'}">Deadline</span></div></div></div><div class="client-job-right"><strong th:text="${#numbers.formatDecimal(j.budget,0,'POINT',0,'COMMA')}+'₫'">0đ</strong><span class="client-badge" th:classappend="${#strings.toLowerCase(j.status.name())}" th:text="${j.status}">OPEN</span><small th:text="${applicantCounts[j.id]}+' Proposal'">0</small><div class="client-actions"><a class="client-btn outline" th:href="@{/customer/jobs/{id}/applicants(id=${j.id})}">Xem ứng viên</a><a class="client-btn pale" th:if="${j.status.name()=='OPEN' or j.status.name()=='PAUSED'}" th:href="@{/customer/jobs/{id}/edit(id=${j.id})}">Sửa</a></div><form th:if="${j.status.name()=='OPEN' or j.status.name()=='PAUSED'}" th:action="@{/customer/jobs/{id}/status(id=${j.id})}" method="post" class="client-status-form"><label>Thay đổi trạng thái<select name="status"><option value="OPEN" th:selected="${j.status.name()=='OPEN'}">Đang tuyển</option><option value="PAUSED" th:selected="${j.status.name()=='PAUSED'}">Tạm dừng</option><option value="CANCELLED">Hủy tin tuyển</option></select></label><button type="submit">Cập nhật</button></form><a th:href="@{/jobs/{id}/discussion(id=${j.id})}" class="client-mini-link">Trả lời câu hỏi về việc →</a></div></article></div><div class="client-empty large" th:if="${#lists.isEmpty(jobs)}"><i class="fa-regular fa-folder-open"></i><b>Chưa có công việc trong bộ lọc này</b><p>Thử chọn trạng thái khác hoặc tạo tin đăng mới.</p><a class="client-btn primary" th:href="@{/customer/jobs/new}">Đăng công việc</a></div>
-</div></main><script th:replace="~{fragments/common :: scripts}"></script></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Công việc đã đăng')}"></head>
+<body class="market-body client-workspace client-v52-page cd-dashboard tm-client-posted-v94">
+<link rel="stylesheet" th:href="@{/css/customer-footer-banner-v72.css(v=72)}">
+<link rel="stylesheet" th:href="@{/css/customer-posted-v94.css(v=94)}">
+<link rel="stylesheet" th:href="@{/css/customer-client-v95.css(v=95)}">
+<aside th:replace="~{fragments/common :: marketSidebar('posted')}"></aside>
+<header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="market-main client-main tm-posted-main">
+  <div class="tm-posted-shell">
+    <section class="tm-posted-banner" aria-label="Quản lý các công việc đã đăng">
+      <img th:src="@{/images/talentmatch-client-posted-banner-v94.png}" alt="Quản lý các công việc đã đăng - TalentMatch">
+    </section>
+
+    <section class="tm-posted-kpis" aria-label="Thống kê công việc">
+      <a th:href="@{/customer/jobs(status='ALL')}" class="tm-posted-kpi">
+        <span class="kpi-ico blue"><i class="fa-solid fa-briefcase"></i></span>
+        <span class="kpi-label"><strong th:text="${allCount}">12</strong><small>Tổng công việc đã đăng</small></span>
+      </a>
+      <a th:href="@{/customer/jobs(status='OPEN')}" class="tm-posted-kpi">
+        <span class="kpi-ico green"><i class="fa-solid fa-circle-check"></i></span>
+        <span class="kpi-label"><strong th:text="${openCount}">6</strong><small>Đang tuyển</small></span>
+      </a>
+      <a th:href="@{/customer/jobs(status='PAUSED')}" class="tm-posted-kpi">
+        <span class="kpi-ico orange"><i class="fa-solid fa-circle-pause"></i></span>
+        <span class="kpi-label"><strong th:text="${pausedCount}">2</strong><small>Tạm dừng</small></span>
+      </a>
+      <a th:href="@{/customer/jobs(status='CLOSED')}" class="tm-posted-kpi">
+        <span class="kpi-ico red"><i class="fa-solid fa-circle-xmark"></i></span>
+        <span class="kpi-label"><strong th:text="${closedCount}">3</strong><small>Đã đóng</small></span>
+      </a>
+      <a th:href="@{/customer/applicants}" class="tm-posted-kpi">
+        <span class="kpi-ico purple"><i class="fa-solid fa-users"></i></span>
+        <span class="kpi-label"><strong th:text="${applicantTotal}">48</strong><small>Tổng số ứng viên</small></span>
+      </a>
+    </section>
+
+    <section class="tm-posted-tools" aria-label="Tìm kiếm và lọc công việc">
+      <nav class="tm-status-tabs" aria-label="Lọc theo trạng thái">
+        <a th:href="@{/customer/jobs(status='ALL',q=${q},category=${category},sort=${sort})}"
+           th:classappend="${status=='ALL'} ? ' active' : ''">Tất cả (<span th:text="${allCount}">12</span>)</a>
+        <a th:href="@{/customer/jobs(status='OPEN',q=${q},category=${category},sort=${sort})}"
+           th:classappend="${status=='OPEN'} ? ' active' : ''">Đang tuyển (<span th:text="${openCount}">6</span>)</a>
+        <a th:href="@{/customer/jobs(status='PAUSED',q=${q},category=${category},sort=${sort})}"
+           th:classappend="${status=='PAUSED'} ? ' active' : ''">Tạm dừng (<span th:text="${pausedCount}">2</span>)</a>
+        <a th:href="@{/customer/jobs(status='CLOSED',q=${q},category=${category},sort=${sort})}"
+           th:classappend="${status=='CLOSED'} ? ' active' : ''">Đã đóng (<span th:text="${closedCount}">3</span>)</a>
+      </nav>
+      <form class="tm-posted-search" th:action="@{/customer/jobs}" method="get">
+        <input type="hidden" name="status" th:value="${status}">
+        <label class="tm-search-field"><i class="fa-solid fa-magnifying-glass"></i>
+          <input name="q" th:value="${q}" placeholder="Tìm kiếm công việc..." aria-label="Tìm kiếm công việc">
+        </label>
+        <select name="category" aria-label="Lọc danh mục" onchange="this.form.submit()">
+          <option value="">Tất cả danh mục</option>
+          <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}" th:selected="${cat==category}">Thiết kế</option>
+        </select>
+        <select name="sort" aria-label="Sắp xếp công việc" onchange="this.form.submit()">
+          <option value="newest" th:selected="${sort=='newest'}">Mới nhất</option>
+          <option value="oldest" th:selected="${sort=='oldest'}">Cũ nhất</option>
+          <option value="budgetHigh" th:selected="${sort=='budgetHigh'}">Ngân sách cao</option>
+          <option value="budgetLow" th:selected="${sort=='budgetLow'}">Ngân sách thấp</option>
+          <option value="applicants" th:selected="${sort=='applicants'}">Nhiều ứng viên</option>
+        </select>
+        <button type="submit" class="tm-search-submit" title="Áp dụng tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i><span>Tìm</span></button>
+      </form>
+      <a class="tm-posted-create" th:href="@{/customer/jobs/new}"><i class="fa-solid fa-plus"></i> Đăng công việc</a>
+    </section>
+
+    <section class="tm-posted-table-card" aria-label="Danh sách công việc đã đăng">
+      <div class="tm-posted-table-scroll">
+        <table class="tm-posted-table">
+          <colgroup><col style="width:4%"><col style="width:27%"><col style="width:14%"><col style="width:11%"><col style="width:10%"><col style="width:10%"><col style="width:12%"><col style="width:12%"></colgroup>
+          <thead><tr><th>#</th><th>Công việc</th><th>Danh mục</th><th>Ngân sách</th><th>Số ứng viên</th><th>Ngày đăng</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+          <tbody>
+            <tr th:each="j, row : ${jobs}">
+              <td class="tm-row-num" th:text="${(currentPage-1)*6+row.index+1}">1</td>
+              <td><div class="tm-job-main">
+                <span class="tm-job-icon" th:classappend="${row.index % 6 == 0 ? ' ico-blue' : (row.index % 6 == 1 ? ' ico-purple' : (row.index % 6 == 2 ? ' ico-orange' : (row.index % 6 == 3 ? ' ico-teal' : (row.index % 6 == 4 ? ' ico-pink' : ' ico-indigo'))))}">
+                  <i th:class="${row.index % 6 == 0 ? 'fa-solid fa-window-maximize' : (row.index % 6 == 1 ? 'fa-solid fa-code' : (row.index % 6 == 2 ? 'fa-solid fa-paintbrush' : (row.index % 6 == 3 ? 'fa-solid fa-microphone' : (row.index % 6 == 4 ? 'fa-solid fa-mobile-screen' : 'fa-regular fa-file-lines'))))}"></i>
+                </span>
+                <div class="tm-job-text"><a class="tm-job-title" th:href="@{/jobs/{id}(id=${j.id})}" th:text="${j.title}">Thiết kế UI/UX website</a>
+                  <div class="tm-job-skills" th:if="${j.requiredSkills != null and !#strings.isEmpty(j.requiredSkills)}">
+                    <span th:each="skill, iter : ${#strings.arraySplit(j.requiredSkills, ',')}" th:if="${iter.index < 3}" th:text="${#strings.trim(skill)}">UI/UX</span>
+                  </div>
+                  <div class="tm-job-skills" th:if="${j.requiredSkills==null or #strings.isEmpty(j.requiredSkills)}"><span th:text="${j.workType}">REMOTE</span><span th:text="${j.experienceLevel}">MIDDLE</span></div>
+                </div>
+              </div></td>
+              <td class="tm-category" th:text="${j.category}">Thiết kế &amp; Đa phương tiện</td>
+              <td><strong class="tm-budget" th:text="${j.budget != null ? #numbers.formatDecimal(j.budget,0,'POINT',0,'COMMA') + 'đ' : 'Thỏa thuận'}">13.000.000đ</strong><small class="tm-budget-caption" th:text="${j.priceType == 'NEGOTIABLE' ? 'Thương lượng' : 'Trọn gói'}">Trọn gói</small></td>
+              <td><a class="tm-applicant-total" th:href="@{/customer/jobs/{id}/applicants(id=${j.id})}" th:text="${applicantCounts[j.id] != null ? applicantCounts[j.id] : 0}">15</a><small class="tm-meta-small">ứng viên</small></td>
+              <td class="tm-posted-date" th:text="${j.createdAt != null ? #temporals.format(j.createdAt,'dd/MM/yyyy') : '—'}">10/10/2026</td>
+              <td><span class="tm-posted-state" th:classappend="${' state-' + j.status.name().toLowerCase()}" th:switch="${j.status.name()}"><span th:case="'OPEN'">Đang tuyển</span><span th:case="'PAUSED'">Tạm dừng</span><span th:case="'CLOSED'">Đã đóng</span><span th:case="'CANCELLED'">Đã hủy</span><span th:case="*">Bản nháp</span></span></td>
+              <td><div class="tm-posted-actions">
+                <a class="tm-view-applicants" th:href="@{/customer/jobs/{id}/applicants(id=${j.id})}">Xem ứng viên</a>
+                <details class="tm-more-menu"><summary title="Thao tác khác" aria-label="Thao tác khác"><i class="fa-solid fa-ellipsis"></i></summary>
+                  <div class="tm-more-items">
+                    <a th:href="@{/jobs/{id}(id=${j.id})}"><i class="fa-regular fa-eye"></i> Xem công việc</a>
+                    <a th:if="${j.status.name() == 'OPEN' or j.status.name() == 'PAUSED'}" th:href="@{/customer/jobs/{id}/edit(id=${j.id})}"><i class="fa-solid fa-pen"></i> Chỉnh sửa</a>
+                    <a th:href="@{/jobs/{id}/discussion(id=${j.id})}"><i class="fa-regular fa-comment-dots"></i> Hỏi đáp</a>
+                    <form th:if="${j.status.name() == 'OPEN'}" th:action="@{/customer/jobs/{id}/status(id=${j.id})}" method="post"><input type="hidden" name="status" value="PAUSED"><button type="submit"><i class="fa-solid fa-pause"></i> Tạm dừng</button></form>
+                    <form th:if="${j.status.name() == 'PAUSED'}" th:action="@{/customer/jobs/{id}/status(id=${j.id})}" method="post"><input type="hidden" name="status" value="OPEN"><button type="submit"><i class="fa-solid fa-play"></i> Mở tuyển lại</button></form>
+                    <form th:if="${j.status.name() == 'OPEN' or j.status.name() == 'PAUSED'}" th:action="@{/customer/jobs/{id}/status(id=${j.id})}" method="post" onsubmit="return confirm('Bạn chắc chắn muốn hủy tin tuyển dụng này?')"><input type="hidden" name="status" value="CANCELLED"><button type="submit" class="tm-danger-action"><i class="fa-solid fa-ban"></i> Hủy tin tuyển</button></form>
+                  </div>
+                </details>
+              </div></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(jobs)}"><td colspan="8" class="tm-posted-empty"><i class="fa-regular fa-folder-open"></i><strong>Không có công việc phù hợp</strong><span>Hãy thử điều chỉnh bộ lọc hoặc đăng một công việc mới.</span><a th:href="@{/customer/jobs/new}">Đăng công việc</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <nav class="tm-posted-pagination" aria-label="Phân trang công việc" th:if="${totalPages > 1}">
+        <a th:classappend="${currentPage == 1} ? ' disabled' : ''" th:href="@{/customer/jobs(status=${status},q=${q},category=${category},sort=${sort},page=${currentPage-1})}" aria-label="Trang trước"><i class="fa-solid fa-chevron-left"></i></a>
+        <a th:each="num : ${pageNumbers}" th:classappend="${num==currentPage} ? ' current' : ''" th:href="@{/customer/jobs(status=${status},q=${q},category=${category},sort=${sort},page=${num})}" th:text="${num}">1</a>
+        <a th:classappend="${currentPage==totalPages} ? ' disabled' : ''" th:href="@{/customer/jobs(status=${status},q=${q},category=${category},sort=${sort},page=${currentPage+1})}" aria-label="Trang sau"><i class="fa-solid fa-chevron-right"></i></a>
+      </nav>
+      <div class="tm-posted-count" th:text="|Hiển thị ${#lists.size(jobs)} / ${filteredCount} công việc phù hợp|">Hiển thị 6 / 12 công việc</div>
+    </section>
+  </div>
+  <footer class="fm-footer client-same-footer tm-posted-footer">
+    <div class="fm-footer-top">
+      <div class="fm-footer-intro">
+        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
+        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
+      </div>
+      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
+      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
+      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
+      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
+    </div>
+    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
+  </footer>
+</main>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body>
+</html>

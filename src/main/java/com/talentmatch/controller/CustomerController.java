@@ -11,6 +11,16 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,6 +35,7 @@ public class CustomerController {
     private static final Set<String> WORK_TYPES = Set.of("REMOTE", "HYBRID", "ONSITE");
     private static final Set<String> LEVELS = Set.of("JUNIOR", "MIDDLE", "SENIOR", "ENTRY", "INTERMEDIATE", "EXPERT");
     private static final BigDecimal MAX_BUDGET = new BigDecimal("100000000000");
+    @Autowired private JobDocumentService jobDocumentService;
     private final UserService users; private final JobService jobs; private final ProjectService projects;
     private final PaymentService payments; private final DashboardService dashboard; private final JobRepository jobRepository;
     public CustomerController(UserService users,JobService jobs,ProjectService projects,PaymentService payments,DashboardService dashboard,JobRepository jobRepository){this.users=users;this.jobs=jobs;this.projects=projects;this.payments=payments;this.dashboard=dashboard;this.jobRepository=jobRepository;}
@@ -128,23 +139,86 @@ public class CustomerController {
         return "redirect:/customer/profile";
     }
     @GetMapping("/jobs")
-    public String jobs(Authentication auth,@RequestParam(defaultValue="ALL") String status,Model model){
-        User u=users.byEmail(auth.getName());
-        List<Job> all=jobRepository.findByCustomerOrderByCreatedAtDesc(u);
-        List<Job> filtered=all;
-        if(!"ALL".equalsIgnoreCase(status)){
-            try{JobStatus target=JobStatus.valueOf(status.toUpperCase());filtered=all.stream().filter(j->j.getStatus()==target).toList();}catch(Exception ignored){}
+    public String jobs(Authentication auth,
+                       @RequestParam(defaultValue = "ALL") String status,
+                       @RequestParam(defaultValue = "") String q,
+                       @RequestParam(defaultValue = "") String category,
+                       @RequestParam(defaultValue = "newest") String sort,
+                       @RequestParam(defaultValue = "1") int page,
+                       Model model) {
+        User customer = users.byEmail(auth.getName());
+        List<Job> all = jobRepository.findByCustomerOrderByCreatedAtDesc(customer);
+        java.util.Map<Long, Long> applicantCounts = new java.util.HashMap<>();
+        long totalApplicants = 0;
+        for (Job job : all) {
+            long count = jobs.applicants(job).size();
+            applicantCounts.put(job.getId(), count);
+            totalApplicants += count;
         }
-        model.addAttribute("jobs",filtered);
-        java.util.Map<Long,Long> applicantCounts=new java.util.HashMap<>();
-        all.forEach(j->applicantCounts.put(j.getId(),(long)jobs.applicants(j).size()));
-        model.addAttribute("applicantCounts",applicantCounts);
-        model.addAttribute("status",status);
-        model.addAttribute("allCount",all.size());
-        model.addAttribute("openCount",all.stream().filter(j->j.getStatus()==JobStatus.OPEN).count());
-        model.addAttribute("pausedCount",all.stream().filter(j->j.getStatus()==JobStatus.PAUSED).count());
-        model.addAttribute("closedCount",all.stream().filter(j->j.getStatus()==JobStatus.CLOSED).count());
-        model.addAttribute("cancelledCount",all.stream().filter(j->j.getStatus()==JobStatus.CANCELLED).count());
+
+        String selectedStatus = status == null ? "ALL" : status.trim().toUpperCase(java.util.Locale.ROOT);
+        if (!java.util.Set.of("ALL", "OPEN", "PAUSED", "CLOSED", "CANCELLED", "DRAFT").contains(selectedStatus)) {
+            selectedStatus = "ALL";
+        }
+        String keyword = q == null ? "" : q.trim();
+        String selectedCategory = category == null ? "" : category.trim();
+        String selectedSort = java.util.Set.of("newest", "oldest", "budgetHigh", "budgetLow", "applicants")
+                .contains(sort) ? sort : "newest";
+        java.util.List<String> categories = all.stream()
+                .map(Job::getCategory).filter(v -> v != null && !v.isBlank())
+                .distinct().sorted(String.CASE_INSENSITIVE_ORDER).toList();
+
+        List<Job> filtered = new java.util.ArrayList<>();
+        String search = keyword.toLowerCase(java.util.Locale.ROOT);
+        for (Job job : all) {
+            if (!selectedStatus.equals("ALL") && !job.getStatus().name().equals(selectedStatus)) continue;
+            if (!selectedCategory.isBlank() && !selectedCategory.equals(job.getCategory())) continue;
+            String title = job.getTitle() == null ? "" : job.getTitle();
+            String description = job.getDescription() == null ? "" : job.getDescription();
+            String skills = job.getRequiredSkills() == null ? "" : job.getRequiredSkills();
+            if (!search.isBlank() && !(title + " " + description + " " + skills)
+                    .toLowerCase(java.util.Locale.ROOT).contains(search)) continue;
+            filtered.add(job);
+        }
+        java.util.Comparator<Job> byDate = java.util.Comparator.comparing(
+                Job::getCreatedAt, java.util.Comparator.nullsLast(java.util.Comparator.naturalOrder()));
+        java.util.Comparator<Job> byBudget = java.util.Comparator.comparing(
+                Job::getBudget, java.util.Comparator.nullsLast(java.util.Comparator.naturalOrder()));
+        switch (selectedSort) {
+            case "oldest" -> filtered.sort(byDate);
+            case "budgetHigh" -> filtered.sort(byBudget.reversed());
+            case "budgetLow" -> filtered.sort(byBudget);
+            case "applicants" -> filtered.sort(java.util.Comparator.comparingLong(
+                    (Job j) -> applicantCounts.getOrDefault(j.getId(), 0L)).reversed());
+            default -> filtered.sort(java.util.Comparator.comparing(
+                    Job::getCreatedAt, java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder())).reversed());
+        }
+        final int pageSize = 6;
+        int totalPages = Math.max(1, (filtered.size() + pageSize - 1) / pageSize);
+        int currentPage = Math.max(1, Math.min(page, totalPages));
+        int from = (currentPage - 1) * pageSize;
+        List<Job> result = filtered.subList(from, Math.min(from + pageSize, filtered.size()));
+        int pageStart = Math.max(1, currentPage - 2);
+        int pageEnd = Math.min(totalPages, pageStart + 4);
+        pageStart = Math.max(1, pageEnd - 4);
+
+        model.addAttribute("jobs", result);
+        model.addAttribute("applicantCounts", applicantCounts);
+        model.addAttribute("status", selectedStatus);
+        model.addAttribute("q", keyword);
+        model.addAttribute("category", selectedCategory);
+        model.addAttribute("sort", selectedSort);
+        model.addAttribute("categories", categories);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageNumbers", java.util.stream.IntStream.rangeClosed(pageStart, pageEnd).boxed().toList());
+        model.addAttribute("filteredCount", filtered.size());
+        model.addAttribute("allCount", all.size());
+        model.addAttribute("openCount", all.stream().filter(j -> j.getStatus() == JobStatus.OPEN).count());
+        model.addAttribute("pausedCount", all.stream().filter(j -> j.getStatus() == JobStatus.PAUSED).count());
+        model.addAttribute("closedCount", all.stream().filter(j -> j.getStatus() == JobStatus.CLOSED).count());
+        model.addAttribute("cancelledCount", all.stream().filter(j -> j.getStatus() == JobStatus.CANCELLED).count());
+        model.addAttribute("applicantTotal", totalApplicants);
         return "customer/jobs";
     }
     @GetMapping("/applicants") public String allApplicants(Authentication auth,Model model){
@@ -161,11 +235,16 @@ public class CustomerController {
      * với dữ liệu đã nhập thay vì chuyển hướng làm mất dữ liệu.
      */
     @PostMapping("/jobs")
-    public String createJob(Authentication auth,@ModelAttribute("job") Job form,BindingResult binding,Model model,RedirectAttributes ra){
+    public String createJob(Authentication auth,@ModelAttribute("job") Job form,BindingResult binding, @RequestParam(value="attachment", required=false) MultipartFile attachment, Model model,RedirectAttributes ra){
         try{
             if(binding.hasErrors())throw new IllegalArgumentException(bindingMessage(binding));
             Job job=cleanCopy(form);
             validateJob(job,null);
+            jobDocumentService.validate(attachment);
+            if (attachment != null && !attachment.isEmpty()) {
+                job.setAttachmentKey(jobDocumentService.store(attachment));
+                job.setAttachmentOriginalName(jobDocumentService.safeDisplayName(attachment));
+            }
             job.setCustomer(users.byEmail(auth.getName()));
             job.setStatus(JobStatus.OPEN);
             Job saved=jobs.save(job);
@@ -182,7 +261,7 @@ public class CustomerController {
     }
     @GetMapping("/jobs/{id}/edit") public String editJob(@PathVariable Long id,Authentication auth,Model model){Job j=ownedJob(id,auth);model.addAttribute("job",j);model.addAttribute("editing",true);return "customer/job-form";}
     @PostMapping("/jobs/{id}")
-    public String updateJob(@PathVariable Long id,Authentication auth,@ModelAttribute("job") Job form,BindingResult binding,Model model,RedirectAttributes ra){
+    public String updateJob(@PathVariable Long id,Authentication auth,@ModelAttribute("job") Job form,BindingResult binding, @RequestParam(value="attachment", required=false) MultipartFile attachment, Model model,RedirectAttributes ra){
         Job j;
         try{
             j=ownedJob(id,auth);
@@ -192,6 +271,11 @@ public class CustomerController {
             if(binding.hasErrors())throw new IllegalArgumentException(bindingMessage(binding));
             Job c=cleanCopy(form);
             validateJob(c,j.getDeadline());
+            jobDocumentService.validate(attachment);
+            if (attachment != null && !attachment.isEmpty()) {
+                j.setAttachmentKey(jobDocumentService.store(attachment));
+                j.setAttachmentOriginalName(jobDocumentService.safeDisplayName(attachment));
+            }
             j.setTitle(c.getTitle());j.setCategory(c.getCategory());j.setDescription(c.getDescription());j.setRequiredSkills(c.getRequiredSkills());
             j.setBudget(c.getBudget());j.setPriceType(c.getPriceType());j.setDeadline(c.getDeadline());j.setWorkType(c.getWorkType());
             j.setExperienceLevel(c.getExperienceLevel());j.setAcceptanceCriteria(c.getAcceptanceCriteria());j.setEstimatedDurationDays(c.getEstimatedDurationDays());
@@ -208,6 +292,22 @@ public class CustomerController {
         model.addAttribute("editing",true);
         return "customer/job-form";
     }
+    /** Chỉ chủ sở hữu công việc mới tải được tài liệu đính kèm của công việc. */
+    @GetMapping("/jobs/{id}/attachment")
+    public ResponseEntity<Resource> downloadJobAttachment(@PathVariable Long id, Authentication auth) throws Exception {
+        Job job = ownedJob(id, auth);
+        if (job.getAttachmentKey() == null) return ResponseEntity.notFound().build();
+        var path = jobDocumentService.filePath(job.getAttachmentKey());
+        if (!Files.isRegularFile(path)) return ResponseEntity.notFound().build();
+        Resource resource = new UrlResource(path.toUri());
+        String fileName = job.getAttachmentOriginalName() == null ? "tai-lieu" : job.getAttachmentOriginalName();
+        String encoded = URLEncoder.encode(fileName, StandardCharsets.UTF_8).replace("+", "%20");
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encoded)
+                .body(resource);
+    }
+
     @PostMapping("/jobs/{id}/status") public String jobStatus(@PathVariable Long id,@RequestParam JobStatus status,Authentication auth,RedirectAttributes ra){try{Job j=ownedJob(id,auth);if(status==JobStatus.CLOSED&&jobs.applicants(j).stream().noneMatch(a->a.getStatus()==ApplicationStatus.ACCEPTED))throw new IllegalArgumentException("Hãy chọn Freelancer trước khi đóng tuyển theo luồng dự án, hoặc dùng PAUSED/CANCELLED.");j.setStatus(status);jobs.save(j);ra.addFlashAttribute("success","Đã cập nhật trạng thái công việc.");}catch(Exception e){ra.addFlashAttribute("error",e.getMessage());}return "redirect:/customer/jobs";}
     @GetMapping("/jobs/{id}/applicants") public String applicants(@PathVariable Long id,Authentication auth,Model model){Job j=ownedJob(id,auth);model.addAttribute("job",j);model.addAttribute("applications",jobs.applicants(j));return "customer/applicants";}
     @PostMapping("/applications/{id}/shortlist") public String shortlist(@PathVariable Long id,@RequestParam boolean value,Authentication auth,RedirectAttributes ra){try{projects.shortlist(id,users.byEmail(auth.getName()),value);ra.addFlashAttribute("success",value?"Đã đưa ứng viên vào danh sách ưu tiên.":"Đã từ chối ứng viên.");}catch(Exception e){ra.addFlashAttribute("error",e.getMessage());}return "redirect:/customer/jobs";}

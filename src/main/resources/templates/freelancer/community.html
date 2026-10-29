@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/common :: head('TalentMatch')}"></head><body class="market-body fm-dashboard tm48 tm90"><link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}"><link rel="stylesheet" th:href="@{/css/freelancer-community-chat-v48.css}"><link rel="stylesheet" th:href="@{/css/freelancer-community-v90.css}"><aside th:replace="~{fragments/common :: marketSidebar('community')}"></aside><header class="fm-header">
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/common :: head('TalentMatch')}"></head><body class="market-body fm-dashboard tm48 tm90"><link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}"><link rel="stylesheet" th:href="@{/css/freelancer-community-chat-v48.css}"><link rel="stylesheet" th:href="@{/css/freelancer-community-v90.css}"><link rel="stylesheet" th:href="@{/css/freelancer-community-v91.css}"><aside th:replace="~{fragments/common :: marketSidebar('community')}"></aside><header class="fm-header">
   <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
   <form class="fm-header-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" aria-label="Tìm dự án" placeholder="Tìm dự án, kỹ năng, khách hàng..."><button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button></form>
   <nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/#pricing}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a href="#fm-category">Danh mục nghề</a></nav>
@@ -63,21 +63,37 @@
      <a th:each="n : ${#numbers.sequence(1,pages)}" th:href="@{/freelancer/community(page=${n},q=${q},category=${category},status=${status},period=${period},sort=${sort},tab=${tab},featured=${featured})}" th:text="${n}" th:classappend="${n==page} ? ' active' : ''">1</a>
     </nav>
    </div>
-   <aside class="tm90-filters" aria-label="Bộ lọc câu hỏi">
-    <form th:action="@{/freelancer/community}" method="get">
-     <input type="hidden" name="tab" th:value="${tab}"/><input type="hidden" name="sort" th:value="${sort}"/>
+   <aside class="tm90-filters tm91-filters" aria-label="Bộ lọc câu hỏi">
+    <form th:action="@{/freelancer/community}" method="get" class="tm91-filter-form">
+     <input type="hidden" name="tab" th:value="${tab}"/>
+     <input type="hidden" name="sort" th:value="${sort}"/>
      <div class="tm90-filter-head"><h2><i class="fa-solid fa-sliders"></i> Bộ lọc câu hỏi</h2><a th:href="@{/freelancer/community}">Xóa tất cả</a></div>
-     <div class="tm90-filter-search"><i class="fa-solid fa-magnifying-glass"></i><input type="search" name="q" th:value="${q}" placeholder="Tìm chủ đề, từ khóa..."/></div>
-     <fieldset><legend>Trạng thái</legend>
-      <label><input type="radio" name="status" value="all" th:checked="${status == 'all'}"/> Tất cả câu hỏi</label>
-      <label><input type="radio" name="status" value="waiting" th:checked="${status == 'waiting'}"/> Chờ giải đáp</label>
-      <label><input type="radio" name="status" value="answered" th:checked="${status == 'answered'}"/> Đã giải đáp</label>
-      <label><input type="radio" name="status" value="discussion" th:checked="${status == 'discussion'}"/> Đang thảo luận</label>
-     </fieldset>
-     <fieldset><legend>Danh mục</legend><div class="tm90-category-chips"><label th:classappend="${category.isEmpty()} ? ' selected' : ''"><input type="radio" name="category" value="" th:checked="${category.isEmpty()}"/>Tất cả</label><label th:each="c : ${categories}" th:classappend="${category == c} ? ' selected' : ''"><input type="radio" name="category" th:value="${c}" th:checked="${category == c}"/><span th:text="${c}">Freelancer</span></label></div></fieldset>
-     <fieldset><legend>Thời gian đăng</legend><label><input type="radio" name="period" value="all" th:checked="${period == 'all'}"/> Tất cả thời gian</label><label><input type="radio" name="period" value="7" th:checked="${period == '7'}"/> 7 ngày qua</label><label><input type="radio" name="period" value="30" th:checked="${period == '30'}"/> 30 ngày qua</label></fieldset>
-     <fieldset><legend>Ưu tiên hiển thị</legend><label><input type="checkbox" name="featured" value="true" th:checked="${featured}"/> Câu hỏi hữu ích (từ 3 lượt)</label></fieldset>
-     <button class="tm90-primary tm90-filter-submit" type="submit">Áp dụng bộ lọc</button>
+     <label class="tm91-search-field"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input type="search" name="q" th:value="${q}" placeholder="Tìm chủ đề, từ khóa..." aria-label="Tìm kiếm theo chủ đề hoặc từ khóa"/></label>
+     <div class="tm91-filter-section" role="group" aria-labelledby="tm91-status-title">
+      <h3 id="tm91-status-title">Trạng thái</h3>
+      <label class="tm91-radio-row"><input type="radio" name="status" value="all" th:checked="${status == 'all'}"/><span>Tất cả câu hỏi</span></label>
+      <label class="tm91-radio-row"><input type="radio" name="status" value="waiting" th:checked="${status == 'waiting'}"/><span>Chờ giải đáp</span></label>
+      <label class="tm91-radio-row"><input type="radio" name="status" value="answered" th:checked="${status == 'answered'}"/><span>Đã giải đáp</span></label>
+      <label class="tm91-radio-row"><input type="radio" name="status" value="discussion" th:checked="${status == 'discussion'}"/><span>Đang thảo luận</span></label>
+     </div>
+     <div class="tm91-filter-section" role="group" aria-labelledby="tm91-category-title">
+      <h3 id="tm91-category-title">Danh mục</h3>
+      <div class="tm91-category-chips">
+       <label th:classappend="${category.isEmpty()} ? ' selected' : ''"><input type="radio" name="category" value="" th:checked="${category.isEmpty()}"/><span>Tất cả</span></label>
+       <label th:each="c : ${categories}" th:classappend="${category == c} ? ' selected' : ''"><input type="radio" name="category" th:value="${c}" th:checked="${category == c}"/><span th:text="${c}">Freelancer</span></label>
+      </div>
+     </div>
+     <div class="tm91-filter-section" role="group" aria-labelledby="tm91-period-title">
+      <h3 id="tm91-period-title">Thời gian đăng</h3>
+      <label class="tm91-radio-row"><input type="radio" name="period" value="all" th:checked="${period == 'all'}"/><span>Tất cả thời gian</span></label>
+      <label class="tm91-radio-row"><input type="radio" name="period" value="7" th:checked="${period == '7'}"/><span>7 ngày qua</span></label>
+      <label class="tm91-radio-row"><input type="radio" name="period" value="30" th:checked="${period == '30'}"/><span>30 ngày qua</span></label>
+     </div>
+     <div class="tm91-filter-section" role="group" aria-labelledby="tm91-featured-title">
+      <h3 id="tm91-featured-title">Ưu tiên hiển thị</h3>
+      <label class="tm91-radio-row"><input type="checkbox" name="featured" value="true" th:checked="${featured}"/><span>Câu hỏi hữu ích (từ 3 lượt)</span></label>
+     </div>
+     <button class="tm90-primary tm90-filter-submit" type="submit"><i class="fa-solid fa-filter" aria-hidden="true"></i> Áp dụng bộ lọc</button>
     </form>
     <div class="tm90-filter-note"><i class="fa-regular fa-lightbulb"></i><span><b>Bạn chưa tìm được lời giải?</b><small>Đặt câu hỏi và nhận hỗ trợ từ cộng đồng TalentMatch.</small></span></div>
    </aside>

@@ -1,0 +1,81 @@
+/* TalentMatch V93 - ONLY trang Lich su. Khong thay Sidebar, Header, Footer. */
+.tm93-page { --th-blue:#1167f5; --th-navy:#0b2a6f; --th-border:#dce8fa; --th-muted:#637ba6; color:var(--th-navy); font-family:Inter,"Segoe UI",Arial,sans-serif; }
+.tm93-page .fm-main { background:#eef5ff; }
+.tm93-page .th93-shell { max-width:1680px; margin:0 auto; padding:16px 18px 27px; }
+.tm93-page .th93-banner { width:100%; aspect-ratio:1920 / 360; border-radius:11px; overflow:hidden; margin:0 0 15px; background:#e1f1ff; }
+.tm93-page .th93-banner img { width:100%; height:100%; display:block; object-fit:contain; }
+.tm93-page .th93-layout { display:grid; grid-template-columns:minmax(0,1fr) 256px; gap:16px; align-items:start; }
+.tm93-page .th93-content { min-width:0; }
+.tm93-page .th93-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:0 0 14px; }
+.tm93-page .th93-tabs a { min-width:0; min-height:48px; display:flex; gap:10px; align-items:center; justify-content:center; border:1px solid var(--th-border); background:#fff; border-radius:8px; color:var(--th-navy); text-decoration:none; font-size:15px; font-weight:800; padding:9px; }
+.tm93-page .th93-tabs a.active { background:#0b67f5; color:#fff; border-color:#0b67f5; box-shadow:0 5px 12px #1766e622; }
+.tm93-page .th93-tabs i { font-size:17px; }
+.tm93-page .th93-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:11px; margin-bottom:13px; }
+.tm93-page .th93-stat { display:flex; align-items:center; gap:12px; min-height:112px; background:#fff; border:1px solid var(--th-border); border-radius:11px; padding:14px 13px; min-width:0; }
+.tm93-page .th93-stat-icon { display:grid; place-items:center; width:50px; height:50px; flex:0 0 50px; border-radius:14px; background:#f1eafe; color:#8a49e8; font-size:22px; }
+.tm93-page .th93-stat-icon.icon-1 { background:#e4f8ee; color:#05a46a; }
+.tm93-page .th93-stat-icon.icon-2 { background:#f1eafe; color:#8141e6; }
+.tm93-page .th93-stat-icon.icon-3 { background:#e2f7ed; color:#05a86e; }
+.tm93-page .th93-stat-info { display:flex; min-width:0; flex-direction:column; gap:2px; }
+.tm93-page .th93-stat-info span { font-size:13px; font-weight:800; color:#1a397d; line-height:1.4; }
+.tm93-page .th93-stat-info strong { font-size:26px; color:#0b2a6f; line-height:1.15; font-weight:900; }
+.tm93-page .th93-stat-info small { font-size:11.5px; color:#169a66; font-weight:650; }
+.tm93-page .th93-table-panel { background:#fff; border-radius:10px; border:1px solid var(--th-border); overflow:hidden; }
+.tm93-page .th93-table-scroll { overflow-x:auto; }
+.tm93-page .th93-table { width:100%; border-collapse:collapse; table-layout:auto; min-width:800px; }
+.tm93-page .th93-table thead { background:#f5f9ff; }
+.tm93-page .th93-table th { padding:15px 10px; text-align:left; font-size:13px; font-weight:850; color:var(--th-navy); border-bottom:1px solid #dae7f8; white-space:nowrap; }
+.tm93-page .th93-table td { padding:14px 10px; font-size:13.5px; color:#5672a2; border-bottom:1px solid #e4ecf9; vertical-align:middle; line-height:1.4; }
+.tm93-page .th93-table tbody tr:last-child td { border-bottom:0; }
+.tm93-page .th93-index { color:#4671bb; font-weight:700; text-align:center; width:35px; }
+.tm93-page .th93-project-cell { display:flex; gap:10px; align-items:center; min-width:200px; }
+.tm93-page .th93-thumb { flex:0 0 50px; height:50px; width:50px; border-radius:8px; background:#eaf2ff; object-fit:cover; }
+.tm93-page .th93-jobcopy { min-width:0; display:flex; flex-direction:column; gap:2px; }
+.tm93-page .th93-jobcopy>a { font-size:16px; font-weight:850; text-decoration:none; color:#102e73; line-height:1.35; }
+.tm93-page .th93-jobcopy>a:hover { color:#0b67f5; }
+.tm93-page .th93-jobcopy>small { max-width:225px; color:#7690b7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tm93-page .th93-tags { display:flex; gap:4px; flex-wrap:wrap; margin-top:3px; }
+.tm93-page .th93-tags span { background:#ebf3ff; color:#4b6faf; padding:4px 6px; border-radius:5px; font-size:10.5px; white-space:nowrap; }
+.tm93-page .th93-client { display:flex; align-items:center; gap:7px; min-width:105px; }
+.tm93-page .th93-client>span:last-child { max-width:145px; overflow:hidden; text-overflow:ellipsis; }
+.tm93-page .th93-avatar { display:grid; place-items:center; border-radius:50%; background:#e2efff; color:#1766ed; font-size:12px; font-weight:850; flex:0 0 28px; height:28px; }
+.tm93-page .th93-date { color:#5373ac; white-space:nowrap; }
+.tm93-page .th93-amount { font-size:14px; font-weight:900; color:#dc2626; white-space:nowrap; }
+.tm93-page .th93-status { display:inline-flex; min-width:95px; justify-content:center; align-items:center; padding:7px 9px; border-radius:6px; font-size:12px; white-space:nowrap; font-weight:800; background:#edf3fc; color:#45679f; }
+.tm93-page .th93-status.st-ACCEPTED,.tm93-page .th93-status.st-COMPLETED,.tm93-page .th93-status.st-DISBURSED { color:#008a59; background:#dff7e9; }
+.tm93-page .th93-status.st-SHORTLISTED,.tm93-page .th93-status.st-WAITING_ACCEPTANCE,.tm93-page .th93-status.st-PAID { color:#b86e00; background:#fff2dd; }
+.tm93-page .th93-status.st-REJECTED,.tm93-page .th93-status.st-CANCELLED,.tm93-page .th93-status.st-DISPUTED,.tm93-page .th93-status.st-FAILED { color:#d42c44; background:#ffebed; }
+.tm93-page .th93-status.st-SUBMITTED,.tm93-page .th93-status.st-IN_PROGRESS { color:#2463b5; background:#e6f0ff; }
+.tm93-page .th93-detail { display:inline-flex; align-items:center; justify-content:center; padding:8px 10px; border:1.5px solid #80abff; color:#0b67f5; font-weight:800; border-radius:6px; text-decoration:none; white-space:nowrap; font-size:12.5px; }
+.tm93-page .th93-detail:hover { background:#0b67f5; color:#fff; }
+.tm93-page .th93-empty { padding:38px 16px!important; text-align:center; }
+.tm93-page .th93-empty i { display:block; font-size:28px; color:#337bf7; margin-bottom:10px; }
+.tm93-page .th93-empty strong,.tm93-page .th93-empty span { display:block; margin:5px; }
+.tm93-page .th93-empty strong { color:#0b2a6f; font-size:16px; }
+.tm93-page .th93-empty a { display:inline-block; margin-top:10px; color:#1268f2; font-weight:800; }
+.tm93-page .th93-table-bottom { display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:60px; padding:10px 14px; background:#fff; color:#6d82a9; font-size:12px; }
+.tm93-page .th93-pages { display:flex; justify-content:center; gap:6px; margin-left:auto; }
+.tm93-page .th93-pages a { display:grid; place-items:center; min-width:34px; height:34px; border-radius:6px; border:1px solid #dbe8fb; text-decoration:none; font-weight:800; color:#0f357a; background:#fff; font-size:13px; }
+.tm93-page .th93-pages a.active { background:#0b67f5; border-color:#0b67f5; color:white; }
+.tm93-page .th93-filter { background:#fff; border:1px solid var(--th-border); border-radius:11px; padding:16px 14px 19px; min-width:0; }
+.tm93-page .th93-filter-title { display:flex; align-items:center; justify-content:space-between; gap:8px; padding-bottom:10px; border-bottom:1px solid #e9effb; }
+.tm93-page .th93-filter-title h2 { margin:0; font-size:17px; font-weight:850; color:var(--th-navy); }
+.tm93-page .th93-filter-title a { font-size:12px; color:#1365ee; text-decoration:none; white-space:nowrap; }
+.tm93-page .th93-search { display:flex; gap:7px; align-items:center; margin:13px 0; height:42px; border:1px solid #d5e4fb; border-radius:7px; padding:0 10px; color:#4276d8; }
+.tm93-page .th93-search input { min-width:0; width:100%; height:100%; border:0; font-size:13px; outline:0; }
+.tm93-page .th93-fieldset { margin:0; padding:10px 0 13px; border:0; border-bottom:1px solid #e9effb; min-width:0; }
+.tm93-page .th93-fieldset legend { font-size:14px; font-weight:850; color:var(--th-navy); padding:0; margin-bottom:4px; }
+.tm93-page .th93-fieldset>label { display:flex; gap:9px; align-items:center; margin:10px 0; font-size:13px; line-height:1.35; cursor:pointer; color:#526fa2; }
+.tm93-page .th93-fieldset input[type=radio] { flex:0 0 15px; width:15px; height:15px; accent-color:#1167f5; margin:0; }
+.tm93-page .th93-date-range { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:8px; }
+.tm93-page .th93-date-range label { display:block; min-width:0; font-size:11.5px; color:#5c77a7; }
+.tm93-page .th93-date-range input { width:100%; min-width:0; margin-top:5px; border:1px solid #d8e5f8; padding:5px 4px; font:inherit; font-size:11px; min-height:34px; border-radius:6px; color:#0b2a6f; }
+.tm93-page .th93-categories select { width:100%; min-width:0; min-height:40px; border:1px solid #d5e4fb; border-radius:6px; padding:0 9px; background:#fff; color:#133e8d; font-size:13px; }
+.tm93-page .th93-apply { background:#0b67f5; color:#fff; border:0; border-radius:7px; min-height:43px; width:100%; margin-top:15px; font-size:14px; font-weight:850; cursor:pointer; }
+.tm93-page .th93-apply:hover { background:#0957d6; }
+@media(max-width:1430px) { .tm93-page .th93-shell { padding:15px; }.tm93-page .th93-layout { grid-template-columns:minmax(0,1fr) 238px;gap:11px; }.tm93-page .th93-stat { padding:10px 8px; gap:7px; }.tm93-page .th93-stat-icon { width:40px; height:40px; flex-basis:40px; }.tm93-page .th93-stat-info span { font-size:11.5px; }.tm93-page .th93-stat-info strong { font-size:23px; }.tm93-page .th93-project-cell { min-width:165px; }.tm93-page .th93-table th,.tm93-page .th93-table td { padding:10px 7px; } }
+@media(max-width:1100px) { .tm93-page .th93-layout { grid-template-columns:1fr; }.tm93-page .th93-filter { grid-row:2; }.tm93-page .th93-stats { grid-template-columns:repeat(2,minmax(0,1fr)); }.tm93-page .th93-date-range { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:650px) { .tm93-page .th93-shell { padding:10px; }.tm93-page .th93-tabs { grid-template-columns:1fr; }.tm93-page .th93-tabs a { min-height:39px; }.tm93-page .th93-banner { border-radius:7px; }.tm93-page .th93-stats { gap:6px; }.tm93-page .th93-stat { padding:8px; min-height:82px; }.tm93-page .th93-stat-icon { width:35px; height:35px; flex-basis:35px; }.tm93-page .th93-stat-info strong { font-size:20px; }.tm93-page .th93-table-bottom { flex-wrap:wrap; } }
+
+.tm93-page .th93-actions { display:flex; align-items:center; justify-content:flex-start; gap:6px; }
+.tm93-page .th93-more { display:grid; place-items:center; width:34px; height:34px; flex:0 0 34px; background:#f1f6ff; color:#1769ef; border-radius:6px; text-decoration:none; }

@@ -1,0 +1,105 @@
+/* TalentMatch V95 — Client /customer/jobs and /customer/jobs/new.
+   Keeps all existing sidebar, header and footer fragments. */
+.tm-client-posted-v94 .tm-posted-table th{font-size:14px!important;font-weight:800!important;padding:16px 13px!important}
+.tm-client-posted-v94 .tm-posted-table td{font-size:14px!important;line-height:1.5!important;padding:16px 13px!important}
+.tm-client-posted-v94 .tm-job-title{font-size:16px!important;font-weight:800!important;line-height:1.4!important}
+.tm-client-posted-v94 .tm-job-skills span{font-size:12px!important;padding:4px 7px!important}
+.tm-client-posted-v94 .tm-job-icon{width:52px!important;height:52px!important;flex-basis:52px!important;font-size:22px!important}
+.tm-client-posted-v94 .tm-job-main{gap:13px!important}
+.tm-client-posted-v94 .tm-category,.tm-client-posted-v94 .tm-posted-date{font-size:13px!important}
+.tm-client-posted-v94 .tm-budget{color:#dc2626!important;font-size:18px!important;font-weight:850!important;letter-spacing:-.2px}
+.tm-client-posted-v94 .tm-budget-caption,.tm-client-posted-v94 .tm-meta-small{font-size:12px!important}
+.tm-client-posted-v94 .tm-applicant-total{font-size:18px!important}
+.tm-client-posted-v94 .tm-posted-state{font-size:12.5px!important;min-width:100px!important}
+.tm-client-posted-v94 .tm-view-applicants{font-size:13px!important;min-height:38px!important}
+.tm-client-posted-v94 .tm-status-tabs a{font-size:13px!important}
+.tm-client-posted-v94 .tm-posted-search input,.tm-client-posted-v94 .tm-posted-search select{font-size:13.5px!important}
+.tm-client-posted-v94 .tm-posted-kpi small{font-size:13.5px!important}
+.tm-client-posted-v94 .tm-posted-kpi strong{font-size:28px!important}
+.tm-client-posted-v94 .tm-posted-table{min-width:1140px}
+.tm-client-posted-v94 .tm-posted-pagination a{font-size:14px!important}
+
+/* New job form — uses the same desktop shell, sidebar and footer as the V94 posted jobs page */
+.tm-jobform-v95 .tm-jobform-main{padding-top:78px!important}
+.tm-jobform-v95 .tm-jobform-shell{padding:12px 18px 22px}
+.tm-jobform-v95 .tm-jobform-banner{width:100%;margin:0 0 13px;border-radius:11px;overflow:hidden;background:#dcefff}
+.tm-jobform-v95 .tm-jobform-banner img{display:block;width:100%;height:auto;aspect-ratio:1920/360;object-fit:contain}
+.tm-jobform-v95 .tm-jobform-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;background:#fff;border:1px solid #dce8f8;border-radius:11px;min-height:62px;padding:0 10px;margin-bottom:13px;box-shadow:0 5px 16px #173f7f06}
+.tm-jobform-v95 .tm-jobform-step{display:flex;align-items:center;justify-content:center;gap:13px;min-width:0;border:0;background:transparent;color:#5973a5;font-size:14px;font-weight:750;cursor:pointer}
+.tm-jobform-v95 .tm-jobform-step b{display:grid;place-items:center;flex:0 0 33px;width:33px;height:33px;border-radius:50%;background:#88a2ce;color:#fff;font-size:16px}
+.tm-jobform-v95 .tm-jobform-step.active{color:#075ce3}
+.tm-jobform-v95 .tm-jobform-step.active b{background:#0968fa;box-shadow:0 3px 12px #0968fa33}
+.tm-jobform-v95 .tm-jobform-step.completed b{background:#0fbb83}
+.tm-jobform-v95 .tm-jobform-grid{display:grid;grid-template-columns:minmax(0,1.87fr) minmax(290px,.95fr);gap:15px;align-items:start}
+.tm-jobform-v95 .tm-jobform-card,.tm-jobform-v95 .tm-jobform-side-card{background:white;border:1px solid #dce8f8;border-radius:12px;box-shadow:0 4px 15px #173f7f06}
+.tm-jobform-v95 .tm-jobform-card{min-height:480px;overflow:hidden;padding:18px 22px 15px;display:flex;flex-direction:column}
+.tm-jobform-v95 .tm-wizard-panel{flex:1;min-width:0}
+.tm-jobform-v95 .tm-wizard-panel[hidden],.tm-jobform-v95 [hidden]{display:none!important}
+.tm-jobform-v95 .tm-form-section-title{display:flex;align-items:center;gap:13px;margin-bottom:17px}
+.tm-jobform-v95 .tm-form-icon{width:48px;height:48px;display:grid;place-items:center;flex:0 0 48px;border-radius:12px;background:#e9f2ff;color:#0566ed;font-size:22px}
+.tm-jobform-v95 .tm-form-section-title h1,.tm-jobform-v95 .tm-form-section-title h2{font-size:20px;font-weight:800;color:#0b2a6f;line-height:1.2;margin:0 0 5px}
+.tm-jobform-v95 .tm-form-section-title p{margin:0;color:#657eab;font-size:13.5px;line-height:1.5}
+.tm-jobform-v95 .tm-form-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:19px;row-gap:16px}
+.tm-jobform-v95 .tm-form-field{position:relative;display:flex;flex-direction:column;gap:8px;min-width:0;color:#0c2c69;font-size:14px;font-weight:750}
+.tm-jobform-v95 .tm-form-field.full{grid-column:1/-1}
+.tm-jobform-v95 .tm-form-field em{font-style:normal;color:#df3238}
+.tm-jobform-v95 .tm-form-field input:not([type=file]),.tm-jobform-v95 .tm-form-field select,.tm-jobform-v95 .tm-form-field textarea{width:100%;box-sizing:border-box;min-height:44px;outline:none;padding:12px 13px;border-radius:8px;border:1px solid #cbdcf4;background:#fff;color:#153a77;font:500 14px/1.5 Inter,'Segoe UI',sans-serif;transition:border-color .12s,box-shadow .12s}
+.tm-jobform-v95 .tm-form-field input:focus,.tm-jobform-v95 .tm-form-field select:focus,.tm-jobform-v95 .tm-form-field textarea:focus{border-color:#1671ff;box-shadow:0 0 0 3px #1671ff15}
+.tm-jobform-v95 .tm-form-field input::placeholder,.tm-jobform-v95 .tm-form-field textarea::placeholder{color:#8ca1be}
+.tm-jobform-v95 .tm-form-field textarea{min-height:170px;resize:vertical}
+.tm-jobform-v95 .tm-editor-toolbar{display:flex;align-items:center;gap:5px;padding:6px;background:#f3f7fe;border:1px solid #dbe6f9;border-bottom:0;border-radius:8px 8px 0 0;margin-bottom:-8px}
+.tm-jobform-v95 .tm-editor-toolbar button{border:0;background:#fff;border-radius:5px;color:#244c88;width:32px;height:30px;font-size:14px;cursor:pointer}
+.tm-jobform-v95 .tm-editor-toolbar span{font-size:12px;color:#7890b5;font-weight:400;margin-left:8px}
+.tm-jobform-v95 .tm-editor-toolbar + textarea{border-radius:0 0 8px 8px}
+.tm-jobform-v95 .tm-field-counter{align-self:flex-end;color:#7892bc;font-size:11.5px;font-weight:400;margin-top:-2px}
+.tm-jobform-v95 .tm-upload-zone{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;text-align:center;border:1.5px dashed #88b5fa;border-radius:8px;background:#f7faff;min-height:105px;cursor:pointer;color:#5278b3;padding:13px}
+.tm-jobform-v95 .tm-upload-zone>i{color:#3b8bfa;font-size:25px}
+.tm-jobform-v95 .tm-upload-zone span{font-size:13px;font-weight:450}
+.tm-jobform-v95 .tm-upload-zone strong{color:#0067ed}
+.tm-jobform-v95 .tm-upload-zone small{font-size:11.5px;font-weight:400}
+.tm-jobform-v95 .tm-upload-zone input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.tm-jobform-v95 .tm-upload-zone.dragging{border-color:#0067ed;background:#e7f2ff}
+.tm-jobform-v95 .tm-upload-name,.tm-jobform-v95 .tm-existing-attachment{color:#5377ad;font-size:12px;font-weight:500;text-decoration:none}
+.tm-jobform-v95 .tm-form-helper{grid-column:1/-1;margin:0;padding:10px 13px;background:#f1f7ff;border-radius:8px;color:#5476a7;font-size:13px;line-height:1.6}
+.tm-jobform-v95 .tm-form-helper i{color:#1470ee;margin-right:5px}
+.tm-jobform-v95 .tm-form-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #e7effa;margin-top:auto;padding-top:15px}
+.tm-jobform-v95 .tm-form-bottom-right{display:flex;align-items:center;gap:9px;margin-left:auto}
+.tm-jobform-v95 .tm-form-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:43px;border-radius:8px;padding:0 20px;cursor:pointer;font-size:14px;font-weight:800;border:1px solid transparent;white-space:nowrap}
+.tm-jobform-v95 .tm-form-btn.primary{background:#0b66f5;color:#fff;box-shadow:0 4px 9px #0b66f526}
+.tm-jobform-v95 .tm-form-btn.primary:hover{background:#0052d5}
+.tm-jobform-v95 .tm-form-btn.secondary,.tm-jobform-v95 .tm-form-btn.subtle{background:#f0f6ff;color:#0864ee;border-color:#b3d0ff}
+.tm-jobform-v95 .tm-form-btn:hover{filter:brightness(.97)}
+.tm-jobform-v95 .tm-form-error{display:flex;gap:8px;align-items:center;margin:0 0 12px;padding:12px;border-radius:8px;color:#a91c2c;background:#fff0f2;font-size:13px}
+.tm-jobform-v95 .tm-draft-note{font-size:12px;margin:9px 0 0;color:#02734f}
+.tm-jobform-v95 .tm-jobform-right{display:flex;flex-direction:column;gap:13px}
+.tm-jobform-v95 .tm-jobform-side-card{padding:17px 18px}
+.tm-jobform-v95 .tm-jobform-side-heading{display:flex;align-items:center;gap:11px;margin-bottom:17px}
+.tm-jobform-v95 .tm-jobform-side-heading h2{color:#0b2a6f;font-weight:800;font-size:17px;line-height:1.35;margin:0}
+.tm-jobform-v95 .tm-side-icon{width:39px;height:39px;flex:0 0 39px;display:grid;place-items:center;border-radius:9px;font-size:18px}
+.tm-jobform-v95 .tm-side-icon.orange{background:#fff0df;color:#f1a011}
+.tm-jobform-v95 .tm-side-icon.blue{background:#e7f2ff;color:#1872f5}
+.tm-jobform-v95 .tm-jobform-tips ul{list-style:none;margin:0;padding:0;display:grid;gap:15px}
+.tm-jobform-v95 .tm-jobform-tips li{display:flex;align-items:start;gap:10px;color:#526e9e;font-size:13px;line-height:1.4}
+.tm-jobform-v95 .tm-jobform-tips li i{color:#04ad69;font-size:16px}
+.tm-jobform-v95 .tm-preview-content{display:flex;gap:10px;align-items:center;padding:0 3px 13px;border-bottom:1px solid #e8effa}
+.tm-jobform-v95 .tm-preview-image{flex:0 0 64px;width:64px;height:63px;display:grid;place-items:center;color:#87b7fb;font-size:28px;border-radius:8px;background:#eef4fa}
+.tm-jobform-v95 .tm-preview-main{min-width:0;flex:1;display:flex;flex-direction:column;gap:6px}
+.tm-jobform-v95 .tm-preview-main strong{font-size:13px;color:#0b2a6f;line-height:1.4;overflow-wrap:anywhere}
+.tm-jobform-v95 .tm-preview-main span{font-size:12px;color:#7390bc}
+.tm-jobform-v95 .tm-preview-budget{display:flex;flex:0 0 100px;flex-direction:column;align-items:flex-end;gap:7px}
+.tm-jobform-v95 .tm-preview-budget small{color:#6b84a8;font-size:12px}
+.tm-jobform-v95 .tm-preview-budget strong,.tm-jobform-v95 .tm-preview-price{font-weight:850;color:#dc2626;font-size:16px}
+.tm-jobform-v95 .tm-preview-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;padding-top:15px}
+.tm-jobform-v95 .tm-preview-meta div{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;color:#6c88b0;font-size:11.5px}
+.tm-jobform-v95 .tm-preview-meta i{color:#2476f3;font-size:17px}
+.tm-jobform-v95 .tm-preview-meta b{font-size:12px;font-weight:800;color:#214581;overflow-wrap:anywhere}
+.tm-jobform-v95 .tm-form-hint{display:flex;gap:9px;background:#eef6ff;color:#5976a4;font-size:12px;line-height:1.55}
+.tm-jobform-v95 .tm-form-hint i{font-size:17px;color:#1872f5}
+.tm-jobform-v95 .tm-review-list{display:grid;gap:0;margin:0}
+.tm-jobform-v95 .tm-review-list div{display:grid;grid-template-columns:180px minmax(0,1fr);gap:10px;padding:14px 0;border-bottom:1px solid #e7edf7}
+.tm-jobform-v95 .tm-review-list dt{color:#607caa;font-size:13px}
+.tm-jobform-v95 .tm-review-list dd{margin:0;color:#0e316f;font-size:14px;font-weight:750;white-space:pre-wrap;overflow-wrap:anywhere}
+.tm-jobform-v95 .tm-review-list dd.tm-preview-price{color:#dc2626;font-size:18px}
+@media(max-width:1250px){.tm-jobform-v95 .tm-jobform-grid{grid-template-columns:minmax(0,1.6fr) minmax(270px,.9fr)}.tm-jobform-v95 .tm-jobform-step{font-size:12px;gap:7px}}
+@media(max-width:1040px){.tm-jobform-v95 .tm-jobform-grid{grid-template-columns:1fr}.tm-jobform-v95 .tm-jobform-right{display:grid;grid-template-columns:1fr 1fr}.tm-jobform-v95 .tm-form-hint{grid-column:1/-1}}
+@media(max-width:680px){.tm-jobform-v95 .tm-jobform-steps{gap:3px;padding:7px;min-height:54px}.tm-jobform-v95 .tm-jobform-step span{display:none}.tm-jobform-v95 .tm-jobform-card{padding:14px}.tm-jobform-v95 .tm-form-fields{grid-template-columns:1fr}.tm-jobform-v95 .tm-form-field{grid-column:1/-1}.tm-jobform-v95 .tm-jobform-right{display:flex}.tm-jobform-v95 .tm-form-bottom{flex-wrap:wrap}.tm-jobform-v95 .tm-form-btn{padding:0 12px;font-size:12px}.tm-jobform-v95 .tm-review-list div{grid-template-columns:1fr}}

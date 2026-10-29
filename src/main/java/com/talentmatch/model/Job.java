@@ -29,6 +29,8 @@ public class Job {
     @Column(columnDefinition = "TEXT") private String acceptanceCriteria;
     @Enumerated(EnumType.STRING) @Column(nullable = false, length = 30) private JobStatus status = JobStatus.OPEN;
     @ManyToOne(fetch = FetchType.LAZY, optional = false) @JoinColumn(name = "customer_id") private User customer;
+    @Column(name = "attachment_key", length = 80) private String attachmentKey;
+    @Column(name = "attachment_original_name", length = 255) private String attachmentOriginalName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -69,6 +71,10 @@ public class Job {
     public void setStatus(JobStatus status) { this.status = status; }
     public User getCustomer() { return customer; }
     public void setCustomer(User customer) { this.customer = customer; }
+    public String getAttachmentKey() { return attachmentKey; }
+    public void setAttachmentKey(String attachmentKey) { this.attachmentKey = attachmentKey; }
+    public String getAttachmentOriginalName() { return attachmentOriginalName; }
+    public void setAttachmentOriginalName(String attachmentOriginalName) { this.attachmentOriginalName = attachmentOriginalName; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }

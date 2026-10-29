@@ -1,0 +1,148 @@
+/* TalentMatch V91 - Sửa vỡ nhãn radio, khoảng cách và vùng bộ lọc của trang Hỏi đáp.
+   Không tác động vào Sidebar, Header, Footer hoặc trang khác. */
+.tm90 .tm90-layout {
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 16px;
+  align-items: start;
+}
+.tm90 .tm91-filters,
+.tm90 .tm91-filters * { box-sizing: border-box; }
+.tm90 .tm91-filters {
+  min-width: 0;
+  width: 100%;
+  padding: 17px 16px;
+  overflow: hidden;
+}
+.tm90 .tm91-filter-form { min-width: 0; width: 100%; }
+.tm90 .tm91-filters .tm90-filter-head { padding-bottom: 13px; }
+.tm90 .tm91-filters .tm90-filter-head h2 { font-size: 16px; line-height: 1.3; }
+.tm90 .tm91-filters .tm90-filter-head a { font-size: 12px; }
+.tm90 .tm91-search-field {
+  display: flex !important;
+  align-items: center !important;
+  flex-direction: row !important;
+  gap: 9px !important;
+  height: 42px;
+  width: 100%;
+  margin: 13px 0 0;
+  padding: 0 11px;
+  border: 1px solid #dce7f8;
+  border-radius: 8px;
+  background: #fff;
+  color: #6a8bbc;
+}
+.tm90 .tm91-search-field input {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #0b2a6f;
+}
+.tm90 .tm91-filter-section {
+  display: block;
+  clear: both;
+  width: 100%;
+  padding: 15px 0;
+  border-bottom: 1px solid #e5edf9;
+}
+.tm90 .tm91-filter-section h3 {
+  display: block;
+  float: none;
+  width: auto;
+  padding: 0;
+  margin: 0 0 10px;
+  line-height: 1.35;
+  font-size: 14px;
+  font-weight: 800;
+  color: #0b2a6f;
+}
+/* Dùng grid 16px + 1fr, tách chữ ra span để không bị dạt về mép phải. */
+.tm90 .tm91-filters label.tm91-radio-row {
+  display: grid !important;
+  grid-template-columns: 16px minmax(0,1fr) !important;
+  justify-content: start !important;
+  justify-items: start;
+  align-items: center !important;
+  column-gap: 11px !important;
+  width: 100% !important;
+  max-width: 100%;
+  margin: 10px 0 0 !important;
+  padding: 0 !important;
+  min-height: 23px;
+  border: none !important;
+  background: transparent !important;
+  cursor: pointer;
+}
+.tm90 .tm91-filters .tm91-radio-row input[type=radio],
+.tm90 .tm91-filters .tm91-radio-row input[type=checkbox] {
+  display: block;
+  position: static;
+  grid-column: 1;
+  flex: none;
+  margin: 0;
+  padding: 0;
+  opacity: 1;
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px;
+  accent-color: #1268f5;
+}
+.tm90 .tm91-filters .tm91-radio-row span {
+  display: block;
+  grid-column: 2;
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 500;
+  color: #526b96;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+.tm90 .tm91-filters .tm91-radio-row:has(input:checked) span { color: #0b2a6f; font-weight: 700; }
+.tm90 .tm91-category-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.tm90 .tm91-category-chips label {
+  display: inline-flex !important;
+  position: relative;
+  width: auto !important;
+  max-width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 7px 9px;
+  border-radius: 7px;
+  border: 1px solid #dbe8fb;
+  color: #3f6eae;
+  background: #f1f6ff;
+  cursor: pointer;
+  line-height: 1.3;
+}
+.tm90 .tm91-category-chips label input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.tm90 .tm91-category-chips label span { display: inline; font-size: 12px; font-weight: 700; white-space: normal; }
+.tm90 .tm91-category-chips label.selected,
+.tm90 .tm91-category-chips label:has(input:checked) { background: #deebff; border-color: #a9c8ff; color: #1264e4; }
+.tm90 .tm91-category-chips label:focus-within { outline: 2px solid #1268f5; outline-offset: 2px; }
+.tm90 .tm91-filters .tm90-filter-submit { min-height: 44px; margin-top: 16px; font-size: 14px; }
+.tm90 .tm91-filters .tm90-filter-note { margin-top: 14px; }
+.tm90 .tm90-empty { min-height: 220px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.tm90 .tm90-q-excerpt { font-size: 13px; }
+@media (max-width: 1240px) {
+  .tm90 .tm90-layout { grid-template-columns: minmax(0,1fr) 260px; gap: 12px; }
+  .tm90 .tm91-filters { padding: 14px 12px; }
+}
+@media (max-width: 1080px) {
+  .tm90 .tm90-layout { grid-template-columns: minmax(0,1fr); }
+  .tm90 .tm91-filters { max-width: 100%; }
+}
+@media (max-width: 690px) {
+  .tm90 .tm90-toolbar { flex-wrap: wrap; }
+  .tm90 .tm90-toolbar .tm90-search { flex-basis: 100%; }
+}

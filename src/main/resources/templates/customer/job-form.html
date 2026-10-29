@@ -1,219 +1,130 @@
-```html
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-
 <head th:replace="~{fragments/common :: head('Đăng công việc')}"></head>
-
-<body class="market-body client-workspace">
-
+<body class="market-body client-workspace client-v52-page cd-dashboard tm-client-posted-v94 tm-jobform-v95"
+      th:attr="data-account=${currentUser != null ? currentUser.email : 'anonymous'}">
+<link rel="stylesheet" th:href="@{/css/customer-footer-banner-v72.css(v=72)}">
+<link rel="stylesheet" th:href="@{/css/customer-posted-v94.css(v=94)}">
+<link rel="stylesheet" th:href="@{/css/customer-client-v95.css(v=95)}">
 <aside th:replace="~{fragments/common :: marketSidebar('new')}"></aside>
 <header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
 <div th:replace="~{fragments/common :: flash}"></div>
+<main class="market-main client-main tm-posted-main tm-jobform-main">
+ <div class="tm-posted-shell tm-jobform-shell">
+  <section class="tm-jobform-banner" aria-label="Đăng công việc">
+   <img th:src="@{/images/talentmatch-job-create-banner-v95.png}" alt="Tìm đúng freelancer cho dự án của bạn">
+  </section>
 
-<main class="market-main client-main">
-    <div class="client-shell">
+  <nav class="tm-jobform-steps" aria-label="Các bước đăng công việc">
+   <button type="button" class="tm-jobform-step active" data-step-button="1"><b>1</b><span>Thông tin công việc</span></button>
+   <button type="button" class="tm-jobform-step" data-step-button="2"><b>2</b><span>Ngân sách &amp; thời gian</span></button>
+   <button type="button" class="tm-jobform-step" data-step-button="3"><b>3</b><span>Yêu cầu &amp; kỹ năng</span></button>
+   <button type="button" class="tm-jobform-step" data-step-button="4"><b>4</b><span>Xem lại và đăng</span></button>
+  </nav>
 
-        <div class="client-breadcrumb">
-            Workspace /
-            <a th:href="@{/customer/jobs}">Công việc đã đăng</a> /
-            <b th:text="${editing ? 'Chỉnh sửa' : 'Đăng mới'}">Đăng mới</b>
-        </div>
+  <div class="tm-jobform-grid">
+   <form id="tmJobForm" class="tm-jobform-card" method="post" enctype="multipart/form-data"
+         th:action="${editing} ? @{/customer/jobs/{id}(id=${job.id})} : @{/customer/jobs}"
+         th:object="${job}" th:attr="data-editing=${editing}">
+    <div class="tm-form-error" th:if="${error != null}"><i class="fa-solid fa-circle-exclamation"></i><span th:text="${error}">Dữ liệu không hợp lệ.</span></div>
 
-        <div class="client-page-heading">
-            <div>
-                <span class="client-eyebrow">ĐĂNG TUYỂN</span>
-                <h1 th:text="${editing ? 'Chỉnh sửa công việc' : 'Tạo công việc mới'}">
-                    Tạo công việc mới
-                </h1>
-                <p>
-                    Mô tả dự án, ngân sách và sản phẩm số cần bàn giao
-                    để tìm Freelancer phù hợp.
-                </p>
-            </div>
-        </div>
+    <section class="tm-wizard-panel" data-step="1">
+     <div class="tm-form-section-title"><span class="tm-form-icon"><i class="fa-regular fa-file-lines"></i></span><div><h1>Thông tin công việc</h1><p>Cung cấp thông tin chi tiết về công việc bạn cần tuyển freelancer.</p></div></div>
+     <div class="tm-form-fields">
+      <label class="tm-form-field full"><span>Tiêu đề công việc <em>*</em></span>
+       <input th:field="*{title}" required minlength="5" maxlength="220" placeholder="Ví dụ: Thiết kế UI/UX cho website thương hiệu" autocomplete="off">
+       <small class="tm-field-counter"><span data-count-for="title">0</span>/220</small>
+      </label>
+      <label class="tm-form-field"><span>Danh mục <em>*</em></span>
+       <select th:field="*{category}" required>
+        <option value="">Chọn danh mục</option>
+        <option value="Lập trình &amp; CNTT">Lập trình &amp; CNTT</option>
+        <option value="Thiết kế &amp; Sáng tạo">Thiết kế &amp; Sáng tạo</option>
+        <option value="Marketing &amp; Bán hàng">Marketing &amp; Bán hàng</option>
+        <option value="Viết lách &amp; Nội dung">Viết lách &amp; Nội dung</option>
+        <option value="Viết lách &amp; Dịch thuật">Viết lách &amp; Dịch thuật</option>
+        <option value="Âm thanh &amp; Video">Âm thanh &amp; Video</option>
+        <option value="Kỹ thuật &amp; Kiến trúc">Kỹ thuật &amp; Kiến trúc</option>
+        <option value="Hành chính &amp; Nhân sự">Hành chính &amp; Nhân sự</option>
+        <option value="Luật &amp; Pháp lý">Luật &amp; Pháp lý</option>
+        <option value="Khác">Khác</option>
+       </select>
+      </label>
+      <label class="tm-form-field"><span>Loại công việc <em>*</em></span>
+       <select th:field="*{workType}" required><option value="REMOTE">Làm từ xa (Remote)</option><option value="HYBRID">Kết hợp (Hybrid)</option><option value="ONSITE">Tại văn phòng (Onsite)</option></select>
+      </label>
+      <label class="tm-form-field full"><span>Mô tả chi tiết công việc <em>*</em></span>
+       <span class="tm-editor-toolbar" aria-label="Gợi ý định dạng mô tả"><button type="button" data-insert="**" aria-label="In đậm"><b>B</b></button><button type="button" data-insert="_" aria-label="In nghiêng"><i>I</i></button><button type="button" data-insert="• " aria-label="Dấu đầu dòng"><i class="fa-solid fa-list"></i></button><span>Nhập mô tả rõ yêu cầu và kết quả mong muốn</span></span>
+       <textarea th:field="*{description}" required minlength="30" maxlength="4000" rows="6" placeholder="Mô tả công việc, mục tiêu, phạm vi, các đầu việc và kết quả cần đạt..."></textarea>
+       <small class="tm-field-counter"><span data-count-for="description">0</span>/4000</small>
+      </label>
+      <div class="tm-form-field full"><span>Hình ảnh / tài liệu đính kèm (tùy chọn)</span>
+       <label class="tm-upload-zone" for="tmAttachment"><i class="fa-solid fa-cloud-arrow-up"></i><span><strong>Nhấn để chọn tệp</strong> hoặc kéo thả vào đây</span><small>JPG, PNG, PDF, DOC, DOCX • tối đa 10 MB</small><input type="file" id="tmAttachment" name="attachment" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"></label>
+       <small class="tm-upload-name" id="tmUploadName">Chưa chọn tệp</small>
+       <a th:if="${editing and job.attachmentKey != null}" th:href="@{/customer/jobs/{id}/attachment(id=${job.id})}" th:text="${'Tệp đang lưu: ' + job.attachmentOriginalName}" class="tm-existing-attachment">Tệp đã đính kèm</a>
+      </div>
+     </div>
+    </section>
 
-        <div class="client-form-layout">
+    <section class="tm-wizard-panel" data-step="2" hidden>
+     <div class="tm-form-section-title"><span class="tm-form-icon"><i class="fa-solid fa-wallet"></i></span><div><h2>Ngân sách &amp; thời gian</h2><p>Đưa ra ngân sách và lịch trình phù hợp để freelancer chủ động báo giá.</p></div></div>
+     <div class="tm-form-fields">
+      <label class="tm-form-field"><span>Ngân sách dự kiến (VNĐ) <em>*</em></span><input type="number" th:field="*{budget}" min="1" max="100000000000" step="1000" required placeholder="Ví dụ: 12000000"></label>
+      <label class="tm-form-field"><span>Hình thức ngân sách</span><select th:field="*{priceType}"><option value="FIXED">Trọn gói</option><option value="NEGOTIABLE">Có thể thương lượng</option></select></label>
+      <label class="tm-form-field"><span>Hạn hoàn thành dự kiến</span><input type="date" th:field="*{deadline}" id="tmDeadline"></label>
+      <label class="tm-form-field"><span>Số ngày thực hiện dự kiến</span><input type="number" th:field="*{estimatedDurationDays}" min="1" max="3650" placeholder="14"></label>
+      <p class="tm-form-helper full"><i class="fa-regular fa-circle-info"></i> Bạn có thể điều chỉnh thời gian và ngân sách khi thương lượng với freelancer.</p>
+     </div>
+    </section>
 
-            <form class="client-panel client-form"
-                  th:action="${editing} ? @{/customer/jobs/{id}(id=${job.id})} : @{/customer/jobs}"
-                  method="post"
-                  th:object="${job}">
+    <section class="tm-wizard-panel" data-step="3" hidden>
+     <div class="tm-form-section-title"><span class="tm-form-icon"><i class="fa-solid fa-list-check"></i></span><div><h2>Yêu cầu &amp; kỹ năng</h2><p>Xác định chuyên môn và tiêu chí bàn giao để chọn đúng người thực hiện.</p></div></div>
+     <div class="tm-form-fields">
+      <label class="tm-form-field full"><span>Kỹ năng cần có</span><input th:field="*{requiredSkills}" maxlength="1000" placeholder="Figma, UI/UX, React, Spring Boot... (cách nhau bởi dấu phẩy)"></label>
+      <label class="tm-form-field full"><span>Cấp độ kinh nghiệm</span><select th:field="*{experienceLevel}"><option value="JUNIOR">Mới bắt đầu / Junior</option><option value="MIDDLE">Trung cấp / Middle</option><option value="SENIOR">Chuyên gia / Senior</option><option value="ENTRY">Entry</option><option value="INTERMEDIATE">Intermediate</option><option value="EXPERT">Expert</option></select></label>
+      <label class="tm-form-field full"><span>Tiêu chí nghiệm thu <em>*</em></span><textarea th:field="*{acceptanceCriteria}" rows="7" required minlength="10" maxlength="3000" placeholder="Những hạng mục bắt buộc hoàn thành, định dạng bàn giao, cách kiểm thử và số lần chỉnh sửa..."></textarea><small class="tm-field-counter"><span data-count-for="acceptanceCriteria">0</span>/3000</small></label>
+     </div>
+    </section>
 
-                <!-- THÔNG TIN CÔNG VIỆC -->
-                <div class="client-panel-head">
-                    <div>
-                        <h2>1. Thông tin công việc</h2>
-                        <p>Các trường đánh dấu * là bắt buộc.</p>
-                    </div>
-                </div>
+    <section class="tm-wizard-panel tm-review-panel" data-step="4" hidden>
+     <div class="tm-form-section-title"><span class="tm-form-icon"><i class="fa-regular fa-circle-check"></i></span><div><h2>Xem lại và đăng công việc</h2><p>Kiểm tra các thông tin bên dưới trước khi gửi công việc lên TalentMatch.</p></div></div>
+     <dl class="tm-review-list"><div><dt>Tên công việc</dt><dd data-review="title">—</dd></div><div><dt>Danh mục</dt><dd data-review="category">—</dd></div><div><dt>Hình thức</dt><dd data-review="workType">—</dd></div><div><dt>Ngân sách</dt><dd class="tm-preview-price" data-review="budget">—</dd></div><div><dt>Thời hạn</dt><dd data-review="deadline">—</dd></div><div><dt>Kỹ năng</dt><dd data-review="requiredSkills">—</dd></div><div><dt>Tiêu chí nghiệm thu</dt><dd data-review="acceptanceCriteria">—</dd></div></dl>
+     <p class="tm-form-helper"><i class="fa-solid fa-shield-halved"></i> Tin đăng sẽ sử dụng tài khoản doanh nghiệp đang đăng nhập. Chỉ gửi khi bạn đã kiểm tra thông tin.</p>
+    </section>
 
-                <div class="client-form-grid">
+    <div class="tm-form-error" id="tmWizardError" role="alert" hidden></div>
+    <div class="tm-form-bottom"><button type="button" class="tm-form-btn secondary" id="tmBack" hidden><i class="fa-solid fa-arrow-left"></i> Quay lại</button><div class="tm-form-bottom-right"><button type="button" id="tmDraft" class="tm-form-btn subtle" th:if="${!editing}"><i class="fa-regular fa-floppy-disk"></i> Lưu nháp</button><button type="button" class="tm-form-btn primary" id="tmNext">Tiếp tục <i class="fa-solid fa-arrow-right"></i></button><button type="submit" class="tm-form-btn primary" id="tmSubmit" hidden th:text="${editing ? 'Lưu thay đổi' : 'Đăng công việc'}">Đăng công việc</button></div></div>
+    <p class="tm-draft-note" id="tmDraftNote" role="status" hidden></p>
+   </form>
 
-                    <label class="wide">
-                        Tên dự án <em>*</em>
-                        <input th:field="*{title}"
-                               required
-                               minlength="5"
-                               maxlength="220"
-                               placeholder="VD: Xây dựng dashboard quản lý bán hàng">
-                    </label>
-
-                    <label>
-                        Lĩnh vực <em>*</em>
-                        <select th:field="*{category}" required>
-                            <option value="">Chọn danh mục</option>
-                            <option value="Lập trình & CNTT">Lập trình & CNTT</option>
-                            <option value="Thiết kế & Sáng tạo">Thiết kế & Sáng tạo</option>
-                            <option value="Marketing & Bán hàng">Marketing & Bán hàng</option>
-                            <option value="Viết lách & Nội dung">Viết lách & Nội dung</option>
-                            <option value="Viết lách & Dịch thuật">Viết lách & Dịch thuật</option>
-                            <option value="Âm thanh & Video">Âm thanh & Video</option>
-                            <option value="Kỹ thuật & Kiến trúc">Kỹ thuật & Kiến trúc</option>
-                            <option value="Hành chính & Nhân sự">Hành chính & Nhân sự</option>
-                            <option value="Luật & Pháp lý">Luật & Pháp lý</option>
-                            <option value="Khác">Khác</option>
-                        </select>
-                    </label>
-
-                    <label>
-                        Kỹ năng yêu cầu
-                        <input th:field="*{requiredSkills}"
-                               maxlength="1000"
-                               placeholder="Java, Spring Boot, Figma...">
-                    </label>
-
-                    <label class="wide">
-                        Mô tả chi tiết công việc <em>*</em>
-                        <textarea th:field="*{description}"
-                                  minlength="30"
-                                  rows="6"
-                                  required
-                                  placeholder="Mục tiêu dự án, chức năng cần thực hiện, phạm vi công việc và yêu cầu kỹ thuật..."></textarea>
-                    </label>
-
-                </div>
-
-                <!-- NGÂN SÁCH VÀ THỜI HẠN -->
-                <div class="client-panel-head divider">
-                    <div>
-                        <h2>2. Ngân sách &amp; thời hạn</h2>
-                    </div>
-                </div>
-
-                <div class="client-form-grid three">
-
-                    <label>
-                        Ngân sách (VNĐ) <em>*</em>
-                        <input type="number"
-                               min="1"
-                               max="100000000000"
-                               th:field="*{budget}"
-                               required>
-                    </label>
-
-                    <label>
-                        Cách tính phí
-                        <select th:field="*{priceType}">
-                            <option value="FIXED">Giá cố định</option>
-                            <option value="NEGOTIABLE">Thương lượng</option>
-                        </select>
-                    </label>
-
-                    <label>
-                        Hạn hoàn thành
-                        <input type="date" th:field="*{deadline}">
-                    </label>
-
-                    <label>
-                        Cấp kinh nghiệm
-                        <select th:field="*{experienceLevel}">
-                            <option value="JUNIOR">Mới bắt đầu</option>
-                            <option value="MIDDLE">Trung cấp</option>
-                            <option value="SENIOR">Chuyên gia</option>
-                            <option value="ENTRY">Entry</option>
-                            <option value="INTERMEDIATE">Intermediate</option>
-                            <option value="EXPERT">Expert</option>
-                        </select>
-                    </label>
-
-                    <label>
-                        Số ngày dự kiến
-                        <input type="number"
-                               min="1"
-                               max="3650"
-                               th:field="*{estimatedDurationDays}">
-                    </label>
-
-                    <label class="wide">
-                        Tiêu chí nghiệm thu <em>*</em>
-                        <textarea th:field="*{acceptanceCriteria}"
-                                  rows="4"
-                                  required
-                                  minlength="10"
-                                  maxlength="3000"
-                                  placeholder="Mô tả điều kiện hoàn thành, chức năng cần đạt, định dạng tệp, tài liệu đi kèm và số lần chỉnh sửa..."></textarea>
-                    </label>
-
-                </div>
-
-                <div class="client-form-actions">
-                    <a class="client-btn outline"
-                       th:href="@{/customer/jobs}">
-                        Quay lại
-                    </a>
-
-                    <button class="client-btn primary"
-                            type="submit"
-                            th:text="${editing ? 'Lưu công việc' : 'Đăng công việc & nhận Proposal'}">
-                        Đăng công việc
-                    </button>
-                </div>
-
-            </form>
-
-            <!-- CỘT GỢI Ý -->
-            <aside class="client-side-help">
-
-                <div class="client-panel">
-                    <span class="client-eyebrow">MẸO TUYỂN DỤNG</span>
-
-                    <h3>Tạo tin hấp dẫn</h3>
-
-                    <p>
-                        Mô tả rõ mục tiêu, kỹ năng, ngân sách và sản phẩm
-                        cần bàn giao để Freelancer hiểu yêu cầu trước khi báo giá.
-                    </p>
-
-                    <div class="client-guide-step">
-                        <b>01</b> Mô tả công việc cụ thể
-                    </div>
-
-                    <div class="client-guide-step">
-                        <b>02</b> Ghi rõ kỹ năng thiết yếu
-                    </div>
-
-                    <div class="client-guide-step">
-                        <b>03</b> Liệt kê sản phẩm bàn giao
-                    </div>
-
-                    <div class="client-guide-step">
-                        <b>04</b> Đặt tiêu chí nghiệm thu rõ ràng
-                    </div>
-                </div>
-
-                <a class="client-btn outline"
-                   th:href="@{/customer/talent}">
-                    Tìm Freelancer phù hợp →
-                </a>
-
-            </aside>
-
-        </div>
+   <aside class="tm-jobform-right">
+    <section class="tm-jobform-side-card tm-jobform-tips"><div class="tm-jobform-side-heading"><span class="tm-side-icon orange"><i class="fa-regular fa-lightbulb"></i></span><h2>Mẹo đăng công việc hiệu quả</h2></div>
+     <ul><li><i class="fa-solid fa-circle-check"></i> Tiêu đề rõ ràng, ngắn gọn</li><li><i class="fa-solid fa-circle-check"></i> Mô tả chi tiết yêu cầu và mục tiêu</li><li><i class="fa-solid fa-circle-check"></i> Đưa ra ngân sách hợp lý</li><li><i class="fa-solid fa-circle-check"></i> Chọn đúng danh mục và kỹ năng</li><li><i class="fa-solid fa-circle-check"></i> Cung cấp đầy đủ thông tin liên hệ</li></ul>
+    </section>
+    <section class="tm-jobform-side-card tm-live-preview"><div class="tm-jobform-side-heading"><span class="tm-side-icon blue"><i class="fa-regular fa-eye"></i></span><h2>Xem trước công việc</h2></div>
+      <div class="tm-preview-content"><span class="tm-preview-image"><i class="fa-regular fa-image"></i></span><div class="tm-preview-main"><strong id="tmPreviewTitle">Tên công việc của bạn</strong><span id="tmPreviewCategory">Danh mục chưa chọn</span><span id="tmPreviewSkills">Kỹ năng chưa nhập</span></div><div class="tm-preview-budget"><small>Ngân sách</small><strong id="tmPreviewBudget">— đ</strong></div></div>
+      <div class="tm-preview-meta"><div><i class="fa-solid fa-folder"></i><span>Danh mục</span><b id="tmPreviewCat2">—</b></div><div><i class="fa-regular fa-clock"></i><span>Thời gian</span><b id="tmPreviewTime">—</b></div><div><i class="fa-solid fa-users"></i><span>Hình thức</span><b id="tmPreviewType">Remote</b></div></div>
+    </section>
+    <section class="tm-jobform-side-card tm-form-hint"><i class="fa-solid fa-circle-info"></i><span>Công việc sẽ xuất hiện trong danh sách tuyển freelancer sau khi bạn hoàn thành bước đăng tin.</span></section>
+   </aside>
+  </div>
+ </div>
+  <footer class="fm-footer client-same-footer tm-posted-footer">
+    <div class="fm-footer-top">
+      <div class="fm-footer-intro">
+        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
+        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
+      </div>
+      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
+      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
+      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
+      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
     </div>
+    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
+  </footer>
 </main>
-
 <script th:replace="~{fragments/common :: scripts}"></script>
-
+<script th:src="@{/js/customer-jobform-v95.js(v=95)}" defer></script>
 </body>
 </html>
-```

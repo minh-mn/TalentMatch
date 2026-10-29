@@ -1,25 +1,93 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/common :: head('Thống kê & Báo cáo')}"></head><body class="market-body fm-dashboard tm42-page"><link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}"><link rel="stylesheet" th:href="@{/css/freelancer-v42.css}"><aside th:replace="~{fragments/common :: marketSidebar('reports')}"></aside><header class="fm-header">
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/common :: head('Thống kê & Báo cáo')}"></head><body class="market-body fm-dashboard tm42-page"><link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}"><link rel="stylesheet" th:href="@{/css/freelancer-v42.css}"><link rel="stylesheet" th:href="@{/css/freelancer-reports-v92.css}"><aside th:replace="~{fragments/common :: marketSidebar('reports')}"></aside><header class="fm-header">
 <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
 <form class="fm-header-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" th:value="${q}" placeholder="Tìm dự án, kỹ năng, khách hàng..." aria-label="Tìm kiếm"><button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button></form>
 <nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục nghề</a></nav>
 <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i></a><a th:href="@{/freelancer/profile}" class="fm-mini-avatar" th:text="${#strings.substring(currentUser.fullName,0,1)}">F</a><span th:text="${currentUser.fullName}">Freelancer</span></div>
-</header><div th:replace="~{fragments/common :: flash}"></div><main class="fm-main"><div class="tm42-shell"><section class="tm42-banner"><img th:src="@{/images/talentmatch-reports-v42-banner.png}" alt="Thống kê và báo cáo"></section><section class="tm42-kpis tm42-five"><div class="tm42-kpi"><i class="fa-solid fa-briefcase violet"></i><span>Tổng dự án<strong th:text="${reportTotalProjects}">0</strong></span></div><div class="tm42-kpi"><i class="fa-solid fa-check green"></i><span>Đã hoàn thành<strong th:text="${reportCompletedProjects}">0</strong></span></div><div class="tm42-kpi"><i class="fa-solid fa-spinner blue"></i><span>Đang thực hiện<strong th:text="${reportActiveProjects}">0</strong></span></div><div class="tm42-kpi"><i class="fa-solid fa-sack-dollar orange"></i><span>Đã giải ngân<strong th:text="${#numbers.formatDecimal(reportRevenue,0,'POINT',0,'COMMA')+'đ'}">0đ</strong></span></div><div class="tm42-kpi"><i class="fa-solid fa-star orange"></i><span>Đánh giá trung bình<strong th:text="${reportRating}">0</strong></span></div></section><nav class="tm42-tabs tm42-report-tabs"><a class="selected" href="#tm42-charts">Tổng quan</a><a href="#tm42-charts">Thu nhập</a><a href="#tm42-projects">Dự án</a><a href="#tm42-ratings">Đánh giá</a><a href="#tm42-clients">Khách hàng</a><a href="#tm42-charts">Hiệu suất</a><a href="#tm42-charts">Báo cáo</a></nav><section class="tm42-report-panel" id="tm42-charts"><h2>Biểu đồ hoạt động theo thời gian</h2><p>Chọn khoảng ngày và loại chỉ số để phân tích số dự án, doanh thu theo dữ liệu thực tế.</p><form class="fm-chart-toolbar" th:action="@{/freelancer/reports}" method="get">
-      <label>Từ ngày <input type="date" name="from" th:value="${from}" required></label>
-      <label>Đến ngày <input type="date" name="to" th:value="${to}" required></label>
-      <label>Thống kê cột <select name="metric"><option value="projects" th:selected="${metric == 'projects'}">Số dự án</option><option value="revenue" th:selected="${metric == 'revenue'}">Doanh thu (VNĐ)</option></select></label>
-      <label>Thống kê tròn <select name="pieMode"><option value="status" th:selected="${pieMode == 'status'}">Theo trạng thái</option><option value="category" th:selected="${pieMode == 'category'}">Theo lĩnh vực</option></select></label>
-      <button type="submit"><i class="fa-solid fa-filter"></i> Áp dụng</button>
-    </form>
-    <section class="fm-analysis-grid fm-chart-grid">
-      <article class="fm-panel fm-chart-panel"><div class="fm-panel-head"><div><h2><i class="fa-solid fa-chart-column"></i> <span th:text="${metric == 'revenue' ? 'Biểu đồ cột - Doanh thu' : 'Biểu đồ cột - Số dự án'}">Biểu đồ cột</span></h2><p th:text="|Từ ${#temporals.format(from,'dd/MM/yyyy')} đến ${#temporals.format(to,'dd/MM/yyyy')}|">Khoảng thời gian</p></div><span class="fm-chart-total" th:text="${metric == 'revenue' ? #numbers.formatDecimal(barTotal,0,'POINT',0,'COMMA') + 'đ' : #numbers.formatDecimal(barTotal,0,'POINT',0,'COMMA') + ' dự án'}">0</span></div>
-        <div class="fm-bar-chart fm-chart-bars" role="img" aria-label="Biểu đồ cột thống kê theo khoảng thời gian">
-          <div th:each="b:${barData}" class="fm-bar-column"><b th:text="${metric == 'revenue' ? #numbers.formatDecimal(b.value,0,'POINT',0,'COMMA') + 'đ' : #numbers.formatDecimal(b.value,0,'POINT',0,'COMMA')}">0</b><i th:style="|height:${12 + (b.value/barMax)*155}px|"></i><small th:text="${b.label}">Tháng</small></div>
-          <div class="fm-empty" th:if="${!hasBarData}">Chưa có dữ liệu phát sinh trong khoảng thời gian đã chọn.</div>
-        </div>
-      </article>
-      <article class="fm-panel fm-pie-panel"><div class="fm-panel-head"><div><h2><i class="fa-solid fa-chart-pie"></i> <span th:text="${pieMode == 'status' ? 'Tỷ lệ dự án theo trạng thái' : 'Tỷ lệ dự án theo lĩnh vực'}">Biểu đồ tròn</span></h2><p>Phân bổ dự án trong khoảng thời gian đã chọn</p></div></div>
-        <div class="fm-pie-content" th:if="${hasPieData}"><div class="fm-pie-ring" th:style="|background:${pieGradient}|" role="img" aria-label="Tỷ lệ các nhóm dự án"><div><b th:text="${pieTotal}">0</b><small>Dự án</small></div></div><div class="fm-pie-legend"><div class="fm-pie-legend-item" th:each="slice,iter:${pieData}"><i th:class="|fm-pie-dot fm-dot-${iter.index % 6}|"></i><span th:text="${slice.label}">Trạng thái</span><b th:text="|${#numbers.formatDecimal(slice.percent,1,1)}%|">0%</b></div></div></div>
-        <div class="fm-pie-empty" th:unless="${hasPieData}"><i class="fa-regular fa-chart-bar"></i><p>Chưa có dự án để hiển thị biểu đồ tròn.</p></div>
-      </article>
-    </section>
-    </section><section class="tm42-report-extras"><article class="tm42-box" id="tm42-projects"><h2>Phân bổ dự án theo trạng thái</h2><div class="tm42-rowstat"><span>Hoàn thành</span><strong th:text="${reportCompletedProjects}">0</strong></div><div class="tm42-rowstat"><span>Đang thực hiện</span><strong th:text="${reportActiveProjects}">0</strong></div><div class="tm42-rowstat"><span>Trạng thái khác</span><strong th:text="${reportOtherProjects}">0</strong></div><a th:href="@{/freelancer/history}">Xem lịch sử dự án →</a></article><article class="tm42-box" id="tm42-ratings"><h2>Đánh giá tài khoản</h2><p class="tm42-big" th:text="${reportRating+' / 5.0'}">0 / 5</p><p>Điểm đánh giá được lưu trên hồ sơ Freelancer.</p><a th:href="@{/freelancer/profile}">Xem hồ sơ →</a></article><article class="tm42-box" id="tm42-clients"><h2>Khách hàng hợp tác</h2><div class="tm42-rowstat" th:each="c:${reportClients}"><span th:text="${c.key}">Khách hàng</span><strong th:text="${c.value+' dự án'}">0</strong></div><p th:if="${#maps.isEmpty(reportClients)}">Chưa có dữ liệu khách hàng.</p></article></section></div><footer class="fm-footer"><div class="fm-footer-top"><div class="fm-footer-intro"><a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a><p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p><div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span></div></div><div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a></div><div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/profile}">Tạo hồ sơ</a><a th:href="@{/freelancer/applications}">Ứng tuyển của tôi</a></div><div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/freelancers}">Tìm freelancer</a><a th:href="@{/freelancers}">Khám phá chuyên gia</a></div><div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/freelancer/profile}">Quản lý tài khoản</a></div></div><div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div></footer></main><script th:replace="~{fragments/common :: scripts}"></script><link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"></body></html>
+</header><div th:replace="~{fragments/common :: flash}"></div><main class="fm-main rp92-main">
+<div class="rp92-shell">
+  <section class="rp92-banner" aria-label="Thống kê và Báo cáo">
+    <img th:src="@{/images/talentmatch-reports-banner-v92.png}" alt="Theo dõi hiệu suất làm việc, thu nhập và tiến độ dự án" />
+  </section>
+  <form class="rp92-toolbar" th:action="@{/freelancer/reports}" method="get" id="rp92-filter-form">
+    <label class="rp92-date-field"><i class="fa-regular fa-calendar"></i><span>Từ ngày</span><input type="date" name="from" th:value="${reportFrom}" required /></label>
+    <span class="rp92-date-separator">–</span>
+    <label class="rp92-date-field"><span>Đến ngày</span><input type="date" name="to" th:value="${reportTo}" required /></label>
+    <label class="rp92-select-field" aria-label="Danh mục"><select name="category">
+      <option value="all" th:selected="${selectedCategory == 'all'}">Tất cả danh mục</option>
+      <option th:each="cat : ${reportCategories}" th:value="${cat}" th:text="${cat}" th:selected="${selectedCategory == cat}">Danh mục</option>
+    </select></label>
+    <label class="rp92-select-field" aria-label="Trạng thái"><select name="status">
+      <option value="ALL" th:selected="${selectedStatus == 'ALL'}">Tất cả trạng thái</option>
+      <option value="IN_PROGRESS" th:selected="${selectedStatus == 'IN_PROGRESS'}">Đang thực hiện</option>
+      <option value="WAITING_ACCEPTANCE" th:selected="${selectedStatus == 'WAITING_ACCEPTANCE'}">Chờ nghiệm thu</option>
+      <option value="COMPLETED" th:selected="${selectedStatus == 'COMPLETED'}">Đã hoàn thành</option>
+      <option value="WAITING_PAYMENT" th:selected="${selectedStatus == 'WAITING_PAYMENT'}">Chờ thanh toán</option>
+      <option value="CANCELLED" th:selected="${selectedStatus == 'CANCELLED'}">Đã hủy</option>
+      <option value="DISPUTED" th:selected="${selectedStatus == 'DISPUTED'}">Tranh chấp</option>
+    </select></label>
+    <button type="submit" class="rp92-apply"><i class="fa-solid fa-filter"></i> Áp dụng</button>
+    <a class="rp92-export" th:href="@{/freelancer/reports/export(from=${reportFrom},to=${reportTo},category=${selectedCategory},status=${selectedStatus})}"><i class="fa-solid fa-download"></i> Xuất báo cáo</a>
+  </form>
+  <p class="rp92-period-note">Số liệu theo thời gian đã chọn; doanh thu chỉ tính khoản tiền đã giải ngân. Đánh giá là điểm hiện tại của hồ sơ.</p>
+  <section class="rp92-kpis" aria-label="Chỉ số thống kê">
+    <article class="rp92-kpi rp92-revenue"><div class="rp92-kpi-icon"><i class="fa-solid fa-wallet"></i></div><div><span>Tổng thu nhập</span><strong th:text="${#numbers.formatDecimal(reportRevenue,0,'POINT',0,'COMMA')+'đ'}">0đ</strong><small>Đã giải ngân trong kỳ</small></div><i class="fa-solid fa-arrow-trend-up rp92-spark"></i></article>
+    <article class="rp92-kpi rp92-projects"><div class="rp92-kpi-icon"><i class="fa-regular fa-file-lines"></i></div><div><span>Số dự án tham gia</span><strong th:text="${reportTotalProjects}">0</strong><small>Khởi tạo trong kỳ</small></div><i class="fa-solid fa-chart-line rp92-spark"></i></article>
+    <article class="rp92-kpi rp92-done"><div class="rp92-kpi-icon"><i class="fa-solid fa-circle-check"></i></div><div><span>Đã hoàn thành</span><strong th:text="${reportCompletedProjects}">0</strong><small>Dự án trong kỳ</small></div><i class="fa-solid fa-check rp92-spark"></i></article>
+    <article class="rp92-kpi rp92-rating"><div class="rp92-kpi-icon"><i class="fa-solid fa-star"></i></div><div><span>Đánh giá trung bình</span><strong th:text="${#numbers.formatDecimal(reportRating,1,1)+'/5'}">0/5</strong><small>Đánh giá hồ sơ hiện tại</small></div><i class="fa-solid fa-star rp92-spark"></i></article>
+    <article class="rp92-kpi rp92-clients"><div class="rp92-kpi-icon"><i class="fa-solid fa-users"></i></div><div><span>Khách hàng hợp tác</span><strong th:text="${reportClientCount}">0</strong><small>Khách hàng trong kỳ</small></div><i class="fa-solid fa-user-group rp92-spark"></i></article>
+  </section>
+  <section class="rp92-charts" aria-label="Biểu đồ thống kê">
+    <article class="rp92-panel rp92-chart-card">
+      <div class="rp92-panel-head"><h2>Thu nhập theo tháng</h2><span class="rp92-light-label">VND · Theo khoảng lọc</span></div>
+      <div class="rp92-bar-view" th:if="${reportHasRevenue}">
+        <div class="rp92-gridlines"><span>100%</span><span>75%</span><span>50%</span><span>25%</span><span>0%</span></div>
+        <div class="rp92-bar-columns"><div class="rp92-bar-group" th:each="month : ${reportMonths}" th:title="${month.label + ': ' + #numbers.formatDecimal(month.revenue,0,'POINT',0,'COMMA') + 'đ'}">
+          <div class="rp92-bar-track"><div class="rp92-bar" th:style="|height:${month.revenuePercent}%|"></div></div>
+          <small th:text="${month.label}">T1</small>
+        </div></div>
+      </div>
+      <div class="rp92-empty-chart" th:unless="${reportHasRevenue}"><i class="fa-regular fa-chart-bar"></i> Chưa có khoản giải ngân trong khoảng đã chọn</div>
+      <p class="rp92-chart-foot"><span class="rp92-dot blue"></span> Thu nhập đã giải ngân <strong th:text="${#numbers.formatDecimal(reportRevenue,0,'POINT',0,'COMMA')+'đ'}">0đ</strong></p>
+    </article>
+    <article class="rp92-panel rp92-chart-card">
+      <div class="rp92-panel-head"><h2>Dự án theo danh mục</h2><span class="rp92-light-label">Trong kỳ</span></div>
+      <div class="rp92-pie-area" th:if="${reportHasCategoryData}">
+        <div class="rp92-pie" th:style="|background:${reportCategoryGradient}|"><div><strong th:text="${reportTotalProjects}">0</strong><small>Dự án</small></div></div>
+        <div class="rp92-pie-legend"><div class="rp92-pie-item" th:each="slice : ${reportCategorySlices}"><span class="rp92-pie-color" th:style="|background:${slice.color}|"></span><span class="rp92-pie-name" th:text="${slice.label}" th:title="${slice.label}">Danh mục</span><b th:text="|${#numbers.formatDecimal(slice.percent,0,0)}%|">0%</b></div></div>
+      </div>
+      <div class="rp92-empty-chart" th:unless="${reportHasCategoryData}"><i class="fa-solid fa-chart-pie"></i> Chưa có dự án trong khoảng đã chọn</div>
+    </article>
+    <article class="rp92-panel rp92-chart-card">
+      <div class="rp92-panel-head"><h2>Số dự án theo thời gian</h2><span class="rp92-light-label">Theo tháng</span></div>
+      <div class="rp92-line-wrap" th:if="${reportHasProjects}">
+        <svg viewBox="0 0 600 185" preserveAspectRatio="none" role="img" aria-label="Số dự án bắt đầu theo tháng">
+          <line x1="12" y1="30" x2="588" y2="30" class="rp92-guide" />
+          <line x1="12" y1="70" x2="588" y2="70" class="rp92-guide" />
+          <line x1="12" y1="110" x2="588" y2="110" class="rp92-guide" />
+          <line x1="12" y1="160" x2="588" y2="160" class="rp92-guide" />
+          <polygon th:attr="points=${reportLineArea}" class="rp92-line-area" />
+          <polyline th:attr="points=${reportLinePoints}" class="rp92-line" />
+          <circle th:each="dot:${reportLineDots}" th:attr="cx=${dot.x},cy=${dot.y}" r="5" class="rp92-line-dot" />
+        </svg>
+        <div class="rp92-line-labels"><span th:each="month:${reportMonths}" th:text="${month.label}">T1</span></div>
+      </div>
+      <div class="rp92-empty-chart" th:unless="${reportHasProjects}"><i class="fa-solid fa-chart-line"></i> Chưa có dự án trong khoảng đã chọn</div>
+      <p class="rp92-chart-foot"><span class="rp92-dot blue"></span> Dự án khởi tạo <strong th:text="${reportTotalProjects}+' dự án'">0 dự án</strong></p>
+    </article>
+  </section>
+  <section class="rp92-tables" aria-label="Báo cáo chi tiết">
+    <article class="rp92-panel rp92-table-card">
+      <div class="rp92-panel-head"><h2>Top khách hàng</h2><span class="rp92-light-label">Theo số dự án</span></div>
+      <div class="rp92-table-scroll"><table><thead><tr><th>#</th><th>Khách hàng</th><th>Số dự án</th><th>Giá trị dự án (VNĐ)</th></tr></thead>
+        <tbody><tr th:each="client,stat:${reportTopClients}"><td th:text="${stat.index+1}">1</td><td class="rp92-client"><span class="rp92-letter" th:text="${#strings.substring(client.name,0,1)}">A</span><strong th:text="${client.name}">Khách hàng</strong></td><td th:text="${client.count}">0</td><td th:text="${#numbers.formatDecimal(client.totalValue,0,'POINT',0,'COMMA')}">0</td></tr>
+        <tr th:if="${#lists.isEmpty(reportTopClients)}"><td colspan="4" class="rp92-table-empty">Chưa có khách hàng trong khoảng đã chọn.</td></tr></tbody></table></div>
+    </article>
+    <article class="rp92-panel rp92-table-card rp92-recent">
+      <div class="rp92-panel-head"><h2>Dự án gần đây</h2><a th:href="@{/freelancer/projects}">Xem tất cả <i class="fa-solid fa-arrow-right"></i></a></div>
+      <div class="rp92-table-scroll"><table><thead><tr><th>Tên dự án</th><th>Khách hàng</th><th>Giá trị</th><th>Trạng thái</th><th>Cập nhật</th></tr></thead>
+        <tbody><tr th:each="project:${reportRecentProjects}"><td><a class="rp92-project-name" th:href="@{/freelancer/projects}" th:text="${project.title}">Dự án</a></td><td th:text="${project.clientName}">Khách hàng</td><td class="rp92-value" th:text="${#numbers.formatDecimal(project.value,0,'POINT',0,'COMMA')+'đ'}">0đ</td><td><span class="rp92-status" th:classappend="| rp92-state-${project.status}|" th:text="${project.statusText}">Đang thực hiện</span></td><td th:text="${project.updatedDate != null ? #temporals.format(project.updatedDate,'dd/MM/yyyy') : '—'}">—</td></tr>
+        <tr th:if="${#lists.isEmpty(reportRecentProjects)}"><td colspan="5" class="rp92-table-empty">Không có dự án nào trong khoảng đã chọn.</td></tr></tbody></table></div>
+    </article>
+  </section>
+</div>
+<footer class="fm-footer"><div class="fm-footer-top"><div class="fm-footer-intro"><a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a><p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p><div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span></div></div><div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a></div><div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/profile}">Tạo hồ sơ</a><a th:href="@{/freelancer/applications}">Ứng tuyển của tôi</a></div><div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/freelancers}">Tìm freelancer</a><a th:href="@{/freelancers}">Khám phá chuyên gia</a></div><div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/freelancer/profile}">Quản lý tài khoản</a></div></div><div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div></footer></main><script th:replace="~{fragments/common :: scripts}"></script><link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"></body></html>
