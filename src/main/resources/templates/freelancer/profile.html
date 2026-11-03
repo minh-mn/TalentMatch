@@ -5,6 +5,8 @@
 <link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
 <link rel="stylesheet" th:href="@{/css/freelancer-v42.css}">
 <link rel="stylesheet" th:href="@{/css/freelancer-profile-v44.css}">
+
+<link rel="stylesheet" th:href="@{/css/freelancer-layout-v106.css(v=106)}">
 <aside th:replace="~{fragments/common :: marketSidebar('profile')}"></aside>
 <header class="fm-header">
   <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
@@ -55,6 +57,7 @@
             <label><span>Số năm kinh nghiệm</span><input type="number" min="0" th:field="*{experienceYears}"></label>
             <label><span>Đơn giá theo giờ (VNĐ)</span><input type="number" min="0" th:field="*{hourlyRate}"></label>
             <label><span>Trạng thái</span><select th:field="*{available}"><option th:value="true">Sẵn sàng nhận việc</option><option th:value="false">Đang bận</option></select></label>
+            <label><span>Hình thức làm việc ưu tiên</span><select th:field="*{workPreference}"><option value="">Chưa cập nhật</option><option value="REMOTE">Remote</option><option value="HYBRID">Hybrid</option><option value="ONSITE">Onsite</option></select></label>
           </div>
           <div class="profile-form-grid two">
             <label><span>Website / Portfolio</span><input th:field="*{website}" placeholder="https://portfolio.example"></label>
@@ -87,5 +90,7 @@
 </div>
 </main>
   <footer class="tm42-profile-footer"><div><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><strong>TalentMatch</strong><span>© 2026 TalentMatch · Freelance Marketplace</span></div><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/reports}">Thống kê & Báo cáo</a></footer><script th:replace="~{fragments/common :: scripts}"></script>
-<link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"></body>
+<link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"><link rel="stylesheet" th:href="@{/css/freelancer-sidebar-v104.css}">
+<link rel="stylesheet" th:href="@{/css/freelancer-sidebar-unified-v107.css(v=107)}">
+</body>
 </html>

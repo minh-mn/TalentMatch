@@ -14,4 +14,4 @@
 <a th:if="${hasPrev}" th:href="@{/admin/audit(page=${page-1})}"><i class="fa-solid fa-angle-left"></i> Trước</a><span>Trang <b th:text="${page}">1</b> / <b th:text="${pages}">1</b></span>
 <a th:if="${hasNext}" th:href="@{/admin/audit(page=${page+1})}">Sau <i class="fa-solid fa-angle-right"></i></a></div></div></section>
 
-</div></main><script th:replace="~{fragments/common :: scripts}"></script></body></html>
+</div></main><footer class="admin-shared-footer"><strong>TalentMatch <small>ADMIN WORKSPACE</small></strong><span>Quản trị nền tảng · Phân quyền &amp; nhật ký hoạt động</span><span>© 2026 TalentMatch</span></footer><script th:replace="~{fragments/common :: scripts}"></script></body></html>

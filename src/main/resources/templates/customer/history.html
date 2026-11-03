@@ -1,7 +1,107 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/common :: head('Lịch sử & thanh toán')}"></head>
-<body class="market-body client-workspace client-v52-page"><aside th:replace="~{fragments/common :: marketSidebar('invitations')}"></aside></header><div th:replace="~{fragments/common :: flash}"></div><main class="market-main client-main"><div class="client-shell"><div class="client-breadcrumb">Workspace / Lịch sử</div><div class="client-page-heading"><div><span class="client-eyebrow">NHẬT KÝ HOẠT ĐỘNG</span><h1>Lịch sử <span>doanh nghiệp</span></h1><p>Đối chiếu tin đã đăng, hợp đồng và lịch sử giao dịch. Thanh toán đang ở chế độ demo.</p></div></div>
-    <div class="client-history-nav"><a href="#jobs">Việc đã đăng <b th:text="${#lists.size(jobs)}">0</b></a><a href="#contracts">Dự án <b th:text="${#lists.size(projects)}">0</b></a><a href="#transactions">Giao dịch <b th:text="${#lists.size(payments)}">0</b></a></div>
-    <section id="jobs" class="client-panel client-table-panel"><div class="client-panel-head"><div><h2><i class="fa-solid fa-briefcase"></i> Lịch sử công việc</h2><p>Tất cả tin đăng từ tài khoản Client.</p></div></div><table class="client-table"><thead><tr><th>Ngày</th><th>Công việc</th><th>Ngân sách</th><th>Trạng thái</th></tr></thead><tbody><tr th:each="j:${jobs}"><td th:text="${#temporals.format(j.createdAt,'dd/MM/yyyy')}">Ngày</td><td><a th:href="@{/customer/jobs/{id}/applicants(id=${j.id})}" th:text="${j.title}">Job</a></td><td th:text="${#numbers.formatDecimal(j.budget,0,'POINT',0,'COMMA')}+'₫'">0</td><td><span class="client-badge" th:text="${j.status}">OPEN</span></td></tr></tbody></table></section>
-    <section id="contracts" class="client-panel client-table-panel"><div class="client-panel-head"><div><h2><i class="fa-solid fa-layer-group"></i> Lịch sử hợp đồng</h2></div></div><table class="client-table"><thead><tr><th>Ngày</th><th>Dự án</th><th>Freelancer</th><th>Giá trị</th><th>Trạng thái</th></tr></thead><tbody><tr th:each="p:${projects}"><td th:text="${#temporals.format(p.createdAt,'dd/MM/yyyy')}">Ngày</td><td><a th:href="@{/projects/{id}(id=${p.id})}" th:text="${p.application.job.title}">Dự án</a></td><td th:text="${p.freelancer.fullName}">F</td><td th:text="${#numbers.formatDecimal(p.totalPrice,0,'POINT',0,'COMMA')}+'₫'">0</td><td><span class="client-badge" th:text="${p.status}">TRẠNG THÁI</span></td></tr></tbody></table></section>
-    <section id="transactions" class="client-panel client-table-panel"><div class="client-panel-head"><div><h2><i class="fa-solid fa-receipt"></i> Sổ giao dịch mô phỏng</h2><p>PAID = đã ghi nhận nội bộ; DISBURSED = đã giải ngân nội bộ; REFUNDED = hoàn tiền trên ledger demo.</p></div></div><table class="client-table"><thead><tr><th>Mã</th><th>Dự án</th><th>Hạng mục</th><th>Giá trị</th><th>Phương thức</th><th>Trạng thái</th></tr></thead><tbody><tr th:each="p:${payments}"><td th:text="${p.transactionCode}">TM...</td><td th:text="${p.project.application.job.title}">Job</td><td th:text="${p.milestone!=null?p.milestone.title:'Toàn dự án'}">Milestone</td><td th:text="${#numbers.formatDecimal(p.amount,0,'POINT',0,'COMMA')}+'₫'">0</td><td th:text="${p.method}">DEMO</td><td><span class="client-badge" th:text="${p.status}">PAID</span></td></tr></tbody></table></section>
-</div></main><script th:replace="~{fragments/common :: scripts}"></script></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Giao dịch & Lịch sử')}"></head>
+<body class="market-body client-workspace client-v52-page cd-dashboard tm-client-posted-v94 tm-client-history-v101">
+<link rel="stylesheet" th:href="@{/css/customer-footer-banner-v72.css(v=72)}">
+<link rel="stylesheet" th:href="@{/css/customer-posted-v94.css(v=94)}">
+<link rel="stylesheet" th:href="@{/css/customer-client-v95.css(v=95)}">
+<link rel="stylesheet" th:href="@{/css/customer-transactions-v101.css(v=101)}">
+<aside th:replace="~{fragments/common :: marketSidebar('history')}"></aside>
+<header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="market-main client-main tm-posted-main tm-transactions-main">
+  <div class="tm-posted-shell tm-transactions-shell">
+    <section class="tm-transactions-banner" aria-label="Giao dịch và lịch sử">
+      <img th:src="@{/images/talentmatch-client-history-banner-v101.png}" width="1920" height="360" alt="Quản lý giao dịch và lịch sử dễ dàng">
+    </section>
+
+    <section class="tm-transactions-kpis" aria-label="Thống kê thanh toán">
+      <div class="tm-transactions-kpi"><span class="tm-transactions-kpi-icon blue"><i class="fa-solid fa-wallet"></i></span><span><small>Tổng đã thanh toán</small><strong th:text="${#numbers.formatDecimal(paidTotal,0,'POINT',0,'COMMA') + 'đ'}">0đ</strong></span></div>
+      <div class="tm-transactions-kpi"><span class="tm-transactions-kpi-icon green"><i class="fa-solid fa-arrow-up"></i></span><span><small>Số giao dịch</small><strong th:text="${transactionCount}">0</strong></span></div>
+      <div class="tm-transactions-kpi"><span class="tm-transactions-kpi-icon rose"><i class="fa-solid fa-clock"></i></span><span><small>Đang xử lý</small><strong class="pending-value" th:text="${#numbers.formatDecimal(pendingTotal,0,'POINT',0,'COMMA') + 'đ'}">0đ</strong></span></div>
+      <div class="tm-transactions-kpi"><span class="tm-transactions-kpi-icon purple"><i class="fa-solid fa-rotate-left"></i></span><span><small>Đã hoàn tiền</small><strong th:text="${#numbers.formatDecimal(refundTotal,0,'POINT',0,'COMMA') + 'đ'}">0đ</strong></span></div>
+    </section>
+
+    <nav class="tm-transactions-tabs" aria-label="Chọn dạng lịch sử">
+      <a th:href="@{/customer/history(tab='transactions',q=${q},type=${type},status=${status},from=${from},to=${to})}" th:classappend="${tab == 'transactions'} ? 'active' : ''">Lịch sử giao dịch</a>
+      <a th:href="@{/customer/history(tab='receipts',q=${q},type=${type},status=${status},from=${from},to=${to})}" th:classappend="${tab == 'receipts'} ? 'active' : ''">Biên nhận <span th:text="|(${receiptCount})|">(0)</span></a>
+    </nav>
+
+    <form class="tm-transactions-filters" method="get" th:action="@{/customer/history}" id="tmTransactionsFilters">
+      <input type="hidden" name="tab" th:value="${tab}">
+      <label class="tm-transactions-search"><i class="fa-solid fa-magnifying-glass"></i>
+        <input name="q" th:value="${q}" type="search" placeholder="Tìm mã giao dịch, dự án, Freelancer..." aria-label="Tìm kiếm giao dịch">
+      </label>
+      <select name="type" aria-label="Loại giao dịch">
+        <option value="all" th:selected="${type == 'all'}">Tất cả loại giao dịch</option>
+        <option value="project" th:selected="${type == 'project'}">Thanh toán dự án</option>
+        <option value="milestone" th:selected="${type == 'milestone'}">Thanh toán giai đoạn</option>
+        <option value="refund" th:selected="${type == 'refund'}">Hoàn tiền</option>
+      </select>
+      <select name="status" aria-label="Trạng thái">
+        <option value="all" th:selected="${status == 'all'}">Tất cả trạng thái</option>
+        <option value="PENDING" th:selected="${status == 'PENDING'}">Đang xử lý</option>
+        <option value="PAID" th:selected="${status == 'PAID'}">Đã thanh toán</option>
+        <option value="DISBURSED" th:selected="${status == 'DISBURSED'}">Đã giải ngân</option>
+        <option value="REFUNDED" th:selected="${status == 'REFUNDED'}">Đã hoàn tiền</option>
+        <option value="FAILED" th:selected="${status == 'FAILED'}">Thất bại</option>
+      </select>
+      <div class="tm-transactions-dates"><label title="Từ ngày">Từ <input type="date" name="from" th:value="${from}"></label><label title="Đến ngày">Đến <input type="date" name="to" th:value="${to}"></label></div>
+      <button class="tm-transactions-apply" type="submit"><i class="fa-solid fa-filter"></i> Lọc</button>
+      <a class="tm-transactions-export" th:href="@{/customer/history/export(tab=${tab},q=${q},type=${type},status=${status},from=${from},to=${to})}"><i class="fa-solid fa-download"></i> Xuất CSV</a>
+    </form>
+    <div class="tm-transactions-filter-hint"><span th:text="|Hiển thị ${#lists.size(rows)} / ${totalResults} giao dịch phù hợp|">0 kết quả</span>
+      <a th:href="@{/customer/history(tab=${tab})}"><i class="fa-solid fa-rotate-right"></i> Xóa bộ lọc</a>
+    </div>
+    <div class="tm-transactions-table-card">
+      <div class="tm-transactions-scroll">
+        <table class="tm-transactions-table">
+          <thead><tr><th>#</th><th>Mã giao dịch</th><th>Loại giao dịch</th><th>Nội dung</th><th>Số tiền</th><th>Ngày giao dịch</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+          <tbody>
+            <tr th:each="item,stat : ${rows}">
+              <td class="tm-transactions-number" th:text="${(page - 1) * 5 + stat.count}">1</td>
+              <td><a class="tm-transactions-code" th:href="@{/customer/history/transaction/{id}(id=${item.id})}" th:text="${item.code}">TM...</a></td>
+              <td><span class="tm-transactions-type"><i class="fa-solid" th:classappend="${item.typeIcon}"></i><span th:text="${item.typeLabel}">Thanh toán dự án</span></span></td>
+              <td><div class="tm-transactions-description" th:text="${item.description}">Thanh toán dự án</div><small th:text="'Đối tác: ' + ${item.freelancer}">Đối tác</small></td>
+              <td><strong class="tm-transactions-money" th:classappend="${item.amountClass}" th:text="${item.amountPrefix + #numbers.formatDecimal(item.amount,0,'POINT',0,'COMMA') + 'đ'}">-0đ</strong></td>
+              <td class="tm-transactions-date"><span th:text="${item.dateOnly}">30/10/2026</span><small th:text="${item.timeOnly}">10:00</small></td>
+              <td><span class="tm-transactions-status" th:classappend="${item.statusClass}" th:text="${item.statusText}">Đã thanh toán</span></td>
+              <td><div class="tm-transactions-actions"><a th:href="@{/customer/history/transaction/{id}(id=${item.id})}" class="tm-transactions-detail"><i class="fa-regular fa-file-lines"></i> Chi tiết</a>
+                  <details class="tm-transactions-more"><summary aria-label="Các thao tác khác"><i class="fa-solid fa-ellipsis"></i></summary><div>
+                    <a th:if="${item.projectId != null}" th:href="@{/projects/{id}(id=${item.projectId})}">Xem dự án</a>
+                    <a th:if="${item.receiptAvailable}" th:href="@{/customer/history/transaction/{id}(id=${item.id})}">Xem biên nhận</a>
+                  </div></details></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tm-transactions-empty" th:if="${#lists.isEmpty(rows)}">
+        <i class="fa-solid fa-receipt"></i><strong>Không tìm thấy giao dịch</strong>
+        <p th:text="${tab == 'receipts'} ? 'Chưa có biên nhận phù hợp. Chỉ giao dịch đã thanh toán, giải ngân hoặc hoàn tiền mới có biên nhận.' : 'Chưa có giao dịch phù hợp với điều kiện tìm kiếm.'">Không có giao dịch</p>
+        <a th:href="@{/customer/history}">Xem tất cả giao dịch</a>
+      </div>
+    </div>
+    <nav class="tm-transactions-pages" aria-label="Phân trang giao dịch" th:if="${pages > 1}">
+      <a th:href="@{/customer/history(tab=${tab},q=${q},type=${type},status=${status},from=${from},to=${to},page=${page - 1})}" th:classappend="${page <= 1} ? 'disabled' : ''" aria-label="Trang trước"><i class="fa-solid fa-angle-left"></i></a>
+      <a th:each="number : ${pageNumbers}" th:href="@{/customer/history(tab=${tab},q=${q},type=${type},status=${status},from=${from},to=${to},page=${number})}" th:text="${number}" th:classappend="${number == page} ? 'active' : ''">1</a>
+      <a th:href="@{/customer/history(tab=${tab},q=${q},type=${type},status=${status},from=${from},to=${to},page=${page + 1})}" th:classappend="${page >= pages} ? 'disabled' : ''" aria-label="Trang sau"><i class="fa-solid fa-angle-right"></i></a>
+    </nav>
+    <p class="tm-transactions-note"><i class="fa-solid fa-circle-info"></i> Giao dịch TalentMatch hiện dùng cổng thanh toán mô phỏng. Biên nhận là bản ghi tham khảo, không phải hóa đơn giá trị gia tăng hoặc xác nhận chuyển tiền thực tế.</p>
+  </div>
+  <footer class="fm-footer client-same-footer tm-posted-footer">
+    <div class="fm-footer-top">
+      <div class="fm-footer-intro">
+        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
+        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
+      </div>
+      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
+      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
+      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
+      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
+    </div>
+    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
+  </footer>
+</main>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body></html>

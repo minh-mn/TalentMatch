@@ -29,6 +29,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth->auth
                 .requestMatchers("/","/login","/register","/verify","/verify-otp","/forgot-password","/reset-password","/css/**","/js/**","/images/**","/error").permitAll()
                 .requestMatchers(HttpMethod.GET,"/jobs/**","/freelancers/**","/hire","/projects").permitAll()
+                .requestMatchers("/payment/vnpay/ipn", "/payment/vnpay/return").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/customer/**").hasRole("CUSTOMER")
                 .requestMatchers("/freelancer/**").hasRole("FREELANCER")

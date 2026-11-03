@@ -1,0 +1,61 @@
+/* V106: Báo giá & Thương lượng cùng gutter với Hồ sơ Freelancer */
+.tm105-quotes .tm105-main{margin-top:0!important;min-height:100vh!important;padding-top:64px!important;background:#eef5ff!important}
+.tm105-quotes .tm105-shell{padding-top:16px!important;padding-bottom:26px!important;max-width:1800px!important;margin:0 auto!important}
+.tm105-quotes .tm105-breadcrumb{margin:0 0 11px!important;font-size:13px!important;line-height:1.4!important}
+.tm105-quotes .tm105-banner{min-height:154px!important;margin-bottom:14px!important;border-radius:10px!important;background-image:linear-gradient(90deg,rgba(235,247,255,.16),rgba(225,240,255,.05)),url('/images/quote-hero-bg-v105.png')!important;box-shadow:none!important}
+.tm105-quotes .tm105-banner-text{padding:20px 28px!important;width:min(760px,68%)!important}
+.tm105-quotes .tm105-banner .tm105-eyebrow{font-size:12px!important;padding:6px 12px!important}
+.tm105-quotes .tm105-banner h1{font-size:34px!important;line-height:1.16!important;margin:9px 0 8px!important;letter-spacing:-.8px!important;font-weight:850!important;color:#081e59!important}
+.tm105-quotes .tm105-banner h1 span{color:#0b67ee!important}
+.tm105-quotes .tm105-banner p{font-size:15px!important;line-height:1.5!important;color:#365c91!important}
+.tm105-quotes .tm105-toolbar{min-height:58px!important;padding:8px 12px!important;gap:12px!important;margin-bottom:14px!important;border-radius:10px!important;flex-wrap:wrap!important}
+.tm105-quotes .tm105-tabs{flex:1 1 530px!important;gap:5px!important}
+.tm105-quotes .tm105-tabs a{font-size:13px!important;font-weight:750!important;padding:11px 10px!important}
+.tm105-quotes .tm105-search{flex:1 1 355px!important;min-width:0!important;max-width:510px!important;gap:9px!important}
+.tm105-quotes .tm105-search label{min-width:130px!important}
+.tm105-quotes .tm105-search input{font-size:13px!important;min-width:0!important}
+.tm105-quotes .tm105-search select{flex:0 0 auto!important;min-width:104px!important}
+.tm105-quotes .tm105-search button{min-width:63px!important}
+.tm105-quotes .tm105-columns{display:grid!important;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)!important;gap:14px!important;align-items:start!important}
+.tm105-quotes .tm105-offer-list{gap:10px!important}
+.tm105-quotes .tm105-offer{min-height:140px!important;align-items:center!important;padding:15px!important;gap:13px!important;position:relative!important;border-radius:10px!important}
+.tm105-quotes .tm105-thumb{flex:0 0 78px!important;width:78px!important;height:78px!important;border-radius:9px!important}
+.tm105-quotes .tm105-offer-title{align-items:flex-start!important;gap:12px!important}
+.tm105-quotes .tm105-offer-title>strong{font-size:16px!important;line-height:1.35!important;font-weight:800!important;letter-spacing:-.2px!important}
+.tm105-quotes .tm105-offer-title>.tm105-pill{flex:0 0 auto!important}
+.tm105-quotes .tm105-offer-content>p{font-size:13px!important;line-height:1.45!important;margin:8px 0!important;color:#60779b!important}
+.tm105-quotes .tm105-tags span{font-size:11px!important;padding:5px 7px!important}
+.tm105-quotes .tm105-offer-bottom{display:flex!important;gap:7px 11px!important;padding-right:15px!important;font-size:12px!important}
+.tm105-quotes .tm105-offer-bottom .tm105-money{margin-left:auto!important;white-space:nowrap!important;font-size:16px!important;color:#dc2626!important}
+.tm105-quotes .tm105-chevron{margin:0!important;color:#174d98!important;flex:0 0 auto!important;align-self:center!important}
+.tm105-quotes .tm105-detail{padding:17px 17px 22px!important;border-radius:10px!important;min-width:0!important}
+.tm105-quotes .tm105-detail-top h2{font-size:20px!important;line-height:1.35!important}
+.tm105-quotes .tm105-facts{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,.8fr)!important}
+.tm105-quotes .tm105-facts>div{min-width:0!important}
+.tm105-quotes .tm105-facts strong{font-size:14px!important;overflow-wrap:anywhere!important}
+.tm105-quotes .tm105-section-title h3{font-size:16px!important}
+.tm105-quotes .tm105-latest strong{font-size:21px!important}
+.tm105-quotes .tm105-scope{font-size:13px!important}
+.tm105-quotes .tm105-timeline{margin-top:12px!important}
+.tm105-quotes .tm105-timeline-row{justify-content:flex-start!important;gap:10px 15px!important}
+.tm105-quotes .tm105-timeline-row>strong{margin-left:auto!important}
+.tm105-quotes .tm105-offer:focus-visible,.tm105-quotes button:focus-visible,.tm105-quotes a:focus-visible{outline:3px solid #2f6fed!important;outline-offset:2px!important}
+@media(max-width:1260px){
+ .tm105-quotes .tm105-columns{grid-template-columns:minmax(0,1fr)!important}
+ .tm105-quotes .tm105-detail{margin:0!important}
+ .tm105-quotes .tm105-search{max-width:none!important}
+}
+@media(max-width:700px){
+ .tm105-quotes .tm105-banner{min-height:150px!important}
+ .tm105-quotes .tm105-banner-text{width:100%!important;padding:17px!important;background:linear-gradient(90deg,#e5f4ffed,#e5f4ff88)!important}
+ .tm105-quotes .tm105-banner h1{font-size:26px!important}
+ .tm105-quotes .tm105-banner p{font-size:13px!important}
+ .tm105-quotes .tm105-tabs{flex:1 1 100%!important}
+ .tm105-quotes .tm105-search{flex:1 1 100%!important;flex-wrap:wrap!important}
+ .tm105-quotes .tm105-search label{flex:1 1 100%!important}
+ .tm105-quotes .tm105-offer{min-height:0!important;padding:12px!important;gap:10px!important}
+ .tm105-quotes .tm105-thumb{flex-basis:52px!important;width:52px!important;height:52px!important;font-size:23px!important}
+ .tm105-quotes .tm105-offer-title{flex-wrap:wrap!important}
+ .tm105-quotes .tm105-offer-bottom .tm105-money{margin-left:0!important}
+ .tm105-quotes .tm105-facts{grid-template-columns:1fr 1fr!important}
+}

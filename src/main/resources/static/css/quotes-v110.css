@@ -1,0 +1,5 @@
+/* V110: chỉ bổ sung nội dung khu báo giá, giữ nguyên sidebar/header/footer. */
+.tm105-quotes .tm110-initial-notice{background:#eef5ff;border:1px solid #cbdffb;border-radius:10px;padding:16px;margin:15px 0;color:#153c7f}
+.tm105-quotes .tm110-initial-notice strong{display:block;font-size:14px;margin-bottom:8px}
+.tm105-quotes .tm110-initial-notice p{font-size:13px;line-height:1.6;margin:0 0 12px;color:#47618c}
+.tm105-quotes .tm110-initial-notice form{margin:0}

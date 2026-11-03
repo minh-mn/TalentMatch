@@ -323,7 +323,9 @@
 
 <!-- GIAO DIỆN SAU KHI ĐĂNG NHẬP: GIỮ LUỒNG MARKETPLACE HIỆN TẠI -->
 <th:block th:if="${false}">
-  <aside th:replace="~{fragments/common :: marketSidebar('home')}"></aside>
+  
+<link rel="stylesheet" th:href="@{/css/freelancer-layout-v106.css(v=106)}">
+<aside th:replace="~{fragments/common :: marketSidebar('home')}"></aside>
   <header th:replace="~{fragments/common :: marketTopbar('jobs')}"></header>
   <main class="market-main">
     <div class="market-home-shell">
@@ -407,5 +409,7 @@
 </th:block>
 
 <script th:replace="~{fragments/common :: scripts}"></script>
+
+<link rel="stylesheet" th:href="@{/css/freelancer-sidebar-unified-v107.css(v=107)}">
 </body>
 </html>

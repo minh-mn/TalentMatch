@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Hồ sơ khách hàng')}"></head>
+<body class="market-body fm-dashboard tm104-job-detail">
+<link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
+
+<link rel="stylesheet" th:href="@{/css/freelancer-layout-v106.css(v=106)}">
+<aside th:replace="~{fragments/common :: marketSidebar('jobs')}"></aside>
+<header class="fm-header"><form class="fm-header-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" placeholder="Tìm dự án, kỹ năng, khách hàng..."><button aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button></form><nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/saved-jobs}">Việc quan tâm</a></nav><div class="fm-header-user"><a th:href="@{/freelancer/profile}" class="fm-mini-avatar" th:text="${currentUser != null ? #strings.substring(currentUser.fullName,0,1) : 'F'}">F</a></div></header>
+<main class="fm-main tm104-detail-main"><div class="tm104-content">
+  <section class="tm104-banner"><div class="tm104-banner-text"><span class="tm104-banner-tag">Hồ sơ khách hàng</span><h1>Thông tin <span>doanh nghiệp</span></h1><p>Kiểm tra thông tin công khai của đơn vị đang tuyển.</p></div></section>
+  <section class="tm104-card tm104-section"><div class="tm104-company"><span class="tm104-company-avatar" th:text="${customerInitial}">N</span><div><h2 th:text="${customerDisplayName}">Doanh nghiệp</h2><p>Khách hàng trên TalentMatch</p></div></div>
+   <dl class="tm104-info"><div><dt>Địa điểm</dt><dd th:text="${customerLocation}">Chưa cập nhật</dd></div><div><dt>Tham gia từ</dt><dd th:text="${customerSince}">Chưa cập nhật</dd></div><div><dt>Đánh giá trung bình</dt><dd th:text="${job.customer.rating != null ? job.customer.rating : 'Chưa có đánh giá'}">Chưa có đánh giá</dd></div><div><dt>Dự án hoàn thành</dt><dd th:text="${job.customer.completedProjects != null ? job.customer.completedProjects : 0}">0</dd></div></dl>
+   <div class="tm104-inline-actions"><a th:href="@{/jobs/{id}(id=${job.id})}">Quay lại chi tiết công việc</a><a th:href="@{/jobs/{id}/discussion(id=${job.id})}">Đặt câu hỏi về công việc</a></div>
+  </section>
+</div><footer class="fm-footer"><div class="fm-footer-top"><div class="fm-footer-intro"><a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a><p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p><div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span></div></div><div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a></div><div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/profile}">Tạo hồ sơ</a><a th:href="@{/freelancer/applications}">Ứng tuyển của tôi</a></div><div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/freelancers}">Tìm freelancer</a><a th:href="@{/freelancers}">Khám phá chuyên gia</a></div><div><h3>Hỗ trợ</h3><a th:href="@{/freelancer/support}">Khiếu nại &amp; Hỗ trợ</a><a th:href="@{/freelancer/profile}">Quản lý tài khoản</a></div></div><div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div></footer></main>
+<script th:replace="~{fragments/common :: scripts}"></script><link rel="stylesheet" th:href="@{/css/job-detail-v104.css}"><link rel="stylesheet" th:href="@{/css/freelancer-sidebar-v104.css}">
+
+<link rel="stylesheet" th:href="@{/css/freelancer-sidebar-unified-v107.css(v=107)}">
+</body></html>

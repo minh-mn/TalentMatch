@@ -15,13 +15,15 @@ public class JobService {
     private final SavedJobRepository savedJobs;
     private final JobApplicationRepository applications;
     private final UserRepository users;
+    private final QuoteService quotes;
 
     public JobService(JobRepository jobs, SavedJobRepository savedJobs,
-                      JobApplicationRepository applications, UserRepository users) {
+                      JobApplicationRepository applications, UserRepository users, QuoteService quotes) {
         this.jobs = jobs;
         this.savedJobs = savedJobs;
         this.applications = applications;
         this.users = users;
+        this.quotes = quotes;
     }
 
     public Job get(Long id) {
@@ -122,7 +124,9 @@ public class JobService {
         app.setEstimatedDays(estimatedDays);
         app.setPortfolioLink(portfolioLink == null ? null : portfolioLink.trim());
         app.setStatus(ApplicationStatus.SUBMITTED);
-        return applications.save(app);
+        JobApplication saved = applications.save(app);
+        quotes.createInitial(saved);
+        return saved;
     }
 
     @Transactional

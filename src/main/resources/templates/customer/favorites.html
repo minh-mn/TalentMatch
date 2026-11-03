@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Freelancer yêu thích')}"></head>
+<body class="market-body client-workspace tm-fav-v121">
+<link rel="stylesheet" th:href="@{/css/customer-footer-banner-v72.css(v=72)}">
+<link rel="stylesheet" th:href="@{/css/customer-posted-v94.css(v=94)}">
+<link rel="stylesheet" th:href="@{/css/customer-favorites-v121.css(v=121)}">
+<aside th:replace="~{fragments/common :: marketSidebar('favorites')}"></aside>
+<header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="market-main client-main tm-fav-main">
+ <div class="fav-shell">
+  <div class="fav-banner"><img th:src="@{/images/talentmatch-customer-favorites-banner-v121.png}" alt="Danh sách Freelancer bạn yêu thích"></div>
+  <div class="fav-layout">
+   <section class="fav-content">
+    <form id="fav-filter" class="fav-toolbar" method="get" th:action="@{/customer/favorites}">
+     <label class="fav-search"><i class="fa-solid fa-magnifying-glass"></i><input type="search" name="q" th:value="${q}" placeholder="Tìm theo tên freelancer, kỹ năng..." aria-label="Tìm Freelancer đã lưu"></label>
+     <label><span>Kỹ năng</span><select name="field"><option value="">Tất cả</option><option th:each="f:${fields}" th:value="${f}" th:text="${f}" th:selected="${field == f}">UI/UX</option></select></label>
+     <label><span>Mức giá</span><select name="rate"><option value="all" th:selected="${rate=='all'}">Tất cả</option><option value="under200" th:selected="${rate=='under200'}">Dưới 200.000đ</option><option value="200to300" th:selected="${rate=='200to300'}">200.000–300.000đ</option><option value="300to400" th:selected="${rate=='300to400'}">300.000–400.000đ</option><option value="over400" th:selected="${rate=='over400'}">Trên 400.000đ</option></select></label>
+     <label><span>Sắp xếp</span><select name="sort"><option value="newest" th:selected="${sort=='newest'}">Mới lưu</option><option value="rating" th:selected="${sort=='rating'}">Đánh giá cao</option><option value="rateAsc" th:selected="${sort=='rateAsc'}">Giá thấp nhất</option><option value="rateDesc" th:selected="${sort=='rateDesc'}">Giá cao nhất</option></select></label>
+     
+     <button class="fav-submit" type="submit"><i class="fa-solid fa-filter"></i> Lọc</button>
+    </form>
+    <div class="fav-count">Có <strong th:text="${filteredCount}">0</strong> freelancer yêu thích <small th:if="${filteredCount != totalSaved}" th:text="|/ ${totalSaved} đã lưu|">/ 8 đã lưu</small></div>
+    <div class="fav-list">
+     <article class="fav-person" th:each="r:${favorites}" th:with="f=${r.freelancer}">
+      <div class="fav-person-main"><div class="fav-avatar"><img th:if="${f.avatar != null and !f.avatar.isBlank()}" th:src="${f.avatar}" alt="Ảnh Freelancer"><span th:unless="${f.avatar != null and !f.avatar.isBlank()}" th:text="${f.fullName != null and !f.fullName.isBlank() ? #strings.substring(f.fullName,0,1) : 'F'}">F</span></div><div class="fav-person-name"><h3><a th:href="@{/customer/freelancers/{id}(id=${f.id})}" th:text="${f.fullName}">Freelancer</a></h3><p th:text="${f.professionalTitle != null and !f.professionalTitle.isBlank() ? f.professionalTitle : 'Freelancer'}">UI/UX Designer</p><div class="fav-meta"><span th:if="${f.rating != null}"><i class="fa-solid fa-star"></i> <b th:text="${#numbers.formatDecimal(f.rating,1,1)}">4.9</b></span><span th:if="${f.completedProjects != null}" th:text="|Đã hoàn thành ${f.completedProjects} dự án|">Dự án</span></div><span class="fav-availability" th:classappend="${f.available} ? 'on' : 'off'"><i class="fa-solid fa-circle"></i><span th:text="${f.available} ? 'Sẵn sàng nhận việc' : 'Chưa sẵn sàng nhận việc'">Trạng thái</span></span></div></div>
+      <div class="fav-summary"><p th:text="${f.bio != null and !f.bio.isBlank() ? #strings.abbreviate(f.bio,150) : 'Xem hồ sơ để tìm hiểu năng lực và dự án đã thực hiện.'}">Giới thiệu</p><div class="fav-skills" th:if="${f.skills != null and !f.skills.isBlank()}"><span th:each="skill,idx:${#strings.arraySplit(f.skills,',')}" th:if="${idx.index < 4}" th:text="${#strings.trim(skill)}">Figma</span></div></div>
+      <div class="fav-actions"><div class="fav-rate" th:text="${f.hourlyRate != null ? #numbers.formatDecimal(f.hourlyRate,0,'POINT',0,'COMMA')+'đ/giờ' : 'Liên hệ báo giá'}">300.000đ/giờ</div><div class="fav-actions-buttons"><a th:href="@{/customer/freelancers/{id}(id=${f.id})}" class="fav-outline"><i class="fa-regular fa-address-card"></i> Xem hồ sơ</a><form th:if="${selectedJob != null}" th:action="@{/customer/invitations}" method="post" onsubmit="return confirm('Gửi lời mời hợp tác tới Freelancer này?')"><input type="hidden" name="jobId" th:value="${selectedJob.id}"><input type="hidden" name="freelancerId" th:value="${f.id}"><input type="hidden" name="message" th:value="|Chúng tôi mời bạn xem công việc: ${selectedJob.title}.|"><button class="fav-primary" type="submit"><i class="fa-regular fa-paper-plane"></i> Mời hợp tác</button></form><a th:if="${selectedJob == null}" class="fav-primary" th:href="@{/customer/jobs/new}">Đăng việc để mời</a></div><div class="fav-secondary-actions"><a th:href="@{/customer/messages}" title="Mở tin nhắn; chỉ có thể nhắn trực tiếp khi có hội thoại hợp lệ"><i class="fa-regular fa-comment-dots"></i> Tin nhắn</a><form th:action="@{/customer/talent/favorites/{id}(id=${f.id})}" method="post" onsubmit="return confirm('Bỏ Freelancer này khỏi danh sách yêu thích?')"><input type="hidden" name="backToFavorites" value="true"><button type="submit" title="Bỏ yêu thích"><i class="fa-solid fa-heart"></i> Bỏ lưu</button></form></div></div>
+     </article>
+     <div class="fav-empty" th:if="${#lists.isEmpty(favorites)}"><i class="fa-regular fa-heart"></i><h2>Không có Freelancer phù hợp</h2><p th:text="${totalSaved == 0 ? 'Bạn chưa lưu Freelancer nào. Hãy tìm kiếm và nhấn biểu tượng lưu trên hồ sơ.' : 'Hãy thay đổi bộ lọc để xem những Freelancer đã lưu.'}">Không có dữ liệu.</p><a th:href="${totalSaved == 0 ? '/customer/talent' : '/customer/favorites'}">Khám phá Freelancer</a></div>
+    </div>
+    <nav class="fav-pagination" th:if="${pages > 1}" aria-label="Phân trang"><a th:each="n:${#numbers.sequence(1,pages)}" th:href="@{/customer/favorites(q=${q},availability=${availability},field=${field},rate=${rate},sort=${sort},page=${n})}" th:text="${n}" th:classappend="${n == page} ? ' active' : ''">1</a></nav>
+   </section>
+   <aside class="fav-filters"><h2><i class="fa-solid fa-sliders"></i> Bộ lọc tìm kiếm <a th:href="@{/customer/favorites}">Xóa tất cả</a></h2><h3>Trạng thái</h3><label><input type="radio" form="fav-filter" name="availability" value="all" th:checked="${availability == 'all'}"> Tất cả (<span th:text="${totalSaved}">0</span>)</label><label><input type="radio" form="fav-filter" name="availability" value="online" th:checked="${availability == 'online'}"> Sẵn sàng (<span th:text="${onlineCount}">0</span>)</label><label><input type="radio" form="fav-filter" name="availability" value="offline" th:checked="${availability == 'offline'}"> Chưa sẵn sàng</label><div class="fav-divider"></div><h3>Dự án muốn mời hợp tác</h3><form method="get" th:action="@{/customer/favorites}" id="fav-job-form"><select name="jobId"><option th:each="job:${openJobs}" th:value="${job.id}" th:selected="${selectedJob != null and selectedJob.id.equals(job.id)}" th:text="${job.title}">Dự án</option><option th:if="${#lists.isEmpty(openJobs)}" value="">Chưa có công việc đang tuyển</option></select><button class="fav-submit" type="submit">Chọn công việc</button></form><p class="fav-hint">Lời mời chỉ được gửi cho công việc đang mở tuyển. Nếu chưa có công việc, hãy đăng công việc trước.</p><div class="fav-divider"></div><h3>Gợi ý</h3><p class="fav-hint">Bạn có thể lưu Freelancer ở trang Tìm & gợi ý Freelancer, xem hồ sơ và mời hợp tác cho dự án.</p></aside>
+  </div>
+ </div>
+  <footer class="fm-footer client-same-footer tm-posted-footer">
+    <div class="fm-footer-top">
+      <div class="fm-footer-intro">
+        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
+        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
+      </div>
+      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
+      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
+      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
+      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
+    </div>
+    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
+  </footer>
+</main>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body></html>

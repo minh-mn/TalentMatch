@@ -1,0 +1,71 @@
+/* V140 - only detail project page. Shared sidebar/header/footer remain unchanged. */
+.tm-project-v140{--navy:#09235e;--blue:#0964ff;--line:#d8e5f8;--muted:#65799c;background:#eef3fc}
+.tm-project-v140 .market-main{background:#eef3fc!important;min-width:0!important}
+.tm-project-v140 .market-page-shell{max-width:1500px!important;width:auto!important;margin:auto!important;padding:18px 22px 28px!important}
+.tm-project-v140 .market-breadcrumb{margin:0 0 12px!important;font-size:12px!important;color:#526e9d!important}
+.tm-project-v140 .project-detail-hero-v23{display:flex!important;align-items:center!important;justify-content:space-between!important;min-height:152px!important;padding:24px 26px!important;border:1px solid #c9dffd!important;border-radius:15px!important;box-shadow:none!important;background:radial-gradient(circle at 65% 40%,#b3d9ff 0%,transparent 33%),linear-gradient(112deg,#f2f8ff 5%,#d4e9ff 60%,#87bdff 100%)!important;color:var(--navy)!important;position:relative;overflow:hidden}
+.tm-project-v140 .project-detail-hero-v23:after{content:"";pointer-events:none;position:absolute;bottom:-65px;right:25%;width:390px;height:160px;border-radius:50%;background:#5da8ff20;transform:rotate(-16deg)}
+.tm-project-v140 .project-detail-title{z-index:1;min-width:0;flex:1}
+.tm-project-v140 .project-detail-title h1{font-size:clamp(23px,2.2vw,33px)!important;line-height:1.25!important;color:#071e56!important;font-weight:850!important;margin:8px 0!important}
+.tm-project-v140 .project-detail-title p,.tm-project-v140 .project-detail-title p b{font-size:13px!important;color:#234779!important}
+.tm-project-v140 .freelancer-page-kicker{display:inline-flex!important;background:#d8eaff!important;color:#0559d2!important;padding:6px 13px!important;font-weight:800!important;border-radius:18px!important;font-size:11px!important}
+.tm-project-v140 .project-detail-value{z-index:1;background:#ffffffcf!important;border:1px solid #cce0ff!important;border-radius:13px!important;min-width:208px!important;padding:12px 18px!important;align-items:center!important}
+.tm-project-v140 .project-detail-value small{font-size:12px!important;color:#536d98!important}
+.tm-project-v140 .project-detail-value strong{font-size:24px!important;color:#dc2626!important}
+.tm-project-v140 .tm140-nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 14px}
+.tm-project-v140 .tm140-nav a{color:#10316d;background:#fff;border:1px solid #dce7f8;border-radius:9px;display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-size:12px;font-weight:800;padding:10px 14px}
+.tm-project-v140 .tm140-nav a.active,.tm-project-v140 .tm140-nav a:hover{background:#1265f5;color:white;border-color:#1265f5}
+.tm-project-v140 .project-detail-layout-v23{display:grid!important;grid-template-columns:minmax(0,1.94fr) minmax(280px,.86fr)!important;align-items:start!important;gap:16px!important}
+.tm-project-v140 .project-detail-main-v23,.tm-project-v140 .project-detail-side-v23{min-width:0!important;display:flex;flex-direction:column;gap:13px!important}
+.tm-project-v140 .project-detail-main-v23 > *, .tm-project-v140 .project-detail-side-v23 > * {margin:0!important}
+.tm-project-v140 .project-detail-main-v23>.client-contract-box,.tm-project-v140 .project-detail-main-v23>.project-section-v23,.tm-project-v140 .project-detail-main-v23>.client-extra-panel,.tm-project-v140 .project-detail-side-v23>.project-side-card-v23,.tm-project-v140 .project-detail-side-v23>.client-extra-panel{background:#fff!important;border:1px solid var(--line)!important;border-radius:13px!important;box-shadow:0 3px 13px #1a54a30a!important;overflow:hidden}
+.tm-project-v140 #agreement{padding:17px 18px!important}
+.tm-project-v140 #agreement h2{color:#0a276b!important;font-weight:850!important;font-size:18px!important;margin:0 0 8px!important}
+.tm-project-v140 #agreement h2 i{color:#1265f5!important;margin-right:6px}
+.tm-project-v140 #agreement>p{font-size:12px!important;line-height:1.5!important;color:#5f7394!important;margin:0 0 11px!important}
+.tm-project-v140 .client-contract-sigs{display:grid!important;grid-template-columns:1fr 1fr;gap:8px!important;align-items:center!important}
+.tm-project-v140 .client-contract-sigs>span{display:inline-flex!important;align-items:center;justify-content:center;background:#ebf9ef!important;color:#078443!important;padding:8px 10px!important;font-weight:800!important;font-size:12px!important;border-radius:8px!important;border:1px solid #d4f4dc!important}
+.tm-project-v140 .client-contract-sigs>form{grid-column:1/-1!important}
+.tm-project-v140 .tm140-terms-editor{grid-column:1/-1;border-top:1px solid #e7eef9;padding-top:9px}
+.tm-project-v140 .tm140-terms-editor summary{cursor:pointer;font-size:12px;font-weight:750;color:#0f58d4;list-style:revert}
+.tm-project-v140 .tm140-terms-editor>.client-contract-box{background:#f8fbff!important;border:1px solid #e0eaf9!important;border-radius:10px!important;padding:14px!important;margin:10px 0 0!important}
+.tm-project-v140 .tm140-terms-editor h3{font-size:15px!important;color:#0b2a6f!important}
+.tm-project-v140 .tm140-terms-editor form{display:grid!important;grid-template-columns:1fr 1fr;gap:10px;align-items:end;margin:12px 0!important}
+.tm-project-v140 .tm140-terms-editor label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;min-width:0}
+.tm-project-v140 .tm140-terms-editor textarea{width:100%;min-height:90px;border-radius:8px;border:1px solid #ccdaf0;padding:9px;box-sizing:border-box}
+.tm-project-v140 .tm140-terms-editor form button{background:#1265f5;color:white;border:0;border-radius:8px;padding:10px 12px;font-weight:700;cursor:pointer}
+.tm-project-v140 .client-contract-box .client-btn.primary,.tm-project-v140 .client-btn.primary{background:#1265f5!important;color:white!important;border-radius:8px!important;border:0!important;padding:11px 14px!important;font-weight:800!important}
+.tm-project-v140 .project-overview-v23{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;margin:0!important;background:transparent!important}
+.tm-project-v140 .project-overview-v23 article{min-width:0!important;background:#fff!important;border:1px solid #dbe7f8!important;border-radius:9px!important;padding:12px!important}
+.tm-project-v140 .project-overview-v23 article i{color:#1265f5!important}
+.tm-project-v140 .project-overview-v23 article small{font-size:10px!important;color:#8292ad!important}
+.tm-project-v140 .project-overview-v23 article b{font-size:12px!important;color:#0b2a6f!important;overflow-wrap:anywhere}
+.tm-project-v140 .project-section-v23 > header{background:#fff!important;padding:14px 16px 9px!important;min-height:auto!important}
+.tm-project-v140 .project-section-v23 h2,.tm-project-v140 .client-extra-panel h2{font-size:17px!important;font-weight:850!important;color:#0b2a6f!important}
+.tm-project-v140 .project-section-v23 header p{font-size:11px!important;color:#697f9e!important;margin:3px 0!important}
+.tm-project-v140 .project-section-v23 .section-icon{color:#0864ef!important;background:#e8f1ff!important}
+.tm-project-v140 .milestone-list-v23{padding:0 15px 13px!important}
+.tm-project-v140 .milestone-v23{border:0!important;border-bottom:1px solid #e7edf7!important;border-radius:0!important;padding:10px 3px!important;box-shadow:none!important;display:flex!important;gap:12px!important}
+.tm-project-v140 .milestone-v23:last-child{border-bottom:0!important}
+.tm-project-v140 .milestone-v23 .milestone-number{color:#0f60e5!important;background:#e9f2ff!important}
+.tm-project-v140 .milestone-title-row h3{font-size:13px!important;color:#132f69!important}
+.tm-project-v140 .milestone-meta-v23 b,.tm-project-v140 .side-metric b{color:#dc2626!important}
+.tm-project-v140 .milestone-form-v23 input,.tm-project-v140 .client-extra-panel textarea,.tm-project-v140 .client-extra-panel select{border:1px solid #d5e1f2!important;background:#fff!important;border-radius:8px!important;font-size:12px!important}
+.tm-project-v140 .history-table-wrap{margin:2px 14px 14px!important;border:1px solid #e5edf8!important;border-radius:8px!important;overflow:auto}
+.tm-project-v140 .history-table-wrap table{width:100%;border-collapse:collapse;font-size:11px}
+.tm-project-v140 .history-table-wrap th{background:#f0f5fc!important;color:#33517e!important;text-align:left!important}
+.tm-project-v140 .history-table-wrap td,.tm-project-v140 .history-table-wrap th{padding:10px!important}
+.tm-project-v140 .client-extra-panel{padding:15px 17px!important}
+.tm-project-v140 .client-extra-panel form{gap:10px!important}
+.tm-project-v140 .project-detail-side-v23 .project-side-card-v23{padding:18px!important}
+.tm-project-v140 .project-side-card-v23 h3{font-size:16px!important;color:#0b2a6f!important;margin:0 0 10px!important}
+.tm-project-v140 .project-side-card-v23.dark{background:linear-gradient(120deg,#082053,#103879)!important;color:#fff!important}
+.tm-project-v140 .project-side-card-v23.dark h3,.tm-project-v140 .project-side-card-v23.dark p{color:#fff!important}
+.tm-project-v140 .project-side-card-v23 p{font-size:12px!important;line-height:1.6}
+.tm-project-v140 .tm140-help-link{color:#075dec;border:1px solid #d1e2ff;border-radius:8px;display:inline-flex;padding:10px 16px;text-decoration:none;font-size:12px;font-weight:800}
+.tm-project-v140 .project-side-card-v23 .side-metric{padding:9px 0!important}
+.tm-project-v140 .client-extra-panel textarea{width:100%;box-sizing:border-box;min-height:70px}
+.tm-project-v140 button,.tm-project-v140 input,.tm-project-v140 textarea,.tm-project-v140 select{font:inherit}
+.tm-project-v140 button{cursor:pointer}
+@media(max-width:1120px){.tm-project-v140 .project-detail-layout-v23{grid-template-columns:1fr!important}.tm-project-v140 .project-overview-v23{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:740px){.tm-project-v140 .market-page-shell{padding:12px!important}.tm-project-v140 .project-detail-hero-v23{align-items:flex-start!important;flex-direction:column!important;gap:10px!important}.tm-project-v140 .project-overview-v23{grid-template-columns:repeat(2,minmax(0,1fr))!important}.tm-project-v140 .client-contract-sigs{grid-template-columns:1fr!important}.tm-project-v140 .tm140-terms-editor form{grid-template-columns:1fr!important}}

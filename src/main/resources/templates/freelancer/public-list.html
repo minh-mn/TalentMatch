@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/common :: head('Thuê Freelancer')}"></head>
-<body class="market-body">
+<body class="market-body" th:classappend="${currentUser != null and currentUser.role.name() == 'ADMIN'} ? ' admin-workspace' : ''">
+
+<link rel="stylesheet" th:href="@{/css/freelancer-layout-v106.css(v=106)}">
 <aside th:replace="~{fragments/common :: marketSidebar('hire')}"></aside>
 <header th:replace="~{fragments/common :: marketTopbar('hire')}"></header>
 <div th:replace="~{fragments/common :: flash}"></div>
@@ -56,5 +58,7 @@
 </main>
 
 <script th:replace="~{fragments/common :: scripts}"></script>
+<link rel="stylesheet" th:href="@{/css/freelancer-sidebar-v104.css}">
+<link rel="stylesheet" th:href="@{/css/freelancer-sidebar-unified-v107.css(v=107)}">
 </body>
 </html>

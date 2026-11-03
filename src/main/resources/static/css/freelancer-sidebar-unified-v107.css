@@ -1,0 +1,256 @@
+/* TalentMatch V107 — One Freelancer Sidebar across every marketplace/workflow page.
+   Reference: /freelancer/profile. This stylesheet is deliberately loaded LAST.
+   CSS is scoped to the authenticated Freelancer nav rendered by Thymeleaf.
+   No Customer / Admin / anonymous sidebar is changed. */
+
+html body:has(.tm104-fnav) {
+  --tm-sidebar-width: 230px !important;
+  --sidebar-width: 230px !important;
+  --tm106-sidebar: 230px !important;
+  --tm106-header: 64px !important;
+  --tm106-gutter: 22px !important;
+  --tm107-sidebar: 230px;
+  --tm107-header: 64px;
+  --tm107-text: #111827;
+  --tm107-active: #2f6fed;
+  --tm107-navy: #0b2a6f;
+}
+
+/* The width INCLUDES internal padding and border (never 230px + padding). */
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar {
+  position: fixed !important;
+  inset: 0 auto 0 0 !important;
+  width: var(--tm107-sidebar) !important;
+  min-width: var(--tm107-sidebar) !important;
+  max-width: var(--tm107-sidebar) !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  box-sizing: border-box !important;
+  padding: 8px 9px 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  overflow: hidden !important;
+  background: #fff !important;
+  border-right: 1px solid #dfe7f4 !important;
+  box-shadow: none !important;
+  z-index: 160 !important;
+}
+
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .market-brand-wrap {
+  flex: 0 0 auto !important;
+  margin: 0 5px !important;
+  padding: 12px 6px 15px !important;
+  border-bottom: 1px solid #e7edf6 !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .market-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  height: auto !important;
+  min-height: 34px !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .market-brand img {
+  width: 33px !important;
+  min-width: 33px !important;
+  height: 33px !important;
+  object-fit: contain !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .market-brand strong {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: var(--tm107-navy) !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .market-brand small {
+  font-size: 7.5px !important;
+  font-weight: 700 !important;
+  color: #697d9c !important;
+}
+
+/* Account block: same size/position as the profile page. */
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm33-sidebar-profile {
+  flex: 0 0 auto !important;
+  margin: 4px 5px 5px !important;
+  padding: 9px 5px 13px !important;
+  border-bottom: 1px solid #e7edf6 !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm33-profile-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-width: 0 !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm33-profile-avatar {
+  flex: 0 0 36px !important;
+  width: 36px !important;
+  min-width: 36px !important;
+  height: 36px !important;
+  font-size: 16px !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm33-profile-name {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm33-profile-name strong {
+  display: block !important;
+  font-size: 12.5px !important;
+  font-weight: 800 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm33-profile-name small {
+  font-size: 10px !important;
+}
+
+/* Only menu scrolls, logout remains visible at the bottom. */
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .market-side-section-auth {
+  display: block !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  padding: 0 3px !important;
+  margin: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin;
+  scrollbar-color: #dce5f3 transparent;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .market-side-section-auth > .market-side-label,
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm104-menu-label {
+  display: block !important;
+  margin: 7px 0 3px !important;
+  padding: 7px 7px 4px !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  line-height: 1.3 !important;
+  color: #8392ac !important;
+  letter-spacing: .25px !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm104-fnav nav.market-side-nav {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  padding: 0 0 4px !important;
+  margin: 0 !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm104-fnav nav.market-side-nav > a,
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm104-fnav nav.market-side-nav > a[href*='/freelancer/quotes'],
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm104-fnav nav.market-side-nav > a[href*='/freelancer/contracts'],
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm104-fnav nav.market-side-nav > a[href*='/freelancer/earnings'] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-height: 38px !important;
+  height: 38px !important;
+  padding: 8px 7px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--tm107-text) !important;
+  font: 700 14px/1.28 Inter, 'Segoe UI', Arial, sans-serif !important;
+  letter-spacing: -.23px !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm104-fnav nav.market-side-nav > a:hover:not(.active) {
+  background: #f0f5ff !important;
+  color: var(--tm107-navy) !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm104-fnav nav.market-side-nav > a.active {
+  background: var(--tm107-active) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 10px #246bfa20 !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm104-fnav .market-side-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 20px !important;
+  width: 20px !important;
+  min-width: 20px !important;
+  height: 20px !important;
+  margin: 0 !important;
+  color: inherit !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm104-fnav .market-side-icon i {
+  font-size: 18px !important;
+  line-height: 1 !important;
+  color: inherit !important;
+}
+
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm-freelancer-signout {
+  display: block !important;
+  position: static !important;
+  flex: 0 0 auto !important;
+  z-index: 3 !important;
+  margin: 0 !important;
+  padding: 10px 6px 13px !important;
+  background: #fff !important;
+  border-top: 1px solid #e7edf6 !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm-freelancer-signout form { margin: 0 !important; }
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .tm-freelancer-signout button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 11px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-height: 38px !important;
+  padding: 9px 12px !important;
+  color: #dc2626 !important;
+  background: #fff0f0 !important;
+  border: 1px solid #ffe0e0 !important;
+  border-radius: 7px !important;
+  font: 700 13px/1.3 Inter, 'Segoe UI', Arial, sans-serif !important;
+  cursor: pointer !important;
+}
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .market-side-utility-auth,
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .market-side-support-auth,
+html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar .market-side-bottom-auth {
+  display: none !important;
+}
+
+/* Consistent canvas offsets for ALL pages using marketplace/Freelancer layouts. */
+html body:has(#tm-freelancer-sidebar .tm104-fnav) .fm-header,
+html body:has(#tm-freelancer-sidebar .tm104-fnav) .market-topbar {
+  left: var(--tm107-sidebar) !important;
+  right: 0 !important;
+  width: calc(100% - var(--tm107-sidebar)) !important;
+  height: var(--tm107-header) !important;
+  min-height: var(--tm107-header) !important;
+  box-sizing: border-box !important;
+}
+html body:has(#tm-freelancer-sidebar .tm104-fnav) main.fm-main,
+html body:has(#tm-freelancer-sidebar .tm104-fnav) main.market-main {
+  margin-left: var(--tm107-sidebar) !important;
+  width: calc(100% - var(--tm107-sidebar)) !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+html body:has(#tm-freelancer-sidebar .tm104-fnav) main.fm-main { padding-top: var(--tm107-header) !important; }
+html body:has(#tm-freelancer-sidebar .tm104-fnav) main.market-main { padding-top: var(--tm107-header) !important; }
+
+@media (max-width: 900px) {
+  html body:has(.tm104-fnav) aside#tm-freelancer-sidebar.market-sidebar { display: none !important; }
+  html body:has(#tm-freelancer-sidebar .tm104-fnav) .fm-header,
+  html body:has(#tm-freelancer-sidebar .tm104-fnav) .market-topbar { left: 0 !important; width: 100% !important; }
+  html body:has(#tm-freelancer-sidebar .tm104-fnav) main.fm-main,
+  html body:has(#tm-freelancer-sidebar .tm104-fnav) main.market-main { margin-left: 0 !important; width: 100% !important; }
+}
+
+/* Notifications page follows the profile page's regular 22px canvas gutter. */
+html body.tm107-notifications:has(#tm-freelancer-sidebar .tm104-fnav) .tm107-notification-content{
+  padding:22px !important;max-width:1700px !important;margin:0 auto !important;box-sizing:border-box !important;
+}
+html body.tm107-notifications:has(#tm-freelancer-sidebar .tm104-fnav) .tm107-notification-content .v31-panel{
+  background:#fff;border:1px solid #dce6f5;border-radius:12px;padding:22px;
+}

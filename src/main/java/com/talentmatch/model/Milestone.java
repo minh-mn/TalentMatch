@@ -15,10 +15,13 @@ public class Milestone {
     @Column(nullable=false,precision=15,scale=2) private BigDecimal amount;
     private LocalDate deadline;
     @Enumerated(EnumType.STRING) @Column(nullable=false,length=30) private MilestoneStatus status=MilestoneStatus.UNPAID;
+    @Column(name="progress_percent",nullable=false) private int progressPercent=0;
     private LocalDateTime createdAt;
     private LocalDateTime completedAt;
     @Column(columnDefinition="TEXT") private String revisionNote;
     @PrePersist void prePersist(){createdAt=LocalDateTime.now();if(status==null)status=MilestoneStatus.UNPAID;}
+    public int getProgressPercent(){return progressPercent;}
+    public void setProgressPercent(int value){this.progressPercent=value;}
     public String getRevisionNote(){return revisionNote;} public void setRevisionNote(String v){revisionNote=v;}
     public Long getId(){return id;} public void setId(Long id){this.id=id;}
     public Project getProject(){return project;} public void setProject(Project project){this.project=project;}

@@ -1,0 +1,107 @@
+/* V100 - Client messages. Existing Client sidebar, header and footer are reused unchanged.
+   Only the content under /customer/messages is affected. */
+.tm-client-messages-v100 {
+  --chat-navy:#0b2a6f; --chat-blue:#0867f5; --chat-border:#dce8f8;
+  font-family: Inter,'Segoe UI',Arial,sans-serif;
+  background:#eff6ff!important;
+}
+.tm-client-messages-v100 *, .tm-client-messages-v100 *::before, .tm-client-messages-v100 *::after {box-sizing:border-box}
+.tm-client-messages-v100 .tm-client-messages-main {
+  background:linear-gradient(180deg,#eff6ff,#f8fbff)!important;
+  overflow:visible;
+}
+.tm-client-messages-v100 .tm89-content {
+  padding:12px 18px 14px;
+  margin:0 auto;
+  max-width:1660px;
+}
+/* Banner text is HTML, illustration from the second user-provided reference image.
+   Never stretch text baked into images. */
+.tm-client-messages-v100 .tm100-hero {
+  width:100%; height:clamp(176px,15vw,215px); position:relative;
+  display:flex; align-items:center; overflow:hidden;
+  isolation:isolate; background:linear-gradient(118deg,#e8f5ff 1%,#d5e9ff 58%,#acd7ff 100%);
+  border-radius:12px; margin-bottom:13px;
+}
+.tm-client-messages-v100 .tm100-hero:before {
+  content:"";position:absolute;left:-12%;bottom:-87px;width:89%;height:155px;
+  border-radius:50%;background:#c6e3ff70;z-index:-1;transform:rotate(-6deg)
+}
+.tm-client-messages-v100 .tm100-hero-copy {
+  padding:13px 3.6%;position:relative;z-index:2;width:63%;min-width:0
+}
+.tm-client-messages-v100 .tm100-hero-tag {
+  display:inline-flex;align-items:center;gap:10px;background:#c5e2ff;border-radius:12px;
+  color:#0a4599;font-size:14px;font-weight:800;padding:8px 13px;margin-bottom:9px
+}
+.tm-client-messages-v100 .tm100-hero h1 {
+  color:#092765;font-size:clamp(26px,2.7vw,38px);line-height:1.1;font-weight:900;
+  margin:0 0 11px;letter-spacing:-.8px
+}
+.tm-client-messages-v100 .tm100-hero h1 em {color:#0867f5;font-style:normal}
+.tm-client-messages-v100 .tm100-hero p {color:#33527e;font-size:clamp(13px,1.16vw,17px);font-weight:500;line-height:1.42;margin:0}
+.tm-client-messages-v100 .tm100-hero-art {
+  position:absolute;right:0;top:0;height:100%;width:51%;object-fit:cover;object-position:50% 49%;
+  mix-blend-mode:multiply;opacity:.92;z-index:1;
+  mask-image:linear-gradient(to right,transparent 0%,black 18%);
+}
+/* Conversation layout closely matches the supplied reference. */
+.tm-client-messages-v100 .tm89-layout {
+  height:575px;grid-template-columns:minmax(266px,1.19fr) minmax(390px,2.17fr) minmax(248px,1fr);
+  gap:10px;
+}
+.tm-client-messages-v100 .tm89-panel {border-radius:11px;border:1px solid #dfebfa;box-shadow:0 3px 14px #22497b0b;}
+.tm-client-messages-v100 .tm89-thread-tools {padding:13px 13px 10px}
+.tm-client-messages-v100 .tm89-thread-search {height:43px}
+.tm-client-messages-v100 .tm89-thread-search input {font-size:13.5px}
+.tm-client-messages-v100 .tm89-thread-tabs a {font-size:12.5px;font-weight:800;min-height:37px;padding:8px 5px}
+.tm-client-messages-v100 .tm89-thread {min-height:78px;grid-template-columns:46px minmax(0,1fr) 44px;gap:10px;padding:11px}
+.tm-client-messages-v100 .tm89-thread-title{font-size:15px;font-weight:850;color:#092765}
+.tm-client-messages-v100 .tm89-thread-preview{font-size:12.5px;line-height:1.42}
+.tm-client-messages-v100 .tm89-avatar{background:linear-gradient(145deg,#1686ff,#0759ea)}
+.tm-client-messages-v100 .tm89-thread.is-current{background:#eaf3ff;border-left-color:#0867f5}
+.tm-client-messages-v100 .tm89-chat-header {min-height:70px;padding:12px 14px}
+.tm-client-messages-v100 .tm89-chat-person strong{font-size:17px}
+.tm-client-messages-v100 .tm89-chat-person small{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:370px;display:block}
+.tm-client-messages-v100 .tm89-chat-actions a,.tm-client-messages-v100 .tm89-chat-actions button{font-size:17px;padding:8px}
+.tm-client-messages-v100 .tm89-message-list{padding:17px 17px;gap:12px}
+.tm-client-messages-v100 .tm89-bubble {font-size:14px;line-height:1.58;max-width:83%;padding:11px 13px 8px}
+.tm-client-messages-v100 .tm89-message.is-mine .tm89-bubble{background:linear-gradient(120deg,#438fff,#1069ed);color:#fff}
+.tm-client-messages-v100 .tm89-compose{padding:10px 13px}
+.tm-client-messages-v100 .tm89-compose-row input[type=text] {font-size:13.5px}
+.tm-client-messages-v100 .tm89-details{padding:15px 13px}
+.tm-client-messages-v100 .tm89-partner-top strong{font-size:17px}
+.tm-client-messages-v100 .tm89-detail-section h3{font-size:14px}
+.tm-client-messages-v100 .tm89-detail-section>p:not(.tm89-no-shared){font-size:12.5px}
+.tm-client-messages-v100 .tm89-project-link strong{font-size:13px}
+.tm-client-messages-v100 .tm89-project-link b{font-size:16px;color:#dc2626}
+.tm-client-messages-v100 .tm89-shared-file strong{font-size:12.5px}
+.tm-client-messages-v100 .tm-posted-footer{margin:0!important;width:100%!important}
+@media (max-width:1400px) {
+  .tm-client-messages-v100 .tm89-layout{grid-template-columns:minmax(225px,1.12fr) minmax(340px,2fr) minmax(222px,1fr)}
+  .tm-client-messages-v100 .tm100-hero-copy{width:66%}
+}
+@media (max-width:1190px) {
+  .tm-client-messages-v100 .tm89-layout{grid-template-columns:minmax(230px,1fr) minmax(370px,1.7fr);height:575px}
+  .tm-client-messages-v100 .tm89-details{display:none}
+  .tm-client-messages-v100 .tm100-hero h1{font-size:30px}
+}
+@media (max-width:900px){
+  .tm-client-messages-v100 .tm89-content{padding:10px}
+  .tm-client-messages-v100 .tm89-layout{grid-template-columns:1fr;height:auto}
+  .tm-client-messages-v100 .tm89-threads{height:280px}
+  .tm-client-messages-v100 .tm89-center{height:520px}
+  .tm-client-messages-v100 .tm89-details{display:block;max-height:390px}
+  .tm-client-messages-v100 .tm100-hero{height:178px}
+  .tm-client-messages-v100 .tm100-hero-copy{width:72%}
+}
+@media (max-width:540px){
+  .tm-client-messages-v100 .tm100-hero{height:166px}
+  .tm-client-messages-v100 .tm100-hero-copy{width:92%;padding:12px 14px}
+  .tm-client-messages-v100 .tm100-hero-tag{font-size:11px;padding:5px 9px;margin-bottom:5px}
+  .tm-client-messages-v100 .tm100-hero h1{font-size:24px}
+  .tm-client-messages-v100 .tm100-hero p{font-size:12px}
+  .tm-client-messages-v100 .tm100-hero-art{opacity:.18;width:80%}
+  .tm-client-messages-v100 .tm100-desktop-break{display:none}
+  .tm-client-messages-v100 .tm89-chat-header{padding:9px}
+}

@@ -1,0 +1,58 @@
+/* V141 – Client Progress workspace. Overrides scoped to this page only. */
+body.tm-client-progress-v135 .cp135-main{padding:136px 16px 0!important;background:#eef3fc;min-height:100vh}
+body.tm-client-progress-v135 .cp135-wrap{margin:0 auto 20px;max-width:1600px;width:100%}
+body.tm-client-progress-v135 .cp135-banner{overflow:hidden;border-radius:12px}
+body.tm-client-progress-v135 .cp135-banner img{display:block;width:100%;aspect-ratio:1920/360;height:auto;object-fit:cover}
+body.tm-client-progress-v135 .cp135-summary{display:none}
+body.tm-client-progress-v135 .cp135-head{margin:10px 0 12px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+body.tm-client-progress-v135 .cp135-head h2{font-size:19px;font-weight:800;color:#0b2a6f;margin:0}
+body.tm-client-progress-v135 .cp135-head a{background:#075df3;color:white;text-decoration:none;padding:10px 15px;border-radius:8px;font-weight:700;font-size:13px}
+body.tm-client-progress-v135 .cp135-layout{display:grid;grid-template-columns:minmax(300px,33%) minmax(0,1fr);gap:14px;align-items:start}
+body.tm-client-progress-v135 .cp135-panel{background:#fff;border:1px solid #dbe6f9;border-radius:12px;padding:14px;box-shadow:0 4px 14px rgba(20,57,115,.035);min-width:0}
+body.tm-client-progress-v135 .cp135-panel h3{font-size:17px;font-weight:800;color:#0a2462;margin:0 0 13px}
+body.tm-client-progress-v135 .cp135-list{padding:12px;min-height:480px}
+body.tm-client-progress-v135 .cp135-search{display:grid;grid-template-columns:1fr;gap:9px;margin-bottom:14px}
+body.tm-client-progress-v135 .cp135-search input,body.tm-client-progress-v135 .cp135-search select{min-height:40px;border:1px solid #cddcf6;border-radius:8px;padding:9px 12px;width:100%;font-size:13px;color:#102854;background:#f9fbff}
+body.tm-client-progress-v135 .cp135-search button{background:#075df3;color:#fff;border:0;border-radius:7px;min-height:39px;font-weight:700;cursor:pointer}
+body.tm-client-progress-v135 .cp135-project{display:grid;grid-template-columns:46px minmax(0,1fr) 43px;align-items:center;gap:9px;padding:13px 10px;border:1px solid transparent;border-bottom-color:#e4ecfa;border-radius:9px;color:#102854;text-decoration:none}
+body.tm-client-progress-v135 .cp135-project.selected{background:#ebf3ff;border-color:#74a6ff}
+body.tm-client-progress-v135 .cp135-folder{display:grid;place-items:center;width:42px;height:42px;background:#edf5ff;color:#075df3;border-radius:9px;font-size:25px}
+body.tm-client-progress-v135 .cp135-info strong{display:block;font-size:13px;line-height:1.4;white-space:normal;font-weight:800}
+body.tm-client-progress-v135 .cp135-info small{display:block;font-size:11px;color:#5f7598;margin:4px 0}
+body.tm-client-progress-v135 .cp135-track{display:block;height:8px;background:#dce8fb;border-radius:50px;overflow:hidden;margin-top:5px}
+body.tm-client-progress-v135 .cp135-track i{display:block;height:100%;background:#075df3;border-radius:50px;max-width:100%}
+body.tm-client-progress-v135 .cp135-pct{font-weight:800;color:#0a2a70;font-size:13px}
+body.tm-client-progress-v135 .cp135-projecthead h2{font-size:21px;line-height:1.3;margin:0 0 12px;font-weight:800}
+body.tm-client-progress-v135 .cp135-pill{display:inline-flex;color:#16803e;background:#ddfae9;padding:5px 10px;border-radius:30px;font-weight:700;font-size:12px}
+body.tm-client-progress-v135 .cp135-meta{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;padding-top:14px;border-top:1px solid #e2ebfa}
+body.tm-client-progress-v135 .cp135-meta>span{padding:0 11px;border-right:1px solid #e3ebfa;min-width:0}
+body.tm-client-progress-v135 .cp135-meta>span:last-child{border-right:0}
+body.tm-client-progress-v135 .cp135-meta small{font-size:11px;color:#63789b;display:block;margin-bottom:5px}
+body.tm-client-progress-v135 .cp135-meta strong{font-size:13px;line-height:1.4;display:block;overflow-wrap:anywhere}
+body.tm-client-progress-v135 .cp135-money{color:#dc2626!important;font-size:16px!important}
+body.tm-client-progress-v135 .cp135-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+body.tm-client-progress-v135 .cp135-tabs a{flex:1 1 auto;text-align:center;background:#fff;color:#0c2b6f;border:1px solid #dae6f9;border-radius:8px;padding:12px 8px;font-size:12px;font-weight:700;text-decoration:none}
+body.tm-client-progress-v135 .cp135-tabs a.active{background:#075df3;color:white;border-color:#075df3}
+body.tm-client-progress-v135 .cp135-milestone{display:grid;grid-template-columns:24px minmax(155px,2fr) minmax(105px,1fr) 55px minmax(80px,1fr) 60px;gap:10px;align-items:center;padding:13px 4px;border-bottom:1px solid #e5ecfa;font-size:12px}
+body.tm-client-progress-v135 .cp135-milestone strong{font-size:13px;font-weight:700;display:block}
+body.tm-client-progress-v135 .cp135-milestone small{display:block;color:#7184a1;font-size:11px;margin-top:3px}
+body.tm-client-progress-v135 .cp135-milestone a{color:#075df3;font-weight:700}
+body.tm-client-progress-v135 .cp135-milestone b{font-size:11px;overflow-wrap:anywhere}
+body.tm-client-progress-v135 .cp135-choose{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 16px}
+body.tm-client-progress-v135 .cp135-choose a{color:#0b2a6f;background:#f0f6ff;border:1px solid #dce7fa;border-radius:9px;padding:9px 11px;font-weight:700;text-decoration:none;font-size:12px}
+body.tm-client-progress-v135 .cp135-choose a.active{background:#075df3;color:#fff}
+body.tm-client-progress-v135 .cp135-submission{background:#f2f7ff;padding:14px;border-radius:10px;margin:12px 0}
+body.tm-client-progress-v135 .cp135-submission a{color:#075df3;display:block;margin-top:6px;overflow-wrap:anywhere}
+body.tm-client-progress-v135 .cp135-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+body.tm-client-progress-v135 .cp135-actions form{display:grid;gap:8px}
+body.tm-client-progress-v135 .cp135-actions button{min-height:40px;border:0;border-radius:8px;background:#075df3;color:#fff;font-weight:700;cursor:pointer}
+body.tm-client-progress-v135 .cp135-actions .secondary{background:#fff;color:#c42222;border:1px solid #f4b3b3}
+body.tm-client-progress-v135 .cp135-actions textarea{min-height:78px;width:100%;padding:11px;border:1px solid #d5e1f4;border-radius:8px;font:inherit}
+body.tm-client-progress-v135 .cp135-history{display:grid;grid-template-columns:45px 150px minmax(0,1fr);padding:10px 4px;border-bottom:1px solid #e5edfb;gap:9px;font-size:12px}
+body.tm-client-progress-v135 .cp141-info{background:#f2f6ff;color:#516b92;border-radius:8px;padding:11px 12px;font-size:12px;line-height:1.5;margin:14px 0}
+body.tm-client-progress-v135 .cp135-empty{padding:24px;text-align:center;color:#687d9d}
+body.tm-client-progress-v135 .cp135-pagination{display:flex;justify-content:center;margin-top:12px;gap:6px}
+body.tm-client-progress-v135 .cp135-pagination a{padding:7px 11px;border:1px solid #d6e3fa;text-decoration:none;border-radius:6px;color:#075df3}
+body.tm-client-progress-v135 .cp135-pagination a.on{background:#075df3;color:#fff}
+@media(max-width:1240px){body.tm-client-progress-v135 .cp135-layout{grid-template-columns:1fr}body.tm-client-progress-v135 .cp135-list{min-height:0}body.tm-client-progress-v135 .cp135-meta{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){body.tm-client-progress-v135 .cp135-meta{grid-template-columns:repeat(2,1fr)}body.tm-client-progress-v135 .cp135-milestone{grid-template-columns:24px 1fr 65px}body.tm-client-progress-v135 .cp135-milestone .cp135-track{grid-column:2}body.tm-client-progress-v135 .cp135-actions{grid-template-columns:1fr}body.tm-client-progress-v135 .cp135-history{grid-template-columns:34px 1fr}body.tm-client-progress-v135 .cp135-history span:last-child{grid-column:2}}

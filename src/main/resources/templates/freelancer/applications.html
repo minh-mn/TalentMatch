@@ -3,6 +3,8 @@
 <head th:replace="~{fragments/common :: head('Ứng tuyển của tôi')}"></head>
 <body class="market-body fm-dashboard tm-apps-v87">
 <link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
+
+<link rel="stylesheet" th:href="@{/css/freelancer-layout-v106.css(v=106)}">
 <aside th:replace="~{fragments/common :: marketSidebar('applications')}"></aside>
 <header class="fm-header">
   <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
@@ -115,7 +117,7 @@
         <div><i class="fa-regular fa-calendar"></i> Ngày ứng tuyển: <span th:text="${a.createdAt != null ? #temporals.format(a.createdAt,'dd/MM/yyyy') : 'Chưa xác định'}">08/10/2026</span></div>
         <div><i class="fa-regular fa-calendar-check"></i> Hạn nộp: <span th:text="${a.job.deadline != null ? #temporals.format(a.job.deadline,'dd/MM/yyyy') : 'Chưa xác định'}">15/10/2026</span></div>
       </div>
-      <div class="ta87-actions">
+      <div class="ta87-actions"><a class="ta87-outline" th:href="@{/quotations/application/{id}(id=${a.id})}">Báo giá</a>
         <div class="ta87-status"
              th:classappend="${a.status.name()=='ACCEPTED' ? ' hired' : (a.status.name()=='REJECTED' ? ' rejected' : (a.status.name()=='WITHDRAWN' ? ' withdrawn' : (a.status.name()=='SHORTLISTED' ? ' priority' : ' review')))}">
           <strong><i th:class="${a.status.name()=='ACCEPTED' ? 'fa-solid fa-circle-check' : (a.status.name()=='REJECTED' ? 'fa-solid fa-circle-xmark' : (a.status.name()=='WITHDRAWN' ? 'fa-solid fa-arrow-rotate-left' : (a.status.name()=='SHORTLISTED' ? 'fa-solid fa-star' : 'fa-regular fa-clock')))}"></i>
@@ -155,5 +157,7 @@
 <script th:replace="~{fragments/common :: scripts}"></script>
 <link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}">
 <link rel="stylesheet" th:href="@{/css/freelancer-applications-v87.css}">
+<link rel="stylesheet" th:href="@{/css/freelancer-sidebar-v104.css}">
+<link rel="stylesheet" th:href="@{/css/freelancer-sidebar-unified-v107.css(v=107)}">
 </body>
 </html>

@@ -1,0 +1,7 @@
+/* Only inner banners; shared sidebar, header, footer remain unchanged */
+.tm105-quotes .tm105-banner{background:#eaf2ff url('/images/tm-banner-quotes-v111.png') center center/100% 100% no-repeat!important;min-height:0!important;aspect-ratio:16/3;padding:0!important;border:0!important;border-radius:12px!important;overflow:hidden}
+.tm105-quotes .tm105-banner-text{display:none!important}
+.tm104-workflow .tm111-payment-banner{background:#eaf2ff url('/images/tm-banner-payment-v111.png') center center/100% 100% no-repeat!important;aspect-ratio:16/3;min-height:0!important;padding:0!important;border:0!important;border-radius:12px!important}
+.tm104-workflow .tm111-payment-banner>*{display:none!important}
+.tm111-contracts .tm111-contract-banner{background:#eaf2ff url('/images/tm-banner-contracts-v111.png') center center/100% 100% no-repeat;aspect-ratio:16/3;border-radius:12px;overflow:hidden}
+@media(max-width:720px){.tm105-quotes .tm105-banner,.tm104-workflow .tm111-payment-banner,.tm111-contracts .tm111-contract-banner{aspect-ratio:16/4}}

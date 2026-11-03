@@ -1,0 +1,109 @@
+/* TalentMatch V101 — Trang Giao dịch & Lịch sử Client.
+   Chỉ thay đổi nội dung của trang này; Sidebar / Header / Footer dùng lại V100. */
+.tm-client-history-v101{--tx-blue:#0866f5;--tx-navy:#0b2a6f;--tx-border:#dbe7fa;--tx-muted:#617ca8;font-family:Inter,'Segoe UI',Arial,sans-serif;background:#f0f6fd!important}
+.tm-client-history-v101 *{box-sizing:border-box}
+.tm-client-history-v101 .tm-transactions-main{background:linear-gradient(180deg,#eef6ff 0%,#f8fbff 100%)!important;min-height:calc(100vh - 110px)}
+.tm-client-history-v101 .tm-transactions-shell{width:100%;max-width:1660px;margin:0 auto;padding:12px 18px 18px;min-width:0}
+.tm-client-history-v101 .tm-transactions-banner{width:100%;margin-bottom:14px;overflow:hidden;border-radius:11px;background:#dceeff}
+.tm-client-history-v101 .tm-transactions-banner img{display:block;width:100%;height:auto;aspect-ratio:1920/360;object-fit:contain}
+.tm-client-history-v101 .tm-transactions-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 16px}
+.tm-client-history-v101 .tm-transactions-kpi{display:flex;align-items:center;gap:16px;min-width:0;min-height:104px;padding:16px 18px;border:1px solid var(--tx-border);border-radius:10px;background:#fff;box-shadow:0 3px 14px #0e4f9910}
+.tm-client-history-v101 .tm-transactions-kpi-icon{display:grid;place-items:center;width:54px;height:54px;flex:0 0 54px;border-radius:12px;font-size:23px}
+.tm-client-history-v101 .tm-transactions-kpi-icon.blue{background:#e6f1ff;color:#0868f4}
+.tm-client-history-v101 .tm-transactions-kpi-icon.green{background:#e1f7ef;color:#04a667}
+.tm-client-history-v101 .tm-transactions-kpi-icon.rose{background:#ffebef;color:#e63d59}
+.tm-client-history-v101 .tm-transactions-kpi-icon.purple{background:#f0eaff;color:#7a47e4}
+.tm-client-history-v101 .tm-transactions-kpi>span:last-child{min-width:0;display:flex;flex-direction:column;gap:7px}
+.tm-client-history-v101 .tm-transactions-kpi small{color:#4d70a3;font-size:14px;font-weight:650;line-height:1.2}
+.tm-client-history-v101 .tm-transactions-kpi strong{color:var(--tx-navy);font-size:26px;font-weight:850;line-height:1.05;white-space:nowrap;letter-spacing:-.4px}
+.tm-client-history-v101 .tm-transactions-kpi strong.pending-value{color:#dc2626}
+.tm-client-history-v101 .tm-transactions-tabs{display:flex;gap:0;align-items:center;border-bottom:1px solid #dfe8f7;margin:0 0 13px}
+.tm-client-history-v101 .tm-transactions-tabs a{position:relative;display:inline-flex;align-items:center;justify-content:center;padding:13px 24px;min-height:46px;color:#4d6794;text-decoration:none;font-size:15px;font-weight:760}
+.tm-client-history-v101 .tm-transactions-tabs a.active{color:var(--tx-blue)}
+.tm-client-history-v101 .tm-transactions-tabs a.active:after{position:absolute;content:"";height:3px;left:0;right:0;bottom:-1px;border-radius:3px 3px 0 0;background:var(--tx-blue)}
+.tm-client-history-v101 .tm-transactions-filters{display:grid;grid-template-columns:minmax(200px,2.2fr) minmax(135px,1fr) minmax(135px,.9fr) minmax(220px,1.45fr) auto auto;align-items:center;gap:9px;margin:0 0 9px;min-width:0}
+.tm-client-history-v101 .tm-transactions-search{display:flex;align-items:center;gap:10px;min-width:0;height:43px;padding:0 13px;border:1px solid var(--tx-border);border-radius:8px;background:#fff;color:#7192be}
+.tm-client-history-v101 .tm-transactions-search input{min-width:0;flex:1;width:100%;height:40px;border:0!important;background:transparent!important;outline:0!important;box-shadow:none!important;color:#11356f;font:500 13.4px Inter,sans-serif;padding:0!important}
+.tm-client-history-v101 .tm-transactions-filters>select{min-width:0;width:100%;height:43px;background:#fff;border:1px solid var(--tx-border);border-radius:8px;padding:0 11px;font:650 12.5px Inter,sans-serif;color:#12366e;cursor:pointer}
+.tm-client-history-v101 .tm-transactions-dates{display:flex;gap:5px;min-width:0}
+.tm-client-history-v101 .tm-transactions-dates>label{display:flex;align-items:center;gap:4px;min-width:0;flex:1;height:43px;padding:0 7px;background:#fff;border:1px solid var(--tx-border);border-radius:8px;font-size:11px;color:#5b7fb3;font-weight:750;white-space:nowrap}
+.tm-client-history-v101 .tm-transactions-dates input{border:0;background:transparent;outline:0;width:100%;min-width:0;color:#124075;font:600 11px Inter,sans-serif;padding:0}
+.tm-client-history-v101 .tm-transactions-apply,.tm-client-history-v101 .tm-transactions-export{display:inline-flex;justify-content:center;align-items:center;gap:7px;min-height:43px;padding:0 12px;border:1px solid #0a6bf5;border-radius:8px;text-decoration:none;font:800 12.7px Inter,sans-serif;white-space:nowrap;cursor:pointer}
+.tm-client-history-v101 .tm-transactions-apply{background:var(--tx-blue);color:white}
+.tm-client-history-v101 .tm-transactions-export{background:#fff;color:#075ff0}
+.tm-client-history-v101 .tm-transactions-apply:hover{background:#0054db}
+.tm-client-history-v101 .tm-transactions-export:hover{background:#edf5ff}
+.tm-client-history-v101 .tm-transactions-filter-hint{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:0 0 9px;color:#6a85b0;font-size:12px;font-weight:600}
+.tm-client-history-v101 .tm-transactions-filter-hint a{color:#0a68f4;text-decoration:none;font-weight:750}
+.tm-client-history-v101 .tm-transactions-table-card{border:1px solid var(--tx-border);border-radius:11px;background:#fff;box-shadow:0 3px 13px #1958990d;overflow:visible}
+.tm-client-history-v101 .tm-transactions-scroll{width:100%;overflow-x:auto;border-radius:11px}
+.tm-client-history-v101 .tm-transactions-table{border-collapse:collapse;width:100%;min-width:1050px;table-layout:fixed;margin:0;background:#fff}
+.tm-client-history-v101 .tm-transactions-table th{height:45px;padding:11px 10px;text-align:left;background:#f4f9ff;border-bottom:1px solid #e2ebf8;font-weight:850;color:#0c2b68;font-size:12.2px;white-space:nowrap}
+.tm-client-history-v101 .tm-transactions-table td{height:85px;padding:10px;border-bottom:1px solid #e7edf7;vertical-align:middle;color:#526e9c;font-size:13px;line-height:1.45;overflow-wrap:break-word}
+.tm-client-history-v101 .tm-transactions-table tr:last-child td{border-bottom:0}
+.tm-client-history-v101 .tm-transactions-table tbody tr:hover td{background:#fafcff}
+.tm-client-history-v101 .tm-transactions-table th:nth-child(1){width:3.5%}
+.tm-client-history-v101 .tm-transactions-table th:nth-child(2){width:13%}
+.tm-client-history-v101 .tm-transactions-table th:nth-child(3){width:15.5%}
+.tm-client-history-v101 .tm-transactions-table th:nth-child(4){width:23%}
+.tm-client-history-v101 .tm-transactions-table th:nth-child(5){width:11.5%}
+.tm-client-history-v101 .tm-transactions-table th:nth-child(6){width:10.5%}
+.tm-client-history-v101 .tm-transactions-table th:nth-child(7){width:11.5%}
+.tm-client-history-v101 .tm-transactions-table th:nth-child(8){width:11.5%}
+.tm-client-history-v101 .tm-transactions-number{color:#7892b5!important;text-align:center;font-weight:700}
+.tm-client-history-v101 .tm-transactions-code{color:#0b61ea;text-decoration:none;font-size:13px;font-weight:800;overflow-wrap:anywhere}
+.tm-client-history-v101 .tm-transactions-code:hover{text-decoration:underline}
+.tm-client-history-v101 .tm-transactions-type{display:flex;align-items:center;gap:10px;color:#123670;font-weight:750}
+.tm-client-history-v101 .tm-transactions-type i{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;background:#e9f4ff;color:#0970f1;border-radius:8px;font-size:15px}
+.tm-client-history-v101 .tm-transactions-description{font-size:13.5px;font-weight:750;color:#0c2b69;line-height:1.45}
+.tm-client-history-v101 .tm-transactions-table td small{display:block;margin-top:5px;font-size:11px;color:#7c92b5}
+.tm-client-history-v101 .tm-transactions-money{white-space:nowrap;color:#dc2626;font-size:15px;font-weight:850}
+.tm-client-history-v101 .tm-transactions-money.incoming{color:#00a864}
+.tm-client-history-v101 .tm-transactions-money.pending{color:#e48714}
+.tm-client-history-v101 .tm-transactions-date span{display:block;color:#3b5d99;font-size:12.7px;font-weight:650}
+.tm-client-history-v101 .tm-transactions-status{display:inline-flex;justify-content:center;align-items:center;min-height:29px;min-width:100px;padding:6px 9px;border-radius:7px;text-align:center;font-size:11.6px;font-weight:790;line-height:1.2}
+.tm-client-history-v101 .tm-transactions-status.success{color:#04844c;background:#def8eb}
+.tm-client-history-v101 .tm-transactions-status.pending{color:#c87508;background:#fff0db}
+.tm-client-history-v101 .tm-transactions-status.refunded{color:#087d5b;background:#ddf7eb}
+.tm-client-history-v101 .tm-transactions-status.failed{color:#d52b39;background:#ffeaed}
+.tm-client-history-v101 .tm-transactions-actions{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.tm-client-history-v101 .tm-transactions-detail{height:34px;min-width:89px;display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:0 9px;border:1px solid #a9c9ff;border-radius:7px;color:#075ff0;text-decoration:none;font-weight:750;font-size:11.7px;background:#fff}
+.tm-client-history-v101 .tm-transactions-more{position:relative}
+.tm-client-history-v101 .tm-transactions-more summary{display:grid;place-items:center;list-style:none;width:30px;height:34px;border:1px solid #e2eaf7;border-radius:7px;background:#f3f8ff;color:#1164e9;cursor:pointer}
+.tm-client-history-v101 .tm-transactions-more summary::-webkit-details-marker{display:none}
+.tm-client-history-v101 .tm-transactions-more>div{position:absolute;right:0;top:calc(100% + 3px);z-index:20;min-width:155px;background:#fff;border:1px solid var(--tx-border);padding:5px;border-radius:8px;box-shadow:0 8px 25px #092d6240}
+.tm-client-history-v101 .tm-transactions-more>div a{display:block;padding:8px;color:#15427a;font-size:12px;text-decoration:none;white-space:nowrap}
+.tm-client-history-v101 .tm-transactions-more>div a:hover{background:#edf5ff}
+.tm-client-history-v101 .tm-transactions-empty{text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;padding:50px 20px}
+.tm-client-history-v101 .tm-transactions-empty i{font-size:32px;color:#2c86f8}
+.tm-client-history-v101 .tm-transactions-empty strong{font-size:18px;color:var(--tx-navy)}
+.tm-client-history-v101 .tm-transactions-empty p{color:#6680a7;font-size:13px;margin:0;max-width:550px}
+.tm-client-history-v101 .tm-transactions-empty a{border:1px solid #a5c6fb;background:#fff;color:#0967f4;padding:9px 13px;border-radius:7px;text-decoration:none;font-size:13px;font-weight:800}
+.tm-client-history-v101 .tm-transactions-pages{display:flex;justify-content:center;align-items:center;gap:7px;padding:18px 0 6px}
+.tm-client-history-v101 .tm-transactions-pages a{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--tx-border);border-radius:7px;background:#fff;color:#1d457c;text-decoration:none;font-size:13px;font-weight:850}
+.tm-client-history-v101 .tm-transactions-pages a.active{background:var(--tx-blue);border-color:var(--tx-blue);color:#fff}
+.tm-client-history-v101 .tm-transactions-pages a.disabled{opacity:.35;pointer-events:none}
+.tm-client-history-v101 .tm-transactions-note{display:flex;align-items:start;gap:8px;margin:11px 0 0;font-size:11.5px;line-height:1.5;color:#627ea9}
+.tm-client-history-v101 .tm-transactions-note i{color:#287af7;margin-top:2px}
+/* chi tiết / biên nhận */
+.tm-client-history-v101 .tm-transactions-receipt{width:min(740px,100%);margin:15px auto 45px}
+.tm-client-history-v101 .tm-receipt-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.tm-client-history-v101 .tm-receipt-back{text-decoration:none;color:#0968f6;font-weight:800;font-size:13px}
+.tm-client-history-v101 .tm-receipt-paper{background:#fff;border:1px solid var(--tx-border);border-radius:12px;box-shadow:0 12px 40px #0c37651c;padding:30px}
+.tm-client-history-v101 .tm-receipt-heading{display:flex;justify-content:space-between;gap:10px;align-items:center;padding-bottom:20px;border-bottom:1px solid #e7eef7}
+.tm-client-history-v101 .tm-receipt-heading>div{display:flex;flex-direction:column;gap:5px}
+.tm-client-history-v101 .tm-receipt-heading strong{font-size:22px;color:var(--tx-navy)}
+.tm-client-history-v101 .tm-receipt-heading small{color:#7589a6;font-size:12px}
+.tm-client-history-v101 .tm-receipt-paper h1{font-size:24px;color:var(--tx-navy);text-align:center;margin:25px 0 13px}
+.tm-client-history-v101 .tm-receipt-amount{text-align:center;font-size:32px;color:#dc2626;font-weight:900;margin-bottom:24px}
+.tm-client-history-v101 .tm-receipt-amount.incoming{color:#00a569}
+.tm-client-history-v101 .tm-receipt-paper dl{margin:0;border-top:1px solid #e7eef7}
+.tm-client-history-v101 .tm-receipt-paper dl>div{display:flex;justify-content:space-between;gap:18px;border-bottom:1px solid #e7eef7;padding:12px 0}
+.tm-client-history-v101 .tm-receipt-paper dt{flex:0 0 140px;color:#7186a4;font-size:13px}
+.tm-client-history-v101 .tm-receipt-paper dd{margin:0;text-align:right;color:#1b3968;font-weight:750;font-size:13px;overflow-wrap:anywhere}
+.tm-client-history-v101 .tm-receipt-project{display:inline-flex;gap:8px;align-items:center;margin-top:20px;color:#0966ef;text-decoration:none;font-size:13px;font-weight:800}
+.tm-client-history-v101 .tm-receipt-warning{padding:13px;background:#f1f6fe;border-radius:8px;font-size:12px;color:#617fa7;line-height:1.6;margin:20px 0 0}
+@media(max-width:1440px){.tm-client-history-v101 .tm-transactions-kpi{padding:12px;gap:10px}.tm-client-history-v101 .tm-transactions-kpi strong{font-size:23px}.tm-client-history-v101 .tm-transactions-kpi small{font-size:12.5px}.tm-client-history-v101 .tm-transactions-filters{grid-template-columns:minmax(200px,2fr) minmax(130px,1fr) minmax(130px,1fr) minmax(220px,1.45fr) auto auto;gap:6px}.tm-client-history-v101 .tm-transactions-export,.tm-client-history-v101 .tm-transactions-apply{padding:0 8px;font-size:11.5px}}
+@media(max-width:1190px){.tm-client-history-v101 .tm-transactions-filters{grid-template-columns:repeat(3,minmax(0,1fr))}.tm-client-history-v101 .tm-transactions-search{grid-column:span 2}.tm-client-history-v101 .tm-transactions-dates{grid-column:span 2}.tm-client-history-v101 .tm-transactions-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.tm-client-history-v101 .tm-transactions-shell{padding:10px}.tm-client-history-v101 .tm-transactions-banner img{min-height:135px;object-fit:cover;object-position:center}.tm-client-history-v101 .tm-transactions-kpis{gap:7px}.tm-client-history-v101 .tm-transactions-kpi{min-height:86px;padding:9px;gap:7px}.tm-client-history-v101 .tm-transactions-kpi-icon{width:36px;height:36px;flex-basis:36px;font-size:16px}.tm-client-history-v101 .tm-transactions-kpi small{font-size:11px}.tm-client-history-v101 .tm-transactions-kpi strong{font-size:17px}.tm-client-history-v101 .tm-transactions-tabs a{font-size:13px;padding:10px 12px}.tm-client-history-v101 .tm-transactions-filters{grid-template-columns:repeat(2,minmax(0,1fr))}.tm-client-history-v101 .tm-transactions-search,.tm-client-history-v101 .tm-transactions-dates{grid-column:1/-1}.tm-client-history-v101 .tm-transactions-receipt{margin-top:4px}.tm-client-history-v101 .tm-receipt-paper{padding:15px}.tm-client-history-v101 .tm-receipt-paper dt{flex-basis:100px}.tm-client-history-v101 .tm-receipt-paper h1{font-size:19px}}
+@media print{.tm-client-history-v101 .market-sidebar,.tm-client-history-v101 header,.tm-client-history-v101 .client-same-footer,.tm-client-history-v101 .tm-receipt-top{display:none!important}.tm-client-history-v101 .tm-transactions-main{margin:0!important;padding:0!important;background:#fff!important;width:100%!important}.tm-client-history-v101 .tm-receipt-paper{box-shadow:none;border:0}.tm-client-history-v101 .tm-transactions-receipt{width:100%;margin:0}}

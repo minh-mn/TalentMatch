@@ -208,12 +208,28 @@ public class UserService implements UserDetailsService {
             user.setExperienceYears(form.getExperienceYears() == null ? 0 : Math.max(0, form.getExperienceYears()));
             user.setHourlyRate(form.getHourlyRate());
             user.setAvailable(form.getAvailable() == null || form.getAvailable());
+            String preference = form.getWorkPreference();
+            user.setWorkPreference(preference != null && java.util.Set.of("REMOTE", "HYBRID", "ONSITE").contains(preference) ? preference : null);
         } else if (user.getRole() == Role.CUSTOMER) {
             user.setCompanyName(limit(form.getCompanyName(), 160));
             user.setCompanySize(limit(form.getCompanySize(), 80));
             user.setContactName(limit(form.getContactName(), 120));
             user.setTaxCode(limit(form.getTaxCode(), 40));
             user.setField(limit(form.getField(), 120));
+            Integer year = form.getFoundedYear();
+            if (year != null && (year < 1800 || year > java.time.Year.now().getValue())) {
+                throw new IllegalArgumentException("Năm thành lập không hợp lệ.");
+            }
+            user.setFoundedYear(year);
+            user.setContactPosition(limit(form.getContactPosition(), 120));
+            String contactEmail = limit(form.getContactEmail(), 160);
+            if (contactEmail != null && !contactEmail.isBlank() &&
+                !contactEmail.matches("^[A-Za-z0-9._%+\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,}$")) {
+                throw new IllegalArgumentException("Email liên hệ không hợp lệ.");
+            }
+            user.setContactEmail(contactEmail);
+            user.setCompanyLinkedinUrl(safeWebUrl(form.getCompanyLinkedinUrl()));
+            user.setFacebookUrl(safeWebUrl(form.getFacebookUrl()));
         }
         return users.save(user);
     }
@@ -227,6 +243,15 @@ public class UserService implements UserDetailsService {
                 .disabled(!Boolean.TRUE.equals(user.getEnabled()))
                 .accountLocked(Boolean.TRUE.equals(user.getLocked()))
                 .build();
+    }
+
+    private String safeWebUrl(String value) {
+        String url = limit(value, 255);
+        if (url != null && !url.isBlank() &&
+            !(url.startsWith("https://") || url.startsWith("http://"))) {
+            throw new IllegalArgumentException("Liên kết phải bắt đầu bằng http:// hoặc https://.");
+        }
+        return url;
     }
 
     private void validatePassword(String password) {

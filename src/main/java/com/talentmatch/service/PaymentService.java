@@ -11,11 +11,12 @@ import java.util.*;
 
 @Service
 public class PaymentService {
+    private final AgreementService agreements;
     private final PaymentRepository payments;
     private final ProjectRepository projects;
     private final MilestoneRepository milestones;
 
-    public PaymentService(PaymentRepository payments,ProjectRepository projects,MilestoneRepository milestones){this.payments=payments;this.projects=projects;this.milestones=milestones;}
+    public PaymentService(PaymentRepository payments,ProjectRepository projects,MilestoneRepository milestones,AgreementService agreements){this.payments=payments;this.projects=projects;this.milestones=milestones;this.agreements=agreements;}
 
     public List<Payment> history(User user){
         if(user.getRole()==Role.CUSTOMER)return payments.findByPayerOrderByCreatedAtDesc(user);
@@ -37,10 +38,54 @@ public class PaymentService {
     }
 
     @Transactional
+    public Payment startVnpay(Project p,Long milestoneId,User customer){
+        if(!p.getCustomer().getId().equals(customer.getId()))throw new IllegalArgumentException("Không có quyền thanh toán.");
+        if(p.getStatus()==ProjectStatus.COMPLETED||p.getStatus()==ProjectStatus.CANCELLED||p.getStatus()==ProjectStatus.DISPUTED)
+            throw new IllegalArgumentException("Dự án không nhận thanh toán.");
+        if(!agreements.signedCurrent(p))throw new IllegalArgumentException("Hai bên cần ký phiên bản hợp đồng hiện hành.");
+        Milestone m=null;
+        if(milestoneId!=null){
+            m=milestones.findById(milestoneId).orElseThrow();
+            if(!m.getProject().getId().equals(p.getId())||m.getStatus()!=MilestoneStatus.UNPAID)
+                throw new IllegalArgumentException("Milestone không hợp lệ hoặc đã thanh toán.");
+        }else if(!milestones.findByProjectOrderByCreatedAtAsc(p).isEmpty())throw new IllegalArgumentException("Vui lòng thanh toán milestone.");
+        Collection<PaymentStatus> blocked=List.of(PaymentStatus.PAID,PaymentStatus.DISBURSED);
+        if(m!=null?payments.existsByProjectAndMilestoneAndStatusIn(p,m,blocked):payments.existsByProjectAndMilestoneIsNullAndStatusIn(p,blocked))
+            throw new IllegalArgumentException("Đã có thanh toán được xác nhận.");
+        Payment tx=new Payment();tx.setProject(p);tx.setMilestone(m);tx.setPayer(customer);
+        tx.setAmount(m==null?p.getTotalPrice():m.getAmount());tx.setMethod("VNPAY_SANDBOX");tx.setStatus(PaymentStatus.PENDING);
+        tx.setTransactionCode("VNS"+UUID.randomUUID().toString().replace("-","").substring(0,24).toUpperCase());
+        return payments.save(tx);
+    }
+    @Transactional
+    public String confirmVnpay(String txnRef,String amount,boolean success){
+        Payment tx=payments.lockByCode(txnRef).orElse(null);
+        if(tx==null||!"VNPAY_SANDBOX".equals(tx.getMethod()))return "01";
+        if(tx.getStatus()==PaymentStatus.PAID||tx.getStatus()==PaymentStatus.DISBURSED)return "02";
+        if(tx.getStatus()!=PaymentStatus.PENDING)return "02";
+        long expected;
+        try{expected=Math.multiplyExact(tx.getAmount().longValueExact(),100L);
+            if(expected!=Long.parseLong(amount))return "04";
+        }catch(Exception ex){return "04";}
+        if(!success){tx.setStatus(PaymentStatus.FAILED);payments.save(tx);return "00";}
+        Project p=tx.getProject();
+        if(p.getStatus()==ProjectStatus.DISPUTED||p.getStatus()==ProjectStatus.CANCELLED||p.getStatus()==ProjectStatus.COMPLETED)return "02";
+        Collection<PaymentStatus> paid=List.of(PaymentStatus.PAID,PaymentStatus.DISBURSED);
+        if(tx.getMilestone()!=null){
+            Milestone m=tx.getMilestone();
+            if(m.getStatus()!=MilestoneStatus.UNPAID||payments.findByProjectAndMilestone(p,m).stream()
+                .anyMatch(other->!other.getId().equals(tx.getId())&&paid.contains(other.getStatus())))return "02";
+            m.setStatus(MilestoneStatus.PAID);milestones.save(m);
+        }else if(payments.findByProjectOrderByCreatedAtDesc(p).stream().anyMatch(other->!other.getId().equals(tx.getId())&&other.getMilestone()==null&&paid.contains(other.getStatus())))return "02";
+        tx.setStatus(PaymentStatus.PAID);tx.setPaidAt(LocalDateTime.now());payments.save(tx);
+        p.setStatus(ProjectStatus.IN_PROGRESS);projects.save(p);return "00";
+    }
+
+    @Transactional
     public Payment pay(Project p,Long milestoneId,User customer,String method){
         if(!p.getCustomer().getId().equals(customer.getId()))throw new IllegalArgumentException("Chỉ khách hàng của dự án được thanh toán.");
         if(p.getStatus()==ProjectStatus.COMPLETED||p.getStatus()==ProjectStatus.CANCELLED)throw new IllegalArgumentException("Dự án đã kết thúc.");
-        if(!p.isAgreementSigned())throw new IllegalArgumentException("Client và Freelancer phải xác nhận hợp đồng trước khi thanh toán.");
+        if(!agreements.signedCurrent(p))throw new IllegalArgumentException("Hai bên phải ký đúng phiên bản hợp đồng hiện hành và xử lý xong yêu cầu sửa trước khi thanh toán.");
         if(p.getStatus()==ProjectStatus.DISPUTED)throw new IllegalArgumentException("Dự án đang được xử lý tranh chấp.");
         if(!java.util.Set.of("VNPAY_DEMO","MOMO_DEMO","BANK_CARD_DEMO").contains(method))throw new IllegalArgumentException("Chỉ cho phép phương thức thanh toán mô phỏng.");
         Milestone m=null;BigDecimal amount=p.getTotalPrice();

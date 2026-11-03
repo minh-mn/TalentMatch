@@ -38,11 +38,17 @@ public class User {
     private Integer experienceYears = 0;
     @Column(precision = 15, scale = 2) private BigDecimal hourlyRate;
     private Boolean available = true;
+    @Column(length = 12) private String workPreference; // REMOTE, HYBRID, ONSITE; null = chua cap nhat
 
     @Column(length = 160) private String companyName;
     @Column(length = 80) private String companySize;
     @Column(length = 120) private String contactName;
     @Column(length = 40) private String taxCode;
+    private Integer foundedYear;
+    @Column(length = 120) private String contactPosition;
+    @Column(length = 160) private String contactEmail;
+    @Column(length = 255) private String companyLinkedinUrl;
+    @Column(length = 255) private String facebookUrl;
 
     private Double rating = 5.0;
     private Integer completedProjects = 0;
@@ -105,6 +111,8 @@ public class User {
     public void setExperienceYears(Integer experienceYears) { this.experienceYears = experienceYears; }
     public BigDecimal getHourlyRate() { return hourlyRate; }
     public void setHourlyRate(BigDecimal hourlyRate) { this.hourlyRate = hourlyRate; }
+    public String getWorkPreference() { return workPreference; }
+    public void setWorkPreference(String value) { workPreference = value; }
     public Boolean getAvailable() { return available; }
     public void setAvailable(Boolean available) { this.available = available; }
     public String getCompanyName() { return companyName; }
@@ -115,6 +123,16 @@ public class User {
     public void setContactName(String contactName) { this.contactName = contactName; }
     public String getTaxCode() { return taxCode; }
     public void setTaxCode(String taxCode) { this.taxCode = taxCode; }
+    public Integer getFoundedYear() { return foundedYear; }
+    public void setFoundedYear(Integer foundedYear) { this.foundedYear = foundedYear; }
+    public String getContactPosition() { return contactPosition; }
+    public void setContactPosition(String value) { this.contactPosition = value; }
+    public String getContactEmail() { return contactEmail; }
+    public void setContactEmail(String value) { this.contactEmail = value; }
+    public String getCompanyLinkedinUrl() { return companyLinkedinUrl; }
+    public void setCompanyLinkedinUrl(String value) { this.companyLinkedinUrl = value; }
+    public String getFacebookUrl() { return facebookUrl; }
+    public void setFacebookUrl(String value) { this.facebookUrl = value; }
     public Double getRating() { return rating; }
     public void setRating(Double rating) { this.rating = rating; }
     public Integer getCompletedProjects() { return completedProjects; }

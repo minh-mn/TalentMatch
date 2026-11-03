@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Hồ sơ Freelancer - TalentMatch')}"></head>
+<body class="market-body client-workspace client-v52-page cd-dashboard tm-client-posted-v94 tm-client-freelancer-v103">
+<link rel="stylesheet" th:href="@{/css/customer-footer-banner-v72.css(v=72)}">
+<link rel="stylesheet" th:href="@{/css/customer-posted-v94.css(v=94)}">
+<link rel="stylesheet" th:href="@{/css/customer-client-v95.css(v=95)}">
+<link rel="stylesheet" th:href="@{/css/customer-freelancer-profile-v103.css(v=103)}">
+<aside th:replace="~{fragments/common :: marketSidebar('talent')}"></aside>
+<header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="market-main client-main tmfp-main">
+  <div class="tmfp-shell">
+    <div class="tmfp-breadcrumb"><a th:href="@{/customer/talent}"><i class="fa-solid fa-arrow-left"></i> Tìm &amp; gợi ý Freelancer</a><i class="fa-solid fa-angle-right"></i><span th:text="${profile.fullName}">Hồ sơ Freelancer</span></div>
+
+    <section class="tmfp-cover" aria-label="Ảnh bìa Freelancer">
+      <img th:if="${profile.profileCover != null and !profile.profileCover.isBlank()}" th:src="@{/freelancers/{id}/photo/cover(id=${profile.id})}" alt="Ảnh bìa Freelancer">
+      <div class="tmfp-cover-art" th:unless="${profile.profileCover != null and !profile.profileCover.isBlank()}">
+        <div class="tmfp-code-window" aria-hidden="true"><span></span><span></span><span></span><pre>function buildBetterExperiences() {
+  const quality = 'clean code';
+  const design  = 'user-first';
+  return deliver(quality, design);
+}</pre></div>
+        <div class="tmfp-cover-caption"><i class="fa-solid fa-code"></i> BUILDING GREAT DIGITAL EXPERIENCES</div>
+      </div>
+      <blockquote>“Hợp tác hiệu quả bắt đầu từ sự tin tưởng và năng lực thực tế.”</blockquote>
+    </section>
+
+    <section class="tmfp-identity">
+      <div class="tmfp-id-left">
+        <div class="tmfp-avatar-wrap">
+          <img th:if="${profile.profileAvatarFile != null and !profile.profileAvatarFile.isBlank()}" th:src="@{/freelancers/{id}/photo/avatar(id=${profile.id})}" alt="Ảnh đại diện Freelancer">
+          <img th:if="${(profile.profileAvatarFile == null or profile.profileAvatarFile.isBlank()) and publicAvatarLink != null}" th:src="${publicAvatarLink}" alt="Ảnh đại diện Freelancer">
+          <span th:if="${(profile.profileAvatarFile == null or profile.profileAvatarFile.isBlank()) and publicAvatarLink == null}" th:text="${#strings.substring(profile.fullName,0,1)}">F</span>
+          <small th:classappend="${profile.available == true} ? ' online' : ' away'" th:text="${profile.available == true ? 'Sẵn sàng' : 'Đang bận'}">Sẵn sàng</small>
+        </div>
+        <div class="tmfp-person-intro">
+          <div class="tmfp-name-line"><h1 th:text="${profile.fullName}">Tên Freelancer</h1><span class="tmfp-verified" th:if="${profile.enabled == true}" title="Tài khoản đã xác nhận"><i class="fa-solid fa-circle-check"></i> Tài khoản xác nhận</span></div>
+          <p class="tmfp-profession" th:text="${profile.professionalTitle != null and !profile.professionalTitle.isBlank() ? profile.professionalTitle : 'Freelancer'}">Lập trình viên Full-stack</p>
+          <div class="tmfp-person-meta">
+            <span th:if="${reviewCount > 0}"><i class="fa-solid fa-star tmfp-star"></i> <b th:text="${#numbers.formatDecimal(ratingAvg,1,1)}">4.9</b> <small th:text="|(${reviewCount} đánh giá)|">(0 đánh giá)</small></span>
+            <span th:unless="${reviewCount > 0}"><i class="fa-regular fa-star"></i> Chưa có đánh giá</span>
+            <span><i class="fa-solid fa-location-dot"></i> <span th:text="${profile.location != null and !profile.location.isBlank() ? profile.location : 'Chưa cập nhật địa điểm'}">Việt Nam</span></span>
+            <span><i class="fa-regular fa-calendar"></i> <span th:text="|${profile.experienceYears != null ? profile.experienceYears : 0} năm kinh nghiệm|">0 năm</span></span>
+          </div>
+          <p class="tmfp-summary" th:text="${profile.bio != null and !profile.bio.isBlank() ? profile.bio : 'Freelancer chưa cập nhật phần giới thiệu chi tiết.'}">Giới thiệu bản thân</p>
+        </div>
+      </div>
+      <div class="tmfp-id-right">
+        <div class="tmfp-actions">
+          <button th:if="${!#lists.isEmpty(clientJobs)}" type="button" class="tmfp-btn primary" data-invite-open><i class="fa-solid fa-paper-plane"></i> Mời hợp tác</button>
+          <a th:if="${#lists.isEmpty(clientJobs)}" class="tmfp-btn primary" th:href="@{/customer/jobs/new}" title="Đăng công việc để gửi lời mời"><i class="fa-solid fa-plus"></i> Đăng việc để mời</a>
+          <a th:if="${chatProjectId != null}" class="tmfp-btn outline" th:href="@{/customer/messages(projectId=${chatProjectId})}"><i class="fa-regular fa-message"></i> Nhắn tin</a>
+          <span th:unless="${chatProjectId != null}" class="tmfp-btn outline unavailable" title="Tin nhắn chỉ mở khi có dự án chung"><i class="fa-regular fa-message"></i> Chưa có hội thoại</span>
+          <form method="post" th:action="@{/customer/talent/favorites/{id}(id=${profile.id})}"><input type="hidden" name="backToProfile" value="true"><button type="submit" class="tmfp-btn save" th:classappend="${savedFreelancer} ? ' is-saved' : ''"><i th:class="${savedFreelancer} ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i><span th:text="${savedFreelancer ? 'Đã lưu' : 'Lưu'}">Lưu</span></button></form>
+          <button type="button" class="tmfp-btn neutral" id="tmfp-share"><i class="fa-solid fa-share-nodes"></i> Chia sẻ</button>
+        </div>
+        <div class="tmfp-metrics">
+          <div><i class="fa-solid fa-briefcase"></i><strong th:text="${completedProjectCount}">0</strong><small>Dự án hoàn thành</small></div>
+          <div><i class="fa-regular fa-clock"></i><strong th:text="${activeProjectCount}">0</strong><small>Đang thực hiện</small></div>
+          <div><i class="fa-solid fa-star"></i><strong th:text="${reviewCount > 0 ? #numbers.formatDecimal(ratingAvg,1,1)+' / 5' : '—'}">—</strong><small>Đánh giá thực tế</small></div>
+          <div><i class="fa-regular fa-comment-dots"></i><strong th:text="${reviewCount}">0</strong><small>Lượt đánh giá</small></div>
+        </div>
+      </div>
+    </section>
+
+    <nav class="tmfp-tabs" aria-label="Nội dung hồ sơ">
+      <a href="#tmfp-overview" class="active"><i class="fa-solid fa-house"></i> Tổng quan</a>
+      <a href="#tmfp-experience"><i class="fa-solid fa-user-tie"></i> Kinh nghiệm</a>
+      <a href="#tmfp-portfolio"><i class="fa-solid fa-layer-group"></i> Dự án đã làm</a>
+      <a href="#tmfp-reviews"><i class="fa-regular fa-star"></i> Đánh giá</a>
+      <a href="#tmfp-skills"><i class="fa-solid fa-bolt"></i> Kỹ năng</a>
+      <a href="#tmfp-certificates"><i class="fa-solid fa-certificate"></i> Chứng chỉ &amp; Học vấn</a>
+    </nav>
+
+    <div class="tmfp-grid">
+      <div class="tmfp-primary">
+        <section class="tmfp-card" id="tmfp-overview"><h2>Giới thiệu về tôi</h2><p class="tmfp-bio" th:text="${profile.bio != null and !profile.bio.isBlank() ? profile.bio : 'Freelancer chưa cập nhật phần giới thiệu. Hãy liên hệ để tìm hiểu thêm về chuyên môn và kinh nghiệm.'}">Thông tin cá nhân.</p>
+          <div class="tmfp-fact-chips">
+            <span><i class="fa-solid fa-code"></i><span th:text="${profile.field != null and !profile.field.isBlank() ? profile.field : 'Chuyên môn chưa cập nhật'}">Chuyên môn</span></span>
+            <span><i class="fa-solid fa-location-dot"></i><span th:text="${profile.location != null and !profile.location.isBlank() ? profile.location : 'Chưa cập nhật địa điểm'}">Địa điểm</span></span>
+            <span th:if="${websiteLink != null}"><i class="fa-solid fa-globe"></i><a th:href="${websiteLink}" target="_blank" rel="noopener noreferrer">Website / Portfolio</a></span>
+            <span th:if="${linkedinLink != null}"><i class="fa-brands fa-linkedin"></i><a th:href="${linkedinLink}" target="_blank" rel="noopener noreferrer">LinkedIn</a></span>
+            <span th:if="${profile.createdAt != null}"><i class="fa-regular fa-calendar"></i> Tham gia <span th:text="${#temporals.format(profile.createdAt,'MM/yyyy')}">2026</span></span>
+          </div>
+        </section>
+        <section class="tmfp-card" id="tmfp-experience"><div class="tmfp-card-heading"><h2>Kinh nghiệm làm việc</h2><span th:text="|${profile.experienceYears != null ? profile.experienceYears : 0} năm kinh nghiệm|">Kinh nghiệm</span></div>
+          <div class="tmfp-experience-row"><span class="tmfp-experience-icon"><i class="fa-solid fa-laptop-code"></i></span><div><h3 th:text="${profile.professionalTitle != null and !profile.professionalTitle.isBlank() ? profile.professionalTitle : 'Freelancer chuyên nghiệp'}">Freelancer</h3><p th:text="${profile.field != null and !profile.field.isBlank() ? profile.field : 'Chưa cập nhật lĩnh vực hoạt động'}">Lĩnh vực</p><small>Thông tin theo hồ sơ do Freelancer cập nhật</small></div></div>
+        </section>
+        <section class="tmfp-card" id="tmfp-portfolio"><div class="tmfp-card-heading"><h2>Dự án đã hoàn thành</h2><span th:text="|${completedProjectCount} dự án|">0 dự án</span></div>
+          <div class="tmfp-portfolio-grid" th:if="${!#lists.isEmpty(portfolio)}">
+            <article class="tmfp-portfolio-item" th:each="p,iteration : ${portfolio}">
+              <div class="tmfp-project-art" th:classappend="|art-${iteration.index % 3}|" aria-hidden="true"><i th:class="${iteration.index % 3 == 0 ? 'fa-solid fa-laptop-code' : iteration.index % 3 == 1 ? 'fa-solid fa-mobile-screen-button' : 'fa-solid fa-chart-line'}"></i><span>PROJECT <b th:text="${iteration.count}">1</b></span></div>
+              <div class="tmfp-project-copy"><h3 th:text="${p.application.job.title}">Dự án đã hoàn thành</h3><p th:text="${p.application.job.category != null ? p.application.job.category : 'Dự án Freelancer'}">Danh mục</p><span class="tmfp-project-success"><i class="fa-solid fa-circle-check"></i> Hoàn thành</span></div>
+            </article>
+          </div>
+          <div class="tmfp-empty" th:if="${#lists.isEmpty(portfolio)}"><i class="fa-regular fa-folder-open"></i><strong>Chưa có dự án hoàn thành công khai</strong><span>Các dự án đã hoàn thành trong hệ thống sẽ được hiển thị tại đây.</span></div>
+        </section>
+        <section class="tmfp-card" id="tmfp-reviews"><div class="tmfp-card-heading"><h2>Đánh giá từ khách hàng</h2><span th:text="|${reviewCount} đánh giá|">0 đánh giá</span></div>
+          <div class="tmfp-review-dashboard" th:if="${reviewCount > 0}"><div class="tmfp-review-total"><strong th:text="${#numbers.formatDecimal(ratingAvg,1,1)}">5.0</strong><span class="tmfp-stars">★★★★★</span><small th:text="|${reviewCount} lượt đánh giá|">0 lượt</small></div><div class="tmfp-ratings"><div th:each="bar : ${ratingBars}" class="tmfp-rating-row"><span th:text="|${bar.star} sao|">5 sao</span><div class="tmfp-track"><span th:style="|width:${bar.percent}%|"></span></div><small th:text="${bar.count}">0</small></div></div></div>
+          <div th:if="${reviewCount > 0}" class="tmfp-comments"><article th:each="review : ${recentReviews}"><div class="tmfp-comment-top"><span class="tmfp-small-avatar" th:text="${#strings.substring(review.author.fullName,0,1)}">C</span><strong th:text="${review.author.companyName != null and !review.author.companyName.isBlank() ? review.author.companyName : review.author.fullName}">Khách hàng</strong><span class="tmfp-stars" th:text="|${review.rating}/5 sao|">★★★★★</span><small th:if="${review.createdAt != null}" th:text="${#temporals.format(review.createdAt,'dd/MM/yyyy')}">10/2026</small></div><p th:text="${review.comment}">Đánh giá.</p></article></div>
+          <div class="tmfp-empty" th:if="${reviewCount == 0}"><i class="fa-regular fa-star"></i><strong>Chưa có đánh giá được xác minh</strong><span>Đánh giá sẽ xuất hiện sau khi khách hàng hoàn thành và đánh giá dự án.</span></div>
+        </section>
+      </div>
+      <div class="tmfp-secondary">
+        <section class="tmfp-card" id="tmfp-skills"><div class="tmfp-card-heading"><h2>Kỹ năng nổi bật</h2><span th:text="|${#lists.size(profileSkills)} kỹ năng|">0</span></div><div class="tmfp-skills" th:if="${!#lists.isEmpty(profileSkills)}"><span th:each="skill : ${profileSkills}" th:text="${skill}">JavaScript</span></div><p class="tmfp-empty-inline" th:if="${#lists.isEmpty(profileSkills)}">Chưa cập nhật kỹ năng.</p></section>
+        <section class="tmfp-card" id="tmfp-certificates"><h2>Chứng chỉ &amp; Học vấn</h2><div class="tmfp-empty compact"><i class="fa-solid fa-graduation-cap"></i><strong>Chưa cập nhật</strong><span>Hệ thống chưa có thông tin chứng chỉ và học vấn được Freelancer công khai.</span></div></section>
+        <section class="tmfp-card tmfp-rate-card"><h2>Mức giá &amp; Thời gian làm việc</h2><div class="tmfp-rate"><strong th:text="${profile.hourlyRate != null ? #numbers.formatDecimal(profile.hourlyRate,0,'POINT',0,'COMMA')+'đ/giờ' : 'Thỏa thuận'}">Thỏa thuận</strong></div><div class="tmfp-availability"><p><i class="fa-solid fa-circle" th:classappend="${profile.available == true} ? ' green' : ' gray'"></i><span th:text="${profile.available == true ? 'Sẵn sàng nhận việc' : 'Đang bận'}">Sẵn sàng</span></p><p><i class="fa-solid fa-location-dot"></i><span th:text="${profile.location != null ? profile.location : 'Chưa cập nhật địa điểm'}">Việt Nam</span></p><p><i class="fa-solid fa-laptop"></i><span th:switch="${profile.workPreference}"><span th:case="'REMOTE'">Làm việc từ xa</span><span th:case="'HYBRID'">Hybrid</span><span th:case="'ONSITE'">Tại văn phòng</span><span th:case="*">Chưa chọn hình thức làm việc</span></span></p></div>
+          <button th:if="${!#lists.isEmpty(clientJobs)}" type="button" class="tmfp-btn primary tmfp-rate-cta" data-invite-open><i class="fa-regular fa-paper-plane"></i> Mời Freelancer hợp tác</button>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="tmfp-modal" id="tmfp-invite-modal" hidden role="dialog" aria-modal="true" aria-labelledby="tmfp-modal-title">
+    <div class="tmfp-modal-backdrop" data-invite-close></div>
+    <div class="tmfp-modal-body"><button class="tmfp-modal-close" type="button" data-invite-close aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button><h2 id="tmfp-modal-title">Mời Freelancer hợp tác</h2><p>Chọn công việc đang tuyển của doanh nghiệp và gửi lời mời.</p>
+      <form th:action="@{/customer/invitations}" method="post"><input type="hidden" name="freelancerId" th:value="${profile.id}"><label for="tmfp-job-id">Công việc đang tuyển <b>*</b></label><select name="jobId" id="tmfp-job-id" required><option value="">-- Chọn công việc --</option><option th:each="job : ${clientJobs}" th:value="${job.id}" th:text="${job.title}">Tên công việc</option></select><label for="tmfp-invite-note">Lời nhắn</label><textarea id="tmfp-invite-note" name="message" rows="4" maxlength="1000" placeholder="Chúng tôi quan tâm đến hồ sơ của bạn và mong muốn mời bạn trao đổi về công việc..."></textarea><div class="tmfp-modal-buttons"><button type="button" class="tmfp-btn outline" data-invite-close>Hủy</button><button type="submit" class="tmfp-btn primary">Gửi lời mời</button></div></form>
+    </div>
+  </div>
+  <footer class="fm-footer client-same-footer tm-posted-footer">
+    <div class="fm-footer-top">
+      <div class="fm-footer-intro">
+        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
+        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
+      </div>
+      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
+      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
+      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
+      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
+    </div>
+    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
+  </footer>
+</main>
+<script th:replace="~{fragments/common :: scripts}"></script>
+<script th:src="@{/js/customer-freelancer-profile-v103.js(v=103)}" defer></script>
+</body>
+</html>

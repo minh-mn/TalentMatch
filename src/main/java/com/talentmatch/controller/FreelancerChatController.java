@@ -71,6 +71,8 @@ public class FreelancerChatController {
             unreadCounts.put(p.getId(), messages.countByProjectIdAndSenderIdNotAndReadAtIsNull(p.getId(), u.getId()));
         }
         long unreadThreads = unreadCounts.values().stream().filter(n -> n > 0).count();
+        long activeProjectThreadCount = all.stream().filter(p -> p.getStatus() == ProjectStatus.IN_PROGRESS
+                || p.getStatus() == ProjectStatus.WAITING_ACCEPTANCE).count();
 
         List<Project> filtered = new ArrayList<>();
         for (Project p : all) {
@@ -109,6 +111,7 @@ public class FreelancerChatController {
         model.addAttribute("chatBase", base(u));
         model.addAttribute("conversations", filtered);
         model.addAttribute("conversationCount", all.size());
+        model.addAttribute("activeProjectThreadCount", activeProjectThreadCount);
         model.addAttribute("unreadThreadCount", unreadThreads);
         model.addAttribute("unreadCounts", unreadCounts);
         model.addAttribute("latestMessages", latest);
@@ -119,7 +122,7 @@ public class FreelancerChatController {
         model.addAttribute("tab", tab);
         model.addAttribute("userId", u.getId());
         model.addAttribute("isCustomer", u.getRole() == Role.CUSTOMER);
-        return "freelancer/messages";
+        return u.getRole() == Role.CUSTOMER ? "customer/messages" : "freelancer/messages";
     }
 
     @PostMapping("/{id}/send")

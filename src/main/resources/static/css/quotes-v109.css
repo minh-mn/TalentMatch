@@ -1,0 +1,29 @@
+/* V109 - Chi chinh phan noi dung bao gia; khong ghi de sidebar, header, footer */
+.tm105-quotes .tm109-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 12px}
+.tm105-quotes .tm109-kpi{background:#fff;border:1px solid #e0e9f7;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;min-height:80px;box-shadow:0 3px 9px #153e7b09}
+.tm105-quotes .tm109-kpi-icon{width:47px;height:47px;display:grid;place-items:center;border-radius:50%;font-size:21px;flex-shrink:0}
+.tm109-kpi-icon.blue{background:#e6f0ff;color:#1666eb}.tm109-kpi-icon.amber{background:#fff5df;color:#df940e}.tm109-kpi-icon.green{background:#e6f9ed;color:#14a34a}.tm109-kpi-icon.red{background:#fff0f1;color:#e32d42}
+.tm109-kpi>span:last-child{font-size:13px;color:#465879;font-weight:700}.tm109-kpi strong{display:block;font-size:25px;color:#091f50;line-height:1.2;margin-top:3px}
+.tm105-quotes .tm109-filterbar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:white;border:1px solid #e1e9f7;border-radius:12px;padding:12px;margin-bottom:12px;flex-wrap:wrap}
+.tm105-quotes .tm109-filters{display:flex;align-items:center;gap:12px;min-width:0;flex:1;flex-wrap:wrap}
+.tm109-search-field{display:flex;align-items:center;gap:9px;border:1px solid #d5e1ef;border-radius:8px;padding:0 12px;flex:2;min-width:210px;height:43px;color:#53739d}
+.tm109-search-field input{width:100%;border:0;outline:0;min-width:0;background:transparent;color:#15376b;font:inherit;font-size:13px}
+.tm109-field{font-size:12px;white-space:nowrap;color:#5c7192;font-weight:700;display:flex;align-items:center;gap:7px}
+.tm109-field select{border:1px solid #d5e1ef;border-radius:8px;background:white;padding:11px 9px;color:#12356c;font-size:13px;max-width:190px}
+.tm109-filter-submit,.tm109-create{border:0;border-radius:8px;padding:12px 15px;cursor:pointer;font-size:13px;font-weight:750;white-space:nowrap;text-decoration:none}
+.tm109-filter-submit{background:#eaf2ff;color:#0c60d5}.tm109-create{background:#105ee7;color:#fff;display:inline-flex;align-items:center;gap:8px}
+.tm105-quotes .tm105-columns.tm109-no-selection{display:block!important}
+.tm105-quotes .tm105-columns.tm109-has-selection{display:grid!important;grid-template-columns:minmax(310px,.81fr) minmax(0,1.19fr)!important;gap:13px!important}
+.tm105-quotes .tm105-offer-list{background:#fff;border:1px solid #e0eaf8;border-radius:12px;padding:12px;gap:10px!important;align-self:stretch}
+.tm105-quotes .tm109-list-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:2px 2px 4px}
+.tm109-list-heading h2{margin:0;color:#0b2a6f;font-size:17px}.tm109-list-heading p{margin:5px 0 0;color:#7186a8;font-size:12px}.tm109-count{font-weight:800;border-radius:8px;color:#0d5bce;background:#eaf2ff;padding:7px 11px}
+.tm105-quotes .tm105-offer{min-height:112px!important;padding:12px!important;box-shadow:none!important}
+.tm105-quotes .tm105-thumb{width:62px!important;height:62px!important;flex-basis:62px!important;font-size:27px!important}
+.tm105-quotes .tm105-offer-title>strong{font-size:15px!important}.tm105-quotes .tm105-offer-content>p{margin:5px 0!important}
+.tm105-quotes .tm105-detail{align-self:start!important;box-shadow:none!important}
+.tm109-detail-navigation{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11px;color:#8196b6;font-weight:800;letter-spacing:.03em;padding-bottom:12px;border-bottom:1px solid #e7eef8;margin-bottom:15px}
+.tm109-detail-navigation a{color:#155ddd;text-decoration:none;letter-spacing:0;font-size:12px}
+.tm105-quotes .tm105-detail-top h2{font-size:19px!important}.tm105-quotes .tm105-section-title{margin-top:15px!important}
+.tm105-quotes .tm105-counter,.tm105-quotes .tm105-respond{scroll-margin-top:90px}
+@media(max-width:1250px){.tm105-quotes .tm109-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.tm105-quotes .tm105-columns.tm109-has-selection{grid-template-columns:1fr!important}}
+@media(max-width:690px){.tm105-quotes .tm109-kpis{gap:8px}.tm105-quotes .tm109-kpi{padding:10px;min-height:68px;gap:8px}.tm105-quotes .tm109-kpi-icon{width:35px;height:35px;font-size:16px}.tm109-kpi>span:last-child{font-size:11px}.tm109-kpi strong{font-size:21px}.tm109-search-field{min-width:100%}.tm109-field{flex:1}.tm109-field select{max-width:160px}.tm109-create{width:100%;justify-content:center}.tm105-quotes .tm105-offer-list{padding:8px}.tm105-quotes .tm105-thumb{width:45px!important;height:45px!important;flex-basis:45px!important}}

@@ -178,26 +178,6 @@ public class AdminController {
         return "admin/projects";
     }
 
-    @GetMapping("/payments")
-    public String payments(Model m,@RequestParam(required=false)String q,@RequestParam(required=false)PaymentStatus status,
-                           @RequestParam(required=false)@DateTimeFormat(iso=DateTimeFormat.ISO.DATE)LocalDate from,
-                           @RequestParam(required=false)@DateTimeFormat(iso=DateTimeFormat.ISO.DATE)LocalDate to,
-                           @RequestParam(defaultValue="1")Integer page){
-        var all=payments.findAll().stream().filter(p->status==null||p.getStatus()==status)
-            .filter(p->contains(p.getTransactionCode()+" "+p.getPayer().getEmail()+" "+p.getProject().getApplication().getJob().getTitle(),q))
-            .filter(p->p.getCreatedAt()!=null&&(from==null||!p.getCreatedAt().toLocalDate().isBefore(from))
-                &&(to==null||!p.getCreatedAt().toLocalDate().isAfter(to)))
-            .sorted(Comparator.comparing(Payment::getCreatedAt,Comparator.nullsLast(Comparator.reverseOrder()))).toList();
-        BigDecimal paid=all.stream().filter(p->p.getStatus()==PaymentStatus.PAID||p.getStatus()==PaymentStatus.DISBURSED)
-            .map(Payment::getAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
-        BigDecimal disbursed=all.stream().filter(p->p.getStatus()==PaymentStatus.DISBURSED)
-            .map(Payment::getAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
-        paginate(m,all,page);m.addAttribute("q",q);m.addAttribute("status",status);
-        m.addAttribute("from",from);m.addAttribute("to",to);
-        m.addAttribute("paidTotal",paid);m.addAttribute("disbursedTotal",disbursed);
-        return "admin/payments";
-    }
-
     @GetMapping("/reports")
     public String reports(Model m,@RequestParam(required=false)String q,@RequestParam(defaultValue="all")String status,
                           @RequestParam(defaultValue="1")Integer page){

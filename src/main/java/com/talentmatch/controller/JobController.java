@@ -160,6 +160,14 @@ public class JobController {
         return "jobs/detail";
     }
 
+    /** Hồ sơ doanh nghiệp chỉ gồm các thông tin công khai gắn với tin tuyển dụng. */
+    @GetMapping("/jobs/{id}/customer")
+    public String customerView(@PathVariable Long id, Authentication auth, Model model) {
+        Job job = jobs.get(id);
+        populateJobViewModel(job, auth, model);
+        return "jobs/customer-public";
+    }
+
     @GetMapping("/jobs/{id}/apply")
     public String applyView(@PathVariable Long id, Authentication auth, Model model) {
         Job job = jobs.get(id);
@@ -336,13 +344,13 @@ public class JobController {
     }
 
     private Set<String> displaySkillTokens(String raw) {
-        if (!hasText(raw)) return new LinkedHashSet<>(List.of("UI/UX", "Responsive", "Website"));
+        if (!hasText(raw)) return new LinkedHashSet<>();
         LinkedHashSet<String> tokens = new LinkedHashSet<>();
         for (String token : raw.split("[,;/]")) {
             String cleaned = token == null ? "" : token.trim();
             if (!cleaned.isBlank()) tokens.add(cleaned);
         }
-        if (tokens.isEmpty()) tokens.addAll(List.of("UI/UX", "Responsive", "Website"));
+        // Không tự sinh kỹ năng khi khách hàng chưa khai báo.
         return tokens;
     }
 

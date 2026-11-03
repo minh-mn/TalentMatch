@@ -1,0 +1,25 @@
+/* Giai đoạn 2: chỉ bổ sung biểu đồ thực và khắc phục các thẻ thống kê. */
+.fm-dashboard .gd2-activity-chart{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;height:145px;align-items:end;width:100%;padding:12px 2px 0}
+.fm-dashboard .gd2-activity-month{height:100%;min-width:0;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:4px}
+.fm-dashboard .gd2-activity-pair{width:100%;height:110px;display:flex;justify-content:center;align-items:end;gap:3px;border-bottom:1px solid #e1e9f5}
+.fm-dashboard .gd2-activity-pair span{width:31%;min-height:0;border-radius:4px 4px 0 0;display:block;transition:height .2s ease}
+.fm-dashboard .gd2-app-bar{background:#2f6fed}.fm-dashboard .gd2-done-bar{background:#10b981}
+.fm-dashboard .gd2-activity-month small{font-size:11px;color:#64748b;white-space:nowrap}
+.fm-dashboard .gd2-activity-legend{display:flex;gap:15px;flex-wrap:wrap;font-size:11px;color:#334155}
+.fm-dashboard .gd2-activity-legend span{display:inline-flex;align-items:center;gap:5px}
+.fm-dashboard .gd2-activity-legend i{width:9px;height:9px;border-radius:2px;background:#2f6fed;display:inline-block}
+.fm-dashboard .gd2-activity-legend span:nth-child(2) i{background:#10b981}
+.fm-dashboard .gd2-empty-chart{font-size:12px;color:#64748b;margin:0}
+.fm-dashboard .fm-fast-metrics{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+.fm-dashboard .fm-fast-metrics>div{min-width:0;display:flex;flex-direction:column;gap:5px}
+.fm-dashboard .fm-fast-metrics>div strong{display:block;font-size:24px;color:#0b2a6f;line-height:1.1}
+.fm-dashboard .fm-fast-metrics>div small{display:block;font-size:12px;color:#64748b}
+.fm-dashboard .fm-summary-chart{min-height:215px}
+@media(max-width:800px){.fm-dashboard .gd2-activity-chart{gap:3px}.fm-dashboard .gd2-activity-pair{gap:2px}}
+
+.gd2-delivery-list{display:flex;flex-direction:column;gap:10px;padding:12px 0}
+.gd2-delivery-entry{display:flex;gap:16px;justify-content:space-between;align-items:center;flex-wrap:wrap;border:1px solid #dce8f8;border-radius:10px;padding:12px;background:#f8fbff}
+.gd2-delivery-entry strong{display:block;color:#0b2a6f}.gd2-delivery-entry small{display:block;color:#64748b;font-size:12px;margin-top:3px}
+.gd2-delivery-entry p{font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
+.gd2-delivery-links{display:flex;gap:10px}.gd2-delivery-links a{color:#2f6fed;font-weight:700;font-size:13px}
+.gd2-delivery-form input,.gd2-delivery-form textarea,.gd2-delivery-form select{max-width:100%}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Chi tiết giao dịch')}"></head>
+<body class="market-body client-workspace client-v52-page cd-dashboard tm-client-posted-v94 tm-client-history-v101">
+<link rel="stylesheet" th:href="@{/css/customer-footer-banner-v72.css(v=72)}"><link rel="stylesheet" th:href="@{/css/customer-posted-v94.css(v=94)}"><link rel="stylesheet" th:href="@{/css/customer-client-v95.css(v=95)}"><link rel="stylesheet" th:href="@{/css/customer-transactions-v101.css(v=101)}">
+<aside th:replace="~{fragments/common :: marketSidebar('history')}"></aside>
+<header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
+<main class="market-main client-main tm-posted-main tm-transactions-main">
+  <div class="tm-posted-shell tm-transactions-shell">
+    <div class="tm-transactions-receipt">
+      <div class="tm-receipt-top"><a th:href="@{/customer/history}" class="tm-receipt-back"><i class="fa-solid fa-arrow-left"></i> Trở về lịch sử</a><button type="button" onclick="window.print()" class="tm-transactions-apply"><i class="fa-solid fa-print"></i> In / Lưu PDF</button></div>
+      <div class="tm-receipt-paper"><div class="tm-receipt-heading"><div><strong>TalentMatch</strong><small>Thông tin giao dịch mô phỏng</small></div><span th:classappend="${transaction.statusClass}" class="tm-transactions-status" th:text="${transaction.statusText}">Đã thanh toán</span></div>
+      <h1 th:text="${transaction.receiptAvailable} ? 'Biên nhận giao dịch (demo)' : 'Chi tiết giao dịch'">Chi tiết giao dịch</h1>
+      <div class="tm-receipt-amount" th:classappend="${transaction.amountClass}" th:text="${transaction.amountPrefix + #numbers.formatDecimal(transaction.amount,0,'POINT',0,'COMMA') + 'đ'}">-0đ</div>
+      <dl><div><dt>Mã giao dịch</dt><dd th:text="${transaction.code}">TM...</dd></div><div><dt>Loại giao dịch</dt><dd th:text="${transaction.typeLabel}">Thanh toán dự án</dd></div>
+      <div><dt>Nội dung</dt><dd th:text="${transaction.description}">Thanh toán dự án</dd></div><div><dt>Freelancer</dt><dd th:text="${transaction.freelancer}">Đối tác</dd></div>
+      <div><dt>Ngày ghi nhận</dt><dd th:text="${transaction.dateText}">Ngày</dd></div><div><dt>Phương thức</dt><dd th:text="${transaction.method}">DEMO</dd></div>
+      <div><dt>Trạng thái</dt><dd th:text="${transaction.statusText}">Trạng thái</dd></div></dl>
+      <a th:if="${transaction.projectId != null}" th:href="@{/projects/{id}(id=${transaction.projectId})}" class="tm-receipt-project">Xem dự án liên quan <i class="fa-solid fa-arrow-right"></i></a>
+      <p class="tm-receipt-warning">Đây là bản ghi thanh toán mô phỏng của TalentMatch, không phải chứng từ ngân hàng hoặc hóa đơn thuế. Không dùng làm xác nhận đã thanh toán tiền thật.</p>
+      </div>
+    </div>
+  </div>
+  <footer class="fm-footer client-same-footer tm-posted-footer">
+    <div class="fm-footer-top">
+      <div class="fm-footer-intro">
+        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
+        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
+      </div>
+      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
+      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
+      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
+      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
+    </div>
+    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
+  </footer>
+</main><script th:replace="~{fragments/common :: scripts}"></script>
+</body></html>

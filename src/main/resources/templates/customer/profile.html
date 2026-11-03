@@ -1,203 +1,118 @@
-
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-
 <head th:replace="~{fragments/common :: head('Hồ sơ doanh nghiệp')}"></head>
-
-<body class="market-body client-workspace client-v52-page">
-
-<!-- Sidebar dành cho Client -->
+<body class="market-body client-workspace client-v52-page cd-dashboard tm-client-posted-v94 tm-company-v102">
+<link rel="stylesheet" th:href="@{/css/customer-footer-banner-v72.css(v=72)}">
+<link rel="stylesheet" th:href="@{/css/customer-posted-v94.css(v=94)}">
+<link rel="stylesheet" th:href="@{/css/customer-client-v95.css(v=95)}">
+<link rel="stylesheet" th:href="@{/css/customer-company-v102.css(v=102)}">
 <aside th:replace="~{fragments/common :: marketSidebar('profile')}"></aside>
-
-<!-- Header dành cho Client -->
 <header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
-
-<!-- Thông báo thành công hoặc lỗi -->
 <div th:replace="~{fragments/common :: flash}"></div>
-
-<main class="market-main client-main">
-    <div class="client-shell">
-
-        <!-- Breadcrumb -->
-        <div class="client-breadcrumb">
-            Workspace / Hồ sơ doanh nghiệp
-        </div>
-
-        <!-- Tiêu đề trang -->
-        <div class="client-page-heading">
-            <div>
-                <span class="client-eyebrow">THÔNG TIN DOANH NGHIỆP</span>
-                <h1>Hồ sơ <span>Client</span></h1>
-                <p>
-                    Cập nhật thông tin để Freelancer đánh giá độ tin cậy
-                    trước khi ứng tuyển.
-                </p>
+<main class="market-main client-main tm-posted-main tm-company-main">
+  <div class="tm-posted-shell tm-company-shell">
+    <section class="tm-company-banner" aria-label="Hồ sơ công ty">
+      <img th:src="@{/images/talentmatch-company-profile-banner-v102.png}" alt="Hồ sơ công ty - Xây dựng hồ sơ chuyên nghiệp để thu hút nhân tài" width="1920" height="360">
+    </section>
+    <div class="tm-company-columns">
+      <div class="tm-company-left">
+        <section class="tm-company-card tm-company-details" aria-labelledby="companyDetailsTitle">
+          <div class="tm-company-card-heading"><h2 id="companyDetailsTitle">Thông tin công ty</h2><span class="tm-company-hint">Dữ liệu hiển thị từ tài khoản doanh nghiệp</span></div>
+          <div class="tm-company-details-body">
+            <div class="tm-company-identity">
+              <div class="tm-company-logo">
+                <img th:if="${companyLogo != null}" th:src="@{/customer/profile/assets/{id}/file(id=${companyLogo.id})}" alt="Logo công ty">
+                <i th:unless="${companyLogo != null}" class="fa-solid fa-building"></i>
+                <strong th:text="${profile.companyName != null and !#strings.isEmpty(profile.companyName) ? profile.companyName : 'Doanh nghiệp'}">Tên công ty</strong>
+              </div>
+              <form class="tm-company-upload-form" th:action="@{/customer/profile/assets}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="kind" value="LOGO">
+                <label class="tm-company-upload-btn"><i class="fa-solid fa-image"></i> Thay đổi logo
+                  <input type="file" name="file" accept="image/png,image/jpeg" data-auto-upload="logo" aria-label="Chọn logo công ty mới">
+                </label>
+              </form>
+              <p class="tm-company-file-tip">PNG, JPG (tối đa 5 MB)</p>
             </div>
-        </div>
-
-        <div class="client-form-layout">
-
-            <!-- Form cập nhật hồ sơ -->
-            <form th:action="@{/customer/profile}"
-                  th:object="${profile}"
-                  method="post"
-                  class="client-panel client-form">
-
-                <!-- Thông tin đại diện -->
-                <div class="client-profile-cover">
-
-                        <span class="client-avatar huge"
-                              th:text="${profile.fullName != null and !#strings.isEmpty(profile.fullName)
-                                  ? #strings.substring(profile.fullName, 0, 1)
-                                  : 'C'}">C</span>
-
-                    <div>
-                        <h2 th:text="${profile.companyName != null and !#strings.isEmpty(profile.companyName)
-                                ? profile.companyName
-                                : (profile.fullName != null ? profile.fullName : 'Doanh nghiệp')}">
-                            Công ty
-                        </h2>
-
-                        <p th:text="${profile.email}">Email</p>
-                    </div>
-                </div>
-
-                <div class="client-panel-head">
-                    <div>
-                        <h2>Thông tin người đại diện</h2>
-                    </div>
-                </div>
-
-                <div class="client-form-grid">
-
-                    <label>
-                        Họ tên <em>*</em>
-                        <input th:field="*{fullName}"
-                               required
-                               maxlength="120">
-                    </label>
-
-                    <label>
-                        Số điện thoại
-                        <input th:field="*{phone}"
-                               maxlength="25">
-                    </label>
-
-                    <label>
-                        Địa điểm
-                        <input th:field="*{location}"
-                               maxlength="160">
-                    </label>
-
-                    <label>
-                        Người liên hệ
-                        <input th:field="*{contactName}"
-                               maxlength="120">
-                    </label>
-
-                </div>
-
-                <!-- Thông tin doanh nghiệp -->
-                <div class="client-panel-head divider">
-                    <div>
-                        <h2>Thông tin doanh nghiệp</h2>
-                    </div>
-                </div>
-
-                <div class="client-form-grid">
-
-                    <label>
-                        Tên doanh nghiệp
-                        <input th:field="*{companyName}"
-                               maxlength="160">
-                    </label>
-
-                    <label>
-                        Lĩnh vực
-                        <input th:field="*{field}"
-                               maxlength="120">
-                    </label>
-
-                    <label>
-                        Quy mô
-                        <select th:field="*{companySize}">
-                            <option value="">Chọn quy mô</option>
-                            <option value="1-10">1-10</option>
-                            <option value="11-50">11-50</option>
-                            <option value="51-100">51-100</option>
-                            <option value="101-500">101-500</option>
-                            <option value="500+">500+</option>
-                        </select>
-                    </label>
-
-                    <label>
-                        Mã số thuế
-                        <input th:field="*{taxCode}"
-                               maxlength="40">
-                    </label>
-
-                    <label class="wide">
-                        Website
-                        <input th:field="*{website}"
-                               type="url"
-                               maxlength="255">
-                    </label>
-
-                    <label class="wide">
-                        Giới thiệu
-                        <textarea th:field="*{bio}"
-                                  rows="6"></textarea>
-                    </label>
-
-                </div>
-
-                <!-- Nút lưu -->
-                <div class="client-form-actions">
-                    <button type="submit" class="client-btn primary">
-                        Lưu thay đổi
-                    </button>
-                </div>
-
+            <form class="tm-company-fields" id="companyProfileForm" th:action="@{/customer/profile}" method="post" th:object="${profile}">
+              <input type="hidden" th:field="*{fullName}">
+              <div class="tm-company-field-grid">
+                <label><span>Tên công ty <b class="tm-company-required">*</b></span><input th:field="*{companyName}" maxlength="160" placeholder="Tên doanh nghiệp" required></label>
+                <label><span>Mã số thuế</span><input th:field="*{taxCode}" maxlength="40" placeholder="Mã số thuế doanh nghiệp"></label>
+                <label><span>Ngành nghề kinh doanh</span><input th:field="*{field}" maxlength="120" placeholder="Ví dụ: Công nghệ thông tin"></label>
+                <label><span>Quy mô công ty</span><select th:field="*{companySize}"><option value="">Chọn quy mô</option><option value="1-10">1–10 nhân viên</option><option value="11-50">11–50 nhân viên</option><option value="51-100">51–100 nhân viên</option><option value="101-500">101–500 nhân viên</option><option value="500+">Trên 500 nhân viên</option></select></label>
+                <label><span>Năm thành lập</span><input th:field="*{foundedYear}" type="number" min="1800" max="2026" placeholder="Ví dụ: 2020"></label>
+                <label><span>Website</span><input th:field="*{website}" maxlength="255" type="url" placeholder="https://congty.vn"></label>
+                <label class="tm-company-wide"><span>Giới thiệu công ty</span><textarea th:field="*{bio}" rows="4" maxlength="4000" placeholder="Giới thiệu lĩnh vực hoạt động, sản phẩm, văn hóa doanh nghiệp..."></textarea><small class="tm-company-length"><span id="companyBioLength">0</span>/4000 ký tự</small></label>
+              </div>
+              <div class="tm-company-save-actions"><p><i class="fa-solid fa-circle-info"></i> Các trường liên hệ bên phải cũng được lưu cùng hồ sơ.</p><button type="submit" class="tm-company-primary"><i class="fa-solid fa-floppy-disk"></i> Lưu thay đổi</button></div>
             </form>
-
-            <!-- Khung hướng dẫn bên phải -->
-            <aside class="client-side-help">
-                <div class="client-panel">
-
-                    <h3>
-                        <i class="fa-solid fa-shield-heart"></i>
-                        Hồ sơ đáng tin cậy
-                    </h3>
-
-                    <p>
-                        Thông tin doanh nghiệp đầy đủ giúp Freelancers
-                        hiểu rõ mục tiêu hợp tác và giảm thời gian trao đổi.
-                    </p>
-
-                    <div class="client-guide-step">
-                        <b>✓</b>
-                        Tên và lĩnh vực rõ ràng
-                    </div>
-
-                    <div class="client-guide-step">
-                        <b>✓</b>
-                        Thông tin người liên hệ
-                    </div>
-
-                    <div class="client-guide-step">
-                        <b>✓</b>
-                        Mô tả hoạt động của công ty
-                    </div>
-
-                </div>
-            </aside>
-
-        </div>
+          </div>
+        </section>
+        <section class="tm-company-card tm-company-photo-card" aria-labelledby="companyPhotosTitle">
+          <div class="tm-company-card-heading"><h2 id="companyPhotosTitle">Hình ảnh công ty</h2><form class="tm-company-upload-form" th:action="@{/customer/profile/assets}" method="post" enctype="multipart/form-data"><input type="hidden" name="kind" value="PHOTO"><label class="tm-company-outline-btn"><i class="fa-solid fa-circle-plus"></i> Thêm ảnh<input type="file" name="file" accept="image/png,image/jpeg" data-auto-upload="photo" aria-label="Tải thêm hình ảnh công ty"></label></form></div>
+          <div class="tm-company-gallery" th:unless="${#lists.isEmpty(companyPhotos)}">
+            <div class="tm-company-picture" th:each="photo : ${companyPhotos}">
+              <img loading="lazy" th:src="@{/customer/profile/assets/{id}/file(id=${photo.id})}" th:alt="${photo.displayName}">
+              <form th:action="@{/customer/profile/assets/{id}/delete(id=${photo.id})}" method="post" onsubmit="return confirm('Xóa hình ảnh này khỏi hồ sơ?')"><button type="submit" aria-label="Xóa hình ảnh"><i class="fa-solid fa-xmark"></i></button></form>
+            </div>
+          </div>
+          <div th:if="${#lists.isEmpty(companyPhotos)}" class="tm-company-empty-photo"><i class="fa-regular fa-images"></i><strong>Chưa có hình ảnh công ty</strong><span>Thêm ảnh văn phòng, đội ngũ hoặc môi trường làm việc để giới thiệu doanh nghiệp.</span></div>
+          <p class="tm-company-muted">Hình JPG/PNG, tối đa 5 MB/ảnh, tối đa 8 ảnh.</p>
+        </section>
+        <section class="tm-company-card tm-company-stats" aria-labelledby="companyStatsTitle">
+          <div class="tm-company-card-heading"><h2 id="companyStatsTitle">Thống kê hoạt động</h2><a th:href="@{/customer/dashboard}">Xem tổng quan <i class="fa-solid fa-angle-right"></i></a></div>
+          <div class="tm-company-stats-grid">
+            <div><span class="tm-company-stat-icon blue"><i class="fa-solid fa-briefcase"></i></span><span><strong th:text="${companyJobCount}">0</strong><small>Công việc đã đăng</small></span></div>
+            <div><span class="tm-company-stat-icon green"><i class="fa-solid fa-users"></i></span><span><strong th:text="${companyApplicantCount}">0</strong><small>Ứng viên đã nhận</small></span></div>
+            <div><span class="tm-company-stat-icon orange"><i class="fa-regular fa-clock"></i></span><span><strong th:text="${companyActiveProjects}">0</strong><small>Dự án đang thực hiện</small></span></div>
+            <div><span class="tm-company-stat-icon purple"><i class="fa-solid fa-circle-check"></i></span><span><strong th:text="${companyCompletedProjects}">0</strong><small>Dự án hoàn thành</small></span></div>
+          </div>
+        </section>
+      </div>
+      <div class="tm-company-right">
+        <section class="tm-company-card tm-company-contact" aria-labelledby="companyContactTitle">
+          <div class="tm-company-card-heading"><h2 id="companyContactTitle">Thông tin liên hệ</h2><button type="button" id="companyEditContact" class="tm-company-outline-btn"><i class="fa-solid fa-pen"></i> Sửa</button></div>
+          <div class="tm-company-contact-fields">
+            <label><span class="tm-company-contact-icon"><i class="fa-solid fa-user"></i></span><span class="tm-company-contact-key">Người đại diện</span><input form="companyProfileForm" name="contactName" th:value="${profile.contactName}" placeholder="Chưa cập nhật" maxlength="120" readonly></label>
+            <label><span class="tm-company-contact-icon"><i class="fa-solid fa-id-badge"></i></span><span class="tm-company-contact-key">Chức vụ</span><input form="companyProfileForm" name="contactPosition" th:value="${profile.contactPosition}" placeholder="Chưa cập nhật" maxlength="120" readonly></label>
+            <label><span class="tm-company-contact-icon"><i class="fa-solid fa-envelope"></i></span><span class="tm-company-contact-key">Email liên hệ</span><input form="companyProfileForm" name="contactEmail" th:value="${profile.contactEmail}" type="email" placeholder="email@doanhnghiep.vn" maxlength="160" readonly></label>
+            <label><span class="tm-company-contact-icon"><i class="fa-solid fa-phone"></i></span><span class="tm-company-contact-key">Số điện thoại</span><input form="companyProfileForm" name="phone" th:value="${profile.phone}" type="tel" placeholder="Chưa cập nhật" maxlength="25" readonly></label>
+            <label><span class="tm-company-contact-icon"><i class="fa-solid fa-location-dot"></i></span><span class="tm-company-contact-key">Địa chỉ công ty</span><input form="companyProfileForm" name="location" th:value="${profile.location}" placeholder="Chưa cập nhật" maxlength="160" readonly></label>
+            <label><span class="tm-company-contact-icon"><i class="fa-brands fa-linkedin-in"></i></span><span class="tm-company-contact-key">LinkedIn</span><input form="companyProfileForm" name="companyLinkedinUrl" th:value="${profile.companyLinkedinUrl}" type="url" placeholder="https://linkedin.com/company/..." maxlength="255" readonly></label>
+            <label><span class="tm-company-contact-icon"><i class="fa-brands fa-facebook-f"></i></span><span class="tm-company-contact-key">Facebook</span><input form="companyProfileForm" name="facebookUrl" th:value="${profile.facebookUrl}" type="url" placeholder="https://facebook.com/..." maxlength="255" readonly></label>
+          </div><p id="companyContactTip" class="tm-company-muted">Chọn “Sửa” để cập nhật, sau đó nhấn “Lưu thay đổi”.</p>
+        </section>
+        <section class="tm-company-card tm-company-verify" aria-labelledby="companyVerifyTitle">
+          <div class="tm-company-card-heading"><h2 id="companyVerifyTitle">Xác minh doanh nghiệp</h2><span class="tm-company-status-pending"><i class="fa-regular fa-circle-clock"></i> Chưa xác minh</span></div>
+          <div class="tm-company-verify-body"><span class="tm-company-verify-icon"><i class="fa-solid fa-shield-halved"></i></span><div><strong>Thông tin pháp lý</strong><p>Tài liệu tải lên chỉ được lưu vào hồ sơ. Xác minh chính thức cần quy trình xét duyệt riêng của quản trị viên.</p><span th:text="|${#lists.size(companyDocuments)} tài liệu đã tải lên|">0 tài liệu đã tải lên</span></div></div>
+        </section>
+        <section class="tm-company-card tm-company-document-card" aria-labelledby="companyDocumentsTitle">
+          <div class="tm-company-card-heading"><h2 id="companyDocumentsTitle">Tài liệu pháp lý</h2><form class="tm-company-upload-form" th:action="@{/customer/profile/assets}" method="post" enctype="multipart/form-data"><input type="hidden" name="kind" value="DOCUMENT"><label class="tm-company-outline-btn"><i class="fa-solid fa-circle-plus"></i> Thêm tài liệu<input type="file" name="file" accept="application/pdf,.pdf" data-auto-upload="document" aria-label="Thêm tài liệu pháp lý PDF"></label></form></div>
+          <div class="tm-company-documents" th:unless="${#lists.isEmpty(companyDocuments)}">
+            <div class="tm-company-document" th:each="document : ${companyDocuments}"><span class="tm-company-pdf"><i class="fa-solid fa-file-pdf"></i></span><span class="tm-company-doc-meta"><b th:text="${document.displayName}">Tài liệu.pdf</b><small th:text="|${#temporals.format(document.createdAt, 'dd/MM/yyyy')} · ${#numbers.formatDecimal(document.fileSize / 1048576.0, 1, 2)} MB|">PDF · 1 MB</small></span><a th:href="@{/customer/profile/assets/{id}/file(id=${document.id})}" title="Tải tệp xuống" aria-label="Tải tệp xuống"><i class="fa-solid fa-download"></i></a><form th:action="@{/customer/profile/assets/{id}/delete(id=${document.id})}" method="post" onsubmit="return confirm('Xóa tài liệu này khỏi hồ sơ?')"><button type="submit" title="Xóa tài liệu" aria-label="Xóa tài liệu"><i class="fa-solid fa-trash-can"></i></button></form></div>
+          </div>
+          <div class="tm-company-empty-doc" th:if="${#lists.isEmpty(companyDocuments)}"><i class="fa-regular fa-file-pdf"></i> Chưa có tài liệu pháp lý. Bạn có thể tải giấy đăng ký kinh doanh hoặc mã số thuế (PDF) lên.</div>
+          <p class="tm-company-muted"><i class="fa-solid fa-lock"></i> Tài liệu chỉ có thể truy cập từ tài khoản doanh nghiệp đang sở hữu. Tối đa 10 MB/PDF.</p>
+        </section>
+      </div>
     </div>
+  </div>
+  <footer class="fm-footer client-same-footer tm-posted-footer">
+    <div class="fm-footer-top">
+      <div class="fm-footer-intro">
+        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
+        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
+      </div>
+      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
+      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
+      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
+      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
+    </div>
+    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
+  </footer>
 </main>
-
-<!-- JavaScript dùng chung -->
 <script th:replace="~{fragments/common :: scripts}"></script>
-
+<script th:src="@{/js/customer-company-v102.js(v=102)}" defer></script>
 </body>
 </html>

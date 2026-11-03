@@ -41,7 +41,9 @@ public class HomeController {
     }
 
     @GetMapping("/freelancers/{id}")
-    public String freelancer(@PathVariable Long id,Model model){
+    public String freelancer(@PathVariable Long id,Model model,Authentication auth){
+        if(auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER")))
+            return "redirect:/customer/freelancers/" + id;
         User u=users.findById(id).orElseThrow(()->new IllegalArgumentException("Không tìm thấy Freelancer."));
         if(u.getRole()!=Role.FREELANCER||Boolean.TRUE.equals(u.getLocked()))throw new IllegalArgumentException("Hồ sơ Freelancer không khả dụng.");
         model.addAttribute("profile",u);return "freelancer/public-profile";

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Hợp đồng & Điều khoản | TalentMatch')}"></head>
+<body class="market-body client-workspace client-v52-page cd-dashboard tm-client-contracts-v134">
+<link rel="stylesheet" th:href="@{/css/customer-footer-banner-v72.css(v=72)}">
+<link rel="stylesheet" th:href="@{/css/customer-client-v95.css(v=95)}">
+<link rel="stylesheet" th:href="@{/css/client-sidebar-v118.css(v=118)}">
+
+<link rel="stylesheet" th:href="@{/css/client-contracts-v134.css(v=134)}">
+<aside th:replace="~{fragments/common :: marketSidebar('contracts')}"></aside>
+<header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="market-main cc133-main"><div class="cc133-wrap">
+  <div class="cc133-banner"><img th:src="@{/images/client-contracts-banner-v133.png}" alt="Hợp đồng và Điều khoản" width="1920" height="360"></div>
+  <div class="cc133-topbar">
+    <nav aria-label="Chế độ xem"><a class="on" th:href="@{/customer/contracts}"><i class="fa-regular fa-file-lines"></i> Danh sách hợp đồng</a>
+      <a th:href="@{/customer/contracts(status='active')}"><i class="fa-solid fa-scale-balanced"></i> Đang hiệu lực</a>
+      <a th:href="@{/customer/contracts(status='completed')}"><i class="fa-regular fa-clock"></i> Lịch sử &amp; lưu trữ</a></nav>
+    <a class="cc133-primary" th:href="@{/customer/quotations(status='accepted')}"><i class="fa-solid fa-plus"></i> Tạo từ báo giá đã chốt</a>
+  </div>
+  <div class="cc133-stats"><div><strong th:text="${contractTotal}">0</strong><span>Tổng hợp đồng</span></div><div><strong th:text="${waitingCount}">0</strong><span>Chờ ký xác nhận</span></div><div><strong th:text="${activeCount}">0</strong><span>Đang hiệu lực</span></div><div><strong th:text="${completedCount}">0</strong><span>Đã hoàn thành</span></div></div>
+  <div class="cc134-advisory" th:if="${missingDrafts>0}"><i class="fa-solid fa-circle-info"></i> <span th:text="|Có ${missingDrafts} dự án cũ chưa có phiên bản hợp đồng. Hãy kiểm tra dữ liệu migration và quy trình tạo dự thảo; không tự phát sinh hợp đồng hay chữ ký.|">Có dự án chưa có bản hợp đồng</span></div>
+  <div class="cc133-grid">
+    <section class="cc133-panel cc133-list-panel"><form method="get" th:action="@{/customer/contracts}" class="cc133-filter">
+      <label><i class="fa-solid fa-magnifying-glass"></i><input name="q" th:value="${q}" placeholder="Tìm mã hợp đồng, tên dự án, freelancer..."></label>
+      <select name="status" aria-label="Trạng thái"><option value="all" th:selected="${status=='all'}">Tất cả trạng thái</option><option value="waiting" th:selected="${status=='waiting'}">Chờ ký</option><option value="active" th:selected="${status=='active'}">Đang hiệu lực</option><option value="completed" th:selected="${status=='completed'}">Hoàn thành</option><option value="cancelled" th:selected="${status=='cancelled'}">Đã hủy</option></select>
+      <select name="sort" aria-label="Sắp xếp"><option value="newest" th:selected="${sort=='newest'}">Mới nhất</option><option value="oldest" th:selected="${sort=='oldest'}">Cũ nhất</option><option value="priceHigh" th:selected="${sort=='priceHigh'}">Giá giảm dần</option><option value="priceLow" th:selected="${sort=='priceLow'}">Giá tăng dần</option></select>
+      <button type="submit" class="cc133-primary">Lọc</button></form>
+      <div class="cc133-tablehead"><span>Dự án / Hợp đồng</span><span>Freelancer</span><span>Giá trị</span><span>Trạng thái</span><span>Thao tác</span></div>
+      <div th:if="${#lists.isEmpty(contracts)}" class="cc133-empty"><strong th:text="${contractTotal==0 ? 'Chưa có hợp đồng được tạo' : 'Không tìm thấy hợp đồng phù hợp'}">Chưa có hợp đồng</strong><p th:if="${contractTotal==0}">Chấp nhận báo giá chỉ là bước thống nhất điều kiện. Client cần chọn Freelancer từ báo giá đã chốt để tạo dự án và dự thảo hợp đồng.</p><p th:if="${contractTotal>0}">Hãy thay đổi từ khóa hoặc bộ lọc để xem hợp đồng khác.</p><a class="cc133-primary" th:if="${contractTotal==0}" th:href="@{/customer/quotations(status=accepted)}">Đến báo giá đã chốt</a></div>
+      <article class="cc133-contract" th:each="p : ${contracts}" th:classappend="${selectedProject!=null and selectedProject.id==p.id} ? ' cc133-selected' : ''">
+        <div class="cc133-project"><span class="cc133-file"><i class="fa-regular fa-file-lines"></i></span><div><b th:text="|HD-${p.id} · v${revisions[p.id].version}|">HD-1</b><small th:text="${p.application.job.title}">Tên công việc</small></div></div>
+        <div class="cc133-person"><span class="cc133-avatar" th:text="${#strings.substring(p.freelancer.fullName,0,1)}">F</span><b th:text="${p.freelancer.fullName}">Freelancer</b></div>
+        <strong class="cc133-price" th:text="${#numbers.formatDecimal(revisions[p.id].amount,0,'POINT',0,'COMMA')+'đ'}">0đ</strong>
+        <div><span class="cc133-chip green" th:if="${p.status.name()=='COMPLETED'}">Đã hoàn thành</span><span class="cc133-chip red" th:if="${p.status.name()=='CANCELLED'}">Đã hủy</span><span class="cc133-chip green" th:if="${p.status.name()!='COMPLETED' and p.status.name()!='CANCELLED' and revisions[p.id].customerSignedAt!=null and revisions[p.id].freelancerSignedAt!=null}">Đang hiệu lực</span><span class="cc133-chip yellow" th:if="${p.status.name()!='COMPLETED' and p.status.name()!='CANCELLED' and (revisions[p.id].customerSignedAt==null or revisions[p.id].freelancerSignedAt==null)}">Chờ ký</span></div>
+        <a class="cc133-view" th:href="@{/customer/contracts(selected=${p.id},q=${q},status=${status},sort=${sort},page=${page})}" title="Xem thông tin hợp đồng"><i class="fa-regular fa-eye"></i> Xem</a>
+      </article>
+      <div class="cc133-pagination" th:if="${totalPages>1}"><a th:each="i : ${#numbers.sequence(0,totalPages - 1)}" th:classappend="${i==page} ? 'on':''" th:href="@{/customer/contracts(q=${q},status=${status},sort=${sort},page=${i})}" th:text="${i+1}">1</a></div>
+      <p class="cc133-count" th:text="|${allCount} hợp đồng phù hợp|">0 hợp đồng</p>
+    </section>
+    <section class="cc133-panel cc133-detail" th:if="${selectedProject!=null and selectedAgreement!=null}" th:with="p=${selectedProject},a=${selectedAgreement}">
+      <div class="cc133-detail-title"><h2>Chi tiết hợp đồng</h2><span class="cc133-chip green" th:if="${a.customerSignedAt!=null and a.freelancerSignedAt!=null}">Đã ký hai bên</span><span class="cc133-chip yellow" th:unless="${a.customerSignedAt!=null and a.freelancerSignedAt!=null}">Chờ ký</span></div>
+      <div class="cc133-sub" th:text="|Hợp đồng HD-${p.id} · Phiên bản v${a.version}|"></div>
+      <dl class="cc133-details"><dt>Dự án</dt><dd th:text="${p.application.job.title}"></dd><dt>Freelancer</dt><dd th:text="${p.freelancer.fullName}"></dd><dt>Giá trị hợp đồng</dt><dd class="cc133-price" th:text="${#numbers.formatDecimal(a.amount,0,'POINT',0,'COMMA')+'đ'}"></dd><dt>Thời gian</dt><dd th:text="|${a.estimatedDays} ngày|"></dd><dt>Client ký</dt><dd th:text="${a.customerSignedAt!=null ? #temporals.format(a.customerSignedAt,'dd/MM/yyyy HH:mm') : 'Chưa ký'}"></dd><dt>Freelancer ký</dt><dd th:text="${a.freelancerSignedAt!=null ? #temporals.format(a.freelancerSignedAt,'dd/MM/yyyy HH:mm') : 'Chưa ký'}"></dd></dl>
+      <h3><i class="fa-solid fa-list-check"></i> Phạm vi công việc</h3><p class="cc133-text" th:text="${a.scopeOfWork}">Phạm vi thực hiện</p>
+      <h3><i class="fa-solid fa-shield-halved"></i> Điều khoản chính</h3><div class="cc133-text" th:text="${a.terms}">Điều khoản hợp đồng</div>
+      <h3><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử phiên bản</h3><div class="cc133-history" th:each="rev:${agreementHistory}"><b th:text="|v${rev.version}|"></b><span th:text="${#temporals.format(rev.createdAt,'dd/MM/yyyy HH:mm')}"></span><small th:text="${rev.customerSignedAt!=null and rev.freelancerSignedAt!=null ? 'Đã ký hai bên' : 'Chưa ký đủ'}"></small></div>
+      <p class="cc133-notice" th:if="${pendingChange}">Có đề nghị sửa điều khoản đang chờ xử lý. Chưa thể ký cho đến khi xử lý xong.</p>
+      <form th:if="${!pendingChange and a.customerSignedAt==null and p.status.name()!='CANCELLED' and p.status.name()!='COMPLETED' and p.status.name()!='DISPUTED'}" method="post" th:action="@{/projects/{id}/agreement/sign(id=${p.id})}"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><input type="hidden" name="expectedVersion" th:value="${a.version}"><button class="cc133-primary cc133-block" type="submit"><i class="fa-solid fa-file-signature"></i> Ký xác nhận phiên bản hiện tại</button></form>
+      <a class="cc133-outline cc133-block" th:href="@{/projects/{id}(id=${p.id})}"><i class="fa-regular fa-eye"></i> Xem hợp đồng &amp; yêu cầu sửa điều khoản</a>
+    </section><section class="cc133-panel cc133-empty" th:if="${selectedProject==null}"><strong>Chưa có hợp đồng để xem</strong><p>Hãy chọn một hợp đồng trong danh sách hoặc chọn Freelancer từ báo giá đã chốt để lập dự thảo.</p></section>
+  </div>
+</div>
+<footer class="fm-footer client-same-footer tm-posted-footer">
+    <div class="fm-footer-top">
+      <div class="fm-footer-intro">
+        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
+        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
+      </div>
+      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
+      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
+      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
+      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
+    </div>
+    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
+  </footer>
+</main>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body></html>

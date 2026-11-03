@@ -1,0 +1,63 @@
+/* V104 – một sidebar cho các trang Freelancer. Chỉ áp dụng nếu nav Freelancer đã được Thymeleaf render. */
+html body:has(.tm104-fnav){--tm-sidebar-width:230px!important;--sidebar-width:230px!important}
+html body:has(.tm104-fnav) .market-sidebar{
+  position:fixed!important;top:0!important;bottom:0!important;left:0!important;
+  width:230px!important;min-width:230px!important;max-width:230px!important;height:100dvh!important;
+  display:flex!important;flex-direction:column!important;overflow-y:auto!important;overflow-x:hidden!important;
+  padding:9px 8px 0!important;background:#fff!important;color:#111827!important;
+  border-right:1px solid #e5e7eb!important;box-shadow:none!important;z-index:160!important;
+  scrollbar-width:thin;scrollbar-color:#d5deed transparent;
+}
+html body:has(.tm104-fnav) .market-brand-wrap{padding:10px 9px 13px!important;margin:0 0 3px!important;flex:0 0 auto!important;border-bottom:1px solid #edf0f5!important;position:static!important}
+html body:has(.tm104-fnav) .market-brand{display:flex!important;align-items:center!important;gap:9px!important;text-decoration:none!important}
+html body:has(.tm104-fnav) .market-brand img{width:30px!important;height:30px!important;min-width:30px!important;object-fit:contain!important;display:block!important}
+html body:has(.tm104-fnav) .market-brand strong{color:#0b2a6f!important;font-size:16px!important;font-weight:800!important;letter-spacing:-.35px!important}
+html body:has(.tm104-fnav) .market-brand small{font-size:7.5px!important;letter-spacing:.25px!important;font-weight:700!important;color:#68758b!important}
+html body:has(.tm104-fnav) .tm33-sidebar-profile{flex:0 0 auto!important;margin:5px 7px 5px!important;padding:10px 0 12px!important;border-bottom:1px solid #e6eaf1!important}
+html body:has(.tm104-fnav) .tm33-profile-link{display:flex!important;align-items:center!important;gap:9px!important}
+html body:has(.tm104-fnav) .tm33-profile-avatar{width:33px!important;height:33px!important;min-width:33px!important;border-radius:50%!important;font-size:14px!important;background:#286df5!important;color:#fff!important}
+html body:has(.tm104-fnav) .tm33-profile-name strong{font-size:12px!important;color:#172a50!important;font-weight:800!important}
+html body:has(.tm104-fnav) .tm33-profile-name small{font-size:10px!important;color:#697b97!important}
+html body:has(.tm104-fnav) .market-side-section-auth{padding:0 1px!important;margin:0!important;display:block!important;flex:1 0 auto!important}
+html body:has(.tm104-fnav) .market-side-section-auth>.market-side-label,html body:has(.tm104-fnav) .tm104-menu-label{
+  padding:10px 10px 4px!important;margin:3px 0 1px!important;color:#8b9097!important;
+  font-size:9px!important;font-weight:800!important;letter-spacing:.2px!important;line-height:1.1!important;
+}
+html body:has(.tm104-fnav) .tm104-fnav{display:block!important}
+html body:has(.tm104-fnav) .tm104-fnav nav.market-side-nav{display:flex!important;flex-direction:column!important;gap:4px!important;padding:0 0 1px!important;margin:0!important}
+html body:has(.tm104-fnav) .tm104-fnav nav.market-side-nav>a{
+  display:flex!important;align-items:center!important;gap:10px!important;min-height:34px!important;
+  width:100%!important;margin:0!important;padding:7px 9px!important;border:0!important;border-radius:6px!important;
+  background:transparent!important;box-shadow:none!important;color:#111827!important;
+  font:700 15px/1.25 Inter,Arial,sans-serif!important;text-decoration:none!important;white-space:normal!important;
+  transition:background .12s ease,color .12s ease!important;
+}
+html body:has(.tm104-fnav) .tm104-fnav nav.market-side-nav>a:hover:not(.active){background:#f0f5ff!important;color:#0b2a6f!important}
+html body:has(.tm104-fnav) .tm104-fnav nav.market-side-nav>a.active{background:#2f6fed!important;color:#fff!important;box-shadow:0 3px 8px #2f6fed24!important}
+html body:has(.tm104-fnav) .tm104-fnav .market-side-icon{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 20px!important;width:20px!important;height:20px!important;font-size:18px!important;color:inherit!important;margin:0!important;min-width:20px!important}
+html body:has(.tm104-fnav) .tm104-fnav .market-side-icon i{font-size:17px!important;line-height:1!important;color:inherit!important}
+html body:has(.tm104-fnav) .market-side-utility-auth,html body:has(.tm104-fnav) .market-side-support-auth,html body:has(.tm104-fnav) .market-side-bottom-auth{display:none!important}
+html body:has(.tm104-fnav) .tm-freelancer-signout{
+  display:block!important;position:sticky!important;bottom:0!important;left:0!important;
+  background:#fff!important;border-top:1px solid #edf0f5!important;
+  padding:10px 7px 12px!important;margin-top:10px!important;flex:0 0 auto!important;z-index:2!important
+}
+html body:has(.tm104-fnav) .tm-freelancer-signout form{margin:0!important}
+html body:has(.tm104-fnav) .tm-freelancer-signout button{
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:11px!important;
+  width:100%!important;min-height:35px!important;padding:8px 11px!important;
+  color:#dc2626!important;background:#fff0f0!important;border:1px solid #ffe2e2!important;
+  border-radius:7px!important;box-shadow:none!important;font:700 14px/1.2 Inter,Arial,sans-serif!important;cursor:pointer!important
+}
+html body:has(.tm104-fnav) .tm-freelancer-signout button:hover{background:#ffe4e4!important}
+html body:has(.tm104-fnav) .fm-header{position:fixed!important;top:0!important;left:230px!important;right:0!important;width:calc(100% - 230px)!important;height:64px!important;padding:0 20px!important;z-index:150!important}
+html body:has(.tm104-fnav) .fm-content{padding-left:24px!important;padding-right:24px!important}
+html body:has(.tm104-fnav) .fm-main{margin-left:230px!important;padding-top:64px!important;width:auto!important;min-width:0!important}
+html body.tm104-freelancer .market-main{margin-left:230px!important;width:auto!important;min-width:0!important}
+html body.tm104-freelancer .market-topbar{left:230px!important;width:calc(100% - 230px)!important}
+@media(max-width:900px){
+  html body:has(.tm104-fnav) .market-sidebar{display:none!important}
+  html body:has(.tm104-fnav) .fm-header{left:0!important;width:100%!important}
+  html body:has(.tm104-fnav) .fm-main,html body.tm104-freelancer .market-main{margin-left:0!important}
+  html body.tm104-freelancer .market-topbar{left:0!important;width:100%!important}
+}

@@ -1,4 +1,88 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/common :: head('Lời mời đã gửi')}"></head>
-<body class="market-body client-workspace client-v52-page"><aside th:replace="~{fragments/common :: marketSidebar('invitations')}"></aside><header th:replace="~{fragments/common :: marketClientTopbar()}"></header><div th:replace="~{fragments/common :: flash}"></div><main class="market-main client-main"><div class="client-shell"><div class="client-breadcrumb">Workspace / Lời mời</div><div class="client-page-heading"><div><span class="client-eyebrow">KẾT NỐI NHÂN SỰ</span><h1>Lời mời <span>đã gửi</span></h1><p>Quản lý lời mời từ các công việc; Freelancer có thể đồng ý và chuyển sang gửi Proposal.</p></div><a class="client-btn primary" th:href="@{/customer/talent}">+ Mời thêm Freelancer</a></div>
-    <section class="client-panel client-table-panel"><table class="client-table"><thead><tr><th>Freelancer</th><th>Dự án</th><th>Thời gian</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody><tr th:each="i:${invitations}"><td><b th:text="${i.freelancer.fullName}">F</b><small th:text="${i.freelancer.professionalTitle}">Chuyên môn</small></td><td th:text="${i.job.title}">Công việc</td><td th:text="${#temporals.format(i.createdAt,'dd/MM/yyyy HH:mm')}">Ngày</td><td><span class="client-badge" th:text="${i.status}">SENT</span></td><td><a th:href="@{/freelancers/{id}(id=${i.freelancer.id})}">Hồ sơ ↗</a></td></tr></tbody></table><div class="client-empty" th:if="${#lists.isEmpty(invitations)}">Chưa gửi lời mời nào. <a th:href="@{/customer/talent}">Khám phá Freelancer →</a></div></section>
-</div></main><script th:replace="~{fragments/common :: scripts}"></script></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Lời mời đã gửi')}"></head>
+<body class="market-body client-workspace client-v52-page cd-dashboard tm-client-posted-v94 tm-client-sent-v98">
+<link rel="stylesheet" th:href="@{/css/customer-footer-banner-v72.css(v=72)}">
+<link rel="stylesheet" th:href="@{/css/customer-posted-v94.css(v=94)}">
+<link rel="stylesheet" th:href="@{/css/customer-client-v95.css(v=95)}">
+<link rel="stylesheet" th:href="@{/css/customer-sent-invitations-v98.css(v=98)}">
+<aside th:replace="~{fragments/common :: marketSidebar('invitations')}"></aside>
+<header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="market-main client-main tm-posted-main tm-sent-main">
+  <div class="tm-posted-shell tm-sent-shell">
+    <section class="tm-sent-banner" aria-label="Quản lý các lời mời đã gửi">
+      <img th:src="@{/images/talentmatch-client-sent-invitations-v98.jpg}" alt="Quản lý các lời mời đã gửi" width="1920" height="384">
+    </section>
+
+    <section class="tm-sent-kpis" aria-label="Thống kê lời mời">
+      <div class="tm-sent-kpi"><span class="tm-kpi-icon sky"><i class="fa-solid fa-paper-plane"></i></span><div><strong th:text="${invitationCount}">0</strong><small>Tổng lời mời đã gửi</small></div></div>
+      <div class="tm-sent-kpi"><span class="tm-kpi-icon mint"><i class="fa-solid fa-circle-check"></i></span><div><strong th:text="${acceptedCount}">0</strong><small>Đã chấp nhận</small></div></div>
+      <div class="tm-sent-kpi"><span class="tm-kpi-icon amber"><i class="fa-solid fa-clock"></i></span><div><strong th:text="${pendingCount}">0</strong><small>Đang chờ phản hồi</small></div></div>
+      <div class="tm-sent-kpi"><span class="tm-kpi-icon rose"><i class="fa-solid fa-circle-xmark"></i></span><div><strong th:text="${declinedCount}">0</strong><small>Đã từ chối</small></div></div>
+      <div class="tm-sent-kpi"><span class="tm-kpi-icon violet"><i class="fa-solid fa-users"></i></span><div><strong th:text="${respondedCount}">0</strong><small>Đã phản hồi</small></div></div>
+    </section>
+
+    <form class="tm-sent-filters" method="get" th:action="@{/customer/invitations}" id="sentInvitationsFilter">
+      <label class="tm-sent-search"><i class="fa-solid fa-magnifying-glass"></i><input name="q" th:value="${q}" type="search" autocomplete="off" placeholder="Tìm tên Freelancer, kỹ năng, dự án..." aria-label="Tìm kiếm lời mời"></label>
+      <select name="jobId" aria-label="Chọn dự án"><option value="">Tất cả dự án</option><option th:each="j : ${sentJobs}" th:value="${j.id}" th:text="${j.title}" th:selected="${jobId != null and jobId.equals(j.id)}">Dự án</option></select>
+      <select name="status" aria-label="Chọn trạng thái"><option value="all" th:selected="${status == 'all'}">Tất cả trạng thái</option><option value="SENT" th:selected="${status == 'SENT'}">Đang chờ phản hồi</option><option value="ACCEPTED" th:selected="${status == 'ACCEPTED'}">Đã chấp nhận</option><option value="DECLINED" th:selected="${status == 'DECLINED'}">Đã từ chối</option></select>
+      <select name="sort" aria-label="Sắp xếp"><option value="newest" th:selected="${sort == 'newest'}">Mới nhất</option><option value="oldest" th:selected="${sort == 'oldest'}">Cũ nhất</option><option value="budget_high" th:selected="${sort == 'budget_high'}">Ngân sách cao nhất</option><option value="budget_low" th:selected="${sort == 'budget_low'}">Ngân sách thấp nhất</option></select>
+      <button type="submit" class="tm-sent-search-submit"><i class="fa-solid fa-magnifying-glass"></i><span>Tìm kiếm</span></button>
+      <a th:href="@{/customer/invitations}" class="tm-sent-reset"><i class="fa-solid fa-rotate-right"></i> Đặt lại lọc</a>
+    </form>
+    <div class="tm-sent-meta"><span th:text="|Hiển thị ${#lists.size(invitations)} trong ${totalFiltered} lời mời phù hợp|">Lời mời phù hợp</span><a th:href="@{/customer/talent}"><i class="fa-solid fa-plus"></i> Mời Freelancer mới</a></div>
+
+    <section class="tm-sent-table-shell" aria-label="Danh sách lời mời đã gửi">
+      <div class="tm-sent-table-scroll"><table class="tm-sent-table">
+        <thead><tr><th class="num">#</th><th>Freelancer</th><th>Dự án</th><th>Kỹ năng chính</th><th>Ngân sách dự án</th><th>Ngày gửi</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+        <tbody>
+          <tr th:each="inv, row : ${invitations}">
+            <td class="num" th:text="${(currentPage - 1) * 5 + row.index + 1}">1</td>
+            <td><div class="tm-sent-freelancer">
+              <a class="tm-sent-avatar" th:href="@{/customer/freelancers/{id}(id=${inv.freelancer.id})}">
+                <img th:if="${inv.freelancer.avatar != null and !inv.freelancer.avatar.isBlank()}" th:src="${inv.freelancer.avatar}" th:alt="${inv.freelancer.fullName}">
+                <span th:unless="${inv.freelancer.avatar != null and !inv.freelancer.avatar.isBlank()}" th:text="${inv.freelancer.fullName != null and !inv.freelancer.fullName.isBlank() ? #strings.substring(inv.freelancer.fullName,0,1) : 'F'}">F</span>
+              </a><div class="tm-sent-freelancer-info"><a th:href="@{/customer/freelancers/{id}(id=${inv.freelancer.id})}" class="tm-sent-name" th:text="${inv.freelancer.fullName}">Freelancer</a><small th:if="${inv.freelancer.rating != null}"><i class="fa-solid fa-star"></i><span th:text="${#numbers.formatDecimal(inv.freelancer.rating,1,1)}">4.9</span> <span>Đánh giá</span></small><small th:unless="${inv.freelancer.rating != null}">Chưa có đánh giá</small></div>
+            </div></td>
+            <td><div class="tm-sent-job"><a th:href="@{/jobs/{id}(id=${inv.job.id})}" th:text="${inv.job.title}">Tên công việc</a><div class="tm-sent-tags"><span th:if="${inv.job.category != null}" th:text="${inv.job.category}">Danh mục</span><span th:if="${inv.job.workType != null}" th:text="${inv.job.workType}">REMOTE</span></div></div></td>
+            <td><div class="tm-sent-skills" th:if="${inv.freelancer.skills != null and !inv.freelancer.skills.isBlank()}"><span th:each="skill,iter:${#strings.arraySplit(inv.freelancer.skills,',')}" th:if="${iter.index < 3}" th:text="${#strings.trim(skill)}">Kỹ năng</span></div><span class="tm-sent-unavailable" th:unless="${inv.freelancer.skills != null and !inv.freelancer.skills.isBlank()}">Chưa cập nhật</span></td>
+            <td class="tm-sent-money" th:text="${inv.job.budget != null ? #numbers.formatDecimal(inv.job.budget,0,'POINT',0,'COMMA') + 'đ' : 'Thỏa thuận'}">15.000.000đ</td>
+            <td class="tm-sent-date" th:text="${inv.createdAt != null ? #temporals.format(inv.createdAt,'dd/MM/yyyy HH:mm') : '—'}">10/10/2026 14:30</td>
+            <td><span class="tm-sent-status waiting" th:if="${inv.status == 'SENT'}"><i class="fa-regular fa-clock"></i> Đang chờ phản hồi</span><span class="tm-sent-status success" th:if="${inv.status == 'ACCEPTED'}"><i class="fa-solid fa-circle-check"></i> Đã chấp nhận</span><span class="tm-sent-status rejected" th:if="${inv.status == 'DECLINED'}"><i class="fa-solid fa-circle-xmark"></i> Đã từ chối</span><span class="tm-sent-status neutral" th:if="${inv.status != 'SENT' and inv.status != 'ACCEPTED' and inv.status != 'DECLINED'}" th:text="${inv.status}">Khác</span></td>
+            <td><div class="tm-sent-actions">
+              <a class="tm-sent-action" th:if="${projectByInvitation.containsKey(inv.id)}" th:href="@{/customer/messages(projectId=${projectByInvitation[inv.id]})}"><i class="fa-regular fa-message"></i> Nhắn tin</a>
+              <a class="tm-sent-action" th:unless="${projectByInvitation.containsKey(inv.id)}" th:href="@{/customer/freelancers/{id}(id=${inv.freelancer.id})}"><i class="fa-regular fa-user"></i> Xem hồ sơ</a>
+              <details class="tm-sent-more"><summary aria-label="Thêm thao tác"><i class="fa-solid fa-ellipsis"></i></summary><div class="tm-sent-menu"><a th:href="@{/customer/freelancers/{id}(id=${inv.freelancer.id})}"><i class="fa-regular fa-address-card"></i> Hồ sơ Freelancer</a><a th:href="@{/jobs/{id}(id=${inv.job.id})}"><i class="fa-solid fa-briefcase"></i> Xem công việc</a><a th:href="@{/customer/messages}" th:if="${projectByInvitation.containsKey(inv.id)}"><i class="fa-regular fa-message"></i> Mở hội thoại</a></div></details>
+            </div></td>
+          </tr>
+        </tbody>
+      </table></div>
+      <div class="tm-sent-empty" th:if="${#lists.isEmpty(invitations)}"><i class="fa-regular fa-paper-plane"></i><strong>Không tìm thấy lời mời</strong><p>Chưa có lời mời nào phù hợp với điều kiện lọc hiện tại.</p><a th:href="@{/customer/talent}">Khám phá Freelancer <i class="fa-solid fa-arrow-right"></i></a></div>
+    </section>
+    <nav class="tm-sent-pages" th:if="${totalPages > 1}" aria-label="Phân trang lời mời">
+      <a th:classappend="${currentPage == 1} ? 'disabled' : ''" th:href="@{/customer/invitations(page=${currentPage - 1},q=${q},jobId=${jobId},status=${status},sort=${sort})}"><i class="fa-solid fa-chevron-left"></i></a>
+      <a th:each="pageNum : ${pageNumbers}" th:classappend="${currentPage == pageNum} ? 'active' : ''" th:href="@{/customer/invitations(page=${pageNum},q=${q},jobId=${jobId},status=${status},sort=${sort})}" th:text="${pageNum}">1</a>
+      <a th:classappend="${currentPage == totalPages} ? 'disabled' : ''" th:href="@{/customer/invitations(page=${currentPage + 1},q=${q},jobId=${jobId},status=${status},sort=${sort})}"><i class="fa-solid fa-chevron-right"></i></a>
+    </nav>
+  </div>
+
+  <footer class="fm-footer client-same-footer tm-posted-footer">
+    <div class="fm-footer-top">
+      <div class="fm-footer-intro">
+        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
+        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
+      </div>
+      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
+      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
+      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
+      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
+    </div>
+    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
+  </footer>
+
+</main>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body>
+</html>

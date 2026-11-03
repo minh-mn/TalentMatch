@@ -1,0 +1,166 @@
+/* TalentMatch V106: Chuẩn hóa Sidebar + chiều rộng nội dung Freelancer.
+   Chuẩn: trang Hồ sơ cá nhân, sidebar 230px, header 64px, gutter 22px.
+   Chỉ kích hoạt với Sidebar Freelancer thực sự được render bởi Spring Security. */
+body:has(.tm104-fnav){
+  --tm106-sidebar:230px;
+  --tm106-header:64px;
+  --tm106-gutter:22px;
+  --tm-sidebar-width:230px!important;
+  --sidebar-width:230px!important;
+  background:#eef5ff;
+}
+html body:has(.tm104-fnav) .market-sidebar{
+  position:fixed!important;inset:0 auto 0 0!important;
+  width:var(--tm106-sidebar)!important;min-width:var(--tm106-sidebar)!important;
+  max-width:var(--tm106-sidebar)!important;height:100vh!important;height:100dvh!important;
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;
+  padding:8px 9px 0!important;box-sizing:border-box!important;background:#fff!important;border-right:1px solid #dfe7f4!important;
+  overflow:hidden!important;box-shadow:none!important;z-index:160!important;
+}
+html body:has(.tm104-fnav) .market-sidebar .market-brand-wrap{
+  flex:0 0 auto!important;margin:0 5px!important;padding:12px 6px 15px!important;
+  border-bottom:1px solid #e7edf6!important;
+}
+html body:has(.tm104-fnav) .market-sidebar .market-brand{
+  display:flex!important;align-items:center!important;gap:9px!important;
+  height:auto!important;min-height:34px!important;
+}
+html body:has(.tm104-fnav) .market-sidebar .market-brand img{
+  width:33px!important;height:33px!important;min-width:33px!important;object-fit:contain!important;
+}
+html body:has(.tm104-fnav) .market-sidebar .market-brand strong{font-size:16px!important;font-weight:800!important;color:#0b2a6f!important}
+html body:has(.tm104-fnav) .market-sidebar .market-brand small{font-size:7.5px!important;color:#697d9c!important;letter-spacing:.1px!important}
+html body:has(.tm104-fnav) .market-sidebar .tm33-sidebar-profile{
+  flex:0 0 auto!important;margin:4px 5px 5px!important;padding:9px 5px 13px!important;
+  border-bottom:1px solid #e7edf6!important;
+}
+html body:has(.tm104-fnav) .market-sidebar .tm33-profile-link{gap:10px!important;display:flex!important;align-items:center!important}
+html body:has(.tm104-fnav) .market-sidebar .tm33-profile-avatar{width:36px!important;height:36px!important;min-width:36px!important;font-size:16px!important}
+html body:has(.tm104-fnav) .market-sidebar .tm33-profile-name{min-width:0!important;flex:1!important}
+html body:has(.tm104-fnav) .market-sidebar .tm33-profile-name strong{font-size:12.5px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+html body:has(.tm104-fnav) .market-sidebar .market-side-section-auth{
+  display:block!important;flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;
+  overflow-x:hidden!important;padding:0 3px!important;margin:0!important;
+  scrollbar-width:thin;scrollbar-color:#dce5f3 transparent;
+}
+html body:has(.tm104-fnav) .market-sidebar .market-side-section-auth>.market-side-label,
+html body:has(.tm104-fnav) .market-sidebar .tm104-menu-label{
+  display:block!important;font-size:9px!important;line-height:1.3!important;
+  font-weight:800!important;color:#8392ac!important;letter-spacing:.25px!important;
+  margin:7px 0 3px!important;padding:7px 7px 4px!important;
+}
+html body:has(.tm104-fnav) .market-sidebar .tm104-fnav nav.market-side-nav{
+  display:flex!important;flex-direction:column!important;gap:4px!important;margin:0!important;padding:0 0 4px!important;
+}
+html body:has(.tm104-fnav) .market-sidebar .tm104-fnav nav.market-side-nav>a{
+  display:flex!important;align-items:center!important;gap:9px!important;
+  min-height:38px!important;width:100%!important;padding:8px 9px!important;margin:0!important;
+  border:0!important;border-radius:7px!important;text-decoration:none!important;box-shadow:none!important;
+  background:transparent!important;color:#111827!important;
+  font:700 14px/1.28 Inter,'Segoe UI',Arial,sans-serif!important;
+  white-space:nowrap!important;letter-spacing:-.18px!important;overflow:hidden!important;
+}
+html body:has(.tm104-fnav) .market-sidebar .tm104-fnav nav.market-side-nav>a[href*='/freelancer/quotes'],
+html body:has(.tm104-fnav) .market-sidebar .tm104-fnav nav.market-side-nav>a[href*='/freelancer/contracts'],
+html body:has(.tm104-fnav) .market-sidebar .tm104-fnav nav.market-side-nav>a[href*='/freelancer/earnings']{
+  font-size:12.7px!important;letter-spacing:-.25px!important;
+}
+html body:has(.tm104-fnav) .market-sidebar .tm104-fnav nav.market-side-nav>a:hover:not(.active){background:#f0f5ff!important;color:#0b2a6f!important}
+html body:has(.tm104-fnav) .market-sidebar .tm104-fnav nav.market-side-nav>a.active{
+  color:#fff!important;background:#2f6fed!important;box-shadow:0 4px 10px #246bfa20!important;
+}
+html body:has(.tm104-fnav) .market-sidebar .tm104-fnav .market-side-icon{
+  width:20px!important;min-width:20px!important;height:20px!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  flex:0 0 20px!important;color:inherit!important;margin:0!important;
+}
+html body:has(.tm104-fnav) .market-sidebar .tm104-fnav .market-side-icon i{font-size:17px!important;color:inherit!important}
+html body:has(.tm104-fnav) .market-sidebar .tm-freelancer-signout{
+  display:block!important;position:static!important;flex:0 0 auto!important;z-index:3!important;
+  background:#fff!important;border-top:1px solid #e7edf6!important;margin:0!important;padding:10px 6px 13px!important;
+}
+html body:has(.tm104-fnav) .market-sidebar .tm-freelancer-signout button{
+  width:100%!important;min-height:38px!important;display:flex!important;align-items:center!important;
+  justify-content:flex-start!important;gap:11px!important;border-radius:7px!important;
+  background:#fff0f0!important;border:1px solid #ffe0e0!important;color:#dc2626!important;
+  padding:9px 12px!important;font-size:13px!important;font-weight:700!important;
+}
+html body:has(.tm104-fnav) .market-sidebar .market-side-utility-auth,
+html body:has(.tm104-fnav) .market-sidebar .market-side-support-auth,
+html body:has(.tm104-fnav) .market-sidebar .market-side-bottom-auth{display:none!important}
+html body:has(.tm104-fnav) .fm-header{
+  position:fixed!important;top:0!important;left:var(--tm106-sidebar)!important;right:0!important;
+  width:calc(100% - var(--tm106-sidebar))!important;height:var(--tm106-header)!important;
+  min-height:var(--tm106-header)!important;box-sizing:border-box!important;
+  z-index:150!important;padding:0 22px!important;display:flex!important;
+  align-items:center!important;justify-content:space-between!important;gap:clamp(12px,1.7vw,26px)!important;
+  background:#fff!important;border-bottom:1px solid #e3ebf7!important;
+}
+html body:has(.tm104-fnav) .fm-header .fm-brand{display:none!important}
+html body:has(.tm104-fnav) .fm-header .fm-header-search{
+  flex:1 1 380px!important;min-width:160px!important;max-width:540px!important;
+  height:42px!important;margin:0!important;
+}
+html body:has(.tm104-fnav) .fm-header .fm-header-links{
+  display:flex!important;flex:1 1 auto!important;min-width:0!important;justify-content:space-evenly!important;gap:clamp(9px,1.3vw,22px)!important;
+}
+html body:has(.tm104-fnav) .fm-header .fm-header-links a{font-size:12.5px!important;font-weight:800!important;white-space:nowrap!important}
+html body:has(.tm104-fnav) .fm-header .fm-header-user{display:flex!important;flex:0 0 auto!important;gap:10px!important;align-items:center!important;min-width:0!important}
+html body:has(.tm104-fnav) .fm-header .fm-header-user>span:not(.fm-mini-avatar){font-size:12.5px!important;max-width:145px!important;text-overflow:ellipsis!important;overflow:hidden!important;white-space:nowrap!important}
+html body:has(.tm104-fnav) .fm-main,
+html body:has(.tm104-fnav) .market-main{
+  margin-left:var(--tm106-sidebar)!important;margin-top:0!important;
+  padding-top:var(--tm106-header)!important;width:calc(100% - var(--tm106-sidebar))!important;
+  min-width:0!important;max-width:none!important;box-sizing:border-box!important;
+}
+/* Một gutter cho các trang như Hồ sơ cá nhân, không co vùng danh sách/bộ lọc. */
+html body:has(.tm104-fnav) .fm-main>.fm-content,
+html body:has(.tm104-fnav) .fm-main>.tp41-content,
+html body:has(.tm104-fnav) .fm-main>.tm37-content,
+html body:has(.tm104-fnav) .fm-main>.ta87-content,
+html body:has(.tm104-fnav) .fm-main>.ti88-content,
+html body:has(.tm104-fnav) .fm-main>.tm90-wrap,
+html body:has(.tm104-fnav) .fm-main>.tm89-content,
+html body:has(.tm104-fnav) .fm-main>.th93-shell,
+html body:has(.tm104-fnav) .fm-main>.rp92-shell,
+html body:has(.tm104-fnav) .fm-main>.tm104-content,
+html body:has(.tm104-fnav) .fm-main>.tm104-work-shell,
+html body:has(.tm104-fnav) .fm-main>.jb-wrap,
+html body:has(.tm104-fnav) .fm-main>.tm105-shell,
+html body:has(.tm104-fnav) .market-main>.tm44-shell,
+html body:has(.tm104-fnav) .market-main>.market-page-shell{
+  width:100%!important;max-width:1800px!important;margin-left:auto!important;margin-right:auto!important;
+  padding-left:var(--tm106-gutter)!important;padding-right:var(--tm106-gutter)!important;
+  box-sizing:border-box!important;
+}
+html body:has(.tm104-fnav) .fm-main>.fm-content,
+html body:has(.tm104-fnav) .fm-main>.tm105-shell{
+  padding-top:16px!important;
+}
+html body:has(.tm104-fnav) .market-main>.tm44-shell{padding-top:15px!important}
+html body:has(.tm104-fnav) .market-topbar{left:var(--tm106-sidebar)!important;width:calc(100% - var(--tm106-sidebar))!important}
+html body:has(.tm104-fnav)>footer.fm-footer,
+html body:has(.tm104-fnav)>footer.tm44-profile-footer{margin-left:var(--tm106-sidebar)!important;width:calc(100% - var(--tm106-sidebar))!important}
+/* Trang profile và banner: giữ vùng nội dung thẳng hàng, không thêm khoảng trống nhân đôi. */
+html body:has(.tm104-fnav) .fm-main>.tm105-shell{padding-bottom:22px!important}
+@media (max-width:1080px) and (min-width:901px){
+  html body:has(.tm104-fnav) .fm-header .fm-header-links a:nth-child(n+3){display:none!important}
+  html body:has(.tm104-fnav) .fm-header .fm-header-search{flex-basis:240px!important}
+}
+@media (max-width:900px){
+  html body:has(.tm104-fnav) .market-sidebar{display:none!important}
+  html body:has(.tm104-fnav) .fm-header,
+  html body:has(.tm104-fnav) .market-topbar{left:0!important;width:100%!important}
+  html body:has(.tm104-fnav) .fm-main,
+  html body:has(.tm104-fnav) .market-main{margin-left:0!important;width:100%!important}
+  html body:has(.tm104-fnav)>footer.fm-footer,
+  html body:has(.tm104-fnav)>footer.tm44-profile-footer{margin-left:0!important;width:100%!important}
+  html body:has(.tm104-fnav) .fm-main>.fm-content,
+  html body:has(.tm104-fnav) .fm-main>.tm105-shell,
+  html body:has(.tm104-fnav) .market-main>.tm44-shell{padding-left:14px!important;padding-right:14px!important}
+}
+@media (max-width:660px){
+  html body:has(.tm104-fnav) .fm-header .fm-header-links{display:none!important}
+  html body:has(.tm104-fnav) .fm-header{padding:0 12px!important;gap:8px!important}
+  html body:has(.tm104-fnav) .fm-header .fm-header-user>span:not(.fm-mini-avatar){display:none!important}
+}

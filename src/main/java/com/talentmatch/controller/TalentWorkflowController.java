@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -18,6 +19,8 @@ public class TalentWorkflowController {
  private final JobRepository jobs;private final ProjectService projectService;
  private final JobInvitationRepository invites;private final JobQuestionRepository questions;
  private final TalentReviewRepository reviews;private final TalentReportRepository reports;
+ @Autowired private SavedFreelancerRepository savedFreelancers;
+ @Autowired private MatchingService matchingService;
  public TalentWorkflowController(UserService users,UserRepository userRepo,JobService jobService,JobRepository jobs,
  ProjectService projectService,JobInvitationRepository invites,JobQuestionRepository questions,TalentReviewRepository reviews,TalentReportRepository reports){
  this.users=users;this.userRepo=userRepo;this.jobService=jobService;this.jobs=jobs;this.projectService=projectService;
@@ -28,40 +31,199 @@ public class TalentWorkflowController {
  if(!j.getCustomer().getId().equals(u.getId()))throw new IllegalArgumentException("Bạn không sở hữu công việc này.");return j;}
  private static String norm(String v){return v==null?"":v.trim().toLowerCase(Locale.ROOT);}
  @GetMapping("/customer/talent")
- public String talent(Authentication a,Model m,@RequestParam(required=false)String q,@RequestParam(required=false)String field,
- @RequestParam(required=false)Integer minExperience,@RequestParam(required=false)Long jobId){
- User u=me(a);customer(u);List<Job> mine=jobs.findByCustomerOrderByCreatedAtDesc(u);
- Job selected=jobId==null?null:ownedJob(jobId,u);
- List<Map<String,Object>> options=new ArrayList<>();
- for(User f:userRepo.findByRoleAndLockedFalseOrderByCreatedAtDesc(Role.FREELANCER)){
-  if(!Boolean.TRUE.equals(f.getEnabled()))continue;
-  if(!norm(q).isEmpty()&&!norm(f.getFullName()+" "+f.getSkills()+" "+f.getProfessionalTitle()).contains(norm(q)))continue;
-  if(!norm(field).isEmpty()&&!norm(f.getField()).contains(norm(field)))continue;
-  if(minExperience!=null&&(f.getExperienceYears()==null||f.getExperienceYears()<minExperience))continue;
-  int score=0;List<String> why=new ArrayList<>();
-  if(selected!=null){
-   Set<String> target=Arrays.stream(Optional.ofNullable(selected.getRequiredSkills()).orElse("").split(","))
-     .map(TalentWorkflowController::norm).filter(v->!v.isBlank()).collect(Collectors.toSet());
-   String skills=norm(f.getSkills());int matches=0;
-   for(String skill:target){if(skills.contains(skill))matches++;}
-   if(matches>0){score+=Math.min(55,(int)Math.round(55.0*matches/Math.max(1,target.size())));why.add("Khớp "+matches+"/"+target.size()+" kỹ năng");}
-   if(norm(selected.getCategory()).equals(norm(f.getField()))){score+=20;why.add("Đúng lĩnh vực");}
-   int years=f.getExperienceYears()==null?0:f.getExperienceYears();
-   if(years>=5){score+=10;why.add("Từ 5 năm kinh nghiệm");}
-   else if(years>=2){score+=6;why.add("Kinh nghiệm phù hợp");}
-   // Approximate cost: hourly rate * 4 billable hours/day * project estimated duration.
-   // 4 hours/day is a DEMO scoring assumption, not a contractual quotation.
-   if(f.getHourlyRate()!=null && selected.getBudget()!=null){
-     java.math.BigDecimal estimate=f.getHourlyRate().multiply(java.math.BigDecimal.valueOf(4L * Math.max(1,Optional.ofNullable(selected.getEstimatedDurationDays()).orElse(14))));
-     if(estimate.compareTo(selected.getBudget())<=0){score+=10;why.add("Chi phí ước tính trong ngân sách (giả định 4 giờ/ngày)");}
-   }
-   if(Boolean.TRUE.equals(f.getAvailable())){score+=5;why.add("Sẵn sàng nhận việc");}
-  }else{score=(Boolean.TRUE.equals(f.getAvailable())?20:0)+(int)Math.min(40,Math.max(0,Optional.ofNullable(f.getExperienceYears()).orElse(0))*8);why.add("Chọn công việc để có điểm phù hợp cụ thể");}
-  Map<String,Object> row=new HashMap<>();row.put("user",f);row.put("score",score);row.put("reason",String.join(" · ",why));options.add(row);
+ public String talent(Authentication auth, Model model,
+         @RequestParam(defaultValue = "") String q,
+         @RequestParam(defaultValue = "") String field,
+         @RequestParam(defaultValue = "") String skill,
+         @RequestParam(required = false) Integer minExperience,
+         @RequestParam(defaultValue = "") String workType,
+         @RequestParam(required = false) java.math.BigDecimal rateFrom,
+         @RequestParam(required = false) java.math.BigDecimal rateTo,
+         @RequestParam(defaultValue = "match") String sort,
+         @RequestParam(defaultValue = "false") boolean onlySaved,
+         @RequestParam(defaultValue = "1") int page,
+         @RequestParam(required = false) Long jobId) {
+     User customerUser = me(auth);
+     customer(customerUser);
+     List<Job> myJobs = jobs.findByCustomerOrderByCreatedAtDesc(customerUser);
+     List<Job> openJobs = myJobs.stream().filter(j -> j.getStatus() == JobStatus.OPEN).toList();
+     Job selected = jobId == null ? (openJobs.isEmpty() ? null : openJobs.get(0)) : ownedJob(jobId, customerUser);
+     String keyword = norm(q);
+     String wantedSkill = norm(skill);
+     String wantedField = norm(field);
+     String wantedWorkType = Set.of("REMOTE", "HYBRID", "ONSITE").contains(workType) ? workType : "";
+     String order = Set.of("match", "rating", "rateAsc", "rateDesc", "experience").contains(sort) ? sort : "match";
+     Set<Long> savedIds = savedFreelancers.findByCustomer(customerUser).stream()
+             .map(x -> x.getFreelancer().getId()).collect(Collectors.toSet());
+     List<Map<String, Object>> candidates = new ArrayList<>();
+     List<User> availableProfiles = userRepo.findByRoleAndLockedFalseOrderByCreatedAtDesc(Role.FREELANCER)
+             .stream().filter(f -> Boolean.TRUE.equals(f.getEnabled())).toList();
+     for (User f : availableProfiles) {
+         if (!keyword.isBlank() && !norm(f.getFullName()+" "+f.getProfessionalTitle()+" "+f.getSkills()+" "+f.getBio()).contains(keyword)) continue;
+         if (!wantedSkill.isBlank() && !norm(f.getSkills()).contains(wantedSkill)) continue;
+         if (!wantedField.isBlank() && !norm(f.getField()).contains(wantedField)) continue;
+         if (minExperience != null && Optional.ofNullable(f.getExperienceYears()).orElse(0) < minExperience) continue;
+         if (!wantedWorkType.isBlank() && !wantedWorkType.equals(f.getWorkPreference())) continue;
+         if (rateFrom != null && (f.getHourlyRate() == null || f.getHourlyRate().compareTo(rateFrom) < 0)) continue;
+         if (rateTo != null && (f.getHourlyRate() == null || f.getHourlyRate().compareTo(rateTo) > 0)) continue;
+         if (onlySaved && !savedIds.contains(f.getId())) continue;
+         MatchingService.Recommendation match = selected == null ? null : matchingService.recommend(selected, f);
+         int score = match == null ? 0 : match.score();
+         Map<String, Object> row = new HashMap<>();
+         row.put("user", f);
+         row.put("score", score);
+         row.put("reason", match == null ? "Chọn công việc đang tuyển để xem mức độ phù hợp" : match.reason());
+         row.put("saved", savedIds.contains(f.getId()));
+         candidates.add(row);
+     }
+     Comparator<Map<String, Object>> byRating = Comparator.comparingDouble(
+             (Map<String, Object> r) -> Optional.ofNullable(((User) r.get("user")).getRating()).orElse(0.0));
+     Comparator<Map<String, Object>> byRate = Comparator.comparing(
+             (Map<String, Object> r) -> ((User) r.get("user")).getHourlyRate(),
+             Comparator.nullsLast(Comparator.naturalOrder()));
+     Comparator<Map<String, Object>> byExperience = Comparator.comparingInt(
+             (Map<String, Object> r) -> Optional.ofNullable(((User) r.get("user")).getExperienceYears()).orElse(0));
+     switch (order) {
+         case "rating" -> candidates.sort(byRating.reversed());
+         case "rateAsc" -> candidates.sort(byRate);
+         case "rateDesc" -> candidates.sort(Comparator.comparing(
+                 (Map<String, Object> r) -> ((User) r.get("user")).getHourlyRate(),
+                 Comparator.nullsLast(Comparator.reverseOrder())));
+         case "experience" -> candidates.sort(byExperience.reversed());
+         default -> candidates.sort(Comparator.comparingInt((Map<String,Object> r) -> (int)r.get("score"))
+                     .thenComparing(byRating).reversed());
+     }
+     int size = 5;
+     int totalPages = Math.max(1, (candidates.size() + size - 1) / size);
+     int currentPage = Math.max(1, Math.min(page, totalPages));
+     int from = (currentPage - 1) * size;
+     List<Map<String,Object>> visible = candidates.subList(from, Math.min(from + size, candidates.size()));
+     List<Map<String,Object>> recommended = candidates.stream().limit(3).toList();
+     List<String> fields = availableProfiles.stream().map(User::getField)
+             .filter(Objects::nonNull).filter(v -> !v.isBlank()).distinct().sorted().toList();
+     model.addAttribute("suggestions", visible);
+     model.addAttribute("recommended", recommended);
+     model.addAttribute("jobs", openJobs);
+     model.addAttribute("selected", selected);
+     model.addAttribute("q", q.trim());
+     model.addAttribute("field", field.trim());
+     model.addAttribute("skill", skill.trim());
+     model.addAttribute("minExperience", minExperience);
+     model.addAttribute("workType", wantedWorkType);
+     model.addAttribute("rateFrom", rateFrom);
+     model.addAttribute("rateTo", rateTo);
+     model.addAttribute("sort", order);
+     model.addAttribute("onlySaved", onlySaved);
+     model.addAttribute("fields", fields);
+     model.addAttribute("totalCandidates", availableProfiles.size());
+     model.addAttribute("filteredCount", candidates.size());
+     model.addAttribute("savedCount", savedIds.size());
+     model.addAttribute("invitedCount", invites.findByCustomerOrderByCreatedAtDesc(customerUser).stream()
+             .map(inv -> inv.getFreelancer().getId()).distinct().count());
+     model.addAttribute("readyCount", availableProfiles.stream().filter(f -> Boolean.TRUE.equals(f.getAvailable())).count());
+     model.addAttribute("currentPage", currentPage);
+     model.addAttribute("totalPages", totalPages);
+     int startPage = Math.max(1, currentPage - 2);
+     int endPage = Math.min(totalPages, startPage + 4);
+     startPage = Math.max(1, endPage - 4);
+     model.addAttribute("pageNumbers", java.util.stream.IntStream.rangeClosed(startPage, endPage).boxed().toList());
+     return "customer/talent";
  }
- options.sort((x,y)->Integer.compare((int)y.get("score"),(int)x.get("score")));
- m.addAttribute("suggestions",options);m.addAttribute("jobs",mine);m.addAttribute("selected",selected);
- m.addAttribute("q",q);m.addAttribute("field",field);m.addAttribute("minExperience",minExperience);return "customer/talent";
+ @GetMapping("/customer/favorites")
+ @Transactional(readOnly = true)
+ public String favoriteFreelancers(Authentication auth, Model model,
+        @RequestParam(defaultValue = "") String q,
+        @RequestParam(defaultValue = "all") String availability,
+        @RequestParam(defaultValue = "") String field,
+        @RequestParam(defaultValue = "all") String rate,
+        @RequestParam(defaultValue = "newest") String sort,
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(required = false) Long jobId) {
+     User client = me(auth); customer(client);
+     List<SavedFreelancer> saved = savedFreelancers.findByCustomer(client);
+     List<Job> openJobs = jobs.findByCustomerOrderByCreatedAtDesc(client).stream()
+             .filter(j -> j.getStatus() == JobStatus.OPEN).toList();
+     Job selectedJob = jobId == null ? (openJobs.isEmpty() ? null : openJobs.get(0)) :
+             openJobs.stream().filter(j -> j.getId().equals(jobId)).findFirst().orElse(null);
+     String keyword = norm(q), wantedField = norm(field);
+     List<SavedFreelancer> results = saved.stream().filter(record -> {
+         User f = record.getFreelancer();
+         if (f.getRole()!=Role.FREELANCER || Boolean.TRUE.equals(f.getLocked()) || !Boolean.TRUE.equals(f.getEnabled())) return false;
+         if (!keyword.isEmpty() && !norm(f.getFullName()+" "+f.getProfessionalTitle()+" "+f.getSkills()+" "+f.getBio()).contains(keyword)) return false;
+         if (!wantedField.isEmpty() && !norm(f.getField()).contains(wantedField) && !norm(f.getSkills()).contains(wantedField)) return false;
+         if ("online".equals(availability) && !Boolean.TRUE.equals(f.getAvailable())) return false;
+         if ("offline".equals(availability) && Boolean.TRUE.equals(f.getAvailable())) return false;
+         java.math.BigDecimal value=f.getHourlyRate();
+         if ("under200".equals(rate) && (value==null || value.compareTo(new java.math.BigDecimal("200000"))>=0))return false;
+         if ("200to300".equals(rate) && (value==null || value.compareTo(new java.math.BigDecimal("200000"))<0 || value.compareTo(new java.math.BigDecimal("300000"))>0))return false;
+         if ("300to400".equals(rate) && (value==null || value.compareTo(new java.math.BigDecimal("300000"))<0 || value.compareTo(new java.math.BigDecimal("400000"))>0))return false;
+         if ("over400".equals(rate) && (value==null || value.compareTo(new java.math.BigDecimal("400000"))<=0))return false;
+         return true;
+     }).collect(Collectors.toCollection(ArrayList::new));
+     Comparator<SavedFreelancer> byRate=Comparator.comparing(r->r.getFreelancer().getHourlyRate(),Comparator.nullsLast(Comparator.naturalOrder()));
+     switch(sort) {
+         case "rateAsc" -> results.sort(byRate);
+         case "rateDesc" -> results.sort(byRate.reversed());
+         case "rating" -> results.sort(Comparator.comparingDouble((SavedFreelancer r)->Optional.ofNullable(r.getFreelancer().getRating()).orElse(0.0)).reversed());
+         default -> results.sort(Comparator.comparing(SavedFreelancer::getCreatedAt,Comparator.nullsLast(Comparator.reverseOrder())));
+     }
+     int pages=Math.max(1,(results.size()+4)/5),current=Math.max(1,Math.min(page,pages)),start=(current-1)*5;
+     model.addAttribute("favorites",results.subList(start,Math.min(results.size(),start+5)));
+     model.addAttribute("totalSaved",saved.size());model.addAttribute("filteredCount",results.size());
+     model.addAttribute("onlineCount",saved.stream().filter(r->Boolean.TRUE.equals(r.getFreelancer().getAvailable())).count());
+     model.addAttribute("q",q);model.addAttribute("availability",availability);model.addAttribute("field",field);
+     model.addAttribute("rate",rate);model.addAttribute("sort",sort);model.addAttribute("page",current);model.addAttribute("pages",pages);
+     model.addAttribute("openJobs",openJobs);model.addAttribute("selectedJob",selectedJob);
+     model.addAttribute("fields",saved.stream().map(r->r.getFreelancer().getField()).filter(Objects::nonNull).filter(f->!f.isBlank()).distinct().sorted().toList());
+     return "customer/favorites";
+ }
+ @PostMapping("/customer/talent/favorites/{freelancerId}") @Transactional
+ public String toggleSavedFreelancer(Authentication auth, @PathVariable Long freelancerId,
+         @RequestParam(required = false) Long jobId,
+         @RequestParam(defaultValue = "") String q,
+         @RequestParam(defaultValue = "") String skill,
+         @RequestParam(defaultValue = "") String field,
+         @RequestParam(defaultValue = "match") String sort,
+         @RequestParam(defaultValue = "") String workType,
+         @RequestParam(required = false) Integer minExperience,
+         @RequestParam(required = false) java.math.BigDecimal rateFrom,
+         @RequestParam(required = false) java.math.BigDecimal rateTo,
+         @RequestParam(defaultValue = "false") boolean onlySaved,
+         @RequestParam(defaultValue = "1") int page,
+         @RequestParam(defaultValue = "false") boolean backToProfile,
+         @RequestParam(defaultValue = "false") boolean backToFavorites,
+         RedirectAttributes ra) {
+     User customerUser = me(auth);
+     customer(customerUser);
+     User freelancer = userRepo.findById(freelancerId).orElseThrow(() ->
+             new IllegalArgumentException("Không tìm thấy Freelancer."));
+     if (freelancer.getRole() != Role.FREELANCER || Boolean.TRUE.equals(freelancer.getLocked()))
+         throw new IllegalArgumentException("Freelancer không khả dụng.");
+     Optional<SavedFreelancer> existing = savedFreelancers.findByCustomerAndFreelancer(customerUser, freelancer);
+     if (existing.isPresent()) {
+         savedFreelancers.delete(existing.get());
+         ra.addFlashAttribute("success", "Đã bỏ lưu Freelancer.");
+     } else {
+         SavedFreelancer record = new SavedFreelancer();
+         record.setCustomer(customerUser);
+         record.setFreelancer(freelancer);
+         savedFreelancers.save(record);
+         ra.addFlashAttribute("success", "Đã lưu Freelancer yêu thích.");
+     }
+     if (backToProfile) return "redirect:/customer/freelancers/" + freelancerId;
+     if (backToFavorites) return "redirect:/customer/favorites";
+     if (jobId != null) ra.addAttribute("jobId", jobId);
+     if (!q.isBlank()) ra.addAttribute("q", q);
+     if (!skill.isBlank()) ra.addAttribute("skill", skill);
+     if (!field.isBlank()) ra.addAttribute("field", field);
+     if (!sort.isBlank()) ra.addAttribute("sort", sort);
+     if (!workType.isBlank()) ra.addAttribute("workType", workType);
+     if (minExperience != null) ra.addAttribute("minExperience", minExperience);
+     if (rateFrom != null) ra.addAttribute("rateFrom", rateFrom);
+     if (rateTo != null) ra.addAttribute("rateTo", rateTo);
+     if (onlySaved) ra.addAttribute("onlySaved", "true");
+     if (page > 1) ra.addAttribute("page", page);
+     return "redirect:/customer/talent";
  }
  @PostMapping("/customer/invitations") @Transactional
  public String invite(Authentication a,@RequestParam Long jobId,@RequestParam Long freelancerId,@RequestParam(required=false)String message,RedirectAttributes ra){
@@ -73,7 +235,77 @@ public class TalentWorkflowController {
   i.setJob(job);i.setCustomer(u);i.setFreelancer(f);i.setStatus("SENT");i.setMessage(message==null?"Mời bạn xem công việc và gửi Proposal.":message.trim());invites.save(i);
   ra.addFlashAttribute("success","Đã gửi lời mời đến "+f.getFullName());
  }catch(Exception e){ra.addFlashAttribute("error",e.getMessage());}return "redirect:/customer/invitations";}
- @GetMapping("/customer/invitations") public String myInvites(Authentication a,Model model){User u=me(a);customer(u);model.addAttribute("invitations",invites.findByCustomerOrderByCreatedAtDesc(u));return "customer/invitations";}
+ @GetMapping("/customer/invitations")
+ @Transactional(readOnly = true)
+ public String myInvites(Authentication auth, Model model,
+        @RequestParam(defaultValue = "") String q,
+        @RequestParam(required = false) Long jobId,
+        @RequestParam(defaultValue = "all") String status,
+        @RequestParam(defaultValue = "newest") String sort,
+        @RequestParam(defaultValue = "1") int page) {
+    User owner = me(auth);
+    customer(owner);
+    List<JobInvitation> all = invites.findByCustomerOrderByCreatedAtDesc(owner);
+    List<Job> ownJobs = jobs.findByCustomerOrderByCreatedAtDesc(owner);
+    String chosenStatus = Set.of("all", "SENT", "ACCEPTED", "DECLINED").contains(status) ? status : "all";
+    String chosenSort = Set.of("newest", "oldest", "budget_high", "budget_low").contains(sort) ? sort : "newest";
+    Long selectedJob = jobId != null && ownJobs.stream().anyMatch(j -> jobId.equals(j.getId())) ? jobId : null;
+    String keyword = norm(q);
+    List<JobInvitation> result = all.stream().filter(inv -> {
+        if (selectedJob != null && !selectedJob.equals(inv.getJob().getId())) return false;
+        if (!"all".equals(chosenStatus) && !chosenStatus.equals(inv.getStatus())) return false;
+        if (keyword.isBlank()) return true;
+        String skills = inv.getFreelancer().getSkills();
+        return norm(inv.getFreelancer().getFullName() + " " + inv.getFreelancer().getProfessionalTitle()
+                + " " + skills + " " + inv.getJob().getTitle() + " " + inv.getJob().getCategory()).contains(keyword);
+    }).collect(Collectors.toCollection(ArrayList::new));
+    if ("oldest".equals(chosenSort)) {
+        result.sort(Comparator.comparing(JobInvitation::getCreatedAt, Comparator.nullsLast(Comparator.naturalOrder())));
+    } else if ("budget_high".equals(chosenSort)) {
+        result.sort(Comparator.comparing((JobInvitation i) -> i.getJob().getBudget(),
+                Comparator.nullsLast(Comparator.reverseOrder())));
+    } else if ("budget_low".equals(chosenSort)) {
+        result.sort(Comparator.comparing((JobInvitation i) -> i.getJob().getBudget(),
+                Comparator.nullsLast(Comparator.naturalOrder())));
+    } else {
+        result.sort(Comparator.comparing(JobInvitation::getCreatedAt,
+                Comparator.nullsLast(Comparator.reverseOrder())));
+    }
+    int pageSize = 5;
+    int totalPages = Math.max(1, (result.size() + pageSize - 1) / pageSize);
+    int currentPage = Math.max(1, Math.min(page, totalPages));
+    int from = (currentPage - 1) * pageSize;
+    List<JobInvitation> visible = result.subList(from, Math.min(from + pageSize, result.size()));
+    // A chat thread exists only after the Freelancer has been selected for a real project.
+    Map<Long, Long> projectByInvitation = new HashMap<>();
+    List<Project> customerProjects = projectService.forCustomer(owner);
+    for (JobInvitation invitation : visible) {
+        customerProjects.stream().filter(project ->
+                project.getFreelancer().getId().equals(invitation.getFreelancer().getId()) &&
+                project.getApplication().getJob().getId().equals(invitation.getJob().getId()))
+                .findFirst().ifPresent(project -> projectByInvitation.put(invitation.getId(), project.getId()));
+    }
+    model.addAttribute("invitations", visible);
+    model.addAttribute("projectByInvitation", projectByInvitation);
+    model.addAttribute("invitationCount", all.size());
+    model.addAttribute("acceptedCount", all.stream().filter(i -> "ACCEPTED".equals(i.getStatus())).count());
+    model.addAttribute("pendingCount", all.stream().filter(i -> "SENT".equals(i.getStatus())).count());
+    model.addAttribute("declinedCount", all.stream().filter(i -> "DECLINED".equals(i.getStatus())).count());
+    model.addAttribute("respondedCount", all.stream().filter(i -> !"SENT".equals(i.getStatus())).count());
+    model.addAttribute("sentJobs", ownJobs);
+    model.addAttribute("q", q.trim());
+    model.addAttribute("jobId", selectedJob);
+    model.addAttribute("status", chosenStatus);
+    model.addAttribute("sort", chosenSort);
+    model.addAttribute("totalFiltered", result.size());
+    model.addAttribute("currentPage", currentPage);
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("pageNumbers", java.util.stream.IntStream.rangeClosed(
+            Math.max(1, Math.min(currentPage - 2, totalPages - 4)),
+            Math.min(totalPages, Math.max(5, currentPage + 2))).boxed().toList());
+    return "customer/invitations";
+ }
+
  @GetMapping("/freelancer/invitations")
  public String freelancerInvites(Authentication a, Model m,
       @RequestParam(defaultValue="") String q,

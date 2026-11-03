@@ -1,4 +1,130 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/common :: head('Hợp đồng & dự án')}"></head>
-<body class="market-body client-workspace client-v52-page"><aside th:replace="~{fragments/common :: marketSidebar('projects')}"></aside><header th:replace="~{fragments/common :: marketClientTopbar()}"></header><div th:replace="~{fragments/common :: flash}"></div><main class="market-main client-main"><div class="client-shell"><div class="client-breadcrumb">Workspace / Dự án</div><div class="client-page-heading"><div><span class="client-eyebrow">QUẢN LÝ THỰC HIỆN</span><h1>Hợp đồng <span>& dự án</span></h1><p>Theo dõi hợp đồng, milestone, thanh toán, bàn giao và nghiệm thu.</p></div><a class="client-btn primary" th:href="@{/customer/jobs/new}"><i class="fa-solid fa-plus"></i> Đăng công việc</a></div>
-    <div class="client-cards"><article class="client-job-card" th:each="p:${projects}"><div class="client-job-leading"><span class="client-job-icon green"><i class="fa-solid fa-file-contract"></i></span><div><span class="client-tag" th:text="${p.application.job.category}">Lĩnh vực</span><h2><a th:href="@{/projects/{id}(id=${p.id})}" th:text="${p.application.job.title}">Dự án</a></h2><p>Freelancer: <b th:text="${p.freelancer.fullName}">Tên</b></p><div class="client-job-tags"><span th:text="${p.status}">IN_PROGRESS</span><span th:text="${p.isAgreementSigned() ? 'Đã xác nhận 2 bên':'Chờ xác nhận hợp đồng'}">Hợp đồng</span><span th:text="${#temporals.format(p.createdAt,'dd/MM/yyyy')}">Ngày</span></div></div></div><div class="client-job-right"><strong th:text="${#numbers.formatDecimal(p.totalPrice,0,'POINT',0,'COMMA')}+'₫'">0</strong><span class="client-badge" th:text="${p.status}">Trạng thái</span><a class="client-btn primary" th:href="@{/projects/{id}(id=${p.id})}">Mở không gian dự án</a></div></article></div><div class="client-empty large" th:if="${#lists.isEmpty(projects)}"><i class="fa-regular fa-folder-open"></i><b>Chưa có hợp đồng</b><p>Chọn một proposal phù hợp để bắt đầu dự án.</p><a class="client-btn primary" th:href="@{/customer/applicants}">Duyệt ứng viên →</a></div>
-</div></main><script th:replace="~{fragments/common :: scripts}"></script></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Hợp đồng & Dự án')}"></head>
+<body class="market-body client-workspace client-v52-page cd-dashboard tm-client-posted-v94 tm-client-contracts-v99">
+<link rel="stylesheet" th:href="@{/css/customer-footer-banner-v72.css(v=72)}">
+<link rel="stylesheet" th:href="@{/css/customer-posted-v94.css(v=94)}">
+<link rel="stylesheet" th:href="@{/css/customer-client-v95.css(v=95)}">
+<link rel="stylesheet" th:href="@{/css/customer-contracts-v99.css(v=99)}">
+<aside th:replace="~{fragments/common :: marketSidebar('projects')}"></aside>
+<header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="market-main client-main tm-posted-main tm-contracts-main">
+  <div class="tm-posted-shell tm-contracts-shell">
+    <section class="tm-contracts-hero" aria-label="Hợp đồng và dự án">
+      <img th:src="@{/images/talentmatch-client-contracts-banner-v99.png}" alt="Quản lý hợp đồng và dự án" width="1920" height="360">
+    </section>
+
+    <div class="tm-contracts-layout">
+      <div class="tm-contracts-left">
+        <section class="tm-contracts-stats" aria-label="Thống kê dự án">
+          <a class="tm-contracts-stat" th:href="@{/customer/projects(status='all')}"><span class="tm-contracts-stat-icon blue"><i class="fa-solid fa-briefcase"></i></span><span><strong th:text="${allCount}">0</strong><small>Tổng dự án</small></span></a>
+          <a class="tm-contracts-stat" th:href="@{/customer/projects(status='running')}"><span class="tm-contracts-stat-icon green"><i class="fa-solid fa-play"></i></span><span><strong th:text="${runningCount}">0</strong><small>Đang thực hiện</small></span></a>
+          <a class="tm-contracts-stat" th:href="@{/customer/projects(status='waiting')}"><span class="tm-contracts-stat-icon amber"><i class="fa-solid fa-clock"></i></span><span><strong th:text="${waitingCount}">0</strong><small>Chờ xử lý</small></span></a>
+          <a class="tm-contracts-stat" th:href="@{/customer/projects(status='completed')}"><span class="tm-contracts-stat-icon cyan"><i class="fa-solid fa-circle-check"></i></span><span><strong th:text="${completedCount}">0</strong><small>Hoàn thành</small></span></a>
+          <a class="tm-contracts-stat" th:href="@{/customer/projects(status='cancelled')}"><span class="tm-contracts-stat-icon rose"><i class="fa-solid fa-xmark"></i></span><span><strong th:text="${cancelledCount}">0</strong><small>Đã hủy</small></span></a>
+        </section>
+
+        <nav class="tm-contracts-tabs" aria-label="Lọc nhanh trạng thái hợp đồng">
+          <a th:href="@{/customer/projects(status='all',q=${q},category=${category},sort=${sort})}" th:classappend="${status == 'all'} ? 'active' : ''">Tất cả (<span th:text="${allCount}">0</span>)</a>
+          <a th:href="@{/customer/projects(status='running',q=${q},category=${category},sort=${sort})}" th:classappend="${status == 'running'} ? 'active' : ''">Đang thực hiện (<span th:text="${runningCount}">0</span>)</a>
+          <a th:href="@{/customer/projects(status='waiting',q=${q},category=${category},sort=${sort})}" th:classappend="${status == 'waiting'} ? 'active' : ''">Chờ xử lý (<span th:text="${waitingCount}">0</span>)</a>
+          <a th:href="@{/customer/projects(status='completed',q=${q},category=${category},sort=${sort})}" th:classappend="${status == 'completed'} ? 'active' : ''">Hoàn thành (<span th:text="${completedCount}">0</span>)</a>
+          <a th:href="@{/customer/projects(status='cancelled',q=${q},category=${category},sort=${sort})}" th:classappend="${status == 'cancelled'} ? 'active' : ''">Đã hủy (<span th:text="${cancelledCount}">0</span>)</a>
+        </nav>
+
+        <form class="tm-contracts-filters" method="get" th:action="@{/customer/projects}" aria-label="Tìm kiếm dự án">
+          <input type="hidden" name="status" th:value="${status}">
+          <label class="tm-contracts-search"><i class="fa-solid fa-magnifying-glass"></i><input type="search" name="q" th:value="${q}" placeholder="Tìm theo tên dự án, freelancer..." aria-label="Tên dự án hoặc freelancer"></label>
+          <select name="category" aria-label="Danh mục nghề"><option value="">Tất cả danh mục</option><option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}" th:selected="${cat == category}">Thiết kế</option></select>
+          <select name="sort" aria-label="Sắp xếp"><option value="newest" th:selected="${sort == 'newest'}">Mới nhất</option><option value="oldest" th:selected="${sort == 'oldest'}">Cũ nhất</option><option value="priceHigh" th:selected="${sort == 'priceHigh'}">Giá trị cao nhất</option><option value="priceLow" th:selected="${sort == 'priceLow'}">Giá trị thấp nhất</option></select>
+          <button class="tm-contracts-search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i><span>Lọc</span></button>
+        </form>
+        <div class="tm-contracts-list-meta"><span th:text="|Hiển thị ${#lists.size(visibleProjects)} trong ${totalFiltered} dự án phù hợp|">Dự án phù hợp</span><a th:href="@{/customer/jobs}">Quản lý công việc <i class="fa-solid fa-arrow-right"></i></a></div>
+
+        <section class="tm-contracts-table-card" aria-label="Danh sách hợp đồng và dự án">
+          <div class="tm-contracts-scroll">
+            <table class="tm-contracts-table">
+              <thead><tr><th>#</th><th>Dự án / Hợp đồng</th><th>Freelancer</th><th>Giá trị hợp đồng</th><th>Tiến độ</th><th>Bắt đầu</th><th>Mốc / Hoàn tất</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+              <tbody>
+                <tr th:each="p,iter : ${visibleProjects}">
+                  <td class="tm-contracts-index" th:text="${(currentPage - 1) * 5 + iter.index + 1}">1</td>
+                  <td><div class="tm-contracts-job">
+                    <span class="tm-contracts-job-icon"><i class="fa-solid fa-file-contract"></i></span>
+                    <div><a th:href="@{/projects/{id}(id=${p.id})}" th:text="${p.application.job.title}">Tên dự án</a>
+                      <div class="tm-contracts-tags"><span th:text="${p.application.job.category}">Danh mục</span><span th:if="${p.application.job.workType != null}" th:text="${p.application.job.workType}">Remote</span></div>
+                      <small th:unless="${p.isAgreementSigned()}"><i class="fa-regular fa-clock"></i> Hợp đồng chờ đủ xác nhận</small>
+                    </div></div></td>
+                  <td><div class="tm-contracts-freelancer"><span class="tm-contracts-avatar" th:text="${p.freelancer.fullName != null and !p.freelancer.fullName.isBlank() ? #strings.substring(p.freelancer.fullName,0,1) : 'F'}">F</span><span th:text="${p.freelancer.fullName}">Freelancer</span></div></td>
+                  <td class="tm-contracts-money" th:text="${#numbers.formatDecimal(p.totalPrice,0,'POINT',0,'COMMA')} + 'đ'">0đ</td>
+                  <td><div class="tm-contracts-progress"><b th:text="|${progressById[p.id]}%|">0%</b><div class="track"><span th:style="|width:${progressById[p.id]}%|" th:classappend="${p.status.name() == 'COMPLETED' ? 'done' : (p.status.name() == 'WAITING_PAYMENT' ? 'waiting' : '')}"></span></div></div></td>
+                  <td class="tm-contracts-date" th:text="${p.createdAt != null ? #temporals.format(p.createdAt,'dd/MM/yyyy') : '—'}">—</td>
+                  <td class="tm-contracts-date" th:text="${deadlineById[p.id] != null ? #temporals.format(deadlineById[p.id],'dd/MM/yyyy') : 'Chưa đặt mốc'}">Chưa đặt mốc</td>
+                  <td>
+                    <span class="tm-contracts-status running" th:if="${p.status.name() == 'IN_PROGRESS'}">Đang thực hiện</span>
+                    <span class="tm-contracts-status awaiting" th:if="${p.status.name() == 'WAITING_PAYMENT'}">Chờ thanh toán</span>
+                    <span class="tm-contracts-status awaiting" th:if="${p.status.name() == 'WAITING_ACCEPTANCE'}">Chờ nghiệm thu</span>
+                    <span class="tm-contracts-status completed" th:if="${p.status.name() == 'COMPLETED'}">Hoàn thành</span>
+                    <span class="tm-contracts-status cancelled" th:if="${p.status.name() == 'CANCELLED'}">Đã hủy</span>
+                    <span class="tm-contracts-status disputed" th:if="${p.status.name() == 'DISPUTED'}">Tranh chấp</span>
+                  </td>
+                  <td><div class="tm-contracts-actions"><a class="tm-contracts-detail" th:href="@{/projects/{id}(id=${p.id})}">Xem chi tiết</a>
+                    <details class="tm-contracts-more"><summary aria-label="Thao tác khác"><i class="fa-solid fa-ellipsis"></i></summary><div class="tm-contracts-menu"><a th:href="@{/projects/{id}(id=${p.id})}">Không gian dự án</a><a th:href="@{/customer/messages(projectId=${p.id})}">Tin nhắn</a></div></details>
+                  </div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tm-contracts-empty" th:if="${#lists.isEmpty(visibleProjects)}"><i class="fa-regular fa-folder-open"></i><strong>Chưa có hợp đồng phù hợp</strong><p>Hãy thay đổi bộ lọc hoặc chọn Freelancer để bắt đầu dự án.</p><a th:href="@{/customer/applicants}">Quản lý ứng viên <i class="fa-solid fa-arrow-right"></i></a></div>
+        </section>
+        <nav class="tm-contracts-pages" th:if="${totalPages > 1}" aria-label="Phân trang dự án">
+          <a th:href="@{/customer/projects(page=${currentPage - 1},status=${status},q=${q},category=${category},sort=${sort})}" th:classappend="${currentPage == 1} ? 'disabled' : ''"><i class="fa-solid fa-chevron-left"></i></a>
+          <a th:each="n : ${pageNumbers}" th:href="@{/customer/projects(page=${n},status=${status},q=${q},category=${category},sort=${sort})}" th:classappend="${currentPage == n} ? 'active' : ''" th:text="${n}">1</a>
+          <a th:href="@{/customer/projects(page=${currentPage + 1},status=${status},q=${q},category=${category},sort=${sort})}" th:classappend="${currentPage == totalPages} ? 'disabled' : ''"><i class="fa-solid fa-chevron-right"></i></a>
+        </nav>
+      </div>
+
+      <aside class="tm-contracts-right" aria-label="Tổng quan hợp đồng">
+        <section class="tm-contracts-panel tm-contracts-value"><h2><i class="fa-solid fa-briefcase"></i> Tổng giá trị hợp đồng</h2>
+          <strong th:text="${#numbers.formatDecimal(totalContractValue,0,'POINT',0,'COMMA')} + 'đ'">0đ</strong>
+          <div class="tm-contracts-value-row"><span><i class="tm-dot blue"></i> Đang thực hiện</span><b th:text="${#numbers.formatDecimal(runningValue,0,'POINT',0,'COMMA')} + 'đ'">0đ</b></div>
+          <div class="tm-contracts-value-row"><span><i class="tm-dot orange"></i> Chờ xử lý</span><b th:text="${#numbers.formatDecimal(waitingValue,0,'POINT',0,'COMMA')} + 'đ'">0đ</b></div>
+          <div class="tm-contracts-value-row"><span><i class="tm-dot green"></i> Hoàn thành</span><b th:text="${#numbers.formatDecimal(completedValue,0,'POINT',0,'COMMA')} + 'đ'">0đ</b></div>
+          <div class="tm-contracts-value-row"><span><i class="tm-dot red"></i> Đã hủy</span><b th:text="${#numbers.formatDecimal(cancelledValue,0,'POINT',0,'COMMA')} + 'đ'">0đ</b></div>
+          <div class="tm-contracts-value-row" th:if="${disputedCount > 0}"><span><i class="tm-dot purple"></i> Tranh chấp</span><b th:text="${#numbers.formatDecimal(disputedValue,0,'POINT',0,'COMMA')} + 'đ'">0đ</b></div>
+          <small class="tm-contracts-value-note">Giá trị hợp đồng không phải tổng tiền đã thanh toán.</small>
+        </section>
+        <section class="tm-contracts-panel"><h2><i class="fa-solid fa-chart-pie"></i> Trạng thái dự án</h2>
+          <div class="tm-contracts-chart"><div class="tm-contracts-donut" th:style="${contractGradient}"><div><strong th:text="${allCount}">0</strong><small>Dự án</small></div></div><div class="tm-contracts-chart-legend">
+            <div><span><i class="tm-dot blue"></i> Đang thực hiện</span><b th:text="${runningCount}">0</b></div>
+            <div><span><i class="tm-dot orange"></i> Chờ xử lý</span><b th:text="${waitingCount - disputedCount}">0</b></div>
+            <div><span><i class="tm-dot green"></i> Hoàn thành</span><b th:text="${completedCount}">0</b></div>
+            <div><span><i class="tm-dot red"></i> Đã hủy</span><b th:text="${cancelledCount}">0</b></div>
+            <div th:if="${disputedCount > 0}"><span><i class="tm-dot purple"></i> Tranh chấp</span><b th:text="${disputedCount}">0</b></div>
+          </div></div>
+        </section>
+        <section class="tm-contracts-panel tm-contracts-due"><h2><i class="fa-regular fa-calendar-days"></i> Mốc sắp đến hạn</h2>
+          <div th:each="d : ${dueTasks}" class="tm-contracts-due-item"><a th:href="@{/projects/{id}(id=${d['id']})}" th:text="${d['title']}">Dự án</a><div><span th:classappend="${d['overdue']} ? 'overdue' : ''" th:text="${#temporals.format(d['deadline'],'dd/MM/yyyy')}">Ngày</span><b th:text="${d['label']}">Còn 1 ngày</b></div></div>
+          <p class="tm-contracts-no-due" th:if="${#lists.isEmpty(dueTasks)}">Không có milestone đến hạn trong 30 ngày hoặc quá hạn.</p>
+        </section>
+      </aside>
+    </div>
+  </div>
+  <footer class="fm-footer client-same-footer tm-posted-footer">
+    <div class="fm-footer-top">
+      <div class="fm-footer-intro">
+        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
+        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
+      </div>
+      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
+      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
+      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
+      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
+    </div>
+    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
+  </footer>
+
+</main>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body></html>

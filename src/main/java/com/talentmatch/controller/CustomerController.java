@@ -26,6 +26,14 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.time.temporal.ChronoUnit;
 
 @Controller
 @RequestMapping("/customer")
@@ -116,9 +124,23 @@ public class CustomerController {
         return "customer/dashboard";
     }
 
+    @Autowired private CompanyProfileAssetService companyProfileAssets;
+
     @GetMapping("/profile")
     public String profile(Authentication auth, Model model) {
-        model.addAttribute("profile", users.byEmail(auth.getName()));
+        User u = users.byEmail(auth.getName());
+        model.addAttribute("profile", u);
+        var assets = companyProfileAssets.forOwner(u);
+        model.addAttribute("companyLogo", assets.stream().filter(a -> a.getKind() == CompanyProfileAsset.Kind.LOGO).findFirst().orElse(null));
+        model.addAttribute("companyPhotos", assets.stream().filter(a -> a.getKind() == CompanyProfileAsset.Kind.PHOTO).toList());
+        model.addAttribute("companyDocuments", assets.stream().filter(a -> a.getKind() == CompanyProfileAsset.Kind.DOCUMENT).toList());
+        var ownJobs = jobRepository.findByCustomerOrderByCreatedAtDesc(u);
+        long applicantCount = ownJobs.stream().mapToLong(j -> jobs.applicants(j).size()).sum();
+        var ownProjects = projects.forCustomer(u);
+        model.addAttribute("companyJobCount", ownJobs.size());
+        model.addAttribute("companyApplicantCount", applicantCount);
+        model.addAttribute("companyActiveProjects", ownProjects.stream().filter(p -> p.getStatus() == ProjectStatus.IN_PROGRESS || p.getStatus() == ProjectStatus.WAITING_ACCEPTANCE).count());
+        model.addAttribute("companyCompletedProjects", ownProjects.stream().filter(p -> p.getStatus() == ProjectStatus.COMPLETED).count());
         return "customer/profile";
     }
 
@@ -131,7 +153,7 @@ public class CustomerController {
             users.updateProfile(auth.getName(), profile);
             ra.addFlashAttribute(
                     "success",
-                    "Cập nhật hồ sơ khách hàng thành công."
+                    "Đã lưu thông tin hồ sơ doanh nghiệp."
             );
         } catch (Exception e) {
             ra.addFlashAttribute("error", e.getMessage());
@@ -221,11 +243,112 @@ public class CustomerController {
         model.addAttribute("applicantTotal", totalApplicants);
         return "customer/jobs";
     }
-    @GetMapping("/applicants") public String allApplicants(Authentication auth,Model model){
-        User customer=users.byEmail(auth.getName());
-        var all=jobRepository.findByCustomerOrderByCreatedAtDesc(customer);
-        var rows=all.stream().flatMap(job->jobs.applicants(job).stream()).sorted(java.util.Comparator.comparing(JobApplication::getCreatedAt).reversed()).toList();
-        model.addAttribute("applications",rows);model.addAttribute("allJobs",all);return "customer/all-applicants";
+    /** Bảng quản lý ứng viên của các công việc do Client đang đăng nhập sở hữu. */
+    @GetMapping("/applicants")
+    public String allApplicants(Authentication auth, Model model,
+            @RequestParam(required = false) Long jobId,
+            @RequestParam(defaultValue = "ALL") String status,
+            @RequestParam(defaultValue = "") String q,
+            @RequestParam(defaultValue = "") String skill,
+            @RequestParam(defaultValue = "ALL") String price,
+            @RequestParam(defaultValue = "newest") String sort,
+            @RequestParam(defaultValue = "1") int page) {
+        User customer = users.byEmail(auth.getName());
+        List<Job> allJobs = jobRepository.findByCustomerOrderByCreatedAtDesc(customer);
+        // Chỉ lựa chọn công việc thuộc Client. Không sử dụng ID được truyền vào để truy cập dữ liệu của người khác.
+        Job currentJob = allJobs.stream()
+                .filter(j -> j.getId().equals(jobId))
+                .findFirst()
+                .orElseGet(() -> allJobs.stream()
+                        .filter(j -> !jobs.applicants(j).isEmpty())
+                        .findFirst().orElse(allJobs.isEmpty() ? null : allJobs.get(0)));
+
+        List<JobApplication> allApplications = currentJob == null ? List.of() : jobs.applicants(currentJob);
+        String selectedStatus = status == null ? "ALL" : status.trim().toUpperCase(java.util.Locale.ROOT);
+        Set<String> allowedStatuses = Set.of("ALL", "SUBMITTED", "SHORTLISTED", "ACCEPTED", "REJECTED", "WITHDRAWN");
+        if (!allowedStatuses.contains(selectedStatus)) selectedStatus = "ALL";
+        String keyword = q == null ? "" : q.trim();
+        String selectedSkill = skill == null ? "" : skill.trim();
+        String selectedPrice = Set.of("ALL", "UNDER_10", "BETWEEN_10_20", "OVER_20")
+                .contains(price) ? price : "ALL";
+        String selectedSort = Set.of("newest", "oldest", "priceAsc", "priceDesc", "rating")
+                .contains(sort) ? sort : "newest";
+
+        java.util.Set<String> skillSet = new java.util.TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        for (JobApplication app : allApplications) {
+            if (app.getFreelancer().getSkills() == null) continue;
+            for (String value : app.getFreelancer().getSkills().split(",")) {
+                if (!value.isBlank()) skillSet.add(value.trim());
+            }
+        }
+
+        List<JobApplication> filtered = new java.util.ArrayList<>();
+        String lowerKeyword = keyword.toLowerCase(java.util.Locale.ROOT);
+        String lowerSkill = selectedSkill.toLowerCase(java.util.Locale.ROOT);
+        for (JobApplication app : allApplications) {
+            if (!"ALL".equals(selectedStatus) && !app.getStatus().name().equals(selectedStatus)) continue;
+            User freelancer = app.getFreelancer();
+            String haystack = String.join(" ",
+                freelancer.getFullName() == null ? "" : freelancer.getFullName(),
+                freelancer.getProfessionalTitle() == null ? "" : freelancer.getProfessionalTitle(),
+                freelancer.getSkills() == null ? "" : freelancer.getSkills(),
+                freelancer.getLocation() == null ? "" : freelancer.getLocation(),
+                app.getProposal() == null ? "" : app.getProposal()).toLowerCase(java.util.Locale.ROOT);
+            if (!lowerKeyword.isBlank() && !haystack.contains(lowerKeyword)) continue;
+            if (!lowerSkill.isBlank() && (freelancer.getSkills() == null
+                    || !freelancer.getSkills().toLowerCase(java.util.Locale.ROOT).contains(lowerSkill))) continue;
+            BigDecimal amount = app.getProposedPrice();
+            BigDecimal ten = new BigDecimal("10000000"), twenty = new BigDecimal("20000000");
+            if ("UNDER_10".equals(selectedPrice) && (amount == null || amount.compareTo(ten) >= 0)) continue;
+            if ("BETWEEN_10_20".equals(selectedPrice) && (amount == null || amount.compareTo(ten) < 0 || amount.compareTo(twenty) > 0)) continue;
+            if ("OVER_20".equals(selectedPrice) && (amount == null || amount.compareTo(twenty) <= 0)) continue;
+            filtered.add(app);
+        }
+        java.util.Comparator<JobApplication> byDate = java.util.Comparator.comparing(
+                JobApplication::getCreatedAt, java.util.Comparator.nullsLast(java.util.Comparator.naturalOrder()));
+        switch (selectedSort) {
+            case "oldest" -> filtered.sort(byDate);
+            case "priceAsc" -> filtered.sort(java.util.Comparator.comparing(JobApplication::getProposedPrice,
+                    java.util.Comparator.nullsLast(java.util.Comparator.naturalOrder())));
+            case "priceDesc" -> filtered.sort(java.util.Comparator.comparing(JobApplication::getProposedPrice,
+                    java.util.Comparator.nullsLast(java.util.Comparator.reverseOrder())));
+            case "rating" -> filtered.sort(java.util.Comparator.comparing(
+                    (JobApplication app) -> app.getFreelancer().getRating(),
+                    java.util.Comparator.nullsLast(java.util.Comparator.reverseOrder())));
+            default -> filtered.sort(byDate.reversed());
+        }
+
+        int pageSize = 5;
+        int totalPages = Math.max(1, (filtered.size() + pageSize - 1) / pageSize);
+        int currentPage = Math.max(1, Math.min(page, totalPages));
+        int start = (currentPage - 1) * pageSize;
+        List<JobApplication> currentRows = filtered.subList(start, Math.min(filtered.size(), start + pageSize));
+
+        model.addAttribute("allJobs", allJobs);
+        model.addAttribute("currentJob", currentJob);
+        model.addAttribute("currentJobId", currentJob == null ? null : currentJob.getId());
+        model.addAttribute("applications", currentRows);
+        model.addAttribute("skillOptions", skillSet);
+        model.addAttribute("status", selectedStatus);
+        model.addAttribute("q", keyword);
+        model.addAttribute("skill", selectedSkill);
+        model.addAttribute("price", selectedPrice);
+        model.addAttribute("sort", selectedSort);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageNumbers", java.util.stream.IntStream.rangeClosed(1, totalPages).boxed().toList());
+        model.addAttribute("filteredCount", filtered.size());
+        model.addAttribute("totalCount", allApplications.size());
+        model.addAttribute("submittedCount", countApplicants(allApplications, ApplicationStatus.SUBMITTED));
+        model.addAttribute("shortlistedCount", countApplicants(allApplications, ApplicationStatus.SHORTLISTED));
+        model.addAttribute("acceptedCount", countApplicants(allApplications, ApplicationStatus.ACCEPTED));
+        model.addAttribute("rejectedCount", countApplicants(allApplications, ApplicationStatus.REJECTED));
+        model.addAttribute("withdrawnCount", countApplicants(allApplications, ApplicationStatus.WITHDRAWN));
+        return "customer/all-applicants";
+    }
+
+    private long countApplicants(List<JobApplication> applications, ApplicationStatus status) {
+        return applications.stream().filter(app -> app.getStatus() == status).count();
     }
     @GetMapping("/jobs/new") public String newJob(Model model){model.addAttribute("job",new Job());model.addAttribute("editing",false);return "customer/job-form";}
 
@@ -309,11 +432,170 @@ public class CustomerController {
     }
 
     @PostMapping("/jobs/{id}/status") public String jobStatus(@PathVariable Long id,@RequestParam JobStatus status,Authentication auth,RedirectAttributes ra){try{Job j=ownedJob(id,auth);if(status==JobStatus.CLOSED&&jobs.applicants(j).stream().noneMatch(a->a.getStatus()==ApplicationStatus.ACCEPTED))throw new IllegalArgumentException("Hãy chọn Freelancer trước khi đóng tuyển theo luồng dự án, hoặc dùng PAUSED/CANCELLED.");j.setStatus(status);jobs.save(j);ra.addFlashAttribute("success","Đã cập nhật trạng thái công việc.");}catch(Exception e){ra.addFlashAttribute("error",e.getMessage());}return "redirect:/customer/jobs";}
-    @GetMapping("/jobs/{id}/applicants") public String applicants(@PathVariable Long id,Authentication auth,Model model){Job j=ownedJob(id,auth);model.addAttribute("job",j);model.addAttribute("applications",jobs.applicants(j));return "customer/applicants";}
-    @PostMapping("/applications/{id}/shortlist") public String shortlist(@PathVariable Long id,@RequestParam boolean value,Authentication auth,RedirectAttributes ra){try{projects.shortlist(id,users.byEmail(auth.getName()),value);ra.addFlashAttribute("success",value?"Đã đưa ứng viên vào danh sách ưu tiên.":"Đã từ chối ứng viên.");}catch(Exception e){ra.addFlashAttribute("error",e.getMessage());}return "redirect:/customer/jobs";}
+    @GetMapping("/jobs/{id}/applicants") public String applicants(@PathVariable Long id, Authentication auth){ownedJob(id,auth);return "redirect:/customer/applicants?jobId="+id;}
+    @PostMapping("/applications/{id}/shortlist")
+    public String shortlist(@PathVariable Long id, @RequestParam boolean value,
+            @RequestParam(required = false) Long jobId, Authentication auth, RedirectAttributes ra) {
+        try {
+            projects.shortlist(id, users.byEmail(auth.getName()), value);
+            ra.addFlashAttribute("success", value ? "Đã thêm ứng viên vào danh sách ưu tiên." : "Đã từ chối ứng viên.");
+        } catch (Exception e) { ra.addFlashAttribute("error", e.getMessage()); }
+        return jobId == null ? "redirect:/customer/jobs" : "redirect:/customer/applicants?jobId=" + jobId;
+    }
     @PostMapping("/applications/{id}/accept") public String accept(@PathVariable Long id,Authentication auth,RedirectAttributes ra){try{Project p=projects.acceptApplication(id,users.byEmail(auth.getName()));ra.addFlashAttribute("success","Đã chọn Freelancer. Dự án đã được tạo và sẵn sàng thanh toán.");return "redirect:/projects/"+p.getId();}catch(Exception e){ra.addFlashAttribute("error",e.getMessage());return "redirect:/customer/jobs";}}
-    @GetMapping("/projects") public String projects(Authentication auth,Model model){model.addAttribute("projects",projects.forCustomer(users.byEmail(auth.getName())));return "customer/projects";}
-    @GetMapping("/history") public String history(Authentication auth,Model model){User u=users.byEmail(auth.getName());model.addAttribute("jobs",jobRepository.findByCustomerOrderByCreatedAtDesc(u));model.addAttribute("projects",projects.forCustomer(u));model.addAttribute("payments",payments.history(u));return "customer/history";}
+    /** Tổng quan hợp đồng Client: chỉ lấy dự án của tài khoản đang đăng nhập. */
+    @GetMapping("/projects")
+    public String projects(Authentication auth, Model model,
+                           @RequestParam(defaultValue = "all") String status,
+                           @RequestParam(defaultValue = "") String q,
+                           @RequestParam(defaultValue = "") String category,
+                           @RequestParam(defaultValue = "newest") String sort,
+                           @RequestParam(defaultValue = "1") int page) {
+        User customer = users.byEmail(auth.getName());
+        List<Project> all = projects.forCustomer(customer);
+
+        long runningCount = all.stream().filter(p -> p.getStatus() == ProjectStatus.IN_PROGRESS).count();
+        long waitingCount = all.stream().filter(p -> isWaitingContract(p)).count();
+        long completedCount = all.stream().filter(p -> p.getStatus() == ProjectStatus.COMPLETED).count();
+        long cancelledCount = all.stream().filter(p -> p.getStatus() == ProjectStatus.CANCELLED).count();
+        long disputedCount = all.stream().filter(p -> p.getStatus() == ProjectStatus.DISPUTED).count();
+
+        BigDecimal totalValue = all.stream().map(Project::getTotalPrice).filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal runningValue = contractValueByStatus(all, ProjectStatus.IN_PROGRESS);
+        BigDecimal completedValue = contractValueByStatus(all, ProjectStatus.COMPLETED);
+        BigDecimal cancelledValue = contractValueByStatus(all, ProjectStatus.CANCELLED);
+        BigDecimal waitingValue = all.stream().filter(CustomerController::isWaitingContract)
+                .map(Project::getTotalPrice).filter(Objects::nonNull).reduce(BigDecimal.ZERO,BigDecimal::add);
+        BigDecimal disputedValue = contractValueByStatus(all,ProjectStatus.DISPUTED);
+
+        // Lấy tiến độ từ milestone hoàn tất; không có milestone thì không tự tạo phần trăm.
+        Map<Long, Integer> progressById = new HashMap<>();
+        Map<Long, LocalDate> deadlineById = new HashMap<>();
+        List<Map<String, Object>> dueTasks = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        for (Project p : all) {
+            List<Milestone> steps = projects.milestones(p);
+            int finished = (int) steps.stream().filter(m -> m.getStatus() == MilestoneStatus.COMPLETED).count();
+            int percent = p.getStatus() == ProjectStatus.COMPLETED ? 100
+                    : steps.isEmpty() ? 0 : (int) Math.round(100.0 * finished / steps.size());
+            progressById.put(p.getId(), percent);
+            LocalDate nextDate = steps.stream()
+                    .filter(m -> m.getStatus() != MilestoneStatus.COMPLETED)
+                    .map(Milestone::getDeadline).filter(Objects::nonNull)
+                    .min(LocalDate::compareTo).orElse(null);
+            if (p.getStatus() == ProjectStatus.COMPLETED && p.getCompletedAt() != null)
+                nextDate = p.getCompletedAt().toLocalDate();
+            if (nextDate != null) deadlineById.put(p.getId(), nextDate);
+            if (nextDate != null && p.getStatus() != ProjectStatus.COMPLETED
+                    && p.getStatus() != ProjectStatus.CANCELLED && p.getStatus() != ProjectStatus.DISPUTED
+                    && !nextDate.isAfter(today.plusDays(30))) {
+                Map<String,Object> item = new HashMap<>();
+                item.put("id", p.getId());
+                item.put("title", p.getApplication().getJob().getTitle());
+                item.put("deadline", nextDate);
+                long daysRemaining = ChronoUnit.DAYS.between(today, nextDate);
+                item.put("days", daysRemaining);
+                item.put("overdue", daysRemaining < 0);
+                item.put("label", daysRemaining < 0 ? "Quá hạn " + (-daysRemaining) + " ngày"
+                        : daysRemaining == 0 ? "Hôm nay" : "Còn " + daysRemaining + " ngày");
+                dueTasks.add(item);
+            }
+        }
+        dueTasks.sort(Comparator.comparing(m -> (LocalDate)m.get("deadline")));
+        dueTasks = dueTasks.stream().limit(3).toList();
+
+        String query = q == null ? "" : q.trim();
+        String selectedCategory = category == null ? "" : category.trim();
+        String selectedStatus = Set.of("all","running","waiting","completed","cancelled")
+                .contains(status) ? status : "all";
+        String selectedSort = Set.of("newest","oldest","priceHigh","priceLow")
+                .contains(sort) ? sort : "newest";
+        String needle = query.toLowerCase(java.util.Locale.ROOT);
+        List<Project> filtered = all.stream().filter(p -> {
+            if (selectedStatus.equals("running") && p.getStatus() != ProjectStatus.IN_PROGRESS) return false;
+            if (selectedStatus.equals("waiting") && !isWaitingContract(p) && p.getStatus() != ProjectStatus.DISPUTED) return false;
+            if (selectedStatus.equals("completed") && p.getStatus() != ProjectStatus.COMPLETED) return false;
+            if (selectedStatus.equals("cancelled") && p.getStatus() != ProjectStatus.CANCELLED) return false;
+            Job job = p.getApplication().getJob();
+            if (!selectedCategory.isBlank() && !selectedCategory.equals(job.getCategory())) return false;
+            if (needle.isBlank()) return true;
+            String title = job.getTitle() == null ? "" : job.getTitle();
+            String freelancer = p.getFreelancer().getFullName() == null ? "" : p.getFreelancer().getFullName();
+            return title.toLowerCase(java.util.Locale.ROOT).contains(needle)
+                    || freelancer.toLowerCase(java.util.Locale.ROOT).contains(needle);
+        }).collect(Collectors.toCollection(ArrayList::new));
+        Comparator<Project> dateOrder = Comparator.comparing(Project::getCreatedAt,
+                Comparator.nullsFirst(Comparator.naturalOrder()));
+        switch (selectedSort) {
+            case "oldest" -> filtered.sort(dateOrder);
+            case "priceHigh" -> filtered.sort(Comparator.comparing(Project::getTotalPrice,
+                    Comparator.nullsFirst(Comparator.naturalOrder())).reversed());
+            case "priceLow" -> filtered.sort(Comparator.comparing(Project::getTotalPrice,
+                    Comparator.nullsLast(Comparator.naturalOrder())));
+            default -> filtered.sort(dateOrder.reversed());
+        }
+        int perPage = 5;
+        int totalPages = Math.max(1, (filtered.size() + perPage - 1) / perPage);
+        int currentPage = Math.max(1, Math.min(page, totalPages));
+        int from = (currentPage - 1) * perPage;
+        List<Project> visible = filtered.subList(from, Math.min(from + perPage, filtered.size()));
+        List<String> categories = all.stream().map(p -> p.getApplication().getJob().getCategory())
+                .filter(Objects::nonNull).distinct().sorted().toList();
+
+        // Biểu đồ trạng thái có tỷ lệ đúng theo dữ liệu, không dùng số minh họa.
+        long[] slices = {runningCount, waitingCount, completedCount, cancelledCount, disputedCount};
+        String[] colors = {"#0968f5", "#ff9d18", "#16b87b", "#f14459", "#8853f4"};
+        StringBuilder gradient = new StringBuilder("background:conic-gradient(");
+        double previous = 0;
+        for (int i = 0; i < slices.length; i++) {
+            double next = previous + (all.isEmpty() ? 0 : 100.0 * slices[i] / all.size());
+            if (i > 0) gradient.append(',');
+            gradient.append(colors[i]).append(' ').append(String.format(java.util.Locale.ROOT,"%.2f%%",previous))
+                    .append(' ').append(String.format(java.util.Locale.ROOT,"%.2f%%",next));
+            previous = next;
+        }
+        gradient.append(")");
+        model.addAttribute("contractGradient", all.isEmpty() ? "background:#e5edfa" : gradient.toString());
+        model.addAttribute("allCount", all.size());
+        model.addAttribute("runningCount", runningCount);
+        model.addAttribute("waitingCount", waitingCount + disputedCount);
+        model.addAttribute("completedCount", completedCount);
+        model.addAttribute("cancelledCount", cancelledCount);
+        model.addAttribute("disputedCount", disputedCount);
+        model.addAttribute("totalContractValue", totalValue);
+        model.addAttribute("runningValue", runningValue);
+        model.addAttribute("waitingValue", waitingValue);
+        model.addAttribute("completedValue", completedValue);
+        model.addAttribute("cancelledValue", cancelledValue);
+        model.addAttribute("disputedValue", disputedValue);
+        model.addAttribute("visibleProjects",visible);
+        model.addAttribute("progressById",progressById);
+        model.addAttribute("deadlineById",deadlineById);
+        model.addAttribute("dueTasks",dueTasks);
+        model.addAttribute("categories",categories);
+        model.addAttribute("q",query);
+        model.addAttribute("category",selectedCategory);
+        model.addAttribute("status",selectedStatus);
+        model.addAttribute("sort",selectedSort);
+        model.addAttribute("currentPage",currentPage);
+        model.addAttribute("totalPages",totalPages);
+        model.addAttribute("totalFiltered",filtered.size());
+        model.addAttribute("pageNumbers",IntStream.rangeClosed(1,totalPages).boxed().toList());
+        return "customer/projects";
+    }
+
+    private static boolean isWaitingContract(Project project) {
+        return project.getStatus() == ProjectStatus.WAITING_PAYMENT
+                || project.getStatus() == ProjectStatus.WAITING_ACCEPTANCE;
+    }
+    private static BigDecimal contractValueByStatus(List<Project> source, ProjectStatus status) {
+        return source.stream().filter(p -> p.getStatus() == status)
+                .map(Project::getTotalPrice).filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO,BigDecimal::add);
+    }
+
+    // Lịch sử giao dịch Client do CustomerTransactionController xử lý từ V101.
 
     private Job ownedJob(Long id,Authentication auth){Job j=jobs.get(id);User u=users.byEmail(auth.getName());if(!j.getCustomer().getId().equals(u.getId()))throw new IllegalArgumentException("Bạn không sở hữu công việc này.");return j;}
     private static String trimToNull(String v){return v==null||v.isBlank()?null:v.trim();}

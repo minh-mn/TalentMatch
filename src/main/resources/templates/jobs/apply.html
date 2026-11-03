@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/common :: head('Ứng tuyển công việc')}"></head>
-<body class="market-body fm-dashboard tmjd-page tmjd-apply-page">
+<body class="market-body fm-dashboard tmjd-page tmjd-apply-page tm108-apply-page">
 <link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
 <link rel="stylesheet" th:href="@{/css/job-detail-apply-v46.css}">
 <link rel="stylesheet" th:href="@{/css/job-detail-apply-v47.css}">
+
+<link rel="stylesheet" th:href="@{/css/freelancer-layout-v106.css(v=106)}">
 <aside th:replace="~{fragments/common :: marketSidebar('applications')}"></aside>
 <header class="fm-header">
   <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
@@ -14,150 +16,122 @@
 </header>
 <div th:replace="~{fragments/common :: flash}"></div>
 
-<main class="fm-main tmjd-main">
-  <div class="tmjd-shell">
-    <section class="tmjd-hero tmjd-apply-hero">
-      <div class="tmjd-breadcrumb">
-        <a th:href="@{/}">Trang chủ</a><span>›</span>
-        <a th:href="@{/jobs}">Tìm dự án</a><span>›</span>
-        <a th:href="@{/jobs/{id}(id=${job.id})}" th:text="${job.title}">Thiết kế website thương hiệu thời trang</a><span>›</span>
-        <b>Ứng tuyển</b>
-      </div>
-      <div class="tm47-apply-banner-image" role="img" aria-label="Ứng tuyển công việc - Kết nối trực tiếp với nhà tuyển dụng"></div>
+<main class="fm-main tmjd-main tm108-main">
+  <div class="tmjd-shell tm108-shell">
+    <nav class="tmjd-breadcrumb tm108-breadcrumb" aria-label="Đường dẫn">
+      <a th:href="@{/freelancer/dashboard}"><i class="fa-solid fa-house"></i> Trang chủ</a>
+      <span aria-hidden="true">›</span>
+      <a th:href="@{/jobs}">Tìm dự án</a>
+      <span aria-hidden="true">›</span>
+      <a th:href="@{/jobs/{id}(id=${job.id})}" th:text="${job.title}">Tên công việc</a>
+      <span aria-hidden="true">›</span>
+      <strong>Ứng tuyển</strong>
+    </nav>
+
+    <!-- Banner do người dùng cung cấp: hiển thị nguyên tỉ lệ, không có chữ đè lên ảnh. -->
+    <section class="tm108-hero" aria-label="Giới thiệu trang ứng tuyển">
+      <img th:src="@{/images/talentmatch-job-apply-v108.png}" src="/images/talentmatch-job-apply-v108.png"
+           width="2048" height="682" alt="Ứng tuyển công việc – Gửi hồ sơ và kết nối trực tiếp với nhà tuyển dụng">
     </section>
 
-    <div class="tmjd-layout apply-layout">
-      <section class="tmjd-content">
-        <article class="tmjd-card">
-          <div class="tmjd-card-head">
-            <div class="tmjd-card-icon"><i class="fa-regular fa-address-card"></i></div>
-            <div><h2>Hồ sơ ứng tuyển</h2></div>
+    <div class="tm108-grid">
+      <section class="tm108-panel tm108-form-panel" aria-labelledby="tm108-form-title">
+        <div class="tm108-panel-heading">
+          <span class="tm108-panel-icon"><i class="fa-solid fa-paper-plane"></i></span>
+          <div><h1 id="tm108-form-title">Hồ sơ ứng tuyển</h1><p>Điền thông tin đề xuất của bạn cho dự án này.</p></div>
+        </div>
+
+        <div th:if="${applied}" class="tm108-notice tm108-notice-success" role="status">
+          <span class="tm108-notice-icon"><i class="fa-solid fa-circle-check"></i></span>
+          <div>
+            <h2>Bạn đã gửi ứng tuyển cho công việc này</h2>
+            <p>Trạng thái: <b th:text="${currentApplication.status}">Đã gửi</b></p>
+            <p><strong class="tm108-price" th:text="${#numbers.formatDecimal(currentApplication.proposedPrice,0,'POINT',0,'COMMA')} + 'đ'">12.000.000đ</strong> · <span th:text="${currentApplication.estimatedDays} + ' ngày'">15 ngày</span></p>
+            <a class="tm108-primary tm108-inline-link" th:href="@{/freelancer/applications}">Xem đơn ứng tuyển</a>
           </div>
+        </div>
 
-          <div th:if="${applied}" class="tmjd-applied-box">
-            <div class="tmjd-applied-state"><i class="fa-solid fa-circle-check"></i></div>
-            <div>
-              <h3>Bạn đã ứng tuyển công việc này</h3>
-              <p>Trạng thái hiện tại: <strong th:text="${currentApplication.status}">SUBMITTED</strong></p>
-              <p><strong th:text="${#numbers.formatDecimal(currentApplication.proposedPrice,0,'POINT',0,'COMMA')} + 'đ'"></strong> · <span th:text="${currentApplication.estimatedDays} + ' ngày'"></span></p>
+        <form id="tm108-apply-form" class="tm108-form"
+              sec:authorize="hasRole('FREELANCER')"
+              th:if="${!applied and job.status == T(com.talentmatch.model.JobStatus).OPEN}"
+              th:action="@{/jobs/{id}/apply(id=${job.id})}" method="post">
+          <div class="tm108-two">
+            <div class="tm108-field">
+              <label for="tm108-price"><i class="fa-solid fa-coins"></i> Giá đề xuất <em>*</em></label>
+              <div class="tm108-input-affix"><input id="tm108-price" type="number" name="proposedPrice" inputmode="decimal" min="1" step="1" required th:value="${job.budget}" aria-describedby="tm108-price-help"><span>đ</span></div>
+              <small id="tm108-price-help">Nhập mức giá bạn đề xuất cho dự án này.</small>
             </div>
-            <a class="tmjd-solid-btn" th:href="@{/freelancer/applications}">Xem danh sách ứng tuyển</a>
-          </div>
-
-          <form sec:authorize="hasRole('FREELANCER')" th:if="${!applied and job.status == T(com.talentmatch.model.JobStatus).OPEN}" class="tmjd-apply-form" th:action="@{/jobs/{id}/apply(id=${job.id})}" method="post">
-            <div class="tmjd-form-row two">
-              <label>
-                <span>Giá đề xuất <em>*</em></span>
-                <div class="tmjd-input-wrap"><input type="number" name="proposedPrice" min="1" required th:value="${job.budget}"><b>đ</b></div>
-                <small>Nhập mức giá bạn đề xuất cho dự án này.</small>
-              </label>
-              <label>
-                <span>Thời gian hoàn thành <em>*</em></span>
-                <div class="tmjd-input-wrap"><input type="number" name="estimatedDays" min="1" max="3650" required th:value="${daysLeft > 0 ? daysLeft : (job.estimatedDurationDays != null ? job.estimatedDurationDays : 30)}"><b>ngày</b></div>
-                <small>Nhập số ngày dự kiến hoàn thành dự án.</small>
-              </label>
-            </div>
-
-            <label>
-              <span>Thư đề xuất (Proposal) <em>*</em></span>
-              <textarea name="proposal" rows="8" minlength="30" required placeholder="Hãy giới thiệu bản thân, kinh nghiệm liên quan và lý do bạn phù hợp với dự án này...&#10;Bạn có thể nêu rõ cách thực hiện, công nghệ sử dụng và cam kết về chất lượng sản phẩm."></textarea>
-            </label>
-
-            <label>
-              <span>Portfolio / Link tham khảo (tùy chọn)</span>
-              <input type="url" name="portfolioLink" placeholder="https://portfolio.example/...">
-            </label>
-
-  
-
-            <label class="tmjd-checkbox-row">
-              <input type="checkbox" required>
-              <span>Tôi cam kết những thông tin trên là chính xác và sẵn sàng trao đổi thêm với nhà tuyển dụng.</span>
-            </label>
-
-            <div class="tmjd-submit-row">
-              <a class="tmjd-outline-btn" th:href="@{/jobs/{id}(id=${job.id})}">Hủy</a>
-              <button class="tmjd-solid-btn" type="submit"><i class="fa-regular fa-paper-plane"></i> Gửi đề xuất ứng tuyển</button>
-            </div>
-          </form>
-
-          <div th:if="${job.status != T(com.talentmatch.model.JobStatus).OPEN}" class="tmjd-applied-box closed">
-            <div class="tmjd-applied-state"><i class="fa-solid fa-lock"></i></div>
-            <div>
-              <h3>Dự án hiện không nhận thêm hồ sơ</h3>
-              <p>Khách hàng đã đóng tin tuyển hoặc đã dừng nhận ứng tuyển.</p>
+            <div class="tm108-field">
+              <label for="tm108-days"><i class="fa-regular fa-calendar-days"></i> Thời gian hoàn thành <em>*</em></label>
+              <div class="tm108-input-affix"><input id="tm108-days" type="number" name="estimatedDays" min="1" max="3650" step="1" required th:value="${job.estimatedDurationDays != null and job.estimatedDurationDays > 0 ? job.estimatedDurationDays : 30}" aria-describedby="tm108-days-help"><span>ngày</span></div>
+              <small id="tm108-days-help">Số ngày dự kiến để hoàn thành công việc.</small>
             </div>
           </div>
 
-          <div sec:authorize="isAnonymous()" class="tmjd-applied-box guest-only">
-            <div class="tmjd-applied-state"><i class="fa-solid fa-user-lock"></i></div>
-            <div>
-              <h3>Đăng nhập để gửi ứng tuyển</h3>
-              <p>Bạn cần đăng nhập tài khoản Freelancer để gửi proposal, báo giá và theo dõi trạng thái.</p>
-            </div>
-            <a class="tmjd-solid-btn" th:href="@{/login}">Đăng nhập Freelancer</a>
+          <div class="tm108-field">
+            <div class="tm108-label-row"><label for="tm108-proposal"><i class="fa-regular fa-file-lines"></i> Thư đề xuất (Proposal) <em>*</em></label><span class="tm108-counter" id="tm108-proposal-counter">0 / 3000</span></div>
+            <textarea id="tm108-proposal" name="proposal" rows="6" minlength="30" maxlength="3000" required
+              placeholder="Hãy giới thiệu bản thân, kinh nghiệm liên quan và lý do bạn phù hợp với dự án này...&#10;Bạn có thể nêu rõ cách thực hiện, công nghệ sử dụng và cam kết về chất lượng sản phẩm."
+              aria-describedby="tm108-proposal-help"></textarea>
+            <small id="tm108-proposal-help">Tối thiểu 30 ký tự. Nêu rõ giải pháp, kết quả bàn giao và thời gian thực hiện.</small>
           </div>
 
-          <div sec:authorize="hasRole('CUSTOMER')" class="tmjd-applied-box guest-only">
-            <div class="tmjd-applied-state"><i class="fa-solid fa-building"></i></div>
-            <div>
-              <h3>Bạn đang ở vai trò Khách hàng</h3>
-              <p>Chỉ tài khoản Freelancer mới có thể gửi ứng tuyển cho công việc này.</p>
-            </div>
-            <a class="tmjd-outline-btn" th:href="@{/jobs/{id}(id=${job.id})}">Quay lại chi tiết công việc</a>
+          <div class="tm108-field">
+            <label for="tm108-portfolio"><i class="fa-solid fa-link"></i> Portfolio / Link tham khảo <span class="tm108-optional">(tùy chọn)</span></label>
+            <input id="tm108-portfolio" type="url" name="portfolioLink" maxlength="1000" placeholder="https://portfolio.example.com/du-an-tuong-tu">
+            <small>Chia sẻ sản phẩm đã thực hiện để tăng tính thuyết phục.</small>
           </div>
-        </article>
+
+          <label class="tm108-agreement" for="tm108-confirm">
+            <input id="tm108-confirm" type="checkbox" required>
+            <span>Tôi cam kết thông tin trên là chính xác và đồng ý trao đổi thêm với khách hàng về đề xuất này.</span>
+          </label>
+
+          <div class="tm108-actions">
+            <a class="tm108-secondary" th:href="@{/jobs/{id}(id=${job.id})}">Hủy</a>
+            <button class="tm108-primary" id="tm108-submit" type="submit"><i class="fa-solid fa-paper-plane"></i><span>Gửi đề xuất ứng tuyển</span></button>
+          </div>
+        </form>
+
+        <div th:if="${!applied and job.status != T(com.talentmatch.model.JobStatus).OPEN}" class="tm108-notice tm108-notice-warn" role="status">
+          <span class="tm108-notice-icon"><i class="fa-solid fa-lock"></i></span>
+          <div><h2>Công việc hiện không nhận thêm ứng tuyển</h2><p>Bạn có thể tiếp tục tìm các công việc khác còn mở.</p><a class="tm108-secondary tm108-inline-link" th:href="@{/jobs}">Tìm dự án khác</a></div>
+        </div>
+        <div sec:authorize="isAnonymous()" class="tm108-notice" role="status"><span class="tm108-notice-icon"><i class="fa-solid fa-user-lock"></i></span><div><h2>Đăng nhập để ứng tuyển</h2><p>Vui lòng dùng tài khoản Freelancer để gửi đề xuất.</p><a class="tm108-primary tm108-inline-link" th:href="@{/login}">Đăng nhập</a></div></div>
+        <div sec:authorize="hasRole('CUSTOMER')" class="tm108-notice" role="status"><span class="tm108-notice-icon"><i class="fa-solid fa-building"></i></span><div><h2>Bạn đang sử dụng tài khoản Client</h2><p>Chỉ Freelancer mới có quyền gửi ứng tuyển.</p><a class="tm108-secondary tm108-inline-link" th:href="@{/jobs/{id}(id=${job.id})}">Quay lại công việc</a></div></div>
       </section>
 
-      <aside class="tmjd-sidebar">
-        <article class="tmjd-side-card">
-          <div class="tmjd-side-title"><i class="fa-regular fa-clipboard"></i><h3>Thông tin dự án</h3></div>
-          <h4 class="tmjd-job-side-title" th:text="${job.title}">Thiết kế website thương hiệu thời trang</h4>
-          <div class="tmjd-customer-box compact">
-            <span class="tmjd-customer-avatar" th:text="${customerInitial}">A</span>
-            <div>
-              <strong th:text="${customerDisplayName}">Công ty TNHH Thời Trang AStyle</strong>
-              <div class="tmjd-rating"><i class="fa-solid fa-star"></i> <span th:text="${job.customer.rating != null ? job.customer.rating : 'Chưa có đánh giá'}">4.8</span></div>
-            </div>
-          </div>
-          <dl class="tmjd-info-list compact">
-            <div><dt>Ngân sách</dt><dd th:text="${#numbers.formatDecimal(job.budget,0,'POINT',0,'COMMA')} + 'đ'">10.000.000đ – 20.000.000đ</dd></div>
-            <div><dt>Thời gian</dt><dd th:text="${estimatedDurationText}">1 – 2 tháng</dd></div>
-            <div><dt>Đăng lúc</dt><dd th:text="${postedAgo}">2 ngày trước</dd></div>
-            <div><dt>Hạn nộp</dt><dd class="danger" th:text="${job.deadline != null ? #temporals.format(job.deadline,'dd/MM/yyyy') + (daysLeft > 0 ? ' (còn ' + daysLeft + ' ngày)' : '') : 'Linh hoạt'}">25/10/2026</dd></div>
-            <div><dt>Hình thức</dt><dd th:text="${job.workType == 'REMOTE' ? 'Làm việc từ xa' : (job.workType == 'HYBRID' ? 'Linh hoạt / Dự án' : 'Làm tại văn phòng')}">Toàn thời gian / Dự án</dd></div>
-            <div><dt>Địa điểm</dt><dd th:text="${customerLocation}">Làm việc từ xa</dd></div>
-            
-            <div><dt>Số ứng tuyển</dt><dd th:text="${proposalCount} + ' ứng viên'">18 ứng viên</dd></div>
-          </dl>
-          <div class="tmjd-side-block">
-            <h5>Mô tả công việc</h5>
-            <p th:text="${jobDescriptionParagraphs[0]}">Thiết kế website thương hiệu thời trang hiện đại, chuẩn UI/UX.</p>
-            <a class="tmjd-small-link" th:href="@{/jobs/{id}(id=${job.id})}">Xem chi tiết →</a>
-          </div>
-          <div class="tmjd-side-block">
-            <h5>Kỹ năng yêu cầu</h5>
-            <div class="tmjd-skill-chips">
-              <span th:each="skill : ${skillChips}" th:text="${skill}">ReactJS</span>
-            </div>
-          </div>
-          <div class="tmjd-side-block">
-            <h5>Mẹo viết proposal hiệu quả</h5>
-            <ol class="tmjd-tips-list">
-              <li>Giới thiệu ngắn gọn về bản thân và kinh nghiệm liên quan.</li>
-              <li>Nêu rõ cách bạn sẽ thực hiện dự án.</li>
-              <li>Đưa ra timeline và cam kết chất lượng.</li>
-              <li>Đính kèm portfolio hoặc sản phẩm tương tự.</li>
-              <li>Giữ nội dung chuyên nghiệp, rõ ràng và thuyết phục.</li>
-            </ol>
-          </div>
-        </article>
+      <aside class="tm108-panel tm108-project" aria-labelledby="tm108-project-title">
+        <div class="tm108-panel-heading">
+          <span class="tm108-panel-icon"><i class="fa-solid fa-briefcase"></i></span><div><h2 id="tm108-project-title">Thông tin dự án</h2><p>Kiểm tra yêu cầu trước khi gửi đề xuất</p></div>
+        </div>
+        <h3 class="tm108-job-title" th:text="${job.title}">Thiết kế bộ nhận diện thương hiệu</h3>
+        <div class="tm108-project-top">
+          <div class="tm108-company"><div class="tm108-avatar" th:text="${customerInitial}">N</div><div><strong th:text="${customerDisplayName}">Nova Digital</strong><small><i class="fa-solid fa-star"></i> <span th:text="${job.customer.rating != null ? job.customer.rating : 'Chưa đánh giá'}">5.0</span></small></div></div>
+          <div class="tm108-budget"><small>Ngân sách</small><strong th:text="${#numbers.formatDecimal(job.budget,0,'POINT',0,'COMMA')} + 'đ'">12.000.000đ</strong></div>
+        </div>
+        <dl class="tm108-meta">
+          <div><dt><i class="fa-regular fa-calendar"></i> Thời gian</dt><dd th:text="${estimatedDurationText}">Khoảng 1 tháng</dd></div>
+          <div><dt><i class="fa-regular fa-clock"></i> Đăng lúc</dt><dd th:text="${postedAgo}">3 ngày trước</dd></div>
+          <div><dt><i class="fa-regular fa-calendar-check"></i> Hạn nộp</dt><dd th:classappend="${daysLeft >= 0 and daysLeft <= 5} ? 'tm108-due-soon' : ''" th:text="${job.deadline != null ? #temporals.format(job.deadline,'dd/MM/yyyy') : 'Linh hoạt'}">16/11/2026</dd></div>
+          <div><dt><i class="fa-solid fa-laptop-house"></i> Hình thức</dt><dd th:text="${job.workType == 'REMOTE' ? 'Làm việc từ xa' : (job.workType == 'HYBRID' ? 'Linh hoạt (Hybrid)' : 'Tại văn phòng')}">Làm việc từ xa</dd></div>
+          <div><dt><i class="fa-solid fa-location-dot"></i> Địa điểm</dt><dd th:text="${customerLocation}">TP. Hồ Chí Minh</dd></div>
+          <div><dt><i class="fa-solid fa-users"></i> Số ứng tuyển</dt><dd th:text="${proposalCount} + ' ứng viên'">0 ứng viên</dd></div>
+        </dl>
+        <div class="tm108-divider"></div>
+        <section class="tm108-aside-section"><h4><i class="fa-regular fa-file-lines"></i> Mô tả công việc</h4><p th:text="${jobDescriptionParagraphs[0]}">Thiết kế logo, màu sắc, typography, card visit và banner truyền thông.</p><a th:href="@{/jobs/{id}(id=${job.id})}">Xem chi tiết <i class="fa-solid fa-arrow-right"></i></a></section>
+        <div class="tm108-divider"></div>
+        <section class="tm108-aside-section"><h4><i class="fa-solid fa-tags"></i> Kỹ năng yêu cầu</h4><div class="tm108-skills"><span th:each="skill : ${skillChips}" th:text="${skill}">Figma</span><span th:if="${#lists.isEmpty(skillChips)}">Khách hàng chưa liệt kê</span></div></section>
       </aside>
     </div>
   </div>
-  <footer class="fm-footer"><div class="fm-footer-top"><div class="fm-footer-intro"><a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a><p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p><div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span></div></div><div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a></div><div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/profile}">Tạo hồ sơ</a><a th:href="@{/freelancer/applications}">Ứng tuyển của tôi</a></div><div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/freelancers}">Tìm freelancer</a><a th:href="@{/freelancers}">Khám phá chuyên gia</a></div><div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/freelancer/profile}">Quản lý tài khoản</a></div></div><div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div></footer>
+<footer class="fm-footer"><div class="fm-footer-top"><div class="fm-footer-intro"><a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a><p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p><div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span></div></div><div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a></div><div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/profile}">Tạo hồ sơ</a><a th:href="@{/freelancer/applications}">Ứng tuyển của tôi</a></div><div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/freelancers}">Tìm freelancer</a><a th:href="@{/freelancers}">Khám phá chuyên gia</a></div><div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/freelancer/profile}">Quản lý tài khoản</a></div></div><div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div></footer>
 </main>
 
 <script th:replace="~{fragments/common :: scripts}"></script>
-<link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"></body>
+<link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"><link rel="stylesheet" th:href="@{/css/freelancer-sidebar-v104.css}">
+<link rel="stylesheet" th:href="@{/css/freelancer-sidebar-unified-v107.css(v=107)}">
+<link rel="stylesheet" th:href="@{/css/tm108-job-apply.css(v=108)}">
+<script th:src="@{/js/tm108-job-apply.js(v=108)}" defer></script>
+</body>
 </html>

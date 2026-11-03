@@ -18,10 +18,13 @@ public class ProjectService {
     private final MilestoneRepository milestones;
     private final PaymentRepository payments;
     private final UserRepository users;
+    private final QuoteService quotes;
+    private final AgreementService agreements;
 
     public ProjectService(ProjectRepository projects, JobApplicationRepository applications, JobRepository jobs,
-                          MilestoneRepository milestones, PaymentRepository payments, UserRepository users) {
-        this.projects=projects; this.applications=applications; this.jobs=jobs; this.milestones=milestones; this.payments=payments; this.users=users;
+                          MilestoneRepository milestones, PaymentRepository payments, UserRepository users,
+                          QuoteService quotes, AgreementService agreements) {
+        this.projects=projects; this.applications=applications; this.jobs=jobs; this.milestones=milestones; this.payments=payments; this.users=users;this.quotes=quotes;this.agreements=agreements;
     }
 
     public Project get(Long id){return projects.findById(id).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án."));}
@@ -35,14 +38,11 @@ public class ProjectService {
     }
 
     @Transactional
-    public void signAgreement(Project p,User user){
+    public void signAgreement(Project project,User user,int expectedVersion){
+        Project p=projects.findById(project.getId()).orElseThrow(()->new IllegalArgumentException("Không tìm thấy dự án."));
         ensureParticipant(p,user);
-        if(p.getStatus()==ProjectStatus.COMPLETED||p.getStatus()==ProjectStatus.CANCELLED||p.getStatus()==ProjectStatus.DISPUTED)
-            throw new IllegalArgumentException("Dự án không cho phép xác nhận hợp đồng.");
-        if(user.getId().equals(p.getCustomer().getId()))p.setCustomerSignedAt(LocalDateTime.now());
-        else if(user.getId().equals(p.getFreelancer().getId()))p.setFreelancerSignedAt(LocalDateTime.now());
-        else throw new IllegalArgumentException("Chỉ hai bên của hợp đồng được xác nhận.");
-        projects.save(p);
+        if(user.getRole()==Role.ADMIN)throw new IllegalArgumentException("Admin không được ký thay.");
+        agreements.recordSignature(p,user,expectedVersion);
     }
     @Transactional
     public void requestCancellation(Project p,User user,String reason){
@@ -80,12 +80,15 @@ public class ProjectService {
         if(!job.getCustomer().getId().equals(customer.getId()))throw new IllegalArgumentException("Bạn không sở hữu công việc này.");
         if(job.getStatus()!=JobStatus.OPEN && job.getStatus()!=JobStatus.PAUSED)throw new IllegalArgumentException("Công việc đã đóng hoặc bị hủy.");
         Optional<Project> existing=projects.findByApplication(selected); if(existing.isPresent())return existing.get();
+        QuoteRevision agreed=quotes.accepted(selected).orElseThrow(()->
+            new IllegalArgumentException("Hai bên cần chấp nhận báo giá trước khi chọn Freelancer."));
         for(JobApplication a:applications.findByJobOrderByCreatedAtDesc(job)){
             a.setStatus(a.getId().equals(selected.getId())?ApplicationStatus.ACCEPTED:ApplicationStatus.REJECTED);applications.save(a);
         }
         job.setStatus(JobStatus.CLOSED);jobs.save(job);
         Project p=new Project();p.setApplication(selected);p.setCustomer(customer);p.setFreelancer(selected.getFreelancer());
-        p.setTotalPrice(selected.getProposedPrice());p.setStatus(ProjectStatus.WAITING_PAYMENT);return projects.save(p);
+        p.setTotalPrice(agreed.getAmount());p.setStatus(ProjectStatus.WAITING_PAYMENT);
+        Project saved=projects.save(p);agreements.createDraft(saved,agreed);return saved;
     }
 
     @Transactional
@@ -120,7 +123,7 @@ public class ProjectService {
             m.setStatus(MilestoneStatus.COMPLETED);
             m.setCompletedAt(LocalDateTime.now());
             milestones.save(m);
-            for(Payment pay:payments.findByProjectAndMilestone(p,m))if(pay.getStatus()==PaymentStatus.PAID){pay.setStatus(PaymentStatus.DISBURSED);pay.setDisbursedAt(LocalDateTime.now());payments.save(pay);}
+            // Acceptance does not mean funds were transferred; settlement happens separately.
             List<Milestone> all=milestones(p);
             boolean allDone=all.stream().allMatch(x->x.getStatus()==MilestoneStatus.COMPLETED);
             BigDecimal total=all.stream().map(Milestone::getAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
