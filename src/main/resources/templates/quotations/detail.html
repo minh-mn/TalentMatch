@@ -14,7 +14,7 @@
     <section class="gd3-card"><h2>Phiên bản báo giá</h2>
       <p th:if="${#lists.isEmpty(quoteHistory)}">Chưa có vòng thương lượng nào. Giá và nội dung ứng tuyển ban đầu vẫn được giữ nguyên.</p>
       <article th:each="quote : ${quoteHistory}" class="gd3-quote">
-        <div class="gd3-between"><strong th:text="'Phiên bản v' + ${quote.version}">v1</strong><span class="gd3-pill" th:text="${quote.status}">PENDING</span></div>
+        <div class="gd3-between"><strong th:text="'Phiên bản v' + ${quote.version}">v1</strong><span class="gd3-pill" th:text="${@vnStatus.label(quote.status)}">PENDING</span></div>
         <div class="gd3-between"><b class="gd3-red" th:text="${#numbers.formatDecimal(quote.amount,0,'POINT',0,'COMMA')} + 'đ'">0đ</b><small th:text="${quote.estimatedDays} + ' ngày'">20 ngày</small></div>
         <div class="gd3-muted" th:text="'Người gửi: ' + ${quote.author.fullName} + ' · ' + ${#temporals.format(quote.createdAt,'dd/MM/yyyy HH:mm')}">Tác giả</div>
         <p><b>Phạm vi:</b> <span th:text="${quote.scope}"></span></p>

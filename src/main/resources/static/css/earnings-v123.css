@@ -1,0 +1,23 @@
+/* V123: bố cục rút tiền, không dùng cảnh báo màu vàng */
+.tm119-notice,.tm120-demo-pill{display:none!important}
+.tm120-withdrawals{min-height:0!important;overflow:visible!important}
+.tm123-withdraw-grid{display:grid!important;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr)!important;align-items:start!important;gap:18px!important;min-height:0!important;overflow:visible!important}
+.tm123-form-card,.tm123-side,.tm123-history{visibility:visible!important;opacity:1!important;position:relative!important;transform:none!important;min-height:0!important;overflow:visible!important}
+.tm123-form-card{display:block!important;padding:22px!important;background:#fff!important;max-width:none!important}
+.tm123-side{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:16px!important;align-self:start!important}
+.tm123-side>.tm120-balance-card,.tm123-side>.tm120-process-card{display:block!important;visibility:visible!important;opacity:1!important;height:auto!important;max-height:none!important}
+.tm123-form-card .tm120-available{display:flex!important;visibility:visible!important}
+.tm123-form-card form.tm120-withdraw-form{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:11px!important;height:auto!important;max-height:none!important;overflow:visible!important;visibility:visible!important;opacity:1!important}
+.tm123-form-card .tm120-withdraw-form select,.tm123-form-card .tm120-amount-wrap,.tm123-form-card .tm120-amount-wrap input{display:block!important;width:100%!important}
+.tm123-form-card .tm120-field-heading{display:flex!important;justify-content:space-between!important}
+.tm123-form-card .tm121-submit-bottom{display:block!important;width:100%!important;background:#1764ee!important;color:#fff!important;cursor:pointer}
+.tm123-submit-top{display:inline-flex!important;flex:0 0 auto!important;max-width:100%!important;white-space:normal!important;text-align:center}
+.tm123-history{display:block!important;margin-top:18px!important;background:#fff!important}
+.tm123-history .tm120-table-wrap{overflow-x:auto!important}
+.tm123-history table{min-width:730px}
+.tm120-withdraw-heading{margin-bottom:16px!important}
+.tm120-withdraw-heading h2{font-size:22px!important}
+.tm123-form-card .tm120-card-heading{align-items:center;flex-wrap:wrap}
+.tm123-form-card .tm120-card-heading>div{flex:1 1 200px}
+@media(max-width:1220px){.tm123-withdraw-grid{grid-template-columns:minmax(0,1fr)!important}.tm123-side{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:760px){.tm123-side{grid-template-columns:minmax(0,1fr)!important}.tm123-form-card{padding:15px!important}.tm123-submit-top{width:100%}}

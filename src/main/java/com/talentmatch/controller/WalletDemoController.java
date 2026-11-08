@@ -24,7 +24,22 @@ public class WalletDemoController {
   return "redirect:/freelancer/earnings?tab=withdrawals";
  }
  @GetMapping("/admin/wallet-withdrawals")
- public String admin(Model model){model.addAttribute("requests",wallet.allWithdrawals());return "admin/wallet-withdrawals";}
+ public String admin(Model model,@RequestParam(defaultValue="") String q,@RequestParam(defaultValue="all") String status){
+  java.util.List<WalletWithdrawal> all=wallet.allWithdrawals();
+  String keyword=q==null?"":q.strip().toLowerCase(java.util.Locale.ROOT);
+  java.util.List<WalletWithdrawal> filtered=all.stream().filter(w->{
+   if(!"all".equals(status)&&!w.getStatus().name().equalsIgnoreCase(status))return false;
+   String search=("WD-"+w.getId()+" "+w.getFreelancer().getFullName()+" "+w.getBank().getBankName()+" "+w.getBank().getMasked()).toLowerCase(java.util.Locale.ROOT);
+   return keyword.isBlank()||search.contains(keyword);
+  }).sorted(java.util.Comparator.comparing(WalletWithdrawal::getCreatedAt,java.util.Comparator.nullsLast(java.util.Comparator.reverseOrder()))).toList();
+  model.addAttribute("requests",filtered);model.addAttribute("q",q);model.addAttribute("status",status);
+  model.addAttribute("withdrawalTotal",all.size());
+  model.addAttribute("withdrawalPending",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.PENDING).count());
+  model.addAttribute("withdrawalApproved",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.APPROVED).count());
+  model.addAttribute("withdrawalCompleted",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.COMPLETED).count());
+  model.addAttribute("withdrawalRejected",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.REJECTED).count());
+  return "admin/wallet-withdrawals";
+ }
  @PostMapping("/admin/wallet-withdrawals/{id}/review")
  public String review(@PathVariable Long id,@RequestParam boolean accept,@RequestParam(required=false)String reason,RedirectAttributes a){
   try{wallet.review(id,accept,reason);a.addFlashAttribute("success","Đã cập nhật yêu cầu rút DEMO.");}

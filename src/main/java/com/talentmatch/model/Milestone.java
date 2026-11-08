@@ -14,6 +14,7 @@ public class Milestone {
     @Column(columnDefinition="TEXT") private String description;
     @Column(nullable=false,precision=15,scale=2) private BigDecimal amount;
     private LocalDate deadline;
+    @Column(name="payment_due_date") private LocalDate paymentDueDate;
     @Enumerated(EnumType.STRING) @Column(nullable=false,length=30) private MilestoneStatus status=MilestoneStatus.UNPAID;
     @Column(name="progress_percent",nullable=false) private int progressPercent=0;
     private LocalDateTime createdAt;
@@ -23,6 +24,8 @@ public class Milestone {
     public int getProgressPercent(){return progressPercent;}
     public void setProgressPercent(int value){this.progressPercent=value;}
     public String getRevisionNote(){return revisionNote;} public void setRevisionNote(String v){revisionNote=v;}
+    public LocalDate getPaymentDueDate(){return paymentDueDate;}
+    public void setPaymentDueDate(LocalDate value){this.paymentDueDate=value;}
     public Long getId(){return id;} public void setId(Long id){this.id=id;}
     public Project getProject(){return project;} public void setProject(Project project){this.project=project;}
     public String getTitle(){return title;} public void setTitle(String title){this.title=title;}

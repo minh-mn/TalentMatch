@@ -354,3 +354,38 @@
     });
   }
 })();
+
+// Việt hóa những mã trạng thái được trả thẳng từ DTO / controller cũ.
+// Chỉ đổi text người dùng nhìn thấy, KHÔNG đổi enum, value của form, URL hay logic JS.
+(function () {
+  const labels = {
+    PENDING:'Chờ xử lý', SUBMITTED:'Đã gửi', SHORTLISTED:'Được chọn vào danh sách ngắn',
+    ACCEPTED:'Đã chấp nhận', REJECTED:'Đã từ chối', WITHDRAWN:'Đã rút',
+    SUPERSEDED:'Đã được thay thế', EXPIRED:'Đã hết hạn', DRAFT:'Bản nháp',
+    OPEN:'Đang mở', PAUSED:'Tạm dừng', CLOSED:'Đã đóng', CANCELLED:'Đã hủy',
+    WAITING_PAYMENT:'Chờ thanh toán', IN_PROGRESS:'Đang thực hiện',
+    WAITING_ACCEPTANCE:'Chờ nghiệm thu', COMPLETED:'Đã hoàn thành', DISPUTED:'Đang tranh chấp',
+    UNPAID:'Chưa thanh toán', PAID:'Đã thanh toán', DISBURSED:'Đã giải ngân',
+    FAILED:'Thất bại', REFUNDED:'Đã hoàn tiền', APPROVED:'Đã duyệt',
+    SENT:'Đã gửi', DECLINED:'Đã từ chối', UNDER_REVIEW:'Đang xem xét',
+    RESOLVED:'Đã giải quyết', REVIEWED:'Đã xem xét', ACTIVE:'Đang hoạt động',
+    INACTIVE:'Ngừng hoạt động', VERIFIED:'Đã xác minh', NOT_SUBMITTED:'Chưa gửi xác minh',
+    PROCESSING:'Đang xử lý', SUCCESS:'Thành công'
+  };
+  function localize(root) {
+    if (!root || !document.createTreeWalker) return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = walker.nextNode())) {
+      const parent = node.parentElement;
+      if (!parent || parent.closest('script,style,textarea,option,code,pre,[contenteditable]')) continue;
+      const value = node.nodeValue.trim();
+      if (Object.prototype.hasOwnProperty.call(labels, value)) {
+        node.nodeValue = node.nodeValue.replace(value, labels[value]);
+      }
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => localize(document.body), {once:true});
+  } else localize(document.body);
+})();

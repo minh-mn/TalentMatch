@@ -80,36 +80,38 @@ public class FreelancerWorkflowController {
             @RequestParam(defaultValue="") String q,
             @RequestParam(defaultValue="all") String status,
             @RequestParam(defaultValue="newest") String sort,
+            @RequestParam(defaultValue="all") String type,
             @RequestParam(required=false) Long selected) {
         User freelancer=users.byEmail(auth.getName());
         List<Project> all=projects.forFreelancer(freelancer);
         Map<Long,List<Milestone>> byProject=new LinkedHashMap<>();
-        Map<Long,Integer> reported=new LinkedHashMap<>(), accepted=new LinkedHashMap<>();
+        Map<Long,Integer> reported=new LinkedHashMap<>(), accepted=new LinkedHashMap<>(), milestoneCounts=new LinkedHashMap<>();
         long working=0, ready=0, waiting=0, changes=0;
         for(Project project:all){
             List<Milestone> stages=projects.milestones(project);
             byProject.put(project.getId(),stages);
-            BigDecimal total=BigDecimal.ZERO, reportedSum=BigDecimal.ZERO, acceptedSum=BigDecimal.ZERO;
-            for(Milestone stage:stages){
-                BigDecimal value=stage.getAmount()==null?BigDecimal.ZERO:stage.getAmount();
-                total=total.add(value);
-                reportedSum=reportedSum.add(value.multiply(BigDecimal.valueOf(stage.getStatus()==MilestoneStatus.COMPLETED?100:stage.getProgressPercent())));
-                if(stage.getStatus()==MilestoneStatus.COMPLETED) acceptedSum=acceptedSum.add(value.multiply(BigDecimal.valueOf(100)));
-                if(stage.getStatus()==MilestoneStatus.IN_PROGRESS){working++;if(stage.getProgressPercent()==100)ready++;if(stage.getRevisionNote()!=null&&!stage.getRevisionNote().isBlank())changes++;}
-                if(stage.getStatus()==MilestoneStatus.SUBMITTED)waiting++;
-            }
-            reported.put(project.getId(),total.signum()==0?0:reportedSum.divide(total,0,java.math.RoundingMode.HALF_UP).intValue());
-            accepted.put(project.getId(),total.signum()==0?0:acceptedSum.divide(total,0,java.math.RoundingMode.HALF_UP).intValue());
+            milestoneCounts.put(project.getId(),stages.size());
+            // KPI đếm dự án thay vì cộng số mốc (khớp với danh sách được lọc).
+            if(stages.stream().anyMatch(m->m.getStatus()==MilestoneStatus.IN_PROGRESS && m.getProgressPercent()<100 && (m.getRevisionNote()==null || m.getRevisionNote().isBlank()))
+                 || stages.isEmpty() && project.getStatus()==ProjectStatus.IN_PROGRESS)working++;
+            if(stages.stream().anyMatch(m->m.getStatus()==MilestoneStatus.IN_PROGRESS && m.getProgressPercent()==100))ready++;
+            if(stages.stream().anyMatch(m->m.getStatus()==MilestoneStatus.SUBMITTED)
+                 || stages.isEmpty() && project.getStatus()==ProjectStatus.WAITING_ACCEPTANCE)waiting++;
+            if(stages.stream().anyMatch(m->m.getStatus()==MilestoneStatus.IN_PROGRESS && m.getRevisionNote()!=null && !m.getRevisionNote().isBlank()))changes++;
+            reported.put(project.getId(),com.talentmatch.service.ProgressMetrics.reported(stages));
+            accepted.put(project.getId(),com.talentmatch.service.ProgressMetrics.accepted(stages));
         }
         String term=q==null?"":q.trim().toLowerCase(Locale.ROOT);
         List<Project> filtered=new ArrayList<>();
         for(Project project:all){
-            if(!term.isEmpty()&&!(project.getApplication().getJob().getTitle()+" "+project.getCustomer().getFullName()+" "+project.getId()).toLowerCase(Locale.ROOT).contains(term))continue;
+            if(!term.isEmpty()&&!(project.getApplication().getJob().getTitle()+" "+project.getCustomer().getFullName()+" TM-PJ-"+project.getId()).toLowerCase(Locale.ROOT).contains(term))continue;
+            if("milestone".equals(type)&&byProject.get(project.getId()).isEmpty())continue;
+            if("fixed".equals(type)&&!byProject.get(project.getId()).isEmpty())continue;
             List<Milestone> stages=byProject.get(project.getId());
             boolean matches=switch(status){
-                case "working" -> stages.stream().anyMatch(m->m.getStatus()==MilestoneStatus.IN_PROGRESS);
+                case "working" -> stages.stream().anyMatch(m->m.getStatus()==MilestoneStatus.IN_PROGRESS && m.getProgressPercent()<100 && (m.getRevisionNote()==null || m.getRevisionNote().isBlank())) || (stages.isEmpty() && project.getStatus()==ProjectStatus.IN_PROGRESS);
                 case "ready" -> stages.stream().anyMatch(m->m.getStatus()==MilestoneStatus.IN_PROGRESS&&m.getProgressPercent()==100);
-                case "waiting" -> stages.stream().anyMatch(m->m.getStatus()==MilestoneStatus.SUBMITTED);
+                case "waiting" -> stages.stream().anyMatch(m->m.getStatus()==MilestoneStatus.SUBMITTED) || (stages.isEmpty() && project.getStatus()==ProjectStatus.WAITING_ACCEPTANCE);
                 case "changes" -> stages.stream().anyMatch(m->m.getStatus()==MilestoneStatus.IN_PROGRESS&&m.getRevisionNote()!=null&&!m.getRevisionNote().isBlank());
                 default -> true;
             };
@@ -123,11 +125,17 @@ public class FreelancerWorkflowController {
         model.addAttribute("currentUser",freelancer);model.addAttribute("ownProjects",filtered);
         model.addAttribute("selectedProject",active);model.addAttribute("selectedMilestones",active==null?List.of():byProject.get(active.getId()));
         model.addAttribute("reported",reported);model.addAttribute("accepted",accepted);
-        model.addAttribute("q",q);model.addAttribute("status",status);model.addAttribute("sort",sort);
+        model.addAttribute("milestoneCounts",milestoneCounts);
+        model.addAttribute("progressMetricNote","Tiến độ theo tỷ trọng giá trị mỗi mốc; đã nghiệm thu chỉ tính mốc được Client chấp nhận.");
+        model.addAttribute("q",q);model.addAttribute("status",status);model.addAttribute("sort",sort);model.addAttribute("type",type);
         model.addAttribute("workingCount",working);model.addAttribute("readyCount",ready);
         model.addAttribute("waitingCount",waiting);model.addAttribute("changesCount",changes);
         return "freelancer/progress-deliveries";
     }
+
+    /** Tổng hợp tiền theo dự án từ giao dịch thành công và bút toán ví (không cộng giao dịch chờ/thất bại). */
+    public record ProjectFinance(java.math.BigDecimal paidHeld, java.math.BigDecimal disbursedGross,
+                                 java.math.BigDecimal fee, java.math.BigDecimal net) {}
 
     @GetMapping("/earnings") @Transactional
     public String earnings(Authentication auth, Model model,
@@ -138,12 +146,44 @@ public class FreelancerWorkflowController {
             @RequestParam(defaultValue="projects") String tab) {
         User freelancer=users.byEmail(auth.getName());
         wallet.sync(freelancer);
-        model.addAttribute("walletSummary",wallet.summary(freelancer));
+        var walletSummary=wallet.summary(freelancer);
+        model.addAttribute("walletSummary",walletSummary);
+        model.addAttribute("withdrawEnabled",walletSummary.available().compareTo(new BigDecimal("10000"))>=0);
+        model.addAttribute("withdrawMax",walletSummary.available().max(BigDecimal.ZERO).toBigInteger().toString());
         model.addAttribute("walletBanks",wallet.banks(freelancer));
-        model.addAttribute("walletWithdrawals",wallet.withdrawals(freelancer));
+        List<WalletWithdrawal> allWithdrawals=wallet.withdrawals(freelancer);
+        List<WalletWithdrawal> filteredWithdrawals=new ArrayList<>();
+        for(WalletWithdrawal withdrawal:allWithdrawals){
+            if("withdrawals".equals(tab)){
+                if(!"all".equals(status)&&!withdrawal.getStatus().name().equals(status))continue;
+                String needle=q==null?"":q.trim().toLowerCase(Locale.ROOT);
+                String bankText=withdrawal.getBank()==null?"":withdrawal.getBank().getBankName()+" "+withdrawal.getBank().getMasked();
+                String haystack=("WD-"+withdrawal.getId()+" "+bankText).toLowerCase(Locale.ROOT);
+                if(!needle.isBlank()&&!haystack.contains(needle))continue;
+            }
+            filteredWithdrawals.add(withdrawal);
+        }
+        filteredWithdrawals.sort(Comparator.comparing(WalletWithdrawal::getCreatedAt,Comparator.nullsLast(Comparator.naturalOrder())));
+        if(!"oldest".equals(sort))java.util.Collections.reverse(filteredWithdrawals);
+        model.addAttribute("walletWithdrawals",filteredWithdrawals);
         List<Project> allProjects=projects.forFreelancer(freelancer);
         List<Payment> allPayments=new ArrayList<>();
         for(Project item:allProjects) allPayments.addAll(payments.findByProjectOrderByCreatedAtDesc(item));
+        Map<Long,ProjectFinance> projectFinance=new LinkedHashMap<>();
+        for(Project p:allProjects){
+            BigDecimal paidHeld=BigDecimal.ZERO, disbursed=BigDecimal.ZERO;
+            for(Payment item:payments.findByProjectOrderByCreatedAtDesc(p)){
+                if(item.getAmount()==null)continue;
+                if(item.getStatus()==PaymentStatus.PAID)paidHeld=paidHeld.add(item.getAmount());
+                if(item.getStatus()==PaymentStatus.DISBURSED)disbursed=disbursed.add(item.getAmount());
+            }
+            BigDecimal fee=BigDecimal.ZERO, net=BigDecimal.ZERO;
+            for(WalletCredit credit:wallet.creditsForProject(freelancer,p)){
+                fee=fee.add(credit.getFee());net=net.add(credit.getNet());
+            }
+            projectFinance.put(p.getId(),new ProjectFinance(paidHeld,disbursed,fee,net));
+        }
+        model.addAttribute("projectFinance",projectFinance);
         BigDecimal released=BigDecimal.ZERO, held=BigDecimal.ZERO;
         for(Payment item:allPayments){
             if(item.getAmount()==null)continue;
@@ -154,8 +194,8 @@ public class FreelancerWorkflowController {
         List<Payment> rows=new ArrayList<>();
         for(Payment item:allPayments){
             if(!"all".equals(project) && !String.valueOf(item.getProject().getId()).equals(project))continue;
-            if(!"all".equals(status) && !item.getStatus().name().equals(status))continue;
-            String search=(item.getTransactionCode()+" "+item.getProject().getApplication().getJob().getTitle()).toLowerCase(Locale.ROOT);
+            if("transactions".equals(tab) && !"all".equals(status) && !item.getStatus().name().equals(status))continue;
+            String search=(String.valueOf(item.getTransactionCode())+" "+item.getProject().getApplication().getJob().getTitle()+" TM-PJ-"+item.getProject().getId()+" "+item.getProject().getCustomer().getFullName()).toLowerCase(Locale.ROOT);
             if(!keyword.isBlank()&&!search.contains(keyword))continue;
             rows.add(item);
         }
@@ -164,8 +204,8 @@ public class FreelancerWorkflowController {
         List<Project> visibleProjects=new ArrayList<>();
         for(Project item:allProjects){
             if(!"all".equals(project)&&!String.valueOf(item.getId()).equals(project))continue;
-            if(!keyword.isBlank()&&!(item.getApplication().getJob().getTitle()+" "+item.getId()).toLowerCase(Locale.ROOT).contains(keyword))continue;
-            if(!"all".equals(status)&&rows.stream().noneMatch(payment->payment.getProject().getId().equals(item.getId())))continue;
+            if(!keyword.isBlank()&&!(item.getApplication().getJob().getTitle()+" TM-PJ-"+item.getId()+" "+item.getCustomer().getFullName()).toLowerCase(Locale.ROOT).contains(keyword))continue;
+            if("projects".equals(tab)&&!"all".equals(status)&&!item.getStatus().name().equals(status))continue;
             visibleProjects.add(item);
         }
         visibleProjects.sort(Comparator.comparing(Project::getCreatedAt,Comparator.nullsLast(Comparator.naturalOrder())));

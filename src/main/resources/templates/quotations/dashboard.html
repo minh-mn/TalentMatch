@@ -11,6 +11,7 @@
 <link rel="stylesheet" th:href="@{/css/quotes-v109.css(v=109)}">
 <link rel="stylesheet" th:href="@{/css/quotes-v110.css(v=110)}">
 <link rel="stylesheet" th:href="@{/css/banners-v111.css(v=111)}">
+<link rel="stylesheet" th:href="@{/css/freelancer-workflow-v118.css(v=118)}">
 <aside th:replace="~{fragments/common :: marketSidebar('quotes')}"></aside>
 <header th:if="${!isClient}" class="fm-header">
   <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
@@ -28,23 +29,26 @@
    <div class="tm109-kpi"><span class="tm109-kpi-icon blue"><i class="fa-solid fa-handshake"></i></span><span>Đang thương lượng<strong th:text="${negotiatingCount}">0</strong></span></div>
    <div class="tm109-kpi"><span class="tm109-kpi-icon amber"><i class="fa-regular fa-clock"></i></span><span>Chờ phản hồi<strong th:text="${waitingCount}">0</strong></span></div>
    <div class="tm109-kpi"><span class="tm109-kpi-icon green"><i class="fa-regular fa-circle-check"></i></span><span>Đã chấp nhận<strong th:text="${countACCEPTED}">0</strong></span></div>
+   <a class="tm109-kpi tm118-kpi-link" th:href="@{/freelancer/quotes(status=UNINITIALIZED)}" th:if="${!isClient}"><span class="tm109-kpi-icon blue"><i class="fa-regular fa-file-lines"></i></span><span>Chưa tạo phiên bản<strong th:text="${uninitializedCount}">0</strong></span></a>
    <div class="tm109-kpi"><span class="tm109-kpi-icon red"><i class="fa-regular fa-circle-xmark"></i></span><span>Đã từ chối<strong th:text="${countREJECTED}">0</strong></span></div>
  </section>
  <section class="tm109-filterbar" aria-label="Tim kiem va loc bao gia">
   <form method="get" th:action="${basePath}" class="tm109-filters">
    <label class="tm109-search-field"><i class="fa-solid fa-magnifying-glass"></i><input type="search" name="q" th:value="${q}" placeholder="Tìm theo dự án hoặc đối tác..." aria-label="Tìm kiếm báo giá"></label>
-   <label class="tm109-field">Trạng thái <select name="status" aria-label="Lọc trạng thái"><option value="all" th:selected="${status=='all'}">Tất cả</option><option value="NEGOTIATING" th:selected="${status=='NEGOTIATING'}">Đang thương lượng</option><option value="WAITING" th:selected="${status=='WAITING'}">Chờ phản hồi</option><option value="ACCEPTED" th:selected="${status=='ACCEPTED'}">Đã chấp nhận</option><option value="REJECTED" th:selected="${status=='REJECTED'}">Đã từ chối</option><option value="SUPERSEDED" th:selected="${status=='SUPERSEDED'}">Đã thay thế</option></select></label>
+   <label class="tm109-field">Trạng thái <select name="status" aria-label="Lọc trạng thái"><option value="all" th:selected="${status=='all'}">Tất cả</option><option value="UNINITIALIZED" th:selected="${status=='UNINITIALIZED'}">Chưa tạo phiên bản</option><option value="NEGOTIATING" th:selected="${status=='NEGOTIATING'}">Đang thương lượng</option><option value="WAITING" th:selected="${status=='WAITING'}">Chờ phản hồi</option><option value="ACCEPTED" th:selected="${status=='ACCEPTED'}">Đã chấp nhận</option><option value="REJECTED" th:selected="${status=='REJECTED'}">Đã từ chối</option><option value="SUPERSEDED" th:selected="${status=='SUPERSEDED'}">Đã thay thế</option></select></label>
    <label class="tm109-field">Sắp xếp <select name="sort" aria-label="Sắp xếp"><option value="newest" th:selected="${sort=='newest'}">Mới cập nhật</option><option value="oldest" th:selected="${sort=='oldest'}">Cũ nhất</option><option value="priceHigh" th:selected="${sort=='priceHigh'}">Giá cao nhất</option><option value="priceLow" th:selected="${sort=='priceLow'}">Giá thấp nhất</option></select></label>
+   <a class="tm118-reset" th:href="${basePath}">Đặt lại</a>
    <button class="tm109-filter-submit" type="submit"><i class="fa-solid fa-filter"></i> Áp dụng</button>
   </form>
   <a class="tm109-create" th:href="${isClient ? '/customer/applicants' : '/jobs'}"><i class="fa-solid fa-plus"></i><span th:text="${isClient ? 'Xem ứng viên' : 'Tìm dự án để báo giá'}">Tìm dự án để báo giá</span></a>
  </section>
+ <div class="tm118-helper"><i class="fa-solid fa-circle-info"></i> Chọn một dự án để xem lịch sử và khởi tạo V1. Mỗi lần gửi báo giá mới tạo thêm một phiên bản; không ghi đè phiên bản cũ.</div>
  <div class="tm105-columns" th:classappend="${selectedApplication == null} ? ' tm109-no-selection' : ' tm109-has-selection'">
  <section class="tm105-offer-list" aria-label="Danh sách báo giá">
-   <div class="tm109-list-heading"><div><h2>Danh sách báo giá</h2><p th:text="${totalCount}+' ứng tuyển phù hợp · Chọn một dự án để xem chi tiết thương lượng'">Chọn báo giá</p></div><span class="tm109-count" th:text="${totalCount}">0</span></div>
+   <div class="tm109-list-heading"><div><h2>Danh sách báo giá / ứng tuyển</h2><p th:text="${totalCount}+' ứng tuyển phù hợp · Chọn một dự án để xem chi tiết thương lượng'">Chọn báo giá</p></div><span class="tm109-count" th:text="${totalCount}">0</span></div>
    <a class="tm105-offer" th:each="a:${applications}" th:href="@{${basePath}(selected=${a.id},q=${q},status=${status},sort=${sort},page=${currentPage})}" th:classappend="${selectedId != null and selectedId == a.id} ? 'selected' : ''">
     <div class="tm105-thumb"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-    <div class="tm105-offer-content"><div class="tm105-offer-title"><strong th:text="${a.job.title}">Tên dự án</strong><span class="tm105-pill pending" th:if="${latestById[a.id] != null and latestById[a.id].status.name()=='PENDING'}">Chờ phản hồi</span><span class="tm105-pill accepted" th:if="${latestById[a.id] != null and latestById[a.id].status.name()=='ACCEPTED'}">Đã chấp nhận</span><span class="tm105-pill rejected" th:if="${latestById[a.id] != null and latestById[a.id].status.name()=='REJECTED'}">Đã từ chối</span><span class="tm105-pill superseded" th:if="${latestById[a.id] != null and latestById[a.id].status.name()=='SUPERSEDED'}">Đã thay thế</span><span class="tm105-pill superseded" th:if="${latestById[a.id]==null}">Chưa khởi tạo phiên bản</span></div>
+    <div class="tm105-offer-content"><div class="tm105-offer-title"><strong th:text="${a.job.title}">Tên dự án</strong><span class="tm105-pill pending" th:if="${latestById[a.id] != null and latestById[a.id].status.name()=='PENDING'}" th:text="${latestById[a.id].version > 1 ? 'Đang thương lượng' : 'Chờ phản hồi'}">Chờ phản hồi</span><span class="tm105-pill accepted" th:if="${latestById[a.id] != null and latestById[a.id].status.name()=='ACCEPTED'}">Đã chấp nhận</span><span class="tm105-pill rejected" th:if="${latestById[a.id] != null and latestById[a.id].status.name()=='REJECTED'}">Đã từ chối</span><span class="tm105-pill superseded" th:if="${latestById[a.id] != null and latestById[a.id].status.name()=='SUPERSEDED'}">Đã thay thế</span><span class="tm105-pill superseded" th:if="${latestById[a.id]==null}">Chưa tạo phiên bản báo giá</span></div>
      <div class="tm105-tags"><span th:text="${a.job.category}">Thiết kế</span><span th:if="${a.job.requiredSkills != null and !a.job.requiredSkills.isBlank()}" th:text="${#strings.abbreviate(a.job.requiredSkills,36)}">Figma</span></div>
      <p th:text="${#strings.abbreviate(a.job.description,110)}">Mô tả công việc</p>
      <div class="tm105-offer-bottom"><span><i class="fa-solid fa-building"></i> <b th:text="${isClient ? a.freelancer.fullName : (a.job.customer.companyName != null and !a.job.customer.companyName.isBlank() ? a.job.customer.companyName : a.job.customer.fullName)}">Đối tác</b></span><span><i class="fa-regular fa-calendar"></i> <b th:text="${#temporals.format(a.createdAt,'dd/MM/yyyy')}">10/10/2026</b></span><span th:if="${latestById[a.id] != null}"><i class="fa-regular fa-file-lines"></i> v<span th:text="${latestById[a.id].version}">1</span></span><strong class="tm105-money" th:text="${#numbers.formatDecimal(latestById[a.id] != null ? latestById[a.id].amount : a.proposedPrice,0,'POINT',0,'COMMA')}+'đ'">15.000.000đ</strong></div>
@@ -62,11 +66,11 @@
    <div class="tm105-facts"><div><small>Ngân sách dự kiến</small><strong class="red" th:text="${#numbers.formatDecimal(a.job.budget,0,'POINT',0,'COMMA')}+'đ'">20.000.000đ</strong></div><div><small>Thời gian đề xuất</small><strong th:text="${q != null ? q.estimatedDays+' ngày' : a.estimatedDays+' ngày'}">30 ngày</strong></div><div><small>Phiên bản hiện tại</small><strong th:text="${q != null ? 'v'+q.version : 'Chưa có'}">v3</strong></div></div>
    <div class="tm105-separator"></div>
    <div th:if="${q==null}" class="tm110-initial-notice">
-     <strong>Ứng tuyển cũ chưa có bản báo giá lưu trong lịch sử</strong>
+     <strong>Chưa có phiên bản báo giá — cần tạo V1</strong>
      <p th:if="${!isClient}">Bạn có thể tạo phiên bản v1 từ giá, thời gian và nội dung ứng tuyển đã gửi. Thao tác này sẽ được lưu vào cơ sở dữ liệu.</p>
      <p th:if="${isClient}">Vui lòng chờ Freelancer khởi tạo báo giá ban đầu để bắt đầu thương lượng.</p>
      <form th:if="${canInitialize}" method="post" th:action="@{/quotations/application/{id}/initialize(id=${a.id})}" onsubmit="return confirm('Tạo báo giá v1 từ thông tin ứng tuyển đã gửi?')">
-       <button class="tm105-btn primary" type="submit"><i class="fa-solid fa-file-circle-plus"></i> Khởi tạo báo giá v1</button>
+       <button class="tm105-btn primary" type="submit"><i class="fa-solid fa-file-circle-plus"></i> Tạo phiên bản báo giá V1</button>
      </form>
    </div>
    <div class="tm105-section-title"><h3>Báo giá mới nhất</h3><button type="button" class="tm105-inline-link" th:if="${canCounter}" onclick="document.getElementById('quote-form').open=true;document.getElementById('quote-form').scrollIntoView({behavior:'smooth',block:'center'});">+ Đề xuất mới</button></div>

@@ -45,7 +45,7 @@
           <span class="tm108-notice-icon"><i class="fa-solid fa-circle-check"></i></span>
           <div>
             <h2>Bạn đã gửi ứng tuyển cho công việc này</h2>
-            <p>Trạng thái: <b th:text="${currentApplication.status}">Đã gửi</b></p>
+            <p>Trạng thái: <b th:text="${@vnStatus.label(currentApplication.status)}">Đã gửi</b></p>
             <p><strong class="tm108-price" th:text="${#numbers.formatDecimal(currentApplication.proposedPrice,0,'POINT',0,'COMMA')} + 'đ'">12.000.000đ</strong> · <span th:text="${currentApplication.estimatedDays} + ' ngày'">15 ngày</span></p>
             <a class="tm108-primary tm108-inline-link" th:href="@{/freelancer/applications}">Xem đơn ứng tuyển</a>
           </div>

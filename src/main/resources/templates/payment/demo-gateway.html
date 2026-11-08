@@ -17,7 +17,7 @@
       <div><span>Dự án</span><b th:text="${payment.project.application.job.title}">Dự án</b></div>
       <div><span>Hạng mục</span><b th:text="${payment.milestone != null ? payment.milestone.title : 'Toàn dự án'}">Toàn dự án</b></div>
       <div><span>Phương thức</span><b th:text="${payment.method}">VNPAY_DEMO</b></div>
-      <div><span>Trạng thái</span><b th:text="${payment.status}">PENDING</b></div>
+      <div><span>Trạng thái</span><b th:text="${@vnStatus.label(payment.status)}">PENDING</b></div>
       <div><span>Số tiền</span><b class="gateway-amount" th:text="${#numbers.formatDecimal(payment.amount,0,'POINT',0,'COMMA')} + 'đ'">0đ</b></div>
     </div>
     <div class="gateway-actions" th:if="${payment.status.name() == 'PENDING'}">

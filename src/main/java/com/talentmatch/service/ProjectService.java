@@ -17,9 +17,14 @@ public class ProjectService {
     private final JobRepository jobs;
     private final MilestoneRepository milestones;
     private final PaymentRepository payments;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private ProjectDeliveryRepository deliveryEvidence;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private WalletDemoService walletDemo;
     private final UserRepository users;
     private final QuoteService quotes;
     private final AgreementService agreements;
+    @org.springframework.beans.factory.annotation.Value("${talentmatch.settlement.hold-days:3}") private int holdDays;
 
     public ProjectService(ProjectRepository projects, JobApplicationRepository applications, JobRepository jobs,
                           MilestoneRepository milestones, PaymentRepository payments, UserRepository users,
@@ -91,13 +96,41 @@ public class ProjectService {
         Project saved=projects.save(p);agreements.createDraft(saved,agreed);return saved;
     }
 
+    /** Configure a payment date separately from the delivery deadline. Scheduling does not constitute payment. */
+    @Transactional
+    public void setPaymentDueDate(Long projectId, Long milestoneId, User customer, LocalDate dueDate){
+        Project p=projects.findForUpdate(projectId).orElseThrow(()->new IllegalArgumentException("Không tìm thấy dự án."));
+        if(customer==null || customer.getRole()!=Role.CUSTOMER || !p.getCustomer().getId().equals(customer.getId()))
+            throw new IllegalArgumentException("Chỉ Client của dự án được thiết lập hạn thanh toán.");
+        if(p.getStatus()==ProjectStatus.COMPLETED || p.getStatus()==ProjectStatus.CANCELLED || p.getStatus()==ProjectStatus.DISPUTED)
+            throw new IllegalArgumentException("Không thể đổi lịch thanh toán của dự án đã kết thúc hoặc tranh chấp.");
+        if(dueDate==null)throw new IllegalArgumentException("Hãy chọn hạn thanh toán.");
+        if(dueDate.isBefore(LocalDate.now()))throw new IllegalArgumentException("Hạn thanh toán mới không thể trong quá khứ.");
+        List<Milestone> stages=milestones(p);
+        if(milestoneId==null){
+            if(!stages.isEmpty())throw new IllegalArgumentException("Dự án chia mốc cần thiết lập hạn riêng cho từng mốc.");
+            if(payments.findByProjectOrderByCreatedAtDesc(p).stream().anyMatch(x->x.getMilestone()==null))
+                throw new IllegalArgumentException("Đã phát sinh giao dịch: không thể sửa hạn thanh toán một lần.");
+            p.setPaymentDueDate(dueDate); projects.save(p);return;
+        }
+        Milestone stage=stages.stream().filter(x->x.getId().equals(milestoneId)).findFirst()
+            .orElseThrow(()->new IllegalArgumentException("Mốc không thuộc dự án."));
+        if(stage.getDeadline()==null)throw new IllegalArgumentException("Cần có deadline bàn giao của mốc trước khi thiết lập hạn thanh toán.");
+        if(dueDate.isAfter(stage.getDeadline()))throw new IllegalArgumentException("Hạn thanh toán không được sau deadline bàn giao mốc.");
+        if(stage.getStatus()!=MilestoneStatus.UNPAID || !payments.findByProjectAndMilestone(p,stage).isEmpty())
+            throw new IllegalArgumentException("Đã phát sinh giao dịch hoặc mốc đang thực hiện: không thể sửa hạn thanh toán.");
+        stage.setPaymentDueDate(dueDate); milestones.save(stage);
+    }
+
     @Transactional
     public Milestone addMilestone(Project p,User customer,String title,String description,BigDecimal amount,LocalDate deadline){
         if(!p.getCustomer().getId().equals(customer.getId()))throw new IllegalArgumentException("Chỉ khách hàng được tạo Milestone.");
-        if(p.getStatus()==ProjectStatus.COMPLETED||p.getStatus()==ProjectStatus.CANCELLED||p.getStatus()==ProjectStatus.DISPUTED)throw new IllegalArgumentException("Dự án đang kết thúc hoặc bị tranh chấp.");
+        if(p.getStatus()!=ProjectStatus.WAITING_PAYMENT)throw new IllegalArgumentException("Chỉ được chia mốc trước khi bắt đầu thanh toán và thực hiện dự án.");
+        if(payments.findByProjectOrderByCreatedAtDesc(p).stream().anyMatch(pay->pay.getStatus()==PaymentStatus.PENDING))throw new IllegalArgumentException("Đang có giao dịch chờ thanh toán; không được thay đổi mốc.");
         title=title==null?"":title.trim(); if(title.isBlank())throw new IllegalArgumentException("Tên Milestone không được để trống.");
         if(amount==null||amount.signum()<=0)throw new IllegalArgumentException("Giá trị Milestone phải lớn hơn 0.");
-        if(deadline!=null&&deadline.isBefore(LocalDate.now()))throw new IllegalArgumentException("Deadline Milestone không được ở quá khứ.");
+        if(deadline==null)throw new IllegalArgumentException("Milestone phải có deadline để theo dõi tiến độ và nghiệm thu.");
+        if(deadline.isBefore(LocalDate.now()))throw new IllegalArgumentException("Deadline Milestone không được ở quá khứ.");
         if(payments.findByProjectOrderByCreatedAtDesc(p).stream().anyMatch(pay->pay.getMilestone()==null && (pay.getStatus()==PaymentStatus.PAID||pay.getStatus()==PaymentStatus.DISBURSED)))
             throw new IllegalArgumentException("Dự án đã thanh toán toàn bộ; không thể tạo Milestone sau thanh toán.");
         BigDecimal current=milestones(p).stream().map(Milestone::getAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
@@ -113,17 +146,31 @@ public class ProjectService {
         if(target==MilestoneStatus.IN_PROGRESS){
             if(!p.getFreelancer().getId().equals(actor.getId()))throw new IllegalArgumentException("Chỉ Freelancer được bắt đầu Milestone.");
             if(m.getStatus()!=MilestoneStatus.PAID)throw new IllegalArgumentException("Milestone phải được thanh toán trước khi bắt đầu.");
+            if(m.getDeadline()==null)throw new IllegalArgumentException("Milestone phải có deadline trước khi thực hiện.");
+            List<Milestone> ordered=milestones(p);
+            int idx=ordered.indexOf(m);
+            if(idx>0){
+                boolean prevDone=ordered.subList(0,idx).stream().allMatch(x->x.getStatus()==MilestoneStatus.COMPLETED);
+                if(!prevDone)throw new IllegalArgumentException("Bạn cần hoàn thành và được nghiệm thu các milestone trước đó trước khi bắt đầu mốc này.");
+            }
         }else if(target==MilestoneStatus.SUBMITTED){
-            if(!p.getFreelancer().getId().equals(actor.getId()))throw new IllegalArgumentException("Chỉ Freelancer được gửi nghiệm thu.");
-            if(m.getStatus()!=MilestoneStatus.IN_PROGRESS)throw new IllegalArgumentException("Milestone chưa ở trạng thái đang thực hiện.");
-            p.setStatus(ProjectStatus.WAITING_ACCEPTANCE);projects.save(p);
+            throw new IllegalArgumentException("Để gửi nghiệm thu, Freelancer phải tải file hoặc liên kết bàn giao tại mục Bàn giao sản phẩm.");
         }else if(target==MilestoneStatus.COMPLETED){
             if(!p.getCustomer().getId().equals(actor.getId()))throw new IllegalArgumentException("Chỉ khách hàng được nghiệm thu.");
             if(m.getStatus()!=MilestoneStatus.SUBMITTED)throw new IllegalArgumentException("Milestone chưa được bàn giao để nghiệm thu.");
+            if(m.getProgressPercent()!=100)throw new IllegalArgumentException("Dữ liệu mốc không hợp lệ: đã gửi bàn giao nhưng tiến độ chưa đạt 100%. Hãy yêu cầu Freelancer chỉnh sửa và cập nhật tiến độ trước khi nghiệm thu.");
+            if(deliveryEvidence!=null&&!deliveryEvidence.existsByProjectAndMilestone(p,m))throw new IllegalArgumentException("Chưa có minh chứng bàn giao của mốc này.");
+            if(!payments.existsByProjectAndMilestoneAndStatusIn(p,m,java.util.List.of(PaymentStatus.PAID,PaymentStatus.DISBURSED)))throw new IllegalArgumentException("Mốc chưa được thanh toán và giữ tiền.");
             m.setStatus(MilestoneStatus.COMPLETED);
             m.setCompletedAt(LocalDateTime.now());
             milestones.save(m);
-            // Acceptance does not mean funds were transferred; settlement happens separately.
+            // Giải ngân đúng mốc sau khi Client nghiệm thu; không giải ngân lần hai.
+            for(Payment pay:payments.findByProjectAndMilestone(p,m)) {
+                if(pay.getStatus()==PaymentStatus.PAID){
+                    pay.setSettlementFeePercent(walletDemo==null?new BigDecimal("10"):walletDemo.feePercent());pay.setAcceptedAt(LocalDateTime.now());pay.setScheduledDisbursementAt(LocalDateTime.now().plusDays(holdDays));payments.save(pay);
+                }
+            }
+            // Khoản PAID chỉ được giải ngân theo lịch sau nghiệm thu.
             List<Milestone> all=milestones(p);
             boolean allDone=all.stream().allMatch(x->x.getStatus()==MilestoneStatus.COMPLETED);
             BigDecimal total=all.stream().map(Milestone::getAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
@@ -136,12 +183,14 @@ public class ProjectService {
     @Transactional
     public void completeProjectWithoutMilestones(Project p,User customer){
         if(!p.getCustomer().getId().equals(customer.getId()))throw new IllegalArgumentException("Chỉ khách hàng được nghiệm thu dự án.");
-        if(p.getStatus()!=ProjectStatus.IN_PROGRESS)throw new IllegalArgumentException("Dự án không ở trạng thái sẵn sàng nghiệm thu.");
+        if(p.getStatus()!=ProjectStatus.WAITING_ACCEPTANCE)throw new IllegalArgumentException("Freelancer phải bàn giao sản phẩm trước khi Client nghiệm thu.");
         if(!p.isAgreementSigned())throw new IllegalArgumentException("Hai bên cần xác nhận hợp đồng trước.");
         if(!milestones(p).isEmpty())throw new IllegalArgumentException("Dự án có Milestone, hãy nghiệm thu theo từng giai đoạn.");
+        if(deliveryEvidence!=null&&!deliveryEvidence.existsByProjectAndMilestone(p,null))throw new IllegalArgumentException("Chưa có sản phẩm bàn giao để nghiệm thu.");
         boolean paid=payments.findByProjectOrderByCreatedAtDesc(p).stream().anyMatch(x->x.getMilestone()==null&&x.getStatus()==PaymentStatus.PAID);
         if(!paid)throw new IllegalArgumentException("Dự án chưa được thanh toán.");
-        for(Payment pay:payments.findByProjectOrderByCreatedAtDesc(p))if(pay.getMilestone()==null&&pay.getStatus()==PaymentStatus.PAID){pay.setStatus(PaymentStatus.DISBURSED);pay.setDisbursedAt(LocalDateTime.now());payments.save(pay);}
+        for(Payment pay:payments.findByProjectOrderByCreatedAtDesc(p))if(pay.getMilestone()==null&&pay.getStatus()==PaymentStatus.PAID){pay.setSettlementFeePercent(walletDemo==null?new BigDecimal("10"):walletDemo.feePercent());pay.setAcceptedAt(LocalDateTime.now());pay.setScheduledDisbursementAt(LocalDateTime.now().plusDays(holdDays));payments.save(pay);}
+        // Ví chỉ được ghi có sau khi dịch vụ giải ngân hoàn tất.
         completeProject(p);
     }
 

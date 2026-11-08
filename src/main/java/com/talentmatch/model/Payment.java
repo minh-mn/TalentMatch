@@ -18,6 +18,12 @@ public class Payment {
     private LocalDateTime createdAt;
     private LocalDateTime paidAt;
     private LocalDateTime disbursedAt;
+    @Column(name="settlement_fee_percent",precision=5,scale=2) private BigDecimal settlementFeePercent;
+    public BigDecimal getSettlementFeePercent(){return settlementFeePercent;} public void setSettlementFeePercent(BigDecimal value){settlementFeePercent=value;}
+    @Column(name="accepted_at") private LocalDateTime acceptedAt;
+    @Column(name="scheduled_disbursement_at") private LocalDateTime scheduledDisbursementAt;
+    public LocalDateTime getAcceptedAt(){return acceptedAt;} public void setAcceptedAt(LocalDateTime x){acceptedAt=x;}
+    public LocalDateTime getScheduledDisbursementAt(){return scheduledDisbursementAt;} public void setScheduledDisbursementAt(LocalDateTime x){scheduledDisbursementAt=x;}
     @PrePersist void prePersist(){createdAt=LocalDateTime.now();if(status==null)status=PaymentStatus.PENDING;}
     public Long getId(){return id;} public void setId(Long id){this.id=id;}
     public Project getProject(){return project;} public void setProject(Project project){this.project=project;}

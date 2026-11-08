@@ -73,6 +73,7 @@ public class CustomerQuotationController {
             .filter(a->"all".equals(freelancer)||String.valueOf(a.getFreelancer().getId()).equals(freelancer))
             .filter(a->{QuoteRevision r=latest.get(a.getId());
                 if("all".equals(status))return true;
+                if("noquote".equals(status))return r==null;
                 if("negotiating".equals(status))return r!=null&&r.getStatus()==QuoteStatus.PENDING&&r.getVersion()>1;
                 if("waiting".equals(status))return r!=null&&r.getStatus()==QuoteStatus.PENDING&&quotes.isRecipient(r,u);
                 if("accepted".equals(status))return r!=null&&r.getStatus()==QuoteStatus.ACCEPTED;
@@ -93,7 +94,7 @@ public class CustomerQuotationController {
         model.addAttribute("freelancerOptions",all.stream().map(JobApplication::getFreelancer).collect(Collectors.toMap(User::getId,x->x,(a,b)->a,LinkedHashMap::new)).values());
         model.addAttribute("totalQuotes",latest.size());model.addAttribute("waitingQuotes",waiting);
         model.addAttribute("acceptedQuotes",accepted);model.addAttribute("negotiatingQuotes",negotiating);
-        model.addAttribute("rejectedQuotes",rejected);model.addAttribute("projectCount",all.stream().map(a->a.getJob().getId()).distinct().count());
+        model.addAttribute("rejectedQuotes",rejected);model.addAttribute("noQuoteCount",all.stream().filter(a->!latest.containsKey(a.getId())).count());model.addAttribute("projectCount",all.stream().map(a->a.getJob().getId()).distinct().count());
         model.addAttribute("totalCount",count);model.addAttribute("currentPage",current);
         model.addAttribute("totalPages",pages);model.addAttribute("pageSize",perPage);
         model.addAttribute("q",q);model.addAttribute("status",status);model.addAttribute("jobFilter",job);

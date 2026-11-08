@@ -42,10 +42,10 @@ public class CustomerContractWorkspaceController {
         int total=contracts.size();
         int missingDrafts=own.size()-contracts.size();
         long waiting=contracts.stream().filter(p->isAwaiting(p,revisions.get(p.getId()))).count();
-        long active=contracts.stream().filter(p->agreements.signedCurrent(p)&&p.getStatus()!=ProjectStatus.COMPLETED&&p.getStatus()!=ProjectStatus.CANCELLED&&p.getStatus()!=ProjectStatus.DISPUTED).count();
+        long active=contracts.stream().filter(p->agreements.signedCurrent(p)&&p.getStatus()!=ProjectStatus.COMPLETED&&p.getStatus()!=ProjectStatus.CANCELLED&&p.getStatus()!=ProjectStatus.DISPUTED&&p.getStatus()!=ProjectStatus.WAITING_PAYMENT).count();
         long completed=contracts.stream().filter(p->p.getStatus()==ProjectStatus.COMPLETED).count();
         String query=q==null?"":q.trim().toLowerCase(Locale.ROOT);
-        if(!Set.of("all","waiting","active","completed","cancelled").contains(status))status="all";
+        if(!Set.of("all","waiting","payment","active","completed","disputed","cancelled").contains(status))status="all";
         final String selectedStatus=status;
         List<Project> filtered=contracts.stream().filter(p->{
             if(!query.isEmpty()){
@@ -57,7 +57,9 @@ public class CustomerContractWorkspaceController {
             }
             return switch(selectedStatus){
                 case "waiting" -> isAwaiting(p,revisions.get(p.getId()));
-                case "active" -> agreements.signedCurrent(p)&&p.getStatus()!=ProjectStatus.COMPLETED&&p.getStatus()!=ProjectStatus.CANCELLED&&p.getStatus()!=ProjectStatus.DISPUTED;
+                case "payment" -> agreements.signedCurrent(p)&&p.getStatus()==ProjectStatus.WAITING_PAYMENT;
+                case "disputed" -> p.getStatus()==ProjectStatus.DISPUTED;
+                case "active" -> agreements.signedCurrent(p)&&p.getStatus()!=ProjectStatus.COMPLETED&&p.getStatus()!=ProjectStatus.CANCELLED&&p.getStatus()!=ProjectStatus.DISPUTED&&p.getStatus()!=ProjectStatus.WAITING_PAYMENT;
                 case "completed" -> p.getStatus()==ProjectStatus.COMPLETED;
                 case "cancelled" -> p.getStatus()==ProjectStatus.CANCELLED;
                 default -> true;
@@ -71,7 +73,7 @@ public class CustomerContractWorkspaceController {
         page=Math.max(0,Math.min(page,totalPages-1));
         List<Project> visible=filtered.subList(page*size,Math.min(filtered.size(),(page+1)*size));
         Project chosen=null;
-        if(selected!=null) chosen=contracts.stream().filter(p->p.getId().equals(selected)).findFirst().orElse(null);
+        if(selected!=null) chosen=visible.stream().filter(p->p.getId().equals(selected)).findFirst().orElse(null);
         if(chosen==null&&!visible.isEmpty())chosen=visible.get(0);
         AgreementRevision agreement=chosen==null?null:revisions.get(chosen.getId());
         boolean hasPending=chosen!=null&&pending.getOrDefault(chosen.getId(),false);

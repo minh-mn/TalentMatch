@@ -21,7 +21,8 @@ public class ProgressService {
          throw new IllegalArgumentException("Chỉ Freelancer được báo cáo tiến độ.");
      if((project.getStatus()!=ProjectStatus.IN_PROGRESS && project.getStatus()!=ProjectStatus.WAITING_ACCEPTANCE) || !project.isAgreementSigned() ||m.getStatus()!=MilestoneStatus.IN_PROGRESS)
          throw new IllegalArgumentException("Milestone chưa ở giai đoạn đang thực hiện.");
-     if(percent<m.getProgressPercent()||percent>100)throw new IllegalArgumentException("Tiến độ không thể giảm hoặc vượt 100%.");
+     if(m.getDeadline()==null)throw new IllegalArgumentException("Milestone chưa có deadline, chưa thể cập nhật tiến độ.");
+     if(percent<0||percent<m.getProgressPercent()||percent>100)throw new IllegalArgumentException("Tiến độ không thể giảm hoặc vượt 100%.");
      if(note==null||note.trim().length()<10||note.length()>3000)throw new IllegalArgumentException("Ghi chú tiến độ cần 10–3000 ký tự.");
      if(evidenceUrl!=null&&!evidenceUrl.isBlank()&&(!evidenceUrl.startsWith("https://")||evidenceUrl.length()>500))
          throw new IllegalArgumentException("Minh chứng phải là liên kết HTTPS tối đa 500 ký tự.");

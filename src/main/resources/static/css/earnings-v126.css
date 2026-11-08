@@ -1,0 +1,14 @@
+/* V126 – phân biệt trạng thái và ổn định hiển thị tab rút tiền */
+.tm126-status{display:inline-flex!important;align-items:center;justify-content:center;gap:5px;border-radius:999px!important;padding:6px 11px!important;font-size:12px!important;font-weight:750!important;line-height:1.35!important;border:1px solid transparent!important;white-space:normal!important;text-align:center}
+.tm126-status.state-waiting_payment,.tm126-status.state-pending,.tm126-status.state-unpaid{background:#fff4dd!important;color:#955800!important;border-color:#f4d9a3!important}
+.tm126-status.state-paid,.tm126-status.state-waiting_acceptance,.tm126-status.state-approved{background:#e9f2ff!important;color:#1656b7!important;border-color:#bfd7ff!important}
+.tm126-status.state-in_progress,.tm126-status.state-submitted{background:#e7f1ff!important;color:#145bc1!important;border-color:#bfd6fb!important}
+.tm126-status.state-completed,.tm126-status.state-disbursed{background:#def8e9!important;color:#137448!important;border-color:#aee2c4!important}
+.tm126-status.state-failed,.tm126-status.state-rejected,.tm126-status.state-disputed{background:#ffe7e7!important;color:#b32732!important;border-color:#f5b7bd!important}
+.tm126-status.state-cancelled,.tm126-status.state-refunded{background:#f1eef9!important;color:#6b4c99!important;border-color:#ddd0f1!important}
+.tm126-money-net{color:#138052!important}
+.tm126-finance-extra{display:flex;gap:18px;flex-wrap:wrap;justify-content:flex-start;padding:0 0 14px;font-size:12px;color:#526a8f}.tm126-finance-extra strong{color:#183e73}
+.tm119-withdrawals{display:block!important;visibility:visible!important;opacity:1!important;min-height:480px}
+.tm120-withdraw-grid{min-height:0!important;overflow:visible!important}
+.tm120-withdraw-form,.tm120-form-card,.tm120-side,.tm120-history{visibility:visible!important;opacity:1!important}
+@media(max-width:780px){.tm126-finance-extra{gap:8px}}

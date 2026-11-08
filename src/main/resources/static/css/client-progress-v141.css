@@ -56,3 +56,5 @@ body.tm-client-progress-v135 .cp135-pagination a{padding:7px 11px;border:1px sol
 body.tm-client-progress-v135 .cp135-pagination a.on{background:#075df3;color:#fff}
 @media(max-width:1240px){body.tm-client-progress-v135 .cp135-layout{grid-template-columns:1fr}body.tm-client-progress-v135 .cp135-list{min-height:0}body.tm-client-progress-v135 .cp135-meta{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:760px){body.tm-client-progress-v135 .cp135-meta{grid-template-columns:repeat(2,1fr)}body.tm-client-progress-v135 .cp135-milestone{grid-template-columns:24px 1fr 65px}body.tm-client-progress-v135 .cp135-milestone .cp135-track{grid-column:2}body.tm-client-progress-v135 .cp135-actions{grid-template-columns:1fr}body.tm-client-progress-v135 .cp135-history{grid-template-columns:34px 1fr}body.tm-client-progress-v135 .cp135-history span:last-child{grid-column:2}}
+
+.cp135-data-warning{border:1px solid #f2baa9;background:#fff1ed;color:#8d3024;padding:11px;border-radius:8px;font-weight:600}

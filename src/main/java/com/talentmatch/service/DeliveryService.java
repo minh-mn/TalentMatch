@@ -51,6 +51,14 @@ public class DeliveryService {
             if(!m.getProject().getId().equals(p.getId()))throw new IllegalArgumentException("Milestone không thuộc dự án.");
             if(m.getStatus()!=MilestoneStatus.IN_PROGRESS&&m.getStatus()!=MilestoneStatus.SUBMITTED)
                 throw new IllegalArgumentException("Milestone chưa sẵn sàng bàn giao.");
+            if(m.getDeadline()==null)throw new IllegalArgumentException("Milestone phải có deadline trước khi bàn giao.");
+            if(m.getProgressPercent()<100)throw new IllegalArgumentException("Chỉ được bàn giao khi milestone đã được cập nhật tiến độ 100%.");
+            List<Milestone> orderedMilestones=milestones.findByProjectOrderByCreatedAtAsc(p);
+            int idx=orderedMilestones.indexOf(m);
+            if(idx>0){
+                boolean prevDone=orderedMilestones.subList(0,idx).stream().allMatch(x->x.getStatus()==MilestoneStatus.COMPLETED);
+                if(!prevDone)throw new IllegalArgumentException("Bạn cần hoàn tất các milestone trước đó trước khi bàn giao mốc này.");
+            }
         }else if(!milestones.findByProjectOrderByCreatedAtAsc(p).isEmpty()){
             throw new IllegalArgumentException("Dự án có Milestone. Hãy bàn giao theo từng giai đoạn.");
         }

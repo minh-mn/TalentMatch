@@ -40,6 +40,7 @@ public class QuoteController {
         .filter(a->{
             QuoteRevision revision=latest.get(a.getId());
             if("all".equals(status))return true;
+            if("UNINITIALIZED".equals(status))return revision==null;
             if(revision==null)return false;
             if("NEGOTIATING".equals(status))return revision.getStatus()==QuoteStatus.PENDING&&revision.getVersion()>1;
             if("WAITING".equals(status))return revision.getStatus()==QuoteStatus.PENDING&&revision.getVersion()==1;
@@ -62,6 +63,7 @@ public class QuoteController {
       }
       model.addAttribute("viewer",user);model.addAttribute("isClient",user.getRole()==Role.CUSTOMER);
       model.addAttribute("applications",visible);model.addAttribute("latestById",latest);model.addAttribute("selectedId",active);
+      model.addAttribute("uninitializedCount",own.stream().filter(a->!latest.containsKey(a.getId())).count());
       model.addAttribute("negotiatingCount",latest.values().stream().filter(r->r.getStatus()==QuoteStatus.PENDING&&r.getVersion()>1).count());
       model.addAttribute("waitingCount",latest.values().stream().filter(r->r.getStatus()==QuoteStatus.PENDING&&r.getVersion()==1).count());
       model.addAttribute("currentPage",current);model.addAttribute("totalPages",pages);model.addAttribute("totalCount",total);

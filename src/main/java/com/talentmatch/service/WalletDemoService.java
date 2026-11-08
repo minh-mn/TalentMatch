@@ -16,6 +16,7 @@ public class WalletDemoService {
   credits=c;banks=b;withdrawals=w;payments=p;users=u;feePercent=fee;
   if(fee.signum()<0||fee.compareTo(new BigDecimal("100"))>0)throw new IllegalArgumentException("Phí demo không hợp lệ");
  }
+ public BigDecimal feePercent(){return feePercent;}
  public record Summary(BigDecimal available,BigDecimal held,BigDecimal credited,BigDecimal withdrawn){}
  private User lockUser(User u){return users.lockForWallet(u.getId()).orElseThrow();}
  @Transactional
@@ -25,7 +26,7 @@ public class WalletDemoService {
    if(payment.getStatus()!=PaymentStatus.DISBURSED||!payment.getProject().getFreelancer().getId().equals(freelancer.getId())||credits.existsByPayment(payment))continue;
    if(payment.getProject().getStatus()==ProjectStatus.DISPUTED)continue;
    BigDecimal gross=payment.getAmount();if(gross==null||gross.signum()<=0)continue;
-   BigDecimal fee=gross.multiply(feePercent).divide(new BigDecimal("100"),2,RoundingMode.HALF_UP);
+   BigDecimal fee=gross.multiply(payment.getSettlementFeePercent()==null?feePercent:payment.getSettlementFeePercent()).divide(new BigDecimal("100"),2,RoundingMode.HALF_UP);
    WalletCredit credit=new WalletCredit();credit.setFreelancer(freelancer);credit.setPayment(payment);
    credit.setGross(gross);credit.setFee(fee);credit.setNet(gross.subtract(fee));credits.save(credit);
   }
@@ -39,6 +40,11 @@ public class WalletDemoService {
    else if(w.getStatus()==WalletWithdrawal.State.PENDING||w.getStatus()==WalletWithdrawal.State.APPROVED)held=held.add(w.getAmount());
   }
   return new Summary(credit.subtract(held).subtract(withdrawn),held,credit,withdrawn);
+ }
+ @Transactional(readOnly=true)
+ public List<WalletCredit> creditsForProject(User freelancer,Project project){
+  return credits.findByFreelancerOrderByCreatedAtDesc(freelancer).stream()
+   .filter(c->c.getPayment()!=null&&c.getPayment().getProject()!=null&&c.getPayment().getProject().getId().equals(project.getId())).toList();
  }
  public List<WalletBank> banks(User u){return banks.findByFreelancerOrderByIdDesc(u);}
  public List<WalletWithdrawal> withdrawals(User u){return withdrawals.findByFreelancerOrderByCreatedAtDesc(u);}

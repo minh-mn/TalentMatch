@@ -2,6 +2,10 @@ package com.talentmatch.controller;
 
 import com.talentmatch.model.*;
 import com.talentmatch.repository.PaymentRepository;
+import com.talentmatch.repository.WalletCreditRepository;
+import com.talentmatch.service.SettlementDemoService;
+import com.talentmatch.service.WalletDemoService;
+import java.math.RoundingMode;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -16,9 +20,14 @@ import java.util.*;
 @RequestMapping("/admin/payments")
 public class AdminPaymentsController {
  private final PaymentRepository repository;
- public AdminPaymentsController(PaymentRepository repository){this.repository=repository;}
+ private final WalletCreditRepository credits;
+ private final WalletDemoService wallet;
+ private final SettlementDemoService settlement;
+ public AdminPaymentsController(PaymentRepository repository,WalletCreditRepository credits,WalletDemoService wallet,SettlementDemoService settlement){this.repository=repository;this.credits=credits;this.wallet=wallet;this.settlement=settlement;}
  public record Row(Long id,String code,String project,String client,String freelancer,String milestone,String method,
-                   String status,BigDecimal amount,LocalDateTime createdAt,Long projectId) {}
+                   String status,BigDecimal amount,LocalDateTime createdAt,Long projectId,
+                   LocalDateTime paidAt,LocalDateTime acceptedAt,LocalDateTime releaseAt,LocalDateTime disbursedAt,
+                   BigDecimal fee,BigDecimal net,BigDecimal feeRate,boolean disputed,boolean credited) {}
  private static BigDecimal total(List<Row> rows,String... states){Set<String> accepted=Set.of(states);return rows.stream().filter(x->accepted.contains(x.status())).map(Row::amount).reduce(BigDecimal.ZERO,BigDecimal::add);}
  @GetMapping @Transactional(readOnly=true)
  public String page(@RequestParam(defaultValue="") String q,@RequestParam(defaultValue="all") String status,
@@ -31,10 +40,25 @@ public class AdminPaymentsController {
    Project project=pay.getProject();String title="Dự án #"+project.getId();
    try{title=project.getApplication().getJob().getTitle();}catch(Exception ignored){}
    String client=name(project.getCustomer()),freelancer=name(project.getFreelancer());
+   BigDecimal gross=pay.getAmount()==null?BigDecimal.ZERO:pay.getAmount();
+   WalletCredit actual=credits.findByPayment(pay).orElse(null);
+   BigDecimal rate=actual!=null && actual.getGross().signum()>0
+       ?actual.getFee().multiply(new BigDecimal("100")).divide(actual.getGross(),2,RoundingMode.HALF_UP)
+       :pay.getSettlementFeePercent()==null?wallet.feePercent():pay.getSettlementFeePercent();
+   BigDecimal fee=actual!=null?actual.getFee():gross.multiply(rate).divide(new BigDecimal("100"),2,RoundingMode.HALF_UP);
+   BigDecimal net=actual!=null?actual.getNet():gross.subtract(fee);
+   LocalDateTime releaseAt=pay.getAcceptedAt()==null?null:(pay.getScheduledDisbursementAt()==null?pay.getAcceptedAt().plusDays(settlement.holdDays()):pay.getScheduledDisbursementAt());
    all.add(new Row(pay.getId(),pay.getTransactionCode(),title,client,freelancer,
      pay.getMilestone()==null?"Toàn dự án":pay.getMilestone().getTitle(),pay.getMethod(),
-     pay.getStatus().name(),pay.getAmount()==null?BigDecimal.ZERO:pay.getAmount(),pay.getCreatedAt(),project.getId()));
+     pay.getStatus().name(),gross,pay.getCreatedAt(),project.getId(),pay.getPaidAt(),pay.getAcceptedAt(),releaseAt,
+     pay.getDisbursedAt(),fee,net,rate,project.getStatus()==ProjectStatus.DISPUTED,actual!=null));
   }
+  model.addAttribute("settlementDays",settlement.holdDays());
+  model.addAttribute("feePercent",wallet.feePercent());
+  model.addAttribute("platformFees",credits.findAll().stream().map(WalletCredit::getFee).reduce(BigDecimal.ZERO,BigDecimal::add));
+  model.addAttribute("freelancerNet",credits.findAll().stream().map(WalletCredit::getNet).reduce(BigDecimal.ZERO,BigDecimal::add));
+  model.addAttribute("waitingAcceptance",all.stream().filter(x->x.status().equals("PAID") && x.acceptedAt()==null).count());
+  model.addAttribute("pendingRelease",all.stream().filter(x->x.status().equals("PAID") && x.acceptedAt()!=null).count());
   model.addAttribute("transactionCount",all.size());model.addAttribute("paidAmount",total(all,"PAID","DISBURSED"));
   model.addAttribute("heldAmount",total(all,"PAID"));model.addAttribute("disbursedAmount",total(all,"DISBURSED"));
   model.addAttribute("refundedAmount",total(all,"REFUNDED"));model.addAttribute("failedCount",all.stream().filter(x->x.status().equals("FAILED")).count());

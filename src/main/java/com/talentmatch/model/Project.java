@@ -3,6 +3,7 @@ package com.talentmatch.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "projects")
@@ -14,6 +15,7 @@ public class Project {
     @Column(nullable = false, precision = 15, scale = 2) private BigDecimal totalPrice;
     @Enumerated(EnumType.STRING) @Column(nullable = false, length = 40) private ProjectStatus status = ProjectStatus.WAITING_PAYMENT;
     private LocalDateTime createdAt;
+    @Column(name="payment_due_date") private LocalDate paymentDueDate;
     private LocalDateTime updatedAt;
     private LocalDateTime completedAt;
     private LocalDateTime customerSignedAt;
@@ -22,6 +24,8 @@ public class Project {
     @Column(nullable=false) private boolean creditAwarded=false;
     @PrePersist void prePersist(){createdAt=LocalDateTime.now();updatedAt=createdAt;if(status==null)status=ProjectStatus.WAITING_PAYMENT;}
     @PreUpdate void preUpdate(){updatedAt=LocalDateTime.now();}
+    public LocalDate getPaymentDueDate(){return paymentDueDate;}
+    public void setPaymentDueDate(LocalDate value){this.paymentDueDate=value;}
     public Long getId(){return id;} public void setId(Long id){this.id=id;}
     public JobApplication getApplication(){return application;} public void setApplication(JobApplication application){this.application=application;}
     public User getCustomer(){return customer;} public void setCustomer(User customer){this.customer=customer;}

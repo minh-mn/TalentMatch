@@ -1,0 +1,30 @@
+/* TalentMatch client payments 128: explicit modes, payment deadlines and milestone status */
+.tm-client-payments .cpay128-projects .cpay-project{display:block;background:#fff;padding:19px;border-color:#d8e5fa}
+.tm-client-payments .cpay128-projects .cpay-projecthead{flex-wrap:wrap;gap:12px}
+.cpay128-grow{flex:1;min-width:220px}.cpay128-project .cpay-projecthead h4{font-size:16px;line-height:1.35}
+.cpay128-subtitle{margin:5px 0 0;color:#6380a4;font-size:13px}
+.cpay128-mode{border-radius:999px;background:#e9efff;color:#1550a5;font-size:12px;font-weight:800;padding:7px 12px}
+.cpay128-finance{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin:16px 0}
+.cpay128-finance>div{border:1px solid #e3ebf9;background:#f6f9ff;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.cpay128-finance small{font-size:12px;color:#58739c}.cpay128-finance strong{font-size:17px;color:#0c285c}
+.cpay128-plan{border:1px solid #e0e9fa;border-radius:11px;padding:14px;background:#fff}
+.cpay128-planheading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;color:#102e68;flex-wrap:wrap}
+.cpay128-planheading>span{font-weight:700;font-size:12px;color:#315b9f}
+.cpay128-warning{color:#af3b30;font-weight:700;font-size:12px;margin:8px 0 10px}
+.cpay128-stage{border-top:1px solid #e7edf8;padding:13px 0}.cpay128-stage-row,.cpay128-stage-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.cpay128-stage-row strong{font-size:14px;color:#0b2a6f}.cpay128-stage-facts{display:flex;flex-wrap:wrap;gap:12px 24px;margin:10px 0;color:#58739c;font-size:12px}
+.cpay128-stage-facts b{color:#1b396b;display:inline-block;margin-left:4px}
+.cpay128-schedule{display:flex;align-items:end;gap:10px;flex-wrap:wrap;margin:8px 0}
+.cpay128-schedule label{font-size:12px;color:#325885;font-weight:700;display:flex;flex-direction:column;gap:5px}
+.cpay128-schedule input{border:1px solid #cbdaf3;border-radius:8px;padding:9px;color:#123265;background:#fff}
+.cpay128-schedule button,.cpay128-milestone-pay{background:#0966f4;color:#fff;border:0;border-radius:8px;padding:10px 13px;text-decoration:none;font-size:12px;font-weight:800;cursor:pointer}
+.cpay128-overdue{color:#b42334;font-weight:800;font-size:12px}.cpay128-muted{color:#6781a5;font-size:12px}
+.cpay128-actions,.cpay128-links{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.cpay128-links{margin-top:14px;padding-top:12px;border-top:1px solid #e6eefb}
+.cpay128-links a{color:#1264e5;text-decoration:none;font-size:13px;font-weight:800}
+.cpay128-project .cpay-status,.cpay128-stage-status{font-size:11px;border-radius:999px;padding:6px 11px;font-weight:800;white-space:nowrap;background:#e8f0ff;color:#174eab}
+.cpay128-stage-status.cpay128-UNPAID,.cpay128-WAITING_PAYMENT{background:#fff0d5!important;color:#9b590b!important}
+.cpay128-stage-status.cpay128-PAID,.cpay128-IN_PROGRESS,.cpay128-WAITING_ACCEPTANCE,.cpay128-stage-status.cpay128-IN_PROGRESS,.cpay128-stage-status.cpay128-SUBMITTED{background:#e3efff!important;color:#0c5ac0!important}
+.cpay128-stage-status.cpay128-COMPLETED,.cpay128-stage-status.cpay128-DISBURSED,.cpay128-COMPLETED{background:#ddf6e7!important;color:#13764b!important}
+.cpay128-DISPUTED,.cpay128-CANCELLED{background:#ffe7e7!important;color:#ad2941!important}
+@media(max-width:1000px){.cpay128-finance{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.cpay128-finance{grid-template-columns:1fr}.cpay128-stage-facts{display:grid;gap:8px}}

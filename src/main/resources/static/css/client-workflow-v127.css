@@ -1,0 +1,37 @@
+/* V127: isolate Client contract + progress visual refinements */
+.cc133-grid>.tm-client-hint{grid-column:1/-1}
+.tm-client-contracts-v133 .cc133-grid{align-items:start;grid-template-columns:minmax(0,1.25fr) minmax(360px,1fr);gap:16px}
+.tm-client-contracts-v133 .cc133-list-panel,.tm-client-contracts-v133 .cc133-detail{min-width:0;align-self:start}
+.tm-client-contracts-v133 .cc133-contract{transition:background .15s,border-color .15s}
+.tm-client-contracts-v133 .cc133-contract:hover{background:#f5f9ff}
+.tm127-contract-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:14px 0 12px}
+.tm127-contract-steps span{font-size:11px;font-weight:700;text-align:center;padding:9px 4px;border-radius:7px;border:1px solid #d6e4f9;background:#f5f8ff;color:#597095}
+.tm127-contract-steps span.done{background:#e0f8eb;border-color:#b7e3ca;color:#127245}
+.tm127-contract-links{display:flex;gap:8px;margin:13px 0}
+.tm127-contract-links a{flex:1;text-decoration:none;text-align:center;padding:10px;border-radius:8px;background:#ecf3ff;color:#0956d6;font-size:12px;font-weight:700}
+.tm127-shortcut{border:1px solid #f5ddb2;background:#fffbeb;color:#90600e;padding:10px;border-radius:8px;font-size:12px;line-height:1.5}
+body.tm-client-progress-v135 .cp135-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}
+body.tm-client-progress-v135 .cp135-summary>div{background:#fff;border:1px solid #dce6f9;border-radius:11px;padding:12px 17px;display:flex;align-items:center;gap:9px}
+body.tm-client-progress-v135 .cp135-summary b{color:#075df3;font-size:24px}
+body.tm-client-progress-v135 .cp135-summary span{color:#325078;font-size:12px;font-weight:700}
+body.tm-client-progress-v135 .cp135-main{padding-top:136px!important}
+body.tm-client-progress-v135 .cp135-milestone{grid-template-columns:24px minmax(160px,2fr) minmax(100px,1fr) 50px minmax(70px,1fr) 55px;padding:14px 6px}
+body.tm-client-progress-v135 .cp135-milestone .tm127-amount{color:#dc2626;font-weight:800;font-size:12px;margin-top:7px}
+body.tm-client-progress-v135 .cp135-milestone .tm127-deadline{color:#bd3232;font-weight:800}
+body.tm-client-progress-v135 .tm127-stage-status{border-radius:22px;padding:7px 9px;text-align:center;font-size:11px;white-space:normal;color:#1a4c90;background:#e8f2ff}
+body.tm-client-progress-v135 .tm127-stage-unpaid{color:#955900;background:#fff1d2}
+body.tm-client-progress-v135 .tm127-stage-paid{color:#175a9e;background:#e2f0ff}
+body.tm-client-progress-v135 .tm127-stage-in_progress{color:#1950a9;background:#e1edff}
+body.tm-client-progress-v135 .tm127-stage-submitted{color:#98550d;background:#ffedda}
+body.tm-client-progress-v135 .tm127-stage-completed{color:#12734a;background:#ddf7e8}
+body.tm-client-progress-v135 .tm127-project-waiting_payment{color:#915611;background:#fff1d4}
+body.tm-client-progress-v135 .tm127-project-in_progress{color:#1757ae;background:#e3f0ff}
+body.tm-client-progress-v135 .tm127-project-waiting_acceptance{color:#955900;background:#fff1dc}
+body.tm-client-progress-v135 .tm127-project-completed{color:#137144;background:#def8e8}
+body.tm-client-progress-v135 .tm127-project-disputed,body.tm-client-progress-v135 .tm127-project-cancelled{color:#b32731;background:#fee5e6}
+.tm127-milestone-check{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.tm127-milestone-check span{padding:9px 10px;border-radius:8px;background:#f2f6ff;color:#355987;font-size:12px}
+.tm127-full-acceptance{padding:18px;border:1px solid #dbe6fa;background:#f6faff;border-radius:11px;color:#33547e}
+.tm127-full-acceptance a{display:inline-block;margin-top:7px;color:#075df3;font-weight:700}
+@media(max-width:1200px){.tm-client-contracts-v133 .cc133-grid{grid-template-columns:1fr}}
+@media(max-width:750px){body.tm-client-progress-v135 .cp135-summary{grid-template-columns:1fr}.tm127-contract-steps{grid-template-columns:repeat(2,1fr)}body.tm-client-progress-v135 .cp135-milestone{grid-template-columns:24px minmax(0,1fr) 90px}body.tm-client-progress-v135 .cp135-milestone .cp135-track{grid-column:2}}

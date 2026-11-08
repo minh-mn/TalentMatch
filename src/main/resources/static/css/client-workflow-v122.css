@@ -1,0 +1,12 @@
+/* TalentMatch client workspace UI consistency V122 */
+.tm-client-hint{display:flex;align-items:center;gap:10px;padding:12px 16px;margin:12px 0 18px;border:1px solid #c7dafa;border-radius:12px;background:#eff5ff;color:#17418a;font-size:13px;line-height:1.5;font-weight:550}
+.tm-client-hint i{color:#2563eb;font-size:16px}
+.tm-client-reset{display:inline-flex;align-items:center;justify-content:center;border:1px solid #c9d8f3;border-radius:9px;background:#fff;color:#19488f;padding:9px 13px;text-decoration:none;font-weight:650;white-space:nowrap}
+.tm-client-reset:hover{background:#eaf2ff}
+.tm-client-stage{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0;color:#42628a;font-size:12px}
+.tm-client-stage span{background:#eef4ff;border:1px solid #d9e5fa;border-radius:7px;padding:6px 9px}
+.cpay-filters,.cp135-search{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.cpay-filters select,.cp135-search select{min-width:155px;min-height:40px;border:1px solid #d2ddf1;border-radius:9px;background:#fff;padding:7px;color:#15376e}
+.cpay-filters button,.cp135-search button{min-height:40px}
+.cpay-project,.cp135-panel,.cc133-panel{box-shadow:0 2px 12px rgba(16,48,110,.045)}
+@media(max-width:1000px){.tm-client-stage{gap:5px}.cpay-filters select,.cp135-search select{min-width:130px}}

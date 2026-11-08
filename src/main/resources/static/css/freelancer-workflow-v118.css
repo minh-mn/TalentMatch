@@ -1,0 +1,16 @@
+/* Giai đoạn demo 118: tăng độ rõ ràng của các khu vực và bộ lọc, không đổi sidebar chung. */
+.tm118-helper{display:flex;align-items:center;gap:10px;padding:13px 16px;margin:14px 0;background:#eef5ff;border:1px solid #c8dcff;border-radius:12px;color:#15428f;font-size:13px;font-weight:600;line-height:1.55}
+.tm118-helper i{color:#1768ed;font-size:17px}
+.tm118-reset{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:10px;border:1px solid #c9d9ee;background:white;color:#174a98;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap}
+.tm118-reset:hover{background:#edf4ff}
+.tm118-kpi-link{text-decoration:none;color:inherit}
+.tm118-subheading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 10px}
+.tm118-subheading h3{font-size:17px;color:#0b2a6f;margin:0}
+.tm118-subheading span{font-size:13px;color:#6d7e9b}
+.tm105-offer:hover,.tm113-project:hover,.tm114-project:hover{border-color:#7aa8ff;box-shadow:0 6px 20px rgba(31,95,193,.08)}
+.tm105-offer{transition:box-shadow .15s,border-color .15s}
+.tm114-panel-body h2,.tm113-section h3{color:#0b2a6f}
+.tm114-table-wrap table{width:100%}
+.tm114-table-wrap th{white-space:nowrap}
+.tm114-status,.tm117-status{font-weight:700}
+@media(max-width:1100px){.tm118-helper{font-size:12px}.tm118-reset{padding:9px 12px}}
