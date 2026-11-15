@@ -27,10 +27,34 @@ public class JobService {
     }
 
     public Job get(Long id) {
-        return jobs.findById(id).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy công việc."));
+        return jobs.findWithCustomerById(id).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy công việc."));
     }
 
     public Job save(Job job) { return jobs.save(job); }
+
+    @Transactional
+    public void changeStatus(Long jobId, User customer, JobStatus target) {
+        Job job = jobs.findForUpdate(jobId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy công việc."));
+        if (customer == null || !job.getCustomer().getId().equals(customer.getId()))
+            throw new IllegalArgumentException("Bạn không sở hữu công việc này.");
+        if (target == null) throw new IllegalArgumentException("Trạng thái công việc không hợp lệ.");
+
+        boolean hasAcceptedApplicant = applications.findByJobOrderByCreatedAtDesc(job).stream()
+                .anyMatch(application -> application.getStatus() == ApplicationStatus.ACCEPTED);
+        boolean allowed = switch (job.getStatus()) {
+            case OPEN -> target == JobStatus.PAUSED || target == JobStatus.CANCELLED
+                    || (target == JobStatus.CLOSED && hasAcceptedApplicant);
+            case PAUSED -> target == JobStatus.OPEN || target == JobStatus.CANCELLED
+                    || (target == JobStatus.CLOSED && hasAcceptedApplicant);
+            default -> false;
+        };
+        if (!allowed) throw new IllegalArgumentException("Không thể chuyển công việc từ "
+                + job.getStatus() + " sang " + target + ".");
+
+        job.setStatus(target);
+        jobs.save(job);
+    }
 
     public List<Job> search(String q, String category, String skill, BigDecimal minBudget, BigDecimal maxBudget,
                             LocalDate deadline, String workType) {
@@ -105,7 +129,13 @@ public class JobService {
     @Transactional
     public JobApplication apply(Job job, User freelancer, String proposal, BigDecimal price, Integer estimatedDays, String portfolioLink) {
         requireFreelancer(freelancer);
+        if (Boolean.TRUE.equals(freelancer.getLocked())) {
+            throw new IllegalArgumentException("Tài khoản của bạn đang bị khóa, không thể ứng tuyển.");
+        }
         if (job.getStatus() != JobStatus.OPEN) throw new IllegalArgumentException("Công việc này không còn nhận ứng tuyển.");
+        if (job.getDeadline() != null && job.getDeadline().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Công việc này đã hết hạn nhận ứng tuyển.");
+        }
         if (applications.findByJobAndFreelancer(job, freelancer).isPresent()) throw new IllegalArgumentException("Bạn đã ứng tuyển công việc này.");
         if (freelancer.getProfessionalTitle() == null || freelancer.getProfessionalTitle().isBlank()
                 || freelancer.getSkills() == null || freelancer.getSkills().isBlank()) {

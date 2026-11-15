@@ -1,1 +1,23 @@
-<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Kết quả VNPay Sandbox</title><style>body{font-family:Arial;background:#eef3fc;color:#0b2a6f;text-align:center;padding:70px}article{max-width:600px;margin:auto;background:white;border-radius:16px;padding:36px}a{color:#1764ed}</style></head><body><article><h1>Kết quả VNPay Sandbox</h1><p th:if="${!verified}">Phản hồi không có chữ ký hợp lệ.</p><p th:if="${verified and success}">Ngân hàng test đã phản hồi thành công. Hệ thống chỉ ghi nhận PAID sau khi IPN được xác minh.</p><p th:if="${verified and !success}">Giao dịch không thành công hoặc đã bị hủy.</p><p>Không chuyển tiền thật. Kiểm tra trạng thái giao dịch trong dự án.</p><a href="/customer/projects">Quay lại dự án</a></article></body></html>
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kết quả VNPay Sandbox</title>
+    <style>
+        body{font-family:Arial;background:#eef3fc;color:#0b2a6f;text-align:center;padding:70px}
+        article{max-width:600px;margin:auto;background:white;border-radius:16px;padding:36px}
+        a{color:#1764ed}
+    </style>
+</head>
+<body>
+<article>
+    <h1>Kết quả VNPay Sandbox</h1>
+    <p th:if="${!verified}">Phản hồi không có chữ ký hợp lệ.</p>
+    <p th:if="${success}">Giao dịch đã được VNPay xác nhận và cập nhật thành công.</p>
+    <p th:if="${pending}">VNPay đã phản hồi thành công. Giao dịch đang chờ hệ thống xác nhận qua IPN; hãy kiểm tra lại trong dự án sau ít phút.</p>
+    <p th:if="${failed}">Giao dịch không thành công, đã bị hủy hoặc không thể xác nhận.</p>
+    <p>Đây là môi trường thử nghiệm, không phát sinh chuyển tiền thật.</p>
+    <a th:href="@{/customer/projects}">Quay lại dự án</a>
+</article>
+</body>
+</html>

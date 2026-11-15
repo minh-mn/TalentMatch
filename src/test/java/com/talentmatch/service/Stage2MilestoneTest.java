@@ -27,14 +27,12 @@ class Stage2MilestoneTest {
         milestone.setStatus(MilestoneStatus.IN_PROGRESS);
 
         MilestoneRepository milestoneRepo = mock(MilestoneRepository.class);
-        ProjectDeliveryRepository deliveryRepo = mock(ProjectDeliveryRepository.class);
         when(milestoneRepo.findById(100L)).thenReturn(Optional.of(milestone));
-        when(deliveryRepo.existsByProjectAndMilestone(project, milestone)).thenReturn(false);
 
         ProjectService service = new ProjectService(mock(ProjectRepository.class),
                 mock(JobApplicationRepository.class), mock(JobRepository.class), milestoneRepo,
                 mock(PaymentRepository.class), mock(UserRepository.class),
-                mock(DisputeRepository.class), deliveryRepo);
+                mock(QuoteService.class), mock(AgreementService.class));
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> service.markMilestone(100L, freelancer, MilestoneStatus.SUBMITTED));
         assertTrue(ex.getMessage().contains("bàn giao"));

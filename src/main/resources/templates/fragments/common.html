@@ -171,10 +171,10 @@
         <a th:href="@{/customer/messages}" th:classappend="${active == 'messages'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-regular fa-comment"></i></span>Tin nhắn</a>
         <a th:href="@{/customer/favorites}" th:classappend="${active == 'favorites'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-regular fa-heart"></i></span>Freelancer yêu thích</a>
         <a th:href="@{/customer/profile}" th:classappend="${active == 'profile'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-regular fa-building"></i></span>Hồ sơ doanh nghiệp</a>
-        <a th:href="@{/customer/dashboard(metric='projects',pieMode='status')}" th:classappend="${active == 'reports'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-chart-column"></i></span>Thống kê &amp; Báo cáo</a>
+        <a th:href="@{/customer/reports(metric='projects',pieMode='status')}" th:classappend="${active == 'reports'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-chart-column"></i></span>Thống kê &amp; Báo cáo</a>
         <span class="tm118-group-title">TIỆN ÍCH &amp; HỖ TRỢ</span>
         <a th:href="@{/customer/profile}" th:classappend="${active == 'credit'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-coins"></i></span>TalentCredit</a>
-        <a th:href="@{/customer/community}" th:classappend="${active == 'support'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-scale-balanced"></i></span>Khiếu nại &amp; Hỗ trợ</a>
+        <a th:href="@{/customer/support}" th:classappend="${active == 'support'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-scale-balanced"></i></span>Khiếu nại &amp; Hỗ trợ</a>
         <a th:href="@{/customer/profile}" th:classappend="${active == 'settings'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-gear"></i></span>Cài đặt</a>
       </nav>
 
@@ -279,6 +279,9 @@
 
     <a th:href="@{/notifications}" aria-label="Thông báo">
       <i class="fa-regular fa-bell"></i>
+      <span class="notification-count-badge"
+            th:if="${unreadNotificationCount != null and unreadNotificationCount > 0}"
+            th:text="${unreadNotificationCount > 99 ? '99+' : unreadNotificationCount}">0</span>
     </a>
 
     <!-- Avatar: ưu tiên tên doanh nghiệp, dự phòng tên người dùng -->
@@ -354,10 +357,11 @@
       <a class="market-primary-action" sec:authorize="hasRole('CUSTOMER')" th:href="@{/customer/jobs/new}">+ Đăng dự án</a>
       <a class="market-primary-action" sec:authorize="hasRole('FREELANCER')" th:href="@{/jobs}"><i class="fa-solid fa-magnifying-glass"></i> Tìm dự án</a>
       <a class="market-primary-action" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}"><i class="fa-solid fa-shield-halved"></i> Quản trị</a>
-      <button class="market-notify" type="button" aria-label="Thông báo">
+      <a class="market-notify" th:href="@{/notifications}" aria-label="Thông báo">
         <svg viewBox="0 0 24 24"><path d="M12 22a2.4 2.4 0 0 0 2.3-2H9.7a2.4 2.4 0 0 0 2.3 2Zm7-6-2-2V9a5 5 0 0 0-4-4.9V3h-2v1.1A5 5 0 0 0 7 9v5l-2 2v2h14v-2Z"/></svg>
-        <span class="market-notify-count">2</span>
-      </button>
+        <span class="market-notify-count" th:if="${unreadNotificationCount != null and unreadNotificationCount > 0}"
+              th:text="${unreadNotificationCount > 99 ? '99+' : unreadNotificationCount}">0</span>
+      </a>
       <div class="market-user-menu" data-user-menu>
         <button class="market-user-trigger" type="button" data-user-trigger>
           <span class="market-user-avatar" th:text="${currentUser.fullName != null and !#strings.isEmpty(currentUser.fullName) ? #strings.substring(currentUser.fullName,0,1) : 'U'}">U</span>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Không tìm thấy trang')}"></head>
+<body class="market-body">
+<main class="page-section">
+    <div class="container">
+        <section class="empty-card error-page" style="max-width:640px;margin:48px auto;text-align:center;padding:40px">
+            <span aria-hidden="true">404</span>
+            <h1>Không tìm thấy nội dung</h1>
+            <p>Trang hoặc dữ liệu bạn yêu cầu không tồn tại hoặc đã được gỡ bỏ.</p>
+            <a class="btn btn-gradient" href="javascript:history.back()">Quay lại</a>
+            <a class="btn btn-gradient" th:href="@{/}">Về trang chủ</a>
+        </section>
+    </div>
+</main>
+</body>
+</html>

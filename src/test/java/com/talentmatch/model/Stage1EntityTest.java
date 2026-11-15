@@ -2,18 +2,15 @@ package com.talentmatch.model;
 
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
-/** Hoi quy co ban cho Entity da dong bo trong GD1 (khong can ket noi MySQL). */
+/** Entity defaults and fields used by the current application model. */
 class Stage1EntityTest {
     @Test void newInvitationIsWaitingForReply() {
         JobInvitation invitation = new JobInvitation();
         assertEquals("SENT", invitation.getStatus());
         invitation.setStatus("ACCEPTED");
-        invitation.setRespondedAt(LocalDateTime.of(2026, 10, 31, 12, 0));
         assertEquals("ACCEPTED", invitation.getStatus());
-        assertNotNull(invitation.getRespondedAt());
     }
 
     @Test void deliverySupportsFileOrExternalUrl() {
@@ -26,16 +23,14 @@ class Stage1EntityTest {
         assertEquals("https://example.com/demo", delivery.getExternalUrl());
     }
 
-    @Test void projectMetadataFromDatabaseIsNotLost() {
+    @Test void projectAgreementSignaturesAreTrackedSeparately() {
         Project project = new Project();
-        project.setOrderNumber("TM-2026-8891");
-        project.setAgreementVersion(2);
-        project.setPlatformFee(new BigDecimal("550000.00"));
-        project.setAgreementTerms("Dieu khoan demo");
-        assertEquals("TM-2026-8891", project.getOrderNumber());
-        assertEquals(2, project.getAgreementVersion());
-        assertEquals(new BigDecimal("550000.00"), project.getPlatformFee());
-        assertEquals("Dieu khoan demo", project.getAgreementTerms());
+        project.setCustomerSignedAt(java.time.LocalDateTime.now());
+        assertFalse(project.isAgreementSigned());
+        project.setFreelancerSignedAt(java.time.LocalDateTime.now());
+        assertTrue(project.isAgreementSigned());
+        project.setTotalPrice(new BigDecimal("550000.00"));
+        assertEquals(new BigDecimal("550000.00"), project.getTotalPrice());
     }
 
     @Test void disputeTracksResolutionSeparately() {

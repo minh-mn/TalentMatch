@@ -15,10 +15,10 @@ import java.util.*;
 @Service
 public class VnPaySandboxService {
     private final String terminal,secret,baseUrl,returnUrl;
-    public VnPaySandboxService(@Value("${vnpay.tmn-code:}") String terminal,
-        @Value("${vnpay.hash-secret:}") String secret,
-        @Value("${vnpay.url:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}") String baseUrl,
-        @Value("${vnpay.return-url:http://localhost:8080/payment/vnpay/return}") String returnUrl){
+    public VnPaySandboxService(@Value("${VNPAY_TMN_CODE:${vnpay.tmn-code:}}") String terminal,
+        @Value("${VNPAY_HASH_SECRET:${vnpay.hash-secret:}}") String secret,
+        @Value("${VNPAY_URL:${vnpay.url:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}}") String baseUrl,
+        @Value("${VNPAY_RETURN_URL:${vnpay.return-url:http://localhost:8080/payment/vnpay/return}}") String returnUrl){
         this.terminal=terminal.trim();this.secret=secret.trim();this.baseUrl=baseUrl;this.returnUrl=returnUrl;
     }
     public boolean configured(){return !terminal.isBlank()&&!secret.isBlank();}
@@ -42,7 +42,7 @@ public class VnPaySandboxService {
         StringJoiner j=new StringJoiner("&");
         fields.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(e->{
             if(e.getValue()!=null&&!e.getValue().isBlank()&&!e.getKey().equals("vnp_SecureHash")&&!e.getKey().equals("vnp_SecureHashType"))
-                j.add(encode(e.getKey())+"="+encode(e.getValue()));
+                j.add(e.getKey()+"="+encode(e.getValue()));
         });
         return j.toString();
     }

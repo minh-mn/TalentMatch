@@ -3,96 +3,158 @@ package com.talentmatch.service;
 import com.talentmatch.model.*;
 import com.talentmatch.repository.*;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class Stage3WorkflowTest {
     private User user(long id, Role role) {
-        User u = new User(); u.setId(id); u.setRole(role); u.setFullName("Demo");
-        return u;
+        User user = new User();
+        user.setId(id);
+        user.setRole(role);
+        user.setFullName("Demo");
+        return user;
     }
+
     private Project project(User customer, User freelancer) {
-        Project p = new Project(); p.setId(50L); p.setCustomer(customer); p.setFreelancer(freelancer);
-        p.setStatus(ProjectStatus.IN_PROGRESS); p.setCustomerSignedAt(java.time.LocalDateTime.now());
-        p.setFreelancerSignedAt(java.time.LocalDateTime.now()); return p;
+        Project project = new Project();
+        project.setId(50L);
+        project.setCustomer(customer);
+        project.setFreelancer(freelancer);
+        project.setTotalPrice(new BigDecimal("12300000"));
+        project.setStatus(ProjectStatus.IN_PROGRESS);
+        project.setCustomerSignedAt(LocalDateTime.now());
+        project.setFreelancerSignedAt(LocalDateTime.now());
+        return project;
     }
+
     private JobApplication application(User customer, User freelancer) {
-        Job j = new Job(); j.setStatus(JobStatus.OPEN); j.setCustomer(customer);
-        j.setDeadline(LocalDate.now().plusDays(30)); j.setTitle("Ứng dụng web quản lý");
-        JobApplication app = new JobApplication(); app.setId(60L); app.setJob(j);
-        app.setFreelancer(freelancer); app.setStatus(ApplicationStatus.SUBMITTED);
-        app.setProposedPrice(new BigDecimal("15000000")); app.setEstimatedDays(20);
-        return app;
+        Job job = new Job();
+        job.setStatus(JobStatus.OPEN);
+        job.setCustomer(customer);
+        job.setDeadline(LocalDate.now().plusDays(30));
+        job.setTitle("Ứng dụng web quản lý");
+        JobApplication application = new JobApplication();
+        application.setId(60L);
+        application.setJob(job);
+        application.setFreelancer(freelancer);
+        application.setStatus(ApplicationStatus.SUBMITTED);
+        application.setProposedPrice(new BigDecimal("15000000"));
+        application.setEstimatedDays(20);
+        return application;
     }
-    @Test void freelancerCannotApproveOwnQuotation() {
-        User freelancer = user(8, Role.FREELANCER); User customer = user(2, Role.CUSTOMER);
-        JobApplication app = application(customer, freelancer);
-        JobApplicationRepository apps = mock(JobApplicationRepository.class);
-        QuoteRevisionRepository repo = mock(QuoteRevisionRepository.class);
-        when(apps.findForUpdate(60L)).thenReturn(Optional.of(app));
-        QuoteRevision quote = new QuoteRevision(); quote.setApplication(app);quote.setAuthor(freelancer);
-        quote.setVersion(1); quote.setStatus(QuoteStatus.PENDING);
-        when(repo.findById(17L)).thenReturn(Optional.of(quote));
-        when(repo.findByApplicationOrderByVersionDesc(app)).thenReturn(List.of(quote));
-        // id of the stored quotation is generated; use reflection to simulate database row.
-        org.springframework.test.util.ReflectionTestUtils.setField(quote,"id",17L);
-        QuoteService service = new QuoteService(repo,apps,mock(ProjectRepository.class),mock(NotificationService.class));
-        assertThrows(IllegalArgumentException.class,()->service.decide(60L,17L,freelancer,true));
-        verify(apps,never()).save(any());
+
+    @Test
+    void freelancerCannotAcceptTheirOwnQuotation() {
+        User freelancer = user(8, Role.FREELANCER);
+        User customer = user(2, Role.CUSTOMER);
+        JobApplication application = application(customer, freelancer);
+        JobApplicationRepository applications = mock(JobApplicationRepository.class);
+        QuoteRevisionRepository revisions = mock(QuoteRevisionRepository.class);
+        when(applications.findForUpdate(60L)).thenReturn(Optional.of(application));
+        QuoteRevision quote = quote(application, freelancer);
+        when(revisions.findById(17L)).thenReturn(Optional.of(quote));
+        when(revisions.findTopByApplicationOrderByVersionDesc(application)).thenReturn(Optional.of(quote));
+        QuoteService service = new QuoteService(revisions, applications, mock(ProjectRepository.class),
+                mock(NotificationService.class));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> service.resolve(60L, 17L, freelancer, true, null));
+        verify(applications, never()).save(any());
     }
-    @Test void acceptingOtherSideQuotationUpdatesAcceptedAmount() {
-        User freelancer = user(8, Role.FREELANCER);User customer = user(2, Role.CUSTOMER);
-        JobApplication app = application(customer,freelancer);
-        JobApplicationRepository apps = mock(JobApplicationRepository.class);
-        QuoteRevisionRepository repo = mock(QuoteRevisionRepository.class);
-        when(apps.findForUpdate(60L)).thenReturn(Optional.of(app));
-        QuoteRevision quote = new QuoteRevision();quote.setApplication(app);quote.setAuthor(freelancer);
-        quote.setAmount(new BigDecimal("12300000"));quote.setEstimatedDays(18);
-        quote.setVersion(1);quote.setStatus(QuoteStatus.PENDING);
-        org.springframework.test.util.ReflectionTestUtils.setField(quote,"id",17L);
-        when(repo.findById(17L)).thenReturn(Optional.of(quote));
-        when(repo.findByApplicationOrderByVersionDesc(app)).thenReturn(List.of(quote));
-        QuoteService service = new QuoteService(repo,apps,mock(ProjectRepository.class),mock(NotificationService.class));
-        service.decide(60L,17L,customer,true);
-        assertEquals(QuoteStatus.ACCEPTED,quote.getStatus());
-        assertEquals(0,app.getProposedPrice().compareTo(new BigDecimal("12300000")));
-        assertEquals(18,app.getEstimatedDays());
+
+    @Test
+    void acceptingOtherSideQuotationUpdatesAcceptedAmount() {
+        User freelancer = user(8, Role.FREELANCER);
+        User customer = user(2, Role.CUSTOMER);
+        JobApplication application = application(customer, freelancer);
+        JobApplicationRepository applications = mock(JobApplicationRepository.class);
+        QuoteRevisionRepository revisions = mock(QuoteRevisionRepository.class);
+        when(applications.findForUpdate(60L)).thenReturn(Optional.of(application));
+        QuoteRevision quote = quote(application, freelancer);
+        quote.setAmount(new BigDecimal("12300000"));
+        quote.setEstimatedDays(18);
+        when(revisions.findById(17L)).thenReturn(Optional.of(quote));
+        when(revisions.findTopByApplicationOrderByVersionDesc(application)).thenReturn(Optional.of(quote));
+        QuoteService service = new QuoteService(revisions, applications, mock(ProjectRepository.class),
+                mock(NotificationService.class));
+
+        service.resolve(60L, 17L, customer, true, null);
+
+        assertEquals(QuoteStatus.ACCEPTED, quote.getStatus());
+        assertEquals(0, application.getProposedPrice().compareTo(new BigDecimal("12300000")));
+        assertEquals(18, application.getEstimatedDays());
     }
-    @Test void reportedProgressCannotBeReducedAndCannotBeUpdatedByClient() {
-        User freelancer = user(8,Role.FREELANCER);User customer = user(2,Role.CUSTOMER);
-        Project project = project(customer,freelancer);
-        Milestone m = new Milestone();m.setId(100L);m.setProject(project);
-        m.setStatus(MilestoneStatus.IN_PROGRESS);m.setProgressPercent(60);
-        MilestoneRepository repo = mock(MilestoneRepository.class);
-        when(repo.findForUpdate(100L)).thenReturn(Optional.of(m));
-        ProgressService service = new ProgressService(mock(ProgressUpdateRepository.class),repo,mock(NotificationService.class));
-        assertThrows(IllegalArgumentException.class,()->service.report(project,100L,freelancer,35,
-                "Đã làm xong màn hình",null));
-        assertThrows(IllegalArgumentException.class,()->service.report(project,100L,customer,70,
-                "Đã làm xong màn hình",null));
-        verify(repo,never()).save(any());
+
+    @Test
+    void reportedProgressCannotBeReducedOrUpdatedByClient() {
+        User freelancer = user(8, Role.FREELANCER);
+        User customer = user(2, Role.CUSTOMER);
+        Project project = project(customer, freelancer);
+        Milestone milestone = new Milestone();
+        milestone.setId(100L);
+        milestone.setProject(project);
+        milestone.setStatus(MilestoneStatus.IN_PROGRESS);
+        milestone.setProgressPercent(60);
+        MilestoneRepository milestones = mock(MilestoneRepository.class);
+        when(milestones.findForUpdate(100L)).thenReturn(Optional.of(milestone));
+        ProgressService service = new ProgressService(mock(ProgressUpdateRepository.class), milestones,
+                mock(NotificationService.class));
+
+        assertThrows(IllegalArgumentException.class, () -> service.report(project, 100L, freelancer, 35,
+                "Đã làm xong màn hình", null));
+        assertThrows(IllegalArgumentException.class, () -> service.report(project, 100L, customer, 70,
+                "Đã làm xong màn hình", null));
+        verify(milestones, never()).save(any());
     }
-    @Test void progressIsWeightedByMilestoneAmountAndAcceptanceIsSeparate() {
-        Milestone first = new Milestone();first.setAmount(new BigDecimal("3000000"));
-        first.setStatus(MilestoneStatus.COMPLETED);first.setProgressPercent(100);
-        Milestone second = new Milestone();second.setAmount(new BigDecimal("7000000"));
-        second.setStatus(MilestoneStatus.IN_PROGRESS);second.setProgressPercent(50);
-        ProgressService service = new ProgressService(mock(ProgressUpdateRepository.class),
-                mock(MilestoneRepository.class),mock(NotificationService.class));
-        assertEquals(65,service.weightedProgress(List.of(first,second)));
-        assertEquals(30,service.acceptedProgress(List.of(first,second)));
+
+    @Test
+    void progressMetricsAreAmountWeightedAndTrackAcceptanceSeparately() {
+        Milestone first = new Milestone();
+        first.setAmount(new BigDecimal("3000000"));
+        first.setStatus(MilestoneStatus.COMPLETED);
+        first.setProgressPercent(100);
+        Milestone second = new Milestone();
+        second.setAmount(new BigDecimal("7000000"));
+        second.setStatus(MilestoneStatus.IN_PROGRESS);
+        second.setProgressPercent(50);
+
+        assertEquals(65, ProgressMetrics.reported(List.of(first, second)));
+        assertEquals(30, ProgressMetrics.accepted(List.of(first, second)));
     }
-    @Test void agreementRejectsOldVersion() {
-        User customer = user(2,Role.CUSTOMER);User freelancer = user(8,Role.FREELANCER);
-        Project p = project(customer,freelancer);p.setAgreementVersion(3);
-        ProjectRepository repo = mock(ProjectRepository.class);
-        when(repo.findForUpdate(50L)).thenReturn(Optional.of(p));
-        AgreementService service = new AgreementService(mock(AgreementRevisionRepository.class),
-                repo,mock(PaymentRepository.class),mock(NotificationService.class));
-        assertThrows(IllegalArgumentException.class,()->service.sign(p,customer,2));
+
+    @Test
+    void signatureRejectsUnavailableAgreementVersion() {
+        User customer = user(2, Role.CUSTOMER);
+        Project project = project(customer, user(8, Role.FREELANCER));
+        ProjectRepository projects = mock(ProjectRepository.class);
+        AgreementRevisionRepository revisions = mock(AgreementRevisionRepository.class);
+        when(projects.findForUpdate(50L)).thenReturn(Optional.of(project));
+        when(revisions.lockVersion(50L, 2)).thenReturn(Optional.empty());
+        AgreementService service = new AgreementService(revisions, mock(AgreementChangeRequestRepository.class),
+                projects, mock(PaymentRepository.class));
+
+        assertThrows(IllegalArgumentException.class, () -> service.recordSignature(project, customer, 2));
+    }
+
+    private QuoteRevision quote(JobApplication application, User author) {
+        QuoteRevision quote = new QuoteRevision();
+        quote.setApplication(application);
+        quote.setAuthor(author);
+        quote.setAmount(new BigDecimal("12300000"));
+        quote.setEstimatedDays(18);
+        quote.setScope("Implement the complete agreed application scope.");
+        quote.setRevisionPolicy("Additional work requires prior written agreement.");
+        quote.setVersion(1);
+        quote.setStatus(QuoteStatus.PENDING);
+        ReflectionTestUtils.setField(quote, "id", 17L);
+        return quote;
     }
 }

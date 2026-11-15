@@ -1,19 +1,18 @@
-
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/common :: head('Có lỗi xảy ra')}"></head>
-<body>
-<section class="page-section">
+<body class="market-body">
+<main class="page-section">
     <div class="container">
-        <div class="empty-card error-page">
-            <span>!</span>
-            <h1>Không thể xử lý yêu cầu</h1>
-            <p th:text="${message != null ? message : 'Đã có lỗi xảy ra. Vui lòng quay lại và thử lại.'}">
-                Đã có lỗi xảy ra.
-            </p>
+        <section class="empty-card error-page" style="max-width:640px;margin:48px auto;text-align:center;padding:40px">
+            <span aria-hidden="true">!</span>
+            <h1>Chưa thể hoàn tất yêu cầu</h1>
+            <p>Đã xảy ra lỗi trong hệ thống. Vui lòng thử lại sau hoặc liên hệ hỗ trợ.</p>
+            <p>Mã lỗi: <strong th:text="${errorId}">—</strong></p>
+            <a class="btn btn-gradient" href="javascript:history.back()">Quay lại</a>
             <a class="btn btn-gradient" th:href="@{/}">Về trang chủ</a>
-        </div>
+        </section>
     </div>
-</section>
+</main>
 </body>
 </html>

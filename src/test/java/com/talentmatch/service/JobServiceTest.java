@@ -2,6 +2,7 @@ package com.talentmatch.service;
 
 import com.talentmatch.model.Job;
 import com.talentmatch.model.JobStatus;
+import com.talentmatch.model.User;
 import com.talentmatch.repository.JobApplicationRepository;
 import com.talentmatch.repository.JobRepository;
 import com.talentmatch.repository.SavedJobRepository;
@@ -11,10 +12,13 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class JobServiceTest {
@@ -47,7 +51,8 @@ class JobServiceTest {
                 repository,
                 mock(SavedJobRepository.class),
                 mock(JobApplicationRepository.class),
-                mock(UserRepository.class)
+                mock(UserRepository.class),
+                mock(QuoteService.class)
         );
 
         var normal = service.searchAdvanced(
@@ -63,5 +68,23 @@ class JobServiceTest {
                 List.of(), List.of(), "latest"
         );
         assertEquals(List.of(future), timeFiltered);
+    }
+
+    @Test
+    void cannotReopenCancelledJob() {
+        User customer = new User();
+        customer.setId(1L);
+        Job cancelled = new Job();
+        cancelled.setId(2L);
+        cancelled.setCustomer(customer);
+        cancelled.setStatus(JobStatus.CANCELLED);
+        JobRepository jobs = mock(JobRepository.class);
+        when(jobs.findForUpdate(2L)).thenReturn(Optional.of(cancelled));
+        JobService service = new JobService(jobs, mock(SavedJobRepository.class),
+                mock(JobApplicationRepository.class), mock(UserRepository.class), mock(QuoteService.class));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> service.changeStatus(2L, customer, JobStatus.OPEN));
+        verify(jobs, org.mockito.Mockito.never()).save(cancelled);
     }
 }

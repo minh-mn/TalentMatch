@@ -8,7 +8,7 @@
 <link rel="stylesheet" th:href="@{/css/customer-reference-v70.css}">
 <link rel="stylesheet" th:href="@{/css/customer-reference-v71.css}">
 <link rel="stylesheet" th:href="@{/css/customer-footer-banner-v72.css(v=72)}">
-<aside th:replace="~{fragments/common :: marketSidebar('dashboard')}"></aside>
+<aside th:replace="~{fragments/common :: marketSidebar(${active})}"></aside>
 <!-- legacy dashboard sidebar replaced by shared Client navigation -->
 <!-- <aside class="tmc49-sidebar">
   <a class="tmc49-logo" th:href="@{/customer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><b>TalentMatch</b><small>FREELANCE MARKETPLACE</small></span></a>
@@ -50,7 +50,12 @@
     <a th:href="@{/#how}">Cách hoạt động</a>
   </nav>
   <div class="cd-header-user">
-    <a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i></a>
+    <a th:href="@{/notifications}" aria-label="Thông báo">
+      <i class="fa-regular fa-bell"></i>
+      <span class="notification-count-badge"
+            th:if="${unreadNotificationCount != null and unreadNotificationCount > 0}"
+            th:text="${unreadNotificationCount > 99 ? '99+' : unreadNotificationCount}">0</span>
+    </a>
     <a th:href="@{/customer/profile}" class="cd-mini-avatar" th:text="${companyInitial}">C</a>
     <span th:text="${companyDisplayName}">Doanh nghiệp</span>
   </div>
@@ -97,8 +102,8 @@
  </div>
 </section>
 <div class="cr-middle-grid">
- <section class="cr-panel cr-report cr-cost-report"><div class="cr-heading"><h2><i class="fa-solid fa-chart-column"></i> Thống kê chi phí</h2><a th:href="@{/customer/dashboard(metric='revenue')}">Xem chi tiết →</a></div>
- <p class="cr-sub">Dữ liệu theo thời gian từ hệ thống</p><div class="cr-bars"><div th:each="point : ${barData}" class="cr-bar"><div class="cr-bar-track"><span th:style="|height:${(point.value / barMax) * 100}%|"></span></div><small th:text="${point.label}">T1</small></div></div><div class="cr-chart-footer"><span class="cr-dot"></span><span th:text="${metric=='revenue' ? 'Chi phí (VND)' : 'Số dự án'}">Số dự án</span><a th:href="@{/customer/dashboard(metric='revenue')}">Xem chi phí →</a></div></section>
+ <section class="cr-panel cr-report cr-cost-report"><div class="cr-heading"><h2><i class="fa-solid fa-chart-column"></i> Thống kê chi phí</h2><a th:href="@{/customer/reports(metric='revenue')}">Xem chi tiết →</a></div>
+ <p class="cr-sub">Dữ liệu theo thời gian từ hệ thống</p><div class="cr-bars"><div th:each="point : ${barData}" class="cr-bar"><div class="cr-bar-track"><span th:style="|height:${(point.value / barMax) * 100}%|"></span></div><small th:text="${point.label}">T1</small></div></div><div class="cr-chart-footer"><span class="cr-dot"></span><span th:text="${metric=='revenue' ? 'Chi phí (VND)' : 'Số dự án'}">Số dự án</span><a th:href="@{/customer/reports(metric='revenue')}">Xem chi phí →</a></div></section>
  <section class="cr-panel cr-activity-panel"><div class="cr-heading"><h2><i class="fa-solid fa-bell"></i> Hoạt động gần đây</h2><a th:href="@{/customer/applicants}">Xem tất cả →</a></div>
   <a class="cr-activity" th:href="@{/customer/applicants}"><span class="cr-ico blue"><i class="fa-solid fa-users"></i></span><div><b>Hồ sơ ứng tuyển mới</b><small><span th:text="${applicantTotal}">0</span> hồ sơ đã ứng tuyển vào dự án của bạn</small></div></a>
   <a class="cr-activity" th:href="@{/customer/projects}"><span class="cr-ico green"><i class="fa-solid fa-shield-halved"></i></span><div><b>Dự án đang thực hiện</b><small><span th:text="${stats.activeProjects}">0</span> dự án đang theo dõi</small></div></a>

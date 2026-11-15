@@ -6,11 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 public class PaymentService {
+    private static final Duration PENDING_PAYMENT_TIMEOUT = Duration.ofMinutes(15);
     private final AgreementService agreements;
     private final PaymentRepository payments;
     private final ProjectRepository projects;
@@ -26,6 +28,11 @@ public class PaymentService {
         return payments.findAll().stream().sorted(Comparator.comparing(Payment::getCreatedAt).reversed()).toList();
     }
     public List<Payment> forProject(Project project){return payments.findByProjectOrderByCreatedAtDesc(project);}
+
+    public Optional<PaymentStatus> statusByTransactionCode(String transactionCode) {
+        if (transactionCode == null || transactionCode.isBlank()) return Optional.empty();
+        return payments.findByTransactionCode(transactionCode).map(Payment::getStatus);
+    }
 
     public BigDecimal checkoutAmount(Project p,Long milestoneId){
         if(milestoneId==null){
@@ -62,6 +69,7 @@ public class PaymentService {
             throw new IllegalArgumentException("Dự án không nhận thanh toán.");
         if(!agreements.signedCurrent(p))throw new IllegalArgumentException("Hai bên cần ký phiên bản hợp đồng hiện hành.");
         validatePaymentPlan(p,milestoneId);
+        expireStaleVnpayAttempts(p,milestoneId);
         Milestone m=null;
         if(milestoneId!=null){
             m=milestones.findById(milestoneId).orElseThrow();
@@ -108,6 +116,7 @@ public class PaymentService {
         if(p.getStatus()==ProjectStatus.COMPLETED||p.getStatus()==ProjectStatus.CANCELLED)throw new IllegalArgumentException("Dự án đã kết thúc.");
         if(!agreements.signedCurrent(p))throw new IllegalArgumentException("Hai bên phải ký đúng phiên bản hợp đồng hiện hành và xử lý xong yêu cầu sửa trước khi thanh toán.");
         validatePaymentPlan(p,milestoneId);
+        expireStaleVnpayAttempts(p,milestoneId);
         if(p.getStatus()==ProjectStatus.DISPUTED)throw new IllegalArgumentException("Dự án đang được xử lý tranh chấp.");
         if(!java.util.Set.of("VNPAY_DEMO","MOMO_DEMO","BANK_CARD_DEMO").contains(method))throw new IllegalArgumentException("Chỉ cho phép phương thức thanh toán mô phỏng.");
         Milestone m=null;BigDecimal amount=p.getTotalPrice();
@@ -126,5 +135,23 @@ public class PaymentService {
         pay.setStatus(PaymentStatus.PAID);pay.setPaidAt(LocalDateTime.now());pay.setTransactionCode("TM"+System.currentTimeMillis()+"-"+UUID.randomUUID().toString().substring(0,6).toUpperCase());
         pay=payments.save(pay);
         if(m!=null){m.setStatus(MilestoneStatus.PAID);milestones.save(m);}p.setStatus(ProjectStatus.IN_PROGRESS);projects.save(p);return pay;
+    }
+
+    private void expireStaleVnpayAttempts(Project project, Long milestoneId) {
+        LocalDateTime cutoff = LocalDateTime.now().minus(PENDING_PAYMENT_TIMEOUT);
+        List<Payment> stale = payments.findByProjectOrderByCreatedAtDesc(project).stream()
+                .filter(payment -> payment.getStatus() == PaymentStatus.PENDING)
+                .filter(payment -> "VNPAY_SANDBOX".equals(payment.getMethod()))
+                .filter(payment -> samePaymentTarget(payment, milestoneId))
+                .filter(payment -> payment.getCreatedAt() == null || !payment.getCreatedAt().isAfter(cutoff))
+                .toList();
+        stale.forEach(payment -> payment.setStatus(PaymentStatus.FAILED));
+        if (!stale.isEmpty()) payments.saveAll(stale);
+    }
+
+    private boolean samePaymentTarget(Payment payment, Long milestoneId) {
+        if (milestoneId == null) return payment.getMilestone() == null;
+        return payment.getMilestone() != null
+                && Objects.equals(payment.getMilestone().getId(), milestoneId);
     }
 }

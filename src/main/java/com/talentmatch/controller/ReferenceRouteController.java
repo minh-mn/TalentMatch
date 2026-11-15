@@ -14,4 +14,9 @@ public class ReferenceRouteController {
     public String quotedProjects() {
         return "redirect:/freelancer/applications";
     }
+
+    @GetMapping("/customer/community")
+    public String customerCommunity() {
+        return "redirect:/customer/support";
+    }
 }

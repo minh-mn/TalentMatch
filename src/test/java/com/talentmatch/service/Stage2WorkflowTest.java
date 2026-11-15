@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +36,7 @@ class Stage2WorkflowTest {
 
     private JobService jobs(JobApplicationRepository apps) {
         return new JobService(mock(JobRepository.class), mock(SavedJobRepository.class), apps,
-                mock(UserRepository.class));
+                mock(UserRepository.class), mock(QuoteService.class));
     }
 
     @Test
@@ -80,7 +79,7 @@ class Stage2WorkflowTest {
     }
 
     @Test
-    void activityChartUsesOnlyRealRecordsWithinSevenMonths() {
+    void freelancerStatsUsePersistedApplicationsAndProjects() {
         User f = freelancer();
         JobApplicationRepository apps = mock(JobApplicationRepository.class);
         ProjectRepository projects = mock(ProjectRepository.class);
@@ -97,10 +96,8 @@ class Stage2WorkflowTest {
         when(projects.findByFreelancerOrderByCreatedAtDesc(f)).thenReturn(List.of(completed, active));
         DashboardService dashboard = new DashboardService(mock(UserRepository.class),
                 mock(JobRepository.class), apps, projects, mock(PaymentRepository.class));
-        var points = dashboard.freelancerActivity(f, 7);
-        assertEquals(7, points.size());
-        assertEquals(1, points.stream().mapToLong(DashboardService.ActivityMonth::applications).sum());
-        assertEquals(1, points.stream().mapToLong(DashboardService.ActivityMonth::completedProjects).sum());
-        assertEquals(YearMonth.now().getMonthValue(), Integer.parseInt(points.get(6).label().substring(0, 2)));
+        var stats = dashboard.freelancerStats(f);
+        assertEquals(2, stats.get("applications"));
+        assertEquals(1L, stats.get("completedProjects"));
     }
 }

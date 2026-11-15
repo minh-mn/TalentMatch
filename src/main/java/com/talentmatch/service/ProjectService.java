@@ -78,13 +78,19 @@ public class ProjectService {
 
     @Transactional
     public Project acceptApplication(Long applicationId,User customer){
-        JobApplication selected=applications.findById(applicationId).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy ứng viên."));
-        Job job=selected.getJob();
+        JobApplication initial=applications.findById(applicationId).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy ứng viên."));
+        Job job=jobs.findForUpdate(initial.getJob().getId()).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy công việc."));
+        JobApplication selected=applications.findForUpdate(applicationId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy ứng viên."));
+        if(!selected.getJob().getId().equals(job.getId()))
+            throw new IllegalArgumentException("Ứng viên không thuộc công việc này.");
+        if(!job.getCustomer().getId().equals(customer.getId()))
+            throw new IllegalArgumentException("Bạn không sở hữu công việc này.");
         if(selected.getStatus()==ApplicationStatus.WITHDRAWN||selected.getStatus()==ApplicationStatus.REJECTED)
             throw new IllegalArgumentException("Không thể chọn đề xuất đã rút hoặc bị từ chối.");
-        if(!job.getCustomer().getId().equals(customer.getId()))throw new IllegalArgumentException("Bạn không sở hữu công việc này.");
+        Optional<Project> existing=projects.findByApplication(selected);
+        if(existing.isPresent())return existing.get();
         if(job.getStatus()!=JobStatus.OPEN && job.getStatus()!=JobStatus.PAUSED)throw new IllegalArgumentException("Công việc đã đóng hoặc bị hủy.");
-        Optional<Project> existing=projects.findByApplication(selected); if(existing.isPresent())return existing.get();
         QuoteRevision agreed=quotes.accepted(selected).orElseThrow(()->
             new IllegalArgumentException("Hai bên cần chấp nhận báo giá trước khi chọn Freelancer."));
         for(JobApplication a:applications.findByJobOrderByCreatedAtDesc(job)){

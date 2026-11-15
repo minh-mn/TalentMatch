@@ -17,7 +17,7 @@
     </section>
 
     <section class="tm-talent-kpis" aria-label="Thống kê Freelancer">
-      <div class="tm-talent-kpi"><span class="kpi-icon blue"><i class="fa-regular fa-user"></i></span><div><span>Freelancer phù hợp</span><strong th:text="${filteredCount}">0</strong></div></div>
+      <div class="tm-talent-kpi"><span class="kpi-icon blue"><i class="fa-regular fa-user"></i></span><div><span th:text="${selected != null ? 'Phù hợp cao (≥' + highMatchThreshold + ' điểm)' : 'Hồ sơ Freelancer'}">Freelancer phù hợp</span><strong th:text="${selected != null ? highMatchCount : totalCandidates}">0</strong></div></div>
       <div class="tm-talent-kpi"><span class="kpi-icon rose"><i class="fa-regular fa-heart"></i></span><div><span>Đã lưu</span><strong th:text="${savedCount}">0</strong></div></div>
       <div class="tm-talent-kpi"><span class="kpi-icon cyan"><i class="fa-regular fa-paper-plane"></i></span><div><span>Đã mời hợp tác</span><strong th:text="${invitedCount}">0</strong></div></div>
       <div class="tm-talent-kpi"><span class="kpi-icon amber"><i class="fa-solid fa-bolt"></i></span><div><span>Sẵn sàng nhận việc</span><strong th:text="${readyCount}">0</strong></div></div>
@@ -27,14 +27,14 @@
       <label class="tm-talent-job"><span>Dự án đang tuyển:</span><select name="jobId" aria-label="Chọn công việc đang tuyển"><option value="" th:if="${#lists.isEmpty(jobs)}">Chưa có công việc đang tuyển</option><option th:each="j : ${jobs}" th:value="${j.id}" th:selected="${selected != null and selected.id.equals(j.id)}" th:text="${j.title}">Thiết kế UI/UX website</option></select></label>
       <label class="tm-talent-search"><i class="fa-solid fa-magnifying-glass"></i><input name="q" type="search" th:value="${q}" placeholder="Tìm kỹ năng, tên freelancer..." aria-label="Tìm Freelancer"></label>
       <select name="field" aria-label="Danh mục Freelancer"><option value="">Tất cả danh mục</option><option th:each="f : ${fields}" th:value="${f}" th:text="${f}" th:selected="${field == f}">UI/UX</option></select>
-      <select name="sort" aria-label="Sắp xếp Freelancer"><option value="match" th:selected="${sort == 'match'}">Phù hợp nhất</option><option value="rating" th:selected="${sort == 'rating'}">Đánh giá cao nhất</option><option value="experience" th:selected="${sort == 'experience'}">Nhiều kinh nghiệm</option><option value="rateAsc" th:selected="${sort == 'rateAsc'}">Giá thấp nhất</option><option value="rateDesc" th:selected="${sort == 'rateDesc'}">Giá cao nhất</option></select>
+      <select name="sort" aria-label="Tiêu chí phụ khi bằng điểm phù hợp"><option value="match" th:selected="${sort == 'match'}">Điểm phù hợp cao xuống thấp</option><option value="rating" th:selected="${sort == 'rating'}">Điểm phù hợp trước - đánh giá</option><option value="experience" th:selected="${sort == 'experience'}">Điểm phù hợp trước - kinh nghiệm</option><option value="rateAsc" th:selected="${sort == 'rateAsc'}">Điểm phù hợp trước - giá thấp</option><option value="rateDesc" th:selected="${sort == 'rateDesc'}">Điểm phù hợp trước - giá cao</option></select>
       <button class="tm-talent-btn primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
       <input type="hidden" name="onlySaved" th:value="${onlySaved}">
     </form>
 
     <div class="tm-talent-layout">
       <div class="tm-talent-results">
-        <div class="tm-talent-meta"><span th:text="|Hiển thị ${#lists.size(suggestions)} / ${filteredCount} Freelancer phù hợp|">Danh sách Freelancer</span><a th:href="@{/customer/talent(jobId=${selected != null ? selected.id : null},onlySaved=${!onlySaved})}" class="saved-toggle" th:classappend="${onlySaved} ? ' selected' : ''"><i class="fa-regular fa-heart"></i> <span th:text="${onlySaved ? 'Xem tất cả' : 'Freelancer đã lưu'}">Freelancer đã lưu</span></a></div>
+        <div class="tm-talent-meta"><span th:if="${selected != null}" th:text="|Hiển thị ${#lists.size(suggestions)} / ${filteredCount} hồ sơ đã xếp hạng · ${highMatchCount} đạt từ ${highMatchThreshold} điểm|">Danh sách Freelancer</span><span th:if="${selected == null}" th:text="|Hiển thị ${#lists.size(suggestions)} / ${filteredCount} hồ sơ Freelancer|">Danh sách Freelancer</span><a th:href="@{/customer/talent(jobId=${selected != null ? selected.id : null},onlySaved=${!onlySaved})}" class="saved-toggle" th:classappend="${onlySaved} ? ' selected' : ''"><i class="fa-regular fa-heart"></i> <span th:text="${onlySaved ? 'Xem tất cả' : 'Freelancer đã lưu'}">Freelancer đã lưu</span></a></div>
         <section class="tm-talent-people" aria-label="Danh sách Freelancer">
           <article class="tm-talent-person" th:each="s : ${suggestions}">
             <a class="tm-talent-avatar" th:href="@{/customer/freelancers/{id}(id=${s.user.id})}" aria-label="Xem hồ sơ Freelancer">
@@ -42,17 +42,34 @@
               <span th:unless="${s.user.avatar != null and !s.user.avatar.isBlank()}" th:text="${s.user.fullName != null and !s.user.fullName.isBlank() ? #strings.substring(s.user.fullName,0,1) : 'F'}">F</span>
             </a>
             <div class="tm-talent-detail">
-              <div class="tm-talent-name-line"><a class="tm-talent-name" th:href="@{/customer/freelancers/{id}(id=${s.user.id})}" th:text="${s.user.fullName}">Tên Freelancer</a><span class="match-label" th:if="${selected != null and s.score >= 65}"><i class="fa-solid fa-circle-check"></i> Phù hợp cao</span><span class="match-label blue" th:if="${selected != null and s.score < 65}"><i class="fa-solid fa-sparkles"></i> Gợi ý</span><span class="match-label" th:if="${selected == null and s.user.available}">Sẵn sàng</span></div>
+              <div class="tm-talent-name-line"><a class="tm-talent-name" th:href="@{/customer/freelancers/{id}(id=${s.user.id})}" th:text="${s.user.fullName}">Tên Freelancer</a><span class="match-label" th:if="${selected != null and s.score >= highMatchThreshold}"><i class="fa-solid fa-circle-check"></i> Phù hợp cao</span><span class="match-label blue" th:if="${selected != null and s.score < highMatchThreshold}"><i class="fa-solid fa-sparkles"></i> Gợi ý</span><span class="match-label" th:if="${selected == null and s.user.available}">Sẵn sàng</span></div>
               <div class="tm-talent-title" th:text="${s.user.professionalTitle != null and !s.user.professionalTitle.isBlank() ? s.user.professionalTitle : (s.user.field != null ? s.user.field : 'Freelancer')}">UI/UX Designer</div>
               <div class="tm-talent-submeta"><span><i class="fa-solid fa-star"></i><b th:text="${s.user.rating != null ? #numbers.formatDecimal(s.user.rating,1,1) : '—'}">4.9</b></span><span><i class="fa-solid fa-briefcase"></i><span th:text="|${s.user.completedProjects != null ? s.user.completedProjects : 0} dự án|"></span></span><span><i class="fa-solid fa-location-dot"></i><span th:text="${s.user.location != null and !s.user.location.isBlank() ? s.user.location : 'Chưa cập nhật địa điểm'}"></span></span><span th:if="${s.user.experienceYears != null and s.user.experienceYears > 0}" th:text="|${s.user.experienceYears} năm kinh nghiệm|"></span></div>
               <p class="tm-talent-description" th:text="${s.user.bio != null and !s.user.bio.isBlank() ? s.user.bio : 'Freelancer đang cập nhật giới thiệu và portfolio.'}">Mô tả kinh nghiệm</p>
               <div class="tm-talent-tags" th:if="${s.user.skills != null and !s.user.skills.isBlank()}"><span th:each="tag,i : ${#strings.arraySplit(s.user.skills,',')}" th:if="${i.index < 5}" th:text="${#strings.trim(tag)}">Figma</span></div>
               <div class="tm-talent-match" th:if="${selected != null}" title="Điểm đối chiếu kỹ năng, lĩnh vực và kinh nghiệm - không phải xác suất trúng tuyển"><i class="fa-solid fa-circle-info"></i><span th:text="${s.reason}">Khớp kỹ năng</span></div>
+              <details class="tm-match-breakdown" th:if="${selected != null}">
+                <summary><i class="fa-solid fa-chart-pie"></i> Xem phân tích chi tiết <span th:text="|${s.score}/100 điểm|">0/100 điểm</span></summary>
+                <div class="tm-match-breakdown-body">
+                  <p class="tm-match-disclaimer">Điểm là mức đối chiếu theo tiêu chí, không phải xác suất được tuyển. Mỗi thanh thể hiện phần trăm đạt được trong trọng số tối đa của tiêu chí đó.</p>
+                  <div class="tm-match-factor" th:each="factor : ${s.factors}">
+                    <div class="tm-match-factor-heading"><strong th:text="${factor.label}">Kỹ năng</strong><b th:text="|${factor.points}/${factor.maximum}|">0/50</b></div>
+                    <div class="tm-match-factor-track" role="presentation"><span th:style="|width:${factor.percent}%|"></span></div>
+                    <p th:text="${factor.detail}">Giải thích tiêu chí</p>
+                  </div>
+                  <div class="tm-match-skills" th:if="${s.hasRequiredSkills}">
+                    <div><strong><i class="fa-solid fa-check"></i> Kỹ năng khớp</strong><span th:if="${#lists.isEmpty(s.matchedSkills)}">Chưa tìm thấy kỹ năng yêu cầu khớp hoàn toàn trong hồ sơ.</span><span class="tm-match-skill-chip matched" th:each="skill : ${s.matchedSkills}" th:text="${skill}">Java</span></div>
+                    <div><strong><i class="fa-solid fa-circle-minus"></i> Kỹ năng chưa thấy trong hồ sơ</strong><span th:if="${#lists.isEmpty(s.missingSkills)}">Đã khớp tất cả kỹ năng liệt kê trong tin.</span><span class="tm-match-skill-chip missing" th:each="skill : ${s.missingSkills}" th:text="${skill}">Docker</span></div>
+                  </div>
+                  <p class="tm-match-no-skills" th:unless="${s.hasRequiredSkills}">Tin tuyển chưa khai báo kỹ năng yêu cầu nên hệ thống không thể liệt kê kỹ năng khớp/chưa khớp.</p>
+                  <p class="tm-match-method-note">Các tiêu chí cho biết hồ sơ tương thích ở những khía cạnh nào. Nội dung hồ sơ có thể chưa đầy đủ, Client nên xem hồ sơ và trao đổi trực tiếp trước khi lựa chọn.</p>
+                </div>
+              </details>
             </div>
             <div class="tm-talent-action">
               <form th:action="@{/customer/talent/favorites/{id}(id=${s.user.id})}" method="post" class="tm-talent-save"><input type="hidden" name="jobId" th:if="${selected != null}" th:value="${selected.id}"><input type="hidden" name="q" th:value="${q}"><input type="hidden" name="skill" th:value="${skill}"><input type="hidden" name="field" th:value="${field}"><input type="hidden" name="sort" th:value="${sort}"><input type="hidden" name="workType" th:value="${workType}"><input type="hidden" name="minExperience" th:value="${minExperience}"><input type="hidden" name="rateFrom" th:value="${rateFrom}"><input type="hidden" name="rateTo" th:value="${rateTo}"><input type="hidden" name="onlySaved" th:value="${onlySaved}"><input type="hidden" name="page" th:value="${currentPage}"><button type="submit" th:aria-label="${s.saved ? 'Bỏ lưu Freelancer' : 'Lưu Freelancer'}" th:title="${s.saved ? 'Bỏ lưu' : 'Lưu Freelancer'}" th:classappend="${s.saved} ? 'is-saved' : ''"><i th:class="${s.saved ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'}"></i></button></form>
               <strong th:text="${s.user.hourlyRate != null ? #numbers.formatDecimal(s.user.hourlyRate,0,'POINT',0,'COMMA')+'đ/giờ' : 'Liên hệ báo giá'}">250.000đ/giờ</strong>
-              <span th:if="${selected != null}" class="tm-talent-score" th:text="|Độ phù hợp: ${s.score}%|">Độ phù hợp: 90%</span>
+              <span th:if="${selected != null}" class="tm-talent-score" th:text="|Điểm phù hợp: ${s.score}/100|">Điểm phù hợp: 90/100</span>
               <form th:if="${selected != null and selected.status.name() == 'OPEN'}" th:action="@{/customer/invitations}" method="post" onsubmit="return confirm('Gửi lời mời hợp tác đến Freelancer này?')"><input type="hidden" name="jobId" th:value="${selected.id}"><input type="hidden" name="freelancerId" th:value="${s.user.id}"><input type="hidden" name="message" th:value="|Chúng tôi muốn mời bạn tìm hiểu và đề xuất cho dự án: ${selected.title}.|"><button class="tm-talent-btn primary" type="submit">Mời hợp tác</button></form>
               <a th:if="${selected == null}" class="tm-talent-btn primary disabled" th:href="@{/customer/jobs/new}" title="Đăng công việc để gửi lời mời">Đăng dự án để mời</a>
               <a class="tm-talent-btn secondary" th:href="@{/customer/freelancers/{id}(id=${s.user.id})}">Xem hồ sơ</a>
@@ -72,8 +89,8 @@
           <button class="tm-talent-btn primary full" type="submit" form="tm-talent-search"><i class="fa-solid fa-filter"></i> Áp dụng bộ lọc</button>
         </section>
         <section class="tm-talent-panel tm-talent-recommends"><h2><i class="fa-solid fa-wand-magic-sparkles"></i> Gợi ý cho dự án của bạn <span class="sub">Top 3</span></h2><p class="tm-talent-hint" th:if="${selected != null}">Xếp hạng theo kỹ năng, lĩnh vực, kinh nghiệm và ngân sách của dự án.</p><p class="tm-talent-hint" th:if="${selected == null}">Đăng dự án để xem điểm tương thích chi tiết.</p>
-          <a class="tm-talent-mini" th:each="r : ${recommended}" th:href="@{/customer/freelancers/{id}(id=${r.user.id})}"><span class="mini-avatar" th:text="${r.user.fullName != null ? #strings.substring(r.user.fullName,0,1) : 'F'}">F</span><span class="mini-info"><b th:text="${r.user.fullName}">Tên Freelancer</b><small th:text="${r.user.professionalTitle != null ? r.user.professionalTitle : 'Freelancer'}">Chuyên môn</small></span><span class="mini-score" th:if="${selected != null}" th:text="|${r.score}%|">95%</span></a><p class="tm-talent-hint" th:if="${#lists.isEmpty(recommended)}">Không có gợi ý phù hợp bộ lọc.</p>
-          <small class="tm-talent-disclaimer">Điểm gợi ý là thuật toán so khớp thông tin, không phải xác suất tuyển dụng hoặc AI học sâu.</small>
+          <a class="tm-talent-mini" th:each="r : ${recommended}" th:href="@{/customer/freelancers/{id}(id=${r.user.id})}"><span class="mini-avatar" th:text="${r.user.fullName != null ? #strings.substring(r.user.fullName,0,1) : 'F'}">F</span><span class="mini-info"><b th:text="${r.user.fullName}">Tên Freelancer</b><small th:text="${r.user.professionalTitle != null ? r.user.professionalTitle : 'Freelancer'}">Chuyên môn</small></span><span class="mini-score" th:if="${selected != null}" th:text="|${r.score}/100 điểm|">95/100 điểm</span></a><p class="tm-talent-hint" th:if="${#lists.isEmpty(recommended)}">Không có gợi ý phù hợp bộ lọc.</p>
+          <small class="tm-talent-disclaimer">Điểm gợi ý thể hiện mức độ tương thích tham khảo, không phải xác suất được tuyển.</small>
         </section>
       </aside>
     </div>

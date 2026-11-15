@@ -58,6 +58,8 @@ public class TalentWorkflowController {
      List<Map<String, Object>> candidates = new ArrayList<>();
      List<User> availableProfiles = userRepo.findByRoleAndLockedFalseOrderByCreatedAtDesc(Role.FREELANCER)
              .stream().filter(f -> Boolean.TRUE.equals(f.getEnabled())).toList();
+     Map<User, MatchingService.Recommendation> matches = selected == null
+             ? Map.of() : matchingService.rank(selected, availableProfiles);
      for (User f : availableProfiles) {
          if (!keyword.isBlank() && !norm(f.getFullName()+" "+f.getProfessionalTitle()+" "+f.getSkills()+" "+f.getBio()).contains(keyword)) continue;
          if (!wantedSkill.isBlank() && !norm(f.getSkills()).contains(wantedSkill)) continue;
@@ -67,13 +69,20 @@ public class TalentWorkflowController {
          if (rateFrom != null && (f.getHourlyRate() == null || f.getHourlyRate().compareTo(rateFrom) < 0)) continue;
          if (rateTo != null && (f.getHourlyRate() == null || f.getHourlyRate().compareTo(rateTo) > 0)) continue;
          if (onlySaved && !savedIds.contains(f.getId())) continue;
-         MatchingService.Recommendation match = selected == null ? null : matchingService.recommend(selected, f);
+         MatchingService.Recommendation match = matches.get(f);
          int score = match == null ? 0 : match.score();
          Map<String, Object> row = new HashMap<>();
          row.put("user", f);
          row.put("score", score);
          row.put("reason", match == null ? "Chọn công việc đang tuyển để xem mức độ phù hợp" : match.reason());
          row.put("saved", savedIds.contains(f.getId()));
+         if (match != null && selected != null) {
+             row.put("factors", matchingFactors(selected, f, match));
+             row.put("matchedSkills", match.matchedSkills());
+             row.put("missingSkills", match.missingSkills());
+             row.put("hasRequiredSkills", selected.getRequiredSkills() != null
+                     && !selected.getRequiredSkills().isBlank());
+         }
          candidates.add(row);
      }
      Comparator<Map<String, Object>> byRating = Comparator.comparingDouble(
@@ -83,22 +92,37 @@ public class TalentWorkflowController {
              Comparator.nullsLast(Comparator.naturalOrder()));
      Comparator<Map<String, Object>> byExperience = Comparator.comparingInt(
              (Map<String, Object> r) -> Optional.ofNullable(((User) r.get("user")).getExperienceYears()).orElse(0));
-     switch (order) {
-         case "rating" -> candidates.sort(byRating.reversed());
-         case "rateAsc" -> candidates.sort(byRate);
-         case "rateDesc" -> candidates.sort(Comparator.comparing(
+     Comparator<Map<String, Object>> secondaryOrder = switch (order) {
+         case "rating" -> byRating.reversed().thenComparing(byExperience.reversed());
+         case "rateAsc" -> byRate;
+         case "rateDesc" -> Comparator.comparing(
                  (Map<String, Object> r) -> ((User) r.get("user")).getHourlyRate(),
-                 Comparator.nullsLast(Comparator.reverseOrder())));
-         case "experience" -> candidates.sort(byExperience.reversed());
-         default -> candidates.sort(Comparator.comparingInt((Map<String,Object> r) -> (int)r.get("score"))
-                     .thenComparing(byRating).reversed());
-     }
+                 Comparator.nullsLast(Comparator.reverseOrder()));
+         case "experience" -> byExperience.reversed();
+         default -> byRating.reversed().thenComparing(byExperience.reversed());
+     };
+     Comparator<Map<String, Object>> byName = Comparator.comparing(
+             (Map<String, Object> r) -> Optional.ofNullable(((User) r.get("user")).getFullName()).orElse(""),
+             String.CASE_INSENSITIVE_ORDER);
+     candidates.sort(Comparator
+             .comparingInt((Map<String, Object> r) -> (int) r.get("score")).reversed()
+             .thenComparing(secondaryOrder)
+             .thenComparing(byName));
      int size = 5;
      int totalPages = Math.max(1, (candidates.size() + size - 1) / size);
      int currentPage = Math.max(1, Math.min(page, totalPages));
      int from = (currentPage - 1) * size;
      List<Map<String,Object>> visible = candidates.subList(from, Math.min(from + size, candidates.size()));
-     List<Map<String,Object>> recommended = candidates.stream().limit(3).toList();
+     long highMatchCount = candidates.stream()
+             .filter(row -> (int) row.get("score") >= MatchingService.HIGH_MATCH_THRESHOLD)
+             .count();
+     List<Map<String,Object>> recommended = candidates.stream()
+             .sorted(Comparator.comparingInt((Map<String, Object> r) -> (int) r.get("score")).reversed()
+                     .thenComparing(byRating.reversed())
+                     .thenComparing(byExperience.reversed())
+                     .thenComparing(r -> Optional.ofNullable(((User) r.get("user")).getFullName()).orElse(""),
+                             String.CASE_INSENSITIVE_ORDER))
+             .limit(3).toList();
      List<String> fields = availableProfiles.stream().map(User::getField)
              .filter(Objects::nonNull).filter(v -> !v.isBlank()).distinct().sorted().toList();
      model.addAttribute("suggestions", visible);
@@ -117,6 +141,8 @@ public class TalentWorkflowController {
      model.addAttribute("fields", fields);
      model.addAttribute("totalCandidates", availableProfiles.size());
      model.addAttribute("filteredCount", candidates.size());
+     model.addAttribute("highMatchCount", highMatchCount);
+     model.addAttribute("highMatchThreshold", MatchingService.HIGH_MATCH_THRESHOLD);
      model.addAttribute("savedCount", savedIds.size());
      model.addAttribute("invitedCount", invites.findByCustomerOrderByCreatedAtDesc(customerUser).stream()
              .map(inv -> inv.getFreelancer().getId()).distinct().count());
@@ -129,6 +155,60 @@ public class TalentWorkflowController {
      model.addAttribute("pageNumbers", java.util.stream.IntStream.rangeClosed(startPage, endPage).boxed().toList());
      return "customer/talent";
  }
+
+ private List<Map<String, Object>> matchingFactors(Job job, User freelancer,
+                                                    MatchingService.Recommendation match) {
+     String skillDetail = match.matchedSkills().isEmpty()
+             ? "Chưa có kỹ năng yêu cầu nào khớp hoàn toàn."
+             : "Khớp: " + String.join(", ", match.matchedSkills()) + ".";
+     if (!match.missingSkills().isEmpty()) {
+         skillDetail += " Chưa thấy trong hồ sơ: " + String.join(", ", match.missingSkills()) + ".";
+     }
+     String experienceDetail = match.requiredExperienceYears() == 0
+             ? "Cấp độ kinh nghiệm của tin chưa được nhận diện; tiêu chí này không cộng điểm."
+             : "Hồ sơ có " + Optional.ofNullable(freelancer.getExperienceYears()).orElse(0)
+                     + " năm; yêu cầu tối thiểu " + match.requiredExperienceYears() + " năm.";
+     String budgetDetail;
+     if (!match.budgetEvaluated()) {
+         budgetDetail = "Chưa đủ dữ liệu đơn giá hoặc ngân sách để ước tính.";
+     } else {
+         java.text.NumberFormat money = java.text.NumberFormat.getNumberInstance(new Locale("vi", "VN"));
+         int days = Math.max(1, Optional.ofNullable(job.getEstimatedDurationDays()).orElse(14));
+         budgetDetail = money.format(freelancer.getHourlyRate()) + "đ/giờ × 4 giờ/ngày × "
+                 + days + " ngày = " + money.format(match.estimatedBudget()) + "đ; ngân sách tin: "
+                 + money.format(job.getBudget()) + "đ.";
+     }
+     return List.of(
+             factor("Kỹ năng yêu cầu", match.skillPoints(), 50,
+                     skillDetail),
+             factor("Nội dung tin và hồ sơ", match.textPoints(), 10,
+                     "Mức độ tương thích giữa nội dung công việc với kỹ năng, chức danh và phần giới thiệu của Freelancer."),
+             factor("Lĩnh vực", match.fieldPoints(), 20,
+                     "Lĩnh vực công việc: " + safe(job.getCategory()) + " · Lĩnh vực Freelancer: "
+                             + safe(freelancer.getField()) + "."),
+             factor("Kinh nghiệm", match.experiencePoints(), 10, experienceDetail),
+             factor("Ngân sách ước tính", match.budgetPoints(), 5, budgetDetail),
+             factor("Sẵn sàng nhận việc", match.availabilityPoints(), 5,
+                     Boolean.TRUE.equals(freelancer.getAvailable())
+                             ? "Freelancer đang bật trạng thái sẵn sàng."
+                             : "Freelancer chưa bật trạng thái sẵn sàng.")
+     );
+ }
+
+ private Map<String, Object> factor(String label, int points, int maximum, String detail) {
+     Map<String, Object> item = new HashMap<>();
+     item.put("label", label);
+     item.put("points", points);
+     item.put("maximum", maximum);
+     item.put("percent", maximum == 0 ? 0 : points * 100 / maximum);
+     item.put("detail", detail);
+     return item;
+ }
+
+ private static String safe(String value) {
+     return value == null || value.isBlank() ? "Chưa cập nhật" : value;
+ }
+
  @GetMapping("/customer/favorites")
  @Transactional(readOnly = true)
  public String favoriteFreelancers(Authentication auth, Model model,

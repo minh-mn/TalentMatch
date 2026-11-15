@@ -17,7 +17,8 @@
 .cd-dashboard .cd-header-links a { color:#092a74; font-size:11px; font-weight:800; white-space:nowrap; text-decoration:none; }
 .cd-dashboard .cd-header-links a:hover { color:#286dff; }
 .cd-dashboard .cd-header-user { display:flex; align-items:center; justify-content:flex-end; gap:10px; min-width:0; color:#0c2b70; font-size:12px; font-weight:800; }
-.cd-dashboard .cd-header-user>a:first-child { display:grid; place-items:center; width:32px; height:32px; color:#264b87; text-decoration:none; font-size:16px; }
+.cd-dashboard .cd-header-user>a:first-child { position:relative; display:grid; place-items:center; width:32px; height:32px; color:#264b87; text-decoration:none; font-size:16px; }
+.cd-dashboard .cd-header-user .notification-count-badge { position:absolute; top:-2px; right:-3px; min-width:16px; height:16px; padding:0 3px; display:inline-flex; align-items:center; justify-content:center; border:2px solid #fff; border-radius:999px; background:#ef4444; color:#fff; font-size:9px; font-weight:800; line-height:1; }
 .cd-dashboard .cd-header-user .cd-mini-avatar { display:grid; place-items:center; width:34px; height:34px; flex-shrink:0; border-radius:50%; background:#e8f0ff; color:#286dff; text-decoration:none; font-size:13px; font-weight:850; }
 .cd-dashboard .cd-header-user>span { max-width:135px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .cd-dashboard .tmc49-main { margin-left:250px !important; padding:84px 24px 0 !important; min-height:100vh; }

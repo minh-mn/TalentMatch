@@ -4,6 +4,22 @@
 
 Hướng dẫn chi tiết: [README_GD3.md](README_GD3.md) — thay đổi: [CHANGELOG_GD3.md](CHANGELOG_GD3.md).
 
+## Các luồng hiện được hỗ trợ
+
+- Đăng nhập trả người dùng về trang họ yêu cầu trước đó; nếu không có trang chờ, chuyển theo vai trò.
+- Thanh toán VNPay Sandbox chỉ ghi nhận giao dịch sau IPN hợp lệ. Giao dịch thử bị bỏ dở được mở lại sau 15 phút; callback trình duyệt không tự xác nhận thanh toán.
+- Gợi ý Freelancer dùng TF-IDF cosine trên tập hồ sơ cùng các yếu tố lĩnh vực, kinh nghiệm, ngân sách ước tính và trạng thái sẵn sàng. Đây là thuật toán khai phá dữ liệu có giải thích, không phải mô hình ngôn ngữ đã huấn luyện.
+
+### Cách tính gợi ý Freelancer
+
+Điểm gợi ý là điểm đối chiếu quy tắc từ 0–100, không phải xác suất được tuyển. Hệ thống chuẩn hóa văn bản tiếng Việt (bỏ dấu), loại một số từ dừng, tính TF-IDF/cosine trên nội dung tin và hồ sơ; điểm gồm tối đa 50 điểm tương đồng kỹ năng, 10 điểm tương đồng nội dung, 20 điểm đúng lĩnh vực, 10 điểm kinh nghiệm, 5 điểm ngân sách ước tính và 5 điểm sẵn sàng nhận việc. Trên mỗi hồ sơ, mục “Xem phân tích chi tiết” trình bày điểm đạt/tối đa, trọng số, kỹ năng khớp/chưa thấy trong hồ sơ, dữ liệu kinh nghiệm và phép tính ngân sách. Tổng điểm bằng tổng điểm thành phần. Ước tính ngân sách theo đơn giá giờ × 4 giờ/ngày × số ngày dự kiến, nên chỉ mang tính tham khảo.
+
+Danh sách “Phù hợp nhất” sắp xếp điểm giảm dần, sau đó dùng đánh giá, kinh nghiệm và tên làm tiêu chí phụ ổn định. Khối “Top 3 gợi ý” luôn dựa trên điểm tương thích, không đổi thứ tự theo bộ lọc sắp xếp chính. Khi tin không nêu cấp kinh nghiệm nhận diện được, hệ thống không cộng điểm hoặc tuyên bố ứng viên đạt yêu cầu kinh nghiệm. Kết quả phụ thuộc vào chất lượng dữ liệu hồ sơ/tin tuyển và không tự động quyết định tuyển dụng.
+
+Trang `/customer/talent` xếp hạng toàn bộ hồ sơ Freelancer đang hoạt động, vì vậy tổng số hồ sơ có thể giữ nguyên giữa các công việc. Điểm từng hồ sơ, thứ tự gợi ý và số hồ sơ “Phù hợp cao” (điểm từ 65 trở lên) được tính lại theo công việc đã chọn; bộ lọc tìm kiếm tiếp tục thu hẹp tập hồ sơ hiển thị. Không đồng nhất tổng số hồ sơ được xếp hạng với số ứng viên đã nộp đơn cho công việc.
+
+Để trình diễn với nhiều hồ sơ Freelancer đa ngành, đặt `APP_DEMO_MATCHING_SEED=true` rồi khởi động lại ứng dụng. Bộ nạp tạo tối đa 12 hồ sơ mẫu có kỹ năng, lĩnh vực, kinh nghiệm, đơn giá và hình thức làm việc khác nhau; chỉ tạo email chưa tồn tại dạng `matching.demo.*@talentmatch.vn` và không sửa hồ sơ đã có. Mật khẩu các tài khoản mẫu được sinh ngẫu nhiên nên không dùng để đăng nhập. Tắt lại biến này sau khi nạp; dữ liệu mẫu đã tạo sẽ vẫn nằm trong database cho đến khi được xóa riêng. Chỉ bật trên database demo/kiểm thử.
+
 ---
 
 # TalentMatch – Giai đoạn 1: Đồng bộ Maven + MySQL V33
@@ -61,10 +77,27 @@ Project có hai file SQL **khác mục đích** trong thư mục `database/`:
 DB_USERNAME=root
 DB_PASSWORD=MAT_KHAU_MYSQL_CUA_BAN
 APP_DEMO_SEED=false
+APP_DEMO_MATCHING_SEED=false
 APP_MAIL_ENABLED=false
+VNPAY_TMN_CODE=
+VNPAY_HASH_SECRET=
+VNPAY_URL=https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+VNPAY_RETURN_URL=http://localhost:8080/payment/vnpay/return
 ```
 
 Nếu MySQL không chạy trên máy hoặc không dùng port 3306, đặt thêm `DB_URL` cho phù hợp.
+Để kiểm thử thanh toán VNPay Sandbox:
+
+1. Đăng ký/được cấp tài khoản **VNPay Sandbox**; điền `VNPAY_TMN_CODE` và `VNPAY_HASH_SECRET` từ cấu hình merchant vào biến môi trường Run Configuration. Không đưa các giá trị này vào source code.
+2. VNPay phải gọi được IPN từ máy chủ của họ. Khi chạy local, tạo HTTPS tunnel tới cổng `8080` (ví dụ công cụ tunnel bạn tin cậy), rồi đăng ký URL IPN công khai `https://<ten-mien-cong-khai>/payment/vnpay/ipn` trong cấu hình merchant Sandbox. Đặt `VNPAY_RETURN_URL=https://<ten-mien-cong-khai>/payment/vnpay/return` để trình duyệt quay về đúng ứng dụng. Không đăng ký `localhost` làm IPN URL.
+3. Khởi động lại ứng dụng, ký hợp đồng hai bên, thiết lập lịch/hạn thanh toán rồi bắt đầu thanh toán từ checkout. VNPay Sandbox chỉ dùng tài khoản/thẻ thử nghiệm do VNPay cung cấp; không dùng thông tin thanh toán thật.
+4. Chỉ IPN hợp lệ mới chuyển giao dịch từ `PENDING` sang `PAID`; trang Return không tự xác nhận tiền. Kiểm tra lịch sử giao dịch sau khi VNPay báo thành công. Nếu IPN không tới, giao dịch có thể vẫn `PENDING`; xác nhận tunnel đang mở và URL IPN trong merchant trùng khớp.
+
+`VNPAY_URL` mặc định trỏ tới Sandbox. Không đổi sang cổng production hoặc dùng khóa Sandbox cho giao dịch thật. Có thể đặt `APP_SECURITY_REMEMBER_ME_KEY` nếu cần giữ đăng nhập qua lần khởi động lại; mặc định khóa được tạo mới khi ứng dụng chạy.
+
+### Tạo hợp đồng mẫu để thử thanh toán
+
+Sau khi đã chạy ứng dụng ít nhất một lần để Hibernate cập nhật schema, có thể chạy `DATABASE_VNPAY_DEMO_CONTRACT.sql` trong MySQL Workbench. Script thêm một công việc, báo giá đã chốt và hợp đồng một lần trị giá 500.000đ, đã ký hai bên, hạn thanh toán sau 7 ngày; script không tạo sẵn giao dịch và có thể chạy lại an toàn. Cần có sẵn hai tài khoản demo `client@talentmatch.vn` và `freelancer@talentmatch.vn`; nếu dùng tài khoản do DataInitializer tạo, mật khẩu mặc định là `123456`. Chỉ chạy trên database demo/kiểm thử và cấu hình VNPay Sandbox trước khi thanh toán.
 
 4. Chạy `com.talentmatch.TalentMatchApplication` bằng nút Run của IntelliJ.
 5. Mở trình duyệt: `http://localhost:8080`.

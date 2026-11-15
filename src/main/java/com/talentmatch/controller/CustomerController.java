@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +49,10 @@ public class CustomerController {
     private final PaymentService payments; private final DashboardService dashboard; private final JobRepository jobRepository;
     public CustomerController(UserService users,JobService jobs,ProjectService projects,PaymentService payments,DashboardService dashboard,JobRepository jobRepository){this.users=users;this.jobs=jobs;this.projects=projects;this.payments=payments;this.dashboard=dashboard;this.jobRepository=jobRepository;}
 
-    @GetMapping("/dashboard")
+    @GetMapping({"/dashboard", "/reports"})
     public String dashboard(
             Authentication auth,
+            HttpServletRequest request,
             Model model,
             @RequestParam(required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
@@ -80,6 +82,7 @@ public class CustomerController {
         companyName = companyName.trim();
 
         model.addAttribute("companyDisplayName", companyName);
+        model.addAttribute("active", request.getRequestURI().endsWith("/reports") ? "reports" : "dashboard");
         model.addAttribute(
                 "companyInitial",
                 companyName.substring(0, 1).toUpperCase()
@@ -431,7 +434,17 @@ public class CustomerController {
                 .body(resource);
     }
 
-    @PostMapping("/jobs/{id}/status") public String jobStatus(@PathVariable Long id,@RequestParam JobStatus status,Authentication auth,RedirectAttributes ra){try{Job j=ownedJob(id,auth);if(status==JobStatus.CLOSED&&jobs.applicants(j).stream().noneMatch(a->a.getStatus()==ApplicationStatus.ACCEPTED))throw new IllegalArgumentException("Hãy chọn Freelancer trước khi đóng tuyển theo luồng dự án, hoặc dùng PAUSED/CANCELLED.");j.setStatus(status);jobs.save(j);ra.addFlashAttribute("success","Đã cập nhật trạng thái công việc.");}catch(Exception e){ra.addFlashAttribute("error",e.getMessage());}return "redirect:/customer/jobs";}
+    @PostMapping("/jobs/{id}/status")
+    public String jobStatus(@PathVariable Long id, @RequestParam JobStatus status,
+                            Authentication auth, RedirectAttributes ra) {
+        try {
+            jobs.changeStatus(id, users.byEmail(auth.getName()), status);
+            ra.addFlashAttribute("success", "Đã cập nhật trạng thái công việc.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/customer/jobs";
+    }
     @GetMapping("/jobs/{id}/applicants") public String applicants(@PathVariable Long id, Authentication auth){ownedJob(id,auth);return "redirect:/customer/applicants?jobId="+id;}
     @PostMapping("/applications/{id}/shortlist")
     public String shortlist(@PathVariable Long id, @RequestParam boolean value,
