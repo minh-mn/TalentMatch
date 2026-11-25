@@ -107,10 +107,10 @@ public class FreelancerCommunityController {
         };
         filtered = filtered.stream().sorted(comparator).toList();
 
-        int pages = Math.max(1, (filtered.size() + 4) / 5);
+        int pages = Math.max(1, (filtered.size() + 9) / 10);
         int currentPage = Math.max(1, Math.min(pages, page));
-        int from = Math.min((currentPage - 1) * 5, filtered.size());
-        List<CommunityQuestion> slice = filtered.subList(from, Math.min(from + 5, filtered.size()));
+        int from = Math.min((currentPage - 1) * 10, filtered.size());
+        List<CommunityQuestion> slice = filtered.subList(from, Math.min(from + 10, filtered.size()));
 
         model.addAttribute("questions", slice);
         model.addAttribute("votesCount", voteCounts);

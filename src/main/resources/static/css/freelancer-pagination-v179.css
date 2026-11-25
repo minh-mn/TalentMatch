@@ -1,0 +1,9 @@
+/* V179 - Danh sách Freelancer 10 bản ghi/trang; chiều cao nội dung theo số bản ghi. */
+.fm-dashboard .tm179-pager,.market-body .tm179-pager{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:7px;margin:18px 0 4px;padding:12px 0 0;border-top:1px solid #e6eefb}
+.tm179-page-label{margin-right:auto;color:#61799f;font-weight:600;font-size:12px}
+.tm179-pager a{display:inline-flex;align-items:center;justify-content:center;min-width:34px;min-height:34px;padding:6px 10px;text-decoration:none;border:1px solid #cfddf7;border-radius:8px;color:#0b2a6f;background:#fff;font-size:12px;font-weight:700}
+.tm179-pager a:hover{background:#edf4ff;border-color:#2f6fed}
+.tm179-pager a.active{background:#2f6fed;border-color:#2f6fed;color:#fff}
+.fm-dashboard .tm111-list-panel,.fm-dashboard .tm113-list,.fm-dashboard .tm114-panel-body,.fm-dashboard .tm105-offer-list{height:auto;max-height:none;overflow:visible}
+.fm-dashboard .tm111-contract-columns.no-selected,.fm-dashboard .tm113-workspace.no-selection{grid-template-columns:minmax(0,1fr)}
+.fm-dashboard .tm111-shell,.fm-dashboard .tm113-shell,.fm-dashboard .tm114-shell{height:auto;min-height:0}

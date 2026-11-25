@@ -24,6 +24,8 @@ public class NotificationService {
     @Transactional public String read(Long id,User user){
         Notification n=repository.findById(id).orElseThrow(()->new IllegalArgumentException("Không tìm thấy thông báo."));
         if(!n.getRecipient().getId().equals(user.getId()))throw new IllegalArgumentException("Bạn không sở hữu thông báo.");
-        n.setRead(true);repository.save(n);return n.getTargetUrl();
+        n.setRead(true);repository.save(n);
+        String target=n.getTargetUrl();
+        return target!=null && target.startsWith("/") && !target.startsWith("//") && !target.contains("\r") && !target.contains("\n") ? target : "/notifications";
     }
 }

@@ -1,0 +1,68 @@
+/* V182 – Thống nhất bố cục 3 trang Client: Thanh toán, Thống kê, Hỗ trợ.
+   Chỉ tác động 3 trang này, không đổi dashboard hoặc nghiệp vụ. */
+html body.client-workspace:has(.tm118-client-nav):is(.tm-client-payments,.tm171-page) {
+  --tm182-gutter:26px;
+  --tm182-gap:14px;
+  --tm182-topbar-offset:78px;
+}
+/* Topbar fixed: không để 138px như v175/v142, gây khoảng trắng quá lớn. */
+html body.client-workspace:has(.tm118-client-nav):is(.tm-client-payments,.tm171-page)
+  main.market-main.tm175-unified-main {
+  padding:var(--tm182-topbar-offset) 0 0!important;
+  margin-top:0!important;
+  min-height:100vh;
+  box-sizing:border-box!important;
+}
+html body.client-workspace:has(.tm118-client-nav):is(.tm-client-payments,.tm171-page)
+  main.market-main.tm175-unified-main > .tm175-unified-container {
+  padding:0 var(--tm182-gutter) 32px!important;
+  margin:0 auto!important;
+  width:100%!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+}
+/* Banner từ đúng một mép trái/phải và có khoảng cách dưới nhất quán. */
+html body.client-workspace:has(.tm118-client-nav):is(.tm-client-payments,.tm171-page)
+  .tm175-unified-container > :is(.tm174-banner,.tm171-hero) {
+  margin:0 0 var(--tm182-gap)!important;
+  min-height:132px!important;
+  border-radius:14px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+/* 14px giữa các khối độc lập, 12px giữa các card cùng hàng. */
+html body.client-workspace:has(.tm118-client-nav):is(.tm-client-payments,.tm171-page)
+  .tm175-unified-container :is(.cpay-kpis,.tm171-kpis) {
+  margin:0 0 var(--tm182-gap)!important;
+  gap:12px!important;
+}
+html body.client-workspace:has(.tm118-client-nav):is(.tm-client-payments,.tm171-page)
+  .tm175-unified-container :is(.cpay-tabs,.cpay-filters,.tm171-filter,.tm171-chart-grid,.tm171-two-col) {
+  margin-top:0!important;
+  margin-bottom:var(--tm182-gap)!important;
+}
+html body.client-workspace:has(.tm118-client-nav):is(.tm-client-payments,.tm171-page)
+  .tm175-unified-container > .tm171-panel,
+html body.client-workspace:has(.tm118-client-nav):is(.tm-client-payments,.tm171-page)
+  .tm175-unified-container > .cpay-panel {
+  margin-bottom:var(--tm182-gap)!important;
+}
+html body.client-workspace:has(.tm118-client-nav):is(.tm-client-payments,.tm171-page)
+  .tm175-unified-container :is(.tm171-panel,.cpay-panel,.cpay-filters) {
+  box-sizing:border-box!important;
+  min-width:0;
+}
+/* Bảng và bộ lọc không làm tràn ngang khi đổi kích thước cửa sổ. */
+html body.tm-client-payments .cpay-filters {flex-wrap:wrap;gap:10px!important}
+html body.tm-client-payments .cpay-filters label {min-width:180px;flex:1 1 280px}
+html body.tm171-page .tm171-chart-grid > *,
+html body.tm171-page .tm171-two-col > * {min-width:0}
+@media(max-width:900px){
+ html body.client-workspace:has(.tm118-client-nav):is(.tm-client-payments,.tm171-page){--tm182-gutter:18px;--tm182-topbar-offset:78px}
+}
+@media(max-width:750px){
+ html body.client-workspace:has(.tm118-client-nav):is(.tm-client-payments,.tm171-page){--tm182-topbar-offset:76px}
+}
+@media(max-width:550px){
+ html body.client-workspace:has(.tm118-client-nav):is(.tm-client-payments,.tm171-page){--tm182-gutter:12px}
+}

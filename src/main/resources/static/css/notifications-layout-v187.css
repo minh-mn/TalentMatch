@@ -1,0 +1,36 @@
+/* V187: single footer per role + stable notification content layout.
+   Loaded last to avoid older role-specific spacing rules. */
+body.tm184-notify.tm187-notify main.tm184-main {
+  padding: 78px 0 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+body.tm184-notify.tm187-notify main.tm184-main > .tm184-container {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 24px 24px !important;
+  max-width: none !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+body.tm184-notify.tm187-notify .tm184-hero { margin: 0 0 14px !important; }
+body.tm184-notify.tm187-notify .tm184-stats { margin: 0 0 14px !important; }
+body.tm184-notify.tm187-notify .tm184-panel { margin: 0 !important; }
+/* Footer is full width below the content, not placed inside any notification card. */
+body.tm184-notify.tm187-notify main.tm184-main > footer {
+  clear: both;
+  margin-top: 0 !important;
+}
+@media (max-width: 900px) {
+  body.tm184-notify.tm187-notify main.tm184-main > .tm184-container {
+    padding: 0 18px 22px !important;
+  }
+}
+@media (max-width: 600px) {
+  body.tm184-notify.tm187-notify main.tm184-main > .tm184-container {
+    padding: 0 12px 20px !important;
+  }
+}

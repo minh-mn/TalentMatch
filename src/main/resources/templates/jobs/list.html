@@ -13,16 +13,13 @@
   <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
   <form class="fm-header-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" th:value="${q}" placeholder="Tìm dự án, kỹ năng, khách hàng..." aria-label="Tìm dự án"><button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button></form>
   <nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/#pricing}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a href="#jb-categories">Danh mục nghề</a></nav>
-  <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i></a><a th:href="@{/freelancer/dashboard}" aria-label="Trang chủ"><i class="fa-regular fa-message"></i></a><a class="fm-mini-avatar" th:href="@{/freelancer/profile}" th:text="${currentUser != null ? #strings.substring(currentUser.fullName,0,1) : 'F'}">F</a><span th:text="${currentUser != null ? currentUser.fullName : 'Khách'}">Freelancer</span></div>
+  <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i><span class="notification-count-badge" th:if="${unreadNotificationCount != null and unreadNotificationCount > 0}" th:text="${unreadNotificationCount > 99 ? '99+' : unreadNotificationCount}">0</span></a><a th:href="@{/freelancer/dashboard}" aria-label="Trang chủ"><i class="fa-regular fa-message"></i></a><a class="fm-mini-avatar" th:href="@{/freelancer/profile}" th:text="${currentUser != null ? #strings.substring(currentUser.fullName,0,1) : 'F'}">F</a><span th:text="${currentUser != null ? currentUser.fullName : 'Khách'}">Freelancer</span></div>
 </header>
 <div th:replace="~{fragments/common :: flash}"></div>
 
 <main class="fm-main jb-main">
   <div class="jb-wrap">
-    <section class="tm35-hero" aria-label="Tìm dự án phù hợp">
-      <img th:src="@{/images/talentmatch-projects-banner-v76.png}" alt="Hàng ngàn dự án chất lượng đang chờ bạn" />
-      <a class="tm35-banner-link" href="#jb-search" aria-label="Tìm dự án ngay"></a>
-    </section>
+    <section th:replace="~{fragments/common :: rolePageBanner('KHÁM PHÁ CƠ HỘI','Tìm dự án','Tìm kiếm những dự án phù hợp với chuyên môn, mức ngân sách và hình thức làm việc của bạn.','fa-solid fa-magnifying-glass')}" class="tm176-banner-slot"></section>
     <div class="tm35-toolbar"><div><strong>Khám phá dự án</strong><small th:text="|${allJobsCount} dự án đang mở trên TalentMatch|">Dự án đang mở</small></div><label class="jb-sort">Sắp xếp <select id="tm28Sort" aria-label="Sắp xếp dự án"><option value="latest" th:selected="${sort == 'latest'}">Mới nhất</option><option value="match_desc" th:selected="${sort == 'match_desc'}" sec:authorize="hasRole('FREELANCER')">Phù hợp nhất</option><option value="budget_desc" th:selected="${sort == 'budget_desc'}">Ngân sách cao nhất</option><option value="budget_asc" th:selected="${sort == 'budget_asc'}">Ngân sách thấp nhất</option><option value="deadline_asc" th:selected="${sort == 'deadline_asc'}">Hạn gần nhất</option><option value="competition_asc" th:selected="${sort == 'competition_asc'}">Ít cạnh tranh</option></select></label></div>
     <nav id="jb-categories" class="tm28-categories jb-categories" aria-label="Danh mục dự án">
       <a th:href="@{/jobs}" data-category="" th:classappend="${category == null or category.isBlank()} ? ' active' : ''"><i class="fa-solid fa-cube"></i>Tất cả</a>
@@ -88,5 +85,6 @@
 <script th:src="@{/js/jobs-board-reference.js}"></script>
 <link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}"><link rel="stylesheet" th:href="@{/css/jobs-board-v76.css}"><link rel="stylesheet" th:href="@{/css/jobs-board-v77.css}"><link rel="stylesheet" th:href="@{/css/jobs-board-v78.css}"><link rel="stylesheet" th:href="@{/css/freelancer-sidebar-v104.css}">
 <link rel="stylesheet" th:href="@{/css/freelancer-sidebar-unified-v107.css(v=107)}">
+<link rel="stylesheet" th:href="@{/css/freelancer-fixes-v181.css(v=181)}">
 </body>
 </html>

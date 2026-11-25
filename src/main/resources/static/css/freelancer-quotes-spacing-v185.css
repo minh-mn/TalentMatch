@@ -1,0 +1,24 @@
+/* TalentMatch V185 - Sửa khoảng cách banner trang Báo giá Freelancer.
+   Quy tắc cuối cùng ghi đè CSS V181 (padding-top:64px), tránh khoảng trống phía trên. */
+body.tm105-quotes .fm-main.tm105-main {
+  margin-top: 0 !important;
+  padding-top: 14px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  min-height: calc(100vh - 64px);
+}
+body.tm105-quotes .fm-main.tm105-main > .tm105-shell {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  padding: 0 24px 30px !important;
+  box-sizing: border-box !important;
+}
+body.tm105-quotes .tm105-breadcrumb { display: none !important; }
+body.tm105-quotes .tm105-shell > .tm176-banner { margin-top: 0 !important; margin-bottom:14px !important; }
+body.tm105-quotes .tm109-kpis { margin-top:0!important; margin-bottom:14px!important; }
+body.tm105-quotes .tm109-filterbar { margin-bottom:14px!important; }
+body.tm105-quotes .tm118-helper { margin-bottom:14px!important; }
+@media (max-width: 900px) {
+  body.tm105-quotes .fm-main.tm105-main > .tm105-shell { padding: 0 14px 24px !important; }
+}

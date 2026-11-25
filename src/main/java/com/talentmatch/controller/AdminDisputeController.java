@@ -55,9 +55,10 @@ public class AdminDisputeController {
         String query=q.strip().toLowerCase(Locale.ROOT);
         var filtered=rows.stream().filter(x->query.isEmpty() || (String.valueOf(x.get("search"))).contains(query))
               .filter(x->"all".equals(status) || status.equals(x.get("filter"))).toList();
-        int totalPages=Math.max(1,(filtered.size()+4)/5);
+        final int pageSize=10;
+        int totalPages=Math.max(1,(filtered.size()+pageSize-1)/pageSize);
         int current=Math.max(1,Math.min(page,totalPages));
-        var visible=filtered.subList((current-1)*5,Math.min(current*5,filtered.size()));
+        var visible=filtered.subList((current-1)*pageSize,Math.min(current*pageSize,filtered.size()));
         Map<String,Object> detail=null;
         if(selected!=null)for(var row:rows)if(selected.equals(row.get("key"))) {detail=row;break;}
 

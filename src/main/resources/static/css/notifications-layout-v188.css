@@ -1,0 +1,70 @@
+/* TalentMatch V188: Notifications. Fix content clipped behind Freelancer sidebar.
+   Replace contradictory v186/v187 spacing, keep one role-specific footer. */
+html body.tm184-notify.tm188-notify main.tm184-main {
+  position: relative !important;
+  float: none !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  margin-right: 0 !important;
+  padding: 78px 0 0 !important;
+  min-height: 100vh !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+/* Sidebar and header use the same 230px variable from Freelancer layout V106. */
+html body.tm188-notify.freelancer-notify main.fm-main.tm184-main {
+  margin-left: var(--tm106-sidebar, 230px) !important;
+  width: calc(100% - var(--tm106-sidebar, 230px)) !important;
+  max-width: calc(100% - var(--tm106-sidebar, 230px)) !important;
+}
+/* Client layout already owns its sidebar margin: never reset it to zero. */
+html body.tm188-notify.client-workspace main.market-main.tm184-main {
+  margin-left: var(--tm106-sidebar, 230px) !important;
+  width: calc(100% - var(--tm106-sidebar, 230px)) !important;
+  max-width: calc(100% - var(--tm106-sidebar, 230px)) !important;
+}
+html body.tm188-notify main.tm184-main > .tm184-container {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 24px 24px !important;
+  overflow: visible !important;
+}
+html body.tm188-notify main.tm184-main .tm184-hero,
+html body.tm188-notify main.tm184-main .tm184-stats,
+html body.tm188-notify main.tm184-main .tm184-panel {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+html body.tm188-notify main.tm184-main .tm184-hero,
+html body.tm188-notify main.tm184-main .tm184-stats { margin-bottom: 14px !important; }
+html body.tm188-notify main.tm184-main .tm184-list { min-width: 0; }
+html body.tm188-notify main.tm184-main .tm184-item { min-width: 0; }
+html body.tm188-notify main.tm184-main > footer {
+  clear: both !important;
+  margin-top: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+@media(max-width:900px){
+  html body.tm188-notify.freelancer-notify main.fm-main.tm184-main,
+  html body.tm188-notify.client-workspace main.market-main.tm184-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  html body.tm188-notify main.tm184-main > .tm184-container { padding: 0 18px 24px !important; }
+}
+@media(max-width:600px){
+  html body.tm188-notify main.tm184-main > .tm184-container { padding: 0 12px 20px !important; }
+  html body.tm188-notify .tm184-hero { padding: 20px !important; }
+}

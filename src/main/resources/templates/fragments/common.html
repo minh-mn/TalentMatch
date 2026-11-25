@@ -26,6 +26,7 @@
   <link rel="stylesheet" th:href="@{/css/talentmatch-fixes-v50.css}">
   <link rel="stylesheet" th:href="@{/css/client-unified-v53.css}">
   <link rel="stylesheet" sec:authorize="hasRole('FREELANCER')" th:href="@{/css/freelancer-sidebar-v104.css}">
+  <link rel="stylesheet" sec:authorize="hasRole('FREELANCER')" th:href="@{/css/freelancer-pagination-v179.css(v=179)}">
   <link rel="stylesheet" sec:authorize="hasRole('CUSTOMER')" th:href="@{/css/client-sidebar-v118.css(v=119)}">
   <link rel="stylesheet" sec:authorize="hasRole('ADMIN')" th:href="@{/css/admin-unified-v147.css(v=147)}">
   <link rel="stylesheet" sec:authorize="hasRole('ADMIN')" th:href="@{/css/admin-unified-v149.css(v=149)}">
@@ -44,7 +45,12 @@
   <link rel="stylesheet" sec:authorize="hasRole('CUSTOMER')" th:href="@{/css/client-sidebar-match-freelancer-v173.css(v=173)}">
   <link rel="stylesheet" sec:authorize="hasRole('CUSTOMER')" th:href="@{/css/client-banner-v174.css(v=174)}">
   <link rel="stylesheet" sec:authorize="hasRole('CUSTOMER')" th:href="@{/css/client-spacing-v175.css(v=175)}">
+  <link rel="stylesheet" sec:authorize="hasRole('CUSTOMER')" th:href="@{/css/client-spacing-v182.css(v=182)}">
   <link rel="stylesheet" sec:authorize="hasAnyRole('ADMIN','FREELANCER')" th:href="@{/css/role-banner-v176.css(v=176)}">
+  <link rel="stylesheet" sec:authorize="hasRole('ADMIN')" th:href="@{/css/admin-spacing-v178.css(v=178)}">
+  <link rel="stylesheet" sec:authorize="hasRole('ADMIN')" th:href="@{/css/admin-three-pages-v180.css(v=180)}">
+  <link rel="stylesheet" th:href="@{/css/notifications-v184.css(v=184)}">
+  <script defer th:src="@{/js/notification-badges-v184.js(v=184)}"></script>
 </head>
 <body>
 
@@ -70,6 +76,15 @@
   <span class="tm176-banner-art" aria-hidden="true"><i th:class="${iconClass}"></i></span>
 </section>
 
+
+<nav th:fragment="freelancerPager(url,tabName)" class="tm179-pager" th:if="${totalPages>1}" aria-label="Chuyển trang danh sách">
+  <span class="tm179-page-label" th:text="${'Hiển thị tối đa 10 mục/trang · Trang '+currentPage+'/'+totalPages}">Trang 1/1</span>
+  <a th:if="${currentPage>1}" th:href="@{${url}(page=${currentPage-1},q=${q},status=${status},sort=${sort},type=${type},project=${projectFilter},tab=${tabName})}">‹ Trước</a>
+  <a th:each="n:${#numbers.sequence(1,totalPages)}" th:if="${n >= currentPage-2 and n <= currentPage+2}" th:classappend="${n==currentPage}?' active':''" th:href="@{${url}(page=${n},q=${q},status=${status},sort=${sort},type=${type},project=${projectFilter},tab=${tabName})}" th:text="${n}">1</a>
+  <a th:if="${currentPage<totalPages}" th:href="@{${url}(page=${currentPage+1},q=${q},status=${status},sort=${sort},type=${type},project=${projectFilter},tab=${tabName})}">Sau ›</a>
+</nav>
+
+<footer th:fragment="freelancerFooter" class="fm-footer" role="contentinfo"><div class="fm-footer-top"><div class="fm-footer-intro"><a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a><p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p><div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span></div></div><div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a></div><div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancer/profile}">Tạo hồ sơ</a><a th:href="@{/freelancer/applications}">Ứng tuyển của tôi</a></div><div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/freelancers}">Tìm freelancer</a><a th:href="@{/freelancers}">Khám phá chuyên gia</a></div><div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/freelancer/profile}">Quản lý tài khoản</a></div></div><div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div></footer>
 <!-- PUBLIC / MARKETPLACE SIDEBAR -->
 <aside id="tm-freelancer-sidebar" class="market-sidebar" th:fragment="marketSidebar(active)">
   <div class="market-brand-wrap">
@@ -181,7 +196,7 @@
         <div class="market-side-label tm104-menu-label">HỖ TRỢ</div>
         <nav class="market-side-nav market-side-nav-auth" aria-label="Hỗ trợ">
           <a th:href="@{/freelancer/support}" th:classappend="${active == 'support'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-scale-balanced"></i></span>Khiếu nại &amp; Hỗ trợ</a>
-          <a th:href="@{/freelancer/profile#profile-edit}"><span class="market-side-icon"><i class="fa-solid fa-gear"></i></span>Cài đặt</a>
+          <a th:href="@{/freelancer/settings}"><span class="market-side-icon"><i class="fa-solid fa-gear"></i></span>Cài đặt</a>
         </nav>
       </div>
 
@@ -397,7 +412,7 @@
             <a class="market-user-menu-item" sec:authorize="hasRole('CUSTOMER')" th:href="@{/customer/profile}"><span class="menu-icon purple"><i class="fa-solid fa-user"></i></span><span>Hồ sơ của tôi</span></a>
             <a class="market-user-menu-item" sec:authorize="hasRole('FREELANCER')" th:href="@{/freelancer/profile}"><span class="menu-icon purple"><i class="fa-solid fa-user"></i></span><span>Hồ sơ của tôi</span></a>
             <a class="market-user-menu-item" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}"><span class="menu-icon purple"><i class="fa-solid fa-user"></i></span><span>Hồ sơ của tôi</span></a>
-            <a class="market-user-menu-item" sec:authorize="hasRole('FREELANCER')" th:href="@{/freelancer/profile#profile-edit}"><span class="menu-icon gray"><i class="fa-solid fa-gear"></i></span><span>Cài đặt</span></a>
+            <a class="market-user-menu-item" sec:authorize="hasRole('FREELANCER')" th:href="@{/freelancer/settings}"><span class="menu-icon gray"><i class="fa-solid fa-gear"></i></span><span>Cài đặt</span></a>
             <a class="market-user-menu-item" sec:authorize="hasRole('CUSTOMER')" th:href="@{/customer/profile}"><span class="menu-icon gray"><i class="fa-solid fa-gear"></i></span><span>Cài đặt</span></a>
             <a class="market-user-menu-item" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}"><span class="menu-icon gray"><i class="fa-solid fa-gear"></i></span><span>Cài đặt</span></a>
           </div>

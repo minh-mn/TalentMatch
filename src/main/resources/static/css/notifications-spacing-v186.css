@@ -1,0 +1,46 @@
+/* TalentMatch V186 — riêng Trung tâm thông báo Client/Freelancer.
+   Không đổi topbar, sidebar, nội dung hay nghiệp vụ thông báo.
+   V184 padding:0 xung đột các CSS role đã có -> banner bị che/đẩy thấp.
+   Một vị trí duy nhất: dưới topbar cố định (64px) + khoảng đệm 14px. */
+html body.tm184-notify.tm186-notify main.tm184-main,
+html body.tm184-notify.tm186-notify main.fm-main.tm184-main,
+html body.tm184-notify.tm186-notify main.market-main.tm184-main {
+  padding:78px 0 0 !important;
+  margin-top:0 !important;
+  min-height:100vh;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+}
+/* Khử khoảng đệm dọc lặp lại; lề ngang thống nhất với workspace. */
+html body.tm184-notify.tm186-notify main.tm184-main > .tm184-container {
+  width:100% !important;
+  max-width:none !important;
+  padding:0 24px 32px !important;
+  margin:0 auto !important;
+  box-sizing:border-box !important;
+}
+html body.tm184-notify.tm186-notify .tm184-container > .tm184-hero {
+  margin-top:0 !important;
+  margin-bottom:14px !important;
+  width:100% !important;
+}
+html body.tm184-notify.tm186-notify .tm184-container > .tm184-stats {
+  margin:0 0 14px !important;
+  gap:12px !important;
+}
+html body.tm184-notify.tm186-notify .tm184-container > .tm184-panel {
+  margin-top:0 !important;
+}
+@media (max-width:900px) {
+  html body.tm184-notify.tm186-notify main.tm184-main > .tm184-container {
+    padding:0 18px 28px !important;
+  }
+}
+@media (max-width:750px) {
+  html body.tm184-notify.tm186-notify main.tm184-main {
+    padding-top:76px !important;
+  }
+  html body.tm184-notify.tm186-notify main.tm184-main > .tm184-container {
+    padding:0 12px 24px !important;
+  }
+}

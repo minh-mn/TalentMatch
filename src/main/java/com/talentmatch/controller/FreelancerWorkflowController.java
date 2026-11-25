@@ -44,7 +44,7 @@ public class FreelancerWorkflowController {
     @GetMapping("/contracts") @Transactional(readOnly = true)
     public String contracts(Authentication auth, Model model,
         @RequestParam(defaultValue="") String q, @RequestParam(defaultValue="all") String status,
-        @RequestParam(defaultValue="newest") String sort, @RequestParam(required=false) Long selected){
+        @RequestParam(defaultValue="newest") String sort, @RequestParam(defaultValue="1") int page, @RequestParam(required=false) Long selected){
         User u=users.byEmail(auth.getName());
         List<Project> all=projects.forFreelancer(u);
         Map<Long,AgreementRevision> snapshots=new LinkedHashMap<>();
@@ -61,10 +61,17 @@ public class FreelancerWorkflowController {
         }
         filtered.sort(Comparator.comparing(Project::getCreatedAt,Comparator.nullsLast(Comparator.naturalOrder())));
         if(!"oldest".equals(sort))java.util.Collections.reverse(filtered);
+        final int pageSize=10, totalRows=filtered.size();
+        int totalPages=Math.max(1,(totalRows+pageSize-1)/pageSize);
+        int currentPage=Math.max(1,Math.min(page,totalPages));
+        List<Project> pageProjects=filtered.subList((currentPage-1)*pageSize,Math.min(currentPage*pageSize,totalRows));
         Project active=null;
         if(selected!=null)for(Project p:filtered)if(p.getId().equals(selected)){active=p;break;}
+        model.addAttribute("totalFiltered",totalRows);
+        model.addAttribute("currentPage",currentPage);
+        model.addAttribute("totalPages",totalPages);
         model.addAttribute("section","contracts");model.addAttribute("pageTitle","Hợp đồng & Điều khoản");
-        model.addAttribute("currentUser",u);model.addAttribute("ownProjects",filtered);model.addAttribute("agreementsByProject",snapshots);
+        model.addAttribute("currentUser",u);model.addAttribute("ownProjects",pageProjects);model.addAttribute("agreementsByProject",snapshots);
         model.addAttribute("selectedProject",active);model.addAttribute("selectedAgreement",active==null?null:snapshots.get(active.getId()));
         model.addAttribute("q",q);model.addAttribute("status",status);model.addAttribute("sort",sort);
         model.addAttribute("contractTotal",all.size());
@@ -81,6 +88,7 @@ public class FreelancerWorkflowController {
             @RequestParam(defaultValue="all") String status,
             @RequestParam(defaultValue="newest") String sort,
             @RequestParam(defaultValue="all") String type,
+            @RequestParam(defaultValue="1") int page,
             @RequestParam(required=false) Long selected) {
         User freelancer=users.byEmail(auth.getName());
         List<Project> all=projects.forFreelancer(freelancer);
@@ -119,10 +127,17 @@ public class FreelancerWorkflowController {
         }
         filtered.sort(Comparator.comparing(Project::getCreatedAt,Comparator.nullsLast(Comparator.naturalOrder())));
         if(!"oldest".equals(sort))java.util.Collections.reverse(filtered);
+        final int pageSize=10, totalRows=filtered.size();
+        int totalPages=Math.max(1,(totalRows+pageSize-1)/pageSize);
+        int currentPage=Math.max(1,Math.min(page,totalPages));
+        List<Project> pageProjects=filtered.subList((currentPage-1)*pageSize,Math.min(currentPage*pageSize,totalRows));
         Project active=null;
         if(selected!=null)for(Project project:filtered)if(project.getId().equals(selected)){active=project;break;}
+        model.addAttribute("totalFiltered",totalRows);
+        model.addAttribute("currentPage",currentPage);
+        model.addAttribute("totalPages",totalPages);
         model.addAttribute("section","deliveries");model.addAttribute("pageTitle","Tiến độ & Bàn giao");
-        model.addAttribute("currentUser",freelancer);model.addAttribute("ownProjects",filtered);
+        model.addAttribute("currentUser",freelancer);model.addAttribute("ownProjects",pageProjects);
         model.addAttribute("selectedProject",active);model.addAttribute("selectedMilestones",active==null?List.of():byProject.get(active.getId()));
         model.addAttribute("reported",reported);model.addAttribute("accepted",accepted);
         model.addAttribute("milestoneCounts",milestoneCounts);
@@ -143,7 +158,8 @@ public class FreelancerWorkflowController {
             @RequestParam(defaultValue="all") String status,
             @RequestParam(defaultValue="all") String project,
             @RequestParam(defaultValue="newest") String sort,
-            @RequestParam(defaultValue="projects") String tab) {
+            @RequestParam(defaultValue="projects") String tab,
+            @RequestParam(defaultValue="1") int page) {
         User freelancer=users.byEmail(auth.getName());
         wallet.sync(freelancer);
         var walletSummary=wallet.summary(freelancer);
@@ -210,10 +226,20 @@ public class FreelancerWorkflowController {
         }
         visibleProjects.sort(Comparator.comparing(Project::getCreatedAt,Comparator.nullsLast(Comparator.naturalOrder())));
         if(!"oldest".equals(sort))java.util.Collections.reverse(visibleProjects);
+        String safeTab=java.util.Set.of("projects","transactions","withdrawals","banks").contains(tab)?tab:"projects";
+        final int pageSize=10;
+        int totalRows=switch(safeTab){case "transactions" -> rows.size(); case "withdrawals" -> filteredWithdrawals.size(); default -> visibleProjects.size();};
+        int totalPages=Math.max(1,(totalRows+pageSize-1)/pageSize);
+        int currentPage=Math.max(1,Math.min(page,totalPages));
+        int start=(currentPage-1)*pageSize;
+        model.addAttribute("totalFiltered",totalRows);
+        model.addAttribute("currentPage",currentPage);
+        model.addAttribute("totalPages",totalPages);
         model.addAttribute("currentUser",freelancer);
         model.addAttribute("allProjects",allProjects);
-        model.addAttribute("ownProjects",visibleProjects);
-        model.addAttribute("payments",rows);
+        model.addAttribute("ownProjects",visibleProjects.subList("projects".equals(safeTab)?start:0,"projects".equals(safeTab)?Math.min(start+pageSize,visibleProjects.size()):visibleProjects.size()));
+        model.addAttribute("payments",rows.subList("transactions".equals(safeTab)?start:0,"transactions".equals(safeTab)?Math.min(start+pageSize,rows.size()):rows.size()));
+        if("withdrawals".equals(safeTab))model.addAttribute("walletWithdrawals",filteredWithdrawals.subList(start,Math.min(start+pageSize,filteredWithdrawals.size())));
         model.addAttribute("disbursedGross",released);
         model.addAttribute("heldGross",held);
         model.addAttribute("paymentCount",allPayments.size());

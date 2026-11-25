@@ -82,7 +82,7 @@ public class JobController {
             filtered.sort(Comparator.comparingInt((Job j) -> matchScore(freelancer, j)).reversed()
                     .thenComparing(Job::getCreatedAt, Comparator.nullsLast(Comparator.reverseOrder())));
 
-        final int pageSize = 5;
+        final int pageSize = freelancer == null ? 5 : 10;
         int totalPages = Math.max(1, (int) Math.ceil(filtered.size() / (double) pageSize));
         int currentPage = Math.min(totalPages, Math.max(1, page));
         int from = Math.min((currentPage - 1) * pageSize, filtered.size());

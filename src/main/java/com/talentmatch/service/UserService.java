@@ -188,6 +188,23 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy tài khoản."));
     }
 
+
+    /** Cập nhật đúng hai trường cài đặt, không ghi đè các thông tin hồ sơ khác. */
+    @Transactional
+    public void updateFreelancerPreferences(String email, boolean available, String workPreference) {
+        User user = byEmail(email);
+        if (user.getRole() != Role.FREELANCER) {
+            throw new IllegalArgumentException("Chỉ Freelancer được thay đổi thiết lập này.");
+        }
+        String safe = workPreference == null ? "" : workPreference.trim().toUpperCase(java.util.Locale.ROOT);
+        if (!safe.isEmpty() && !java.util.Set.of("REMOTE", "HYBRID", "ONSITE").contains(safe)) {
+            throw new IllegalArgumentException("Hình thức làm việc không hợp lệ.");
+        }
+        user.setAvailable(available);
+        user.setWorkPreference(safe.isEmpty() ? null : safe);
+        users.save(user);
+    }
+
     @Transactional
     public User updateProfile(String email, User form) {
         User user = byEmail(email);

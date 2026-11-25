@@ -52,8 +52,9 @@ public class QuoteController {
       if(!"oldest".equals(sort))Collections.reverse(filtered);
       if("priceHigh".equals(sort))filtered.sort(Comparator.comparing((JobApplication a)->latest.containsKey(a.getId())?latest.get(a.getId()).getAmount():a.getProposedPrice(),Comparator.reverseOrder()));
       if("priceLow".equals(sort))filtered.sort(Comparator.comparing((JobApplication a)->latest.containsKey(a.getId())?latest.get(a.getId()).getAmount():a.getProposedPrice()));
-      int total=filtered.size(),pages=Math.max(1,(total+4)/5),current=Math.min(pages,Math.max(1,page)),from=(current-1)*5;
-      List<JobApplication> visible=filtered.subList(from,Math.min(from+5,total));
+      final int pageSize=10;
+      int total=filtered.size(),pages=Math.max(1,(total+pageSize-1)/pageSize),current=Math.min(pages,Math.max(1,page)),from=(current-1)*pageSize;
+      List<JobApplication> visible=filtered.subList(from,Math.min(from+pageSize,total));
       // Chi mo chi tiet khi nguoi dung chu dong bam vao bao gia trong danh sach hien tai.
       Long active=selected;
       JobApplication activeApp=null;

@@ -1,29 +1,30 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{fragments/common :: head('Thông báo')}"></head>
-<body th:class="${currentUser != null and currentUser.role.name() == 'FREELANCER'} ? 'market-body fm-dashboard tm107-notifications' : 'app-body'">
-  <!-- Freelancer gets exactly the same shared Sidebar as /freelancer/profile. -->
-  <th:block th:if="${currentUser != null and currentUser.role.name() == 'FREELANCER'}">
-    <link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
-    <link rel="stylesheet" th:href="@{/css/freelancer-layout-v106.css(v=106)}">
-    <aside th:replace="~{fragments/common :: marketSidebar('notifications')}"></aside>
-    <header class="fm-header">
-<a class="fm-brand" th:href="@{/freelancer/dashboard}"><img alt="TalentMatch" th:src="@{/images/talentmatch-logo-mark.png}"/><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
-<form class="fm-header-search" method="get" th:action="@{/jobs}"><i class="fa-solid fa-magnifying-glass"></i><input aria-label="Tìm dự án" name="q" placeholder="Tìm dự án, kỹ năng, khách hàng..."/><button aria-label="Tìm kiếm" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button></form>
-<nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/#pricing}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a href="#fm-category">Danh mục nghề</a></nav>
-<div class="fm-header-user"><a aria-label="Thông báo" th:href="@{/notifications}"><i class="fa-regular fa-bell"></i></a><a class="fm-mini-avatar" th:href="@{/freelancer/profile}" th:text="${#strings.substring(currentUser.fullName,0,1)}">F</a><span th:text="${currentUser.fullName}">Freelancer</span></div>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Trung tâm thông báo')}"></head>
+<body th:class="${currentUser.role.name()=='FREELANCER'} ? 'market-body fm-dashboard tm184-notify tm186-notify tm188-notify freelancer-notify' : 'market-body client-workspace client-v52-page cd-dashboard tm184-notify tm186-notify tm188-notify'">
+<link rel="stylesheet" th:if="${currentUser.role.name()=='FREELANCER'}" th:href="@{/css/freelancer-dashboard-reference.css}">
+<link rel="stylesheet" th:if="${currentUser.role.name()=='FREELANCER'}" th:href="@{/css/freelancer-layout-v106.css(v=106)}">
+<link rel="stylesheet" th:href="@{/css/notifications-layout-v188.css(v=188)}">
+<aside th:replace="~{fragments/common :: marketSidebar('notifications')}"></aside>
+<th:block th:if="${currentUser.role.name()=='CUSTOMER'}"><header th:replace="~{fragments/common :: marketClientTopbar()}"></header></th:block>
+<header th:if="${currentUser.role.name()=='FREELANCER'}" class="fm-header">
+ <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+ <form class="fm-header-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" placeholder="Tìm dự án, kỹ năng, khách hàng..." aria-label="Tìm dự án"><button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+ <nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/#pricing}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục nghề</a></nav>
+ <div class="fm-header-user"><a class="tm184-bell-link" th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i><span class="notification-count-badge" th:if="${unreadNotificationCount>0}" th:text="${unreadNotificationCount>99?'99+':unreadNotificationCount}">1</span></a><a class="fm-mini-avatar" th:href="@{/freelancer/profile}" th:text="${#strings.substring(currentUser.fullName,0,1)}">F</a><span th:text="${currentUser.fullName}">Freelancer</span></div>
 </header>
-    <main class="fm-main">
-      <div class="fm-content tm107-notification-content">
-        <section class="v31-panel"><h1><i class="fa-regular fa-bell"></i> Trung tâm thông báo</h1><p class="muted">Các cập nhật về đề xuất, hợp đồng, thanh toán, bàn giao và tranh chấp của bạn.</p><div class="tm155-legacy-controls"><nav><a th:href="@{/notifications(filter='all')}">Tất cả</a><a th:href="@{/notifications(filter='unread')}">Chưa đọc</a><a th:href="@{/notifications(filter='read')}">Đã đọc</a></nav><form th:action="@{/notifications/read-all}" method="post"><button class="v31-primary" th:disabled="${unreadCount==0}">Đánh dấu tất cả đã đọc</button></form></div><div class="v31-notification" th:each="n:${notifications}" th:classappend="${!n.read} ? ' unread' : ''"><div><b th:text="${n.title}">Tiêu đề</b><p th:text="${n.message}">Nội dung</p><small th:text="${#temporals.format(n.createdAt,'dd/MM/yyyy HH:mm')}"></small></div><form th:action="@{/notifications/{id}/read(id=${n.id})}" method="post"><button class="v31-primary">Xem chi tiết <i class="fa-solid fa-arrow-right"></i></button></form></div><p th:if="${#lists.isEmpty(notifications)}">Chưa có thông báo nào.</p></section>
-      </div>
-    </main>
-  </th:block>
-  <!-- Other account roles retain their original notification layout. -->
-  <th:block th:unless="${currentUser != null and currentUser.role.name() == 'FREELANCER'}">
-    <aside th:replace="~{fragments/common :: sidebar}"></aside><div th:replace="~{fragments/common :: mobileAppbar('Thông báo')}"></div><div class="app-main"><header th:replace="~{fragments/common :: appTop('Thông báo của tôi')}"></header><main class="app-content"><section class="v31-panel"><h1><i class="fa-regular fa-bell"></i> Trung tâm thông báo</h1><p class="muted">Các cập nhật về đề xuất, hợp đồng, thanh toán, bàn giao và tranh chấp của bạn.</p><div class="tm155-legacy-controls"><nav><a th:href="@{/notifications(filter='all')}">Tất cả</a><a th:href="@{/notifications(filter='unread')}">Chưa đọc</a><a th:href="@{/notifications(filter='read')}">Đã đọc</a></nav><form th:action="@{/notifications/read-all}" method="post"><button class="v31-primary" th:disabled="${unreadCount==0}">Đánh dấu tất cả đã đọc</button></form></div><div class="v31-notification" th:each="n:${notifications}" th:classappend="${!n.read} ? ' unread' : ''"><div><b th:text="${n.title}">Tiêu đề</b><p th:text="${n.message}">Nội dung</p><small th:text="${#temporals.format(n.createdAt,'dd/MM/yyyy HH:mm')}"></small></div><form th:action="@{/notifications/{id}/read(id=${n.id})}" method="post"><button class="v31-primary">Xem chi tiết <i class="fa-solid fa-arrow-right"></i></button></form></div><p th:if="${#lists.isEmpty(notifications)}">Chưa có thông báo nào.</p></section></main></div>
-  </th:block>
-  <script th:replace="~{fragments/common :: scripts}"></script>
-  <link rel="stylesheet" th:href="@{/css/freelancer-sidebar-unified-v107.css(v=107)}">
-</body>
-</html>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main th:class="${currentUser.role.name()=='FREELANCER'} ? 'fm-main tm184-main' : 'market-main client-main tm184-main'">
+ <div class="tm184-container">
+  <header class="tm184-hero"><div><span class="tm184-kicker">TÀI KHOẢN & CẬP NHẬT</span><h1>Trung tâm thông báo</h1><p>Nhận cập nhật về dự án, hợp đồng, tiến độ, thanh toán và tranh chấp của bạn.</p></div><span class="tm184-hero-icon"><i class="fa-regular fa-bell"></i></span></header>
+  <section class="tm184-stats" aria-label="Thống kê thông báo"><div class="tm184-stat"><small>Tổng thông báo gần đây</small><strong th:text="${allCount}">0</strong></div><div class="tm184-stat"><small>Chưa đọc</small><strong class="tm184-blue" th:text="${unreadCount}">0</strong></div><div class="tm184-stat"><small>Đã đọc</small><strong th:text="${readCount}">0</strong></div></section>
+  <section class="tm184-panel"><div class="tm184-toolbar"><nav aria-label="Bộ lọc thông báo"><a th:classappend="${filter=='all'}?' active':''" th:href="@{/notifications(filter='all')}">Tất cả</a><a th:classappend="${filter=='unread'}?' active':''" th:href="@{/notifications(filter='unread')}">Chưa đọc</a><a th:classappend="${filter=='read'}?' active':''" th:href="@{/notifications(filter='read')}">Đã đọc</a></nav><form method="post" th:action="@{/notifications/read-all}"><button class="tm184-mark" th:disabled="${unreadCount==0}"><i class="fa-solid fa-check-double"></i> Đánh dấu tất cả đã đọc</button></form></div>
+   <div class="tm184-list"><article class="tm184-item" th:each="n:${notifications}" th:classappend="${!n.read}?' unread':''"><div class="tm184-status-icon"><i class="fa-regular fa-bell"></i></div><div class="tm184-item-body"><div class="tm184-item-head"><h2 th:text="${n.title}">Thông báo</h2><span class="tm184-new" th:if="${!n.read}">Chưa đọc</span></div><p th:text="${n.message}">Nội dung</p><time th:text="${#temporals.format(n.createdAt,'dd/MM/yyyy HH:mm')}">Thời gian</time></div><form method="post" th:action="@{/notifications/{id}/read(id=${n.id})}"><button class="tm184-view"><i class="fa-regular fa-eye"></i> <span th:text="${n.read}?'Xem chi tiết':'Đọc & xem'">Xem</span></button></form></article></div>
+   <div class="tm184-empty" th:if="${#lists.isEmpty(notifications)}"><i class="fa-regular fa-bell-slash"></i><p>Không có thông báo phù hợp với bộ lọc.</p></div>
+  </section>
+ </div>
+ <th:block th:if="${currentUser.role.name()=='CUSTOMER'}"><footer th:replace="~{fragments/common :: clientFooter}"></footer></th:block>
+ <th:block th:if="${currentUser.role.name()=='FREELANCER'}"><footer th:replace="~{fragments/common :: freelancerFooter}"></footer></th:block>
+</main>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body></html>

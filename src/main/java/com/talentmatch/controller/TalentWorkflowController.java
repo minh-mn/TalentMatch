@@ -108,7 +108,7 @@ public class TalentWorkflowController {
              .comparingInt((Map<String, Object> r) -> (int) r.get("score")).reversed()
              .thenComparing(secondaryOrder)
              .thenComparing(byName));
-     int size = 5;
+     int size = 10;
      int totalPages = Math.max(1, (candidates.size() + size - 1) / size);
      int currentPage = Math.max(1, Math.min(page, totalPages));
      int from = (currentPage - 1) * size;
@@ -247,8 +247,8 @@ public class TalentWorkflowController {
          case "rating" -> results.sort(Comparator.comparingDouble((SavedFreelancer r)->Optional.ofNullable(r.getFreelancer().getRating()).orElse(0.0)).reversed());
          default -> results.sort(Comparator.comparing(SavedFreelancer::getCreatedAt,Comparator.nullsLast(Comparator.reverseOrder())));
      }
-     int pages=Math.max(1,(results.size()+4)/5),current=Math.max(1,Math.min(page,pages)),start=(current-1)*5;
-     model.addAttribute("favorites",results.subList(start,Math.min(results.size(),start+5)));
+     int pages=Math.max(1,(results.size()+9)/10),current=Math.max(1,Math.min(page,pages)),start=(current-1)*10;
+     model.addAttribute("favorites",results.subList(start,Math.min(results.size(),start+10)));
      model.addAttribute("totalSaved",saved.size());model.addAttribute("filteredCount",results.size());
      model.addAttribute("onlineCount",saved.stream().filter(r->Boolean.TRUE.equals(r.getFreelancer().getAvailable())).count());
      model.addAttribute("q",q);model.addAttribute("availability",availability);model.addAttribute("field",field);
@@ -351,7 +351,7 @@ public class TalentWorkflowController {
         result.sort(Comparator.comparing(JobInvitation::getCreatedAt,
                 Comparator.nullsLast(Comparator.reverseOrder())));
     }
-    int pageSize = 5;
+    int pageSize = 10;
     int totalPages = Math.max(1, (result.size() + pageSize - 1) / pageSize);
     int currentPage = Math.max(1, Math.min(page, totalPages));
     int from = (currentPage - 1) * pageSize;
@@ -433,7 +433,7 @@ public class TalentWorkflowController {
   else if("budget_low".equals(sort))filtered.sort(Comparator.comparing((JobInvitation i)->i.getJob().getBudget(),Comparator.nullsLast(Comparator.naturalOrder())));
   else if("oldest".equals(sort))filtered.sort(Comparator.comparing(JobInvitation::getCreatedAt,Comparator.nullsLast(Comparator.naturalOrder())));
   else filtered.sort(Comparator.comparing(JobInvitation::getCreatedAt,Comparator.nullsLast(Comparator.reverseOrder())));
-  int total=filtered.size(),pageSize=5,totalPages=Math.max(1,(total+pageSize-1)/pageSize);
+  int total=filtered.size(),pageSize=10,totalPages=Math.max(1,(total+pageSize-1)/pageSize);
   int currentPage=Math.max(1,Math.min(page,totalPages));int start=(currentPage-1)*pageSize;
   m.addAttribute("invitations",filtered.subList(start,Math.min(start+pageSize,total)));
   m.addAttribute("totalInvitations",total);m.addAttribute("currentPage",currentPage);m.addAttribute("totalPages",totalPages);

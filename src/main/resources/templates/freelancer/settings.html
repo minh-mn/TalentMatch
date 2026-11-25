@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Cài đặt Freelancer')}"></head>
+<body class="market-body fm-dashboard tm181-settings">
+<link rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
+<link rel="stylesheet" th:href="@{/css/freelancer-layout-v106.css(v=106)}">
+<aside th:replace="~{fragments/common :: marketSidebar('settings')}"></aside>
+<header class="fm-header">
+  <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+  <form class="fm-header-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" placeholder="Tìm dự án, kỹ năng, khách hàng..." aria-label="Tìm kiếm"><button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+  <nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục nghề</a></nav>
+  <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i><span class="notification-count-badge" th:if="${unreadNotificationCount != null and unreadNotificationCount > 0}" th:text="${unreadNotificationCount > 99 ? '99+' : unreadNotificationCount}">0</span></a><a th:href="@{/freelancer/profile}" class="fm-mini-avatar" th:text="${#strings.substring(currentUser.fullName,0,1)}">F</a><span th:text="${currentUser.fullName}">Freelancer</span></div>
+</header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="fm-main tm181-settings-main">
+  <div class="tm181-wrap">
+    <section th:replace="~{fragments/common :: rolePageBanner('TÀI KHOẢN & TÙY CHỌN','Cài đặt Freelancer','Quản lý thông tin tài khoản, khả năng nhận việc, bảo mật và trải nghiệm sử dụng TalentMatch.','fa-solid fa-gear')}" class="tm176-banner-slot"></section>
+    <div class="tm181-layout">
+      <nav class="tm181-side" aria-label="Mục cài đặt">
+        <a href="#account"><i class="fa-regular fa-user"></i> Tài khoản</a>
+        <a href="#availability"><i class="fa-solid fa-briefcase"></i> Nhận việc</a>
+        <a href="#security"><i class="fa-solid fa-shield-halved"></i> Bảo mật</a>
+        <a href="#notifications"><i class="fa-regular fa-bell"></i> Thông báo</a>
+        <a href="#appearance"><i class="fa-solid fa-palette"></i> Giao diện</a>
+      </nav>
+      <div class="tm181-content">
+        <section class="tm181-card" id="account">
+          <div class="tm181-card-heading"><div><h2><i class="fa-regular fa-user"></i> Thông tin tài khoản</h2><p>Thông tin đang được lưu trong hồ sơ TalentMatch.</p></div><a class="tm181-outline" th:href="@{/freelancer/profile}">Chỉnh sửa hồ sơ</a></div>
+          <div class="tm181-details">
+            <div><span>Họ và tên</span><strong th:text="${user.fullName}">Freelancer</strong></div>
+            <div><span>Email đăng nhập</span><strong th:text="${user.email}">email@example.com</strong></div>
+            <div><span>Điện thoại</span><strong th:text="${user.phone != null and !user.phone.isBlank() ? user.phone : 'Chưa cập nhật'}">Chưa cập nhật</strong></div>
+            <div><span>Vai trò</span><strong>Freelancer</strong></div>
+          </div>
+        </section>
+        <section class="tm181-card" id="availability">
+          <div class="tm181-card-heading"><div><h2><i class="fa-solid fa-briefcase"></i> Nhận việc & hình thức làm việc</h2><p>Thiết lập này được lưu trực tiếp vào hồ sơ và có hiệu lực khi tải lại trang.</p></div></div>
+          <form th:action="@{/freelancer/settings/preferences}" method="post" class="tm181-form">
+            <label class="tm181-toggle"><input type="checkbox" name="available" value="true" th:checked="${user.available == true}"><span><strong>Sẵn sàng nhận công việc</strong><small>Bật khi bạn đang tìm dự án mới; tắt khi đang bận.</small></span></label>
+            <label class="tm181-field">Hình thức làm việc ưu tiên
+              <select name="workPreference"><option value="" th:selected="${user.workPreference == null}">Chưa chọn</option><option value="REMOTE" th:selected="${user.workPreference == 'REMOTE'}">Làm việc từ xa</option><option value="HYBRID" th:selected="${user.workPreference == 'HYBRID'}">Kết hợp</option><option value="ONSITE" th:selected="${user.workPreference == 'ONSITE'}">Tại văn phòng</option></select>
+            </label>
+            <div class="tm181-actions"><button type="submit"><i class="fa-solid fa-floppy-disk"></i> Lưu thay đổi</button></div>
+          </form>
+        </section>
+        <section class="tm181-card" id="security">
+          <div class="tm181-card-heading"><div><h2><i class="fa-solid fa-shield-halved"></i> Mật khẩu & bảo mật</h2><p>Đặt lại mật khẩu qua quy trình xác minh email OTP hiện có.</p></div><a class="tm181-outline" th:href="@{/forgot-password}">Đặt lại mật khẩu</a></div>
+          <p class="tm181-muted">Không hiển thị mật khẩu hiện tại. Quá trình đổi mật khẩu được thực hiện trên trang xác minh bảo mật.</p>
+        </section>
+        <section class="tm181-card" id="notifications">
+          <div class="tm181-card-heading"><div><h2><i class="fa-regular fa-bell"></i> Trung tâm thông báo</h2><p>Xem thông báo hợp đồng, báo giá, bàn giao và thanh toán dành cho bạn.</p></div><a class="tm181-outline" th:href="@{/notifications}">Xem thông báo</a></div>
+        </section>
+        <section class="tm181-card" id="appearance">
+          <div class="tm181-card-heading"><div><h2><i class="fa-solid fa-palette"></i> Giao diện</h2><p>Điều chỉnh cách hiển thị của trang Cài đặt trên thiết bị này.</p></div></div>
+          <label class="tm181-field">Chế độ hiển thị
+            <select id="tm181Theme"><option value="light">Sáng</option><option value="dark">Tối</option></select>
+          </label>
+          <p class="tm181-muted">Lựa chọn chỉ áp dụng cho trang Cài đặt và được lưu trên trình duyệt này.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+</main>
+<footer th:replace="~{fragments/common :: freelancerFooter}"></footer>
+<link rel="stylesheet" th:href="@{/css/freelancer-fixes-v181.css(v=181)}">
+<script th:replace="~{fragments/common :: scripts}"></script>
+<script>
+(function(){
+ var selector=document.getElementById('tm181Theme'); if(!selector)return;
+ var key='talentmatch-freelancer-settings-theme';
+ try {var v=localStorage.getItem(key);if(v==='dark'||v==='light')selector.value=v;}catch(e){}
+ function apply(){document.body.classList.toggle('tm181-dark',selector.value==='dark');}
+ selector.addEventListener('change',function(){try{localStorage.setItem(key,selector.value);}catch(e){} apply();});apply();
+})();
+</script>
+</body>
+</html>

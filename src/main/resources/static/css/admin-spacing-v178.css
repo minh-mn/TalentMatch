@@ -1,0 +1,121 @@
+/* TalentMatch V178 — Shared layout rhythm for Admin Progress, Disputes and Terms.
+   Scoped to the three updated screens; admin dashboard and all workflows stay unchanged. */
+body.tm178-admin-spacing {
+  --tm178-page-inset: 24px;
+  --tm178-gap: 14px;
+  --tm178-line: #dae6f7;
+}
+body.tm178-admin-spacing main.market-main.admin-main {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  padding: 64px 0 0 !important; /* Keep content below fixed 64px Admin topbar */
+  margin-right: 0 !important;
+}
+/* The page shell must fill the available area to the right of the sidebar. */
+body.tm178-admin-spacing main.admin-main > .admin-shell,
+body.tm178-admin-spacing main.admin-main > .tm168-shell {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 24px var(--tm178-page-inset) 38px !important;
+}
+/* Remove older per-page shell insets that caused the Progress view to touch the edge. */
+body.tm178-admin-spacing .admin-shell.ap151,
+body.tm178-admin-spacing .admin-shell.dispute154,
+body.tm178-admin-spacing .tm168-shell {
+  padding: 24px var(--tm178-page-inset) 38px !important;
+}
+/* One banner baseline on these Admin screens, without altering the home dashboard. */
+body.tm178-admin-spacing .tm176-banner,
+body.tm178-admin-spacing .tm176-banner-slot .tm176-banner {
+  margin: 0 0 var(--tm178-gap) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+body.tm178-admin-spacing .ap151-kpis,
+body.tm178-admin-spacing .ds154-kpis {
+  gap: 12px !important;
+  margin: 0 0 var(--tm178-gap) !important;
+}
+body.tm178-admin-spacing .tm159-section-heading {
+  margin: 0 0 10px !important;
+  gap: 12px !important;
+}
+body.tm178-admin-spacing .ap151-columns,
+body.tm178-admin-spacing .ds154-layout,
+body.tm178-admin-spacing .tm168-layout {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+body.tm178-admin-spacing .ap151-columns,
+body.tm178-admin-spacing .ds154-layout {gap: var(--tm178-gap) !important;}
+body.tm178-admin-spacing .ap151-card,
+body.tm178-admin-spacing .ds154-panel {padding: 16px !important;}
+body.tm178-admin-spacing .ap151-tabs,
+body.tm178-admin-spacing .ds154-tabs {
+  margin-bottom: 12px !important;
+}
+body.tm178-admin-spacing .ds154-tabs {
+  padding: 8px 0 12px !important;
+  margin-top: 0 !important;
+  margin-bottom: var(--tm178-gap) !important;
+}
+body.tm178-admin-spacing .ds154-kpis {margin: 0 0 var(--tm178-gap) !important;}
+/* Filter controls align horizontally, instead of stretching every input to a new row. */
+body.tm178-admin-spacing .ap151-filter {
+  display: grid !important;
+  grid-template-columns: minmax(260px, 1fr) minmax(145px, 185px) minmax(120px, 150px) auto auto !important;
+  gap: 10px !important;
+  align-items: center !important;
+  margin-bottom: 14px !important;
+}
+body.tm178-admin-spacing .ap151-filter > input,
+body.tm178-admin-spacing .ap151-filter > select,
+body.tm178-admin-spacing .ap151-filter > button,
+body.tm178-admin-spacing .ap151-filter > a {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  height: 40px !important;
+  margin: 0 !important;
+}
+body.tm178-admin-spacing .ap151-filter > button,
+body.tm178-admin-spacing .ap151-filter > a {
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 0 15px !important;
+  white-space: nowrap !important;
+}
+/* Terms used a narrower, centered container; align it with other Admin screens. */
+body.tm178-admin-spacing .tm168-note {margin: 0 0 var(--tm178-gap) !important;}
+body.tm178-admin-spacing .tm168-quick {gap: 12px !important;margin: 0 0 var(--tm178-gap) !important;}
+body.tm178-admin-spacing .tm168-layout {gap: var(--tm178-gap) !important;}
+body.tm178-admin-spacing .tm168-content > section {margin-bottom: var(--tm178-gap) !important;}
+@media (max-width: 1250px) {
+  body.tm178-admin-spacing .ap151-filter {
+    grid-template-columns: minmax(0, 1fr) minmax(145px, 190px) minmax(120px, 150px) auto auto !important;
+  }
+}
+@media (max-width: 1000px) {
+  body.tm178-admin-spacing .ap151-filter {
+    grid-template-columns: minmax(0, 1fr) minmax(145px, 185px) !important;
+  }
+  body.tm178-admin-spacing .ap151-filter > input {grid-column: 1 / -1 !important;}
+}
+@media (max-width: 740px) {
+  body.tm178-admin-spacing {--tm178-page-inset: 14px;}
+  body.tm178-admin-spacing main.admin-main > .admin-shell,
+  body.tm178-admin-spacing main.admin-main > .tm168-shell {
+    padding-top: 14px !important;
+    padding-bottom: 26px !important;
+  }
+  body.tm178-admin-spacing .ap151-filter {grid-template-columns: 1fr !important;}
+  body.tm178-admin-spacing .ap151-filter > input {grid-column: auto !important;}
+  body.tm178-admin-spacing .ap151-kpis,
+  body.tm178-admin-spacing .ds154-kpis {grid-template-columns: repeat(2, minmax(0, 1fr)) !important;}
+}

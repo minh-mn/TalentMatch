@@ -4,7 +4,7 @@
 <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
 <form class="fm-header-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" th:value="${q}" placeholder="Tìm dự án, kỹ năng, khách hàng..." aria-label="Tìm kiếm"><button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button></form>
 <nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục nghề</a></nav>
-<div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i></a><a th:href="@{/freelancer/profile}" class="fm-mini-avatar" th:text="${#strings.substring(currentUser.fullName,0,1)}">F</a><span th:text="${currentUser.fullName}">Freelancer</span></div>
+<div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i><span class="notification-count-badge" th:if="${unreadNotificationCount != null and unreadNotificationCount > 0}" th:text="${unreadNotificationCount > 99 ? '99+' : unreadNotificationCount}">0</span></a><a th:href="@{/freelancer/profile}" class="fm-mini-avatar" th:text="${#strings.substring(currentUser.fullName,0,1)}">F</a><span th:text="${currentUser.fullName}">Freelancer</span></div>
 </header><div th:replace="~{fragments/common :: flash}"></div><main class="fm-main">
 <div class="th93-shell">
   <!-- Banner ảnh đã có chữ: dùng đúng tỉ lệ, không chồng thêm HTML lên ảnh. -->

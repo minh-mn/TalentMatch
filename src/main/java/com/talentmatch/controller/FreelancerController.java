@@ -446,10 +446,10 @@ public class FreelancerController {
         else filtered.sort(Comparator.comparing(SavedJob::getCreatedAt,
                 Comparator.nullsLast(Comparator.reverseOrder())));
 
-        int totalPages = Math.max(1, (filtered.size() + 4) / 5);
+        int totalPages = Math.max(1, (filtered.size() + 9) / 10);
         int currentPage = Math.max(1, Math.min(page, totalPages));
-        int start = Math.min((currentPage - 1) * 5, filtered.size());
-        model.addAttribute("savedJobs", filtered.subList(start, Math.min(start + 5, filtered.size())));
+        int start = Math.min((currentPage - 1) * 10, filtered.size());
+        model.addAttribute("savedJobs", filtered.subList(start, Math.min(start + 10, filtered.size())));
         model.addAttribute("totalJobs", filtered.size());
         model.addAttribute("allJobsCount", allSaved.size());
         model.addAttribute("totalPages", totalPages);
@@ -514,7 +514,7 @@ public class FreelancerController {
                 .sorted(applicationComparator(sort))
                 .toList();
 
-        int pageSize = 5;
+        int pageSize = 10;
         int totalApplications = filtered.size();
         int totalPages = Math.max(1, (int) Math.ceil(totalApplications / (double) pageSize));
         int currentPage = Math.max(1, Math.min(page, totalPages));
@@ -677,10 +677,10 @@ public class FreelancerController {
                 .sorted(projectOrder)
                 .toList();
         int totalFiltered = filtered.size();
-        int totalPages = Math.max(1, (totalFiltered + 4) / 5);
+        int totalPages = Math.max(1, (totalFiltered + 9) / 10);
         int currentPage = Math.max(1, Math.min(page, totalPages));
-        int from = (currentPage - 1) * 5;
-        List<Project> displayed = filtered.subList(from, Math.min(from + 5, totalFiltered));
+        int from = (currentPage - 1) * 10;
+        List<Project> displayed = filtered.subList(from, Math.min(from + 10, totalFiltered));
 
         Map<Long, Long> daysLeft = new HashMap<>();
         for (Project p : displayed) {
@@ -892,7 +892,7 @@ public class FreelancerController {
                 && (rangeEnd == null || !e.date().toLocalDate().isAfter(rangeEnd)))
             .sorted(Comparator.comparing(HistoryEntry::date, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
             .toList();
-        final int pageSize = 5;
+        final int pageSize = 10;
         int pageCount = Math.max(1, (filtered.size() + pageSize - 1) / pageSize);
         int currentPage = Math.max(1, Math.min(page, pageCount));
         int startAt = (currentPage - 1) * pageSize;

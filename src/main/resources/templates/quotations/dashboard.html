@@ -12,19 +12,20 @@
 <link rel="stylesheet" th:href="@{/css/quotes-v110.css(v=110)}">
 <link rel="stylesheet" th:href="@{/css/banners-v111.css(v=111)}">
 <link rel="stylesheet" th:href="@{/css/freelancer-workflow-v118.css(v=118)}">
+<link rel="stylesheet" th:href="@{/css/freelancer-layout-v183.css(v=183)}">
 <aside th:replace="~{fragments/common :: marketSidebar('quotes')}"></aside>
 <header th:if="${!isClient}" class="fm-header">
   <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
   <form class="fm-header-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" placeholder="Tìm dự án, kỹ năng, khách hàng..." aria-label="Tìm dự án"><button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button></form>
   <nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/#pricing}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục nghề</a></nav>
-  <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i></a><a th:href="@{/freelancer/messages}" aria-label="Tin nhắn"><i class="fa-regular fa-message"></i></a><a th:href="@{/freelancer/profile}" class="fm-mini-avatar" th:text="${#strings.substring(viewer.fullName,0,1)}">F</a><span th:text="${viewer.fullName}">Freelancer</span></div>
+  <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i><span class="notification-count-badge" th:if="${unreadNotificationCount != null and unreadNotificationCount > 0}" th:text="${unreadNotificationCount > 99 ? '99+' : unreadNotificationCount}">0</span></a><a th:href="@{/freelancer/messages}" aria-label="Tin nhắn"><i class="fa-regular fa-message"></i></a><a th:href="@{/freelancer/profile}" class="fm-mini-avatar" th:text="${#strings.substring(viewer.fullName,0,1)}">F</a><span th:text="${viewer.fullName}">Freelancer</span></div>
 </header>
 <header th:if="${isClient}" th:replace="~{fragments/common :: marketClientTopbar()}"></header>
 <div th:replace="~{fragments/common :: flash}"></div>
 <main class="fm-main tm105-main">
 <div class="tm105-shell" th:with="basePath=${isClient ? '/customer/quotations' : '/freelancer/quotes'}">
- <div class="tm105-breadcrumb"><a th:href="${isClient ? '/customer/projects' : '/freelancer/projects'}">Dự án đang làm</a><i class="fa-solid fa-chevron-right"></i><strong>Báo giá &amp; Thương lượng</strong></div>
- <section class="tm105-banner" aria-label="Báo giá và thương lượng"><div class="tm105-banner-text"><span class="tm105-eyebrow"><i class="fa-solid fa-handshake"></i> BÁO GIÁ &amp; THƯƠNG LƯỢNG</span><h1>Báo giá <span>&amp; Thương lượng</span></h1><p>Gửi báo giá, xem phản hồi và theo dõi lịch sử phiên bản để chốt công việc nhanh hơn.</p></div></section>
+ 
+ <section th:replace="~{fragments/common :: rolePageBanner('QUẢN LÝ BÁO GIÁ','Báo giá & Thương lượng','Gửi đề xuất, nhận phản hồi và theo dõi từng phiên bản trước khi hai bên thống nhất hợp đồng.','fa-solid fa-file-invoice-dollar')}" class="tm176-banner-slot"></section>
  <section class="tm109-kpis" aria-label="Thong ke bao gia">
    <div class="tm109-kpi"><span class="tm109-kpi-icon blue"><i class="fa-solid fa-handshake"></i></span><span>Đang thương lượng<strong th:text="${negotiatingCount}">0</strong></span></div>
    <div class="tm109-kpi"><span class="tm109-kpi-icon amber"><i class="fa-regular fa-clock"></i></span><span>Chờ phản hồi<strong th:text="${waitingCount}">0</strong></span></div>
@@ -92,5 +93,7 @@
 <script th:replace="~{fragments/common :: scripts}"></script>
 
 <link rel="stylesheet" th:href="@{/css/freelancer-sidebar-unified-v107.css(v=107)}">
+<link rel="stylesheet" th:href="@{/css/freelancer-fixes-v181.css(v=181)}">
+<link rel="stylesheet" th:href="@{/css/freelancer-quotes-spacing-v185.css(v=185)}">
 </body>
 </html>

@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 import java.util.*;
 @Controller @RequestMapping("/notifications")
 public class NotificationController {
@@ -13,9 +14,11 @@ public class NotificationController {
   @GetMapping public String list(Authentication auth,Model model,@RequestParam(defaultValue="all") String filter){
     User user=users.byEmail(auth.getName());var all=notifications.inbox(user);
     model.addAttribute("notifications",all.stream().filter(n->switch(filter){case "unread"->!n.isRead();case "read"->n.isRead();default->true;}).toList());
-    model.addAttribute("filter",filter);model.addAttribute("unreadCount",all.stream().filter(n->!n.isRead()).count());
+    model.addAttribute("filter",filter);model.addAttribute("unreadCount",notifications.unread(user));
+    model.addAttribute("allCount",all.size());model.addAttribute("readCount",all.stream().filter(Notification::isRead).count());
     return user.getRole()==Role.ADMIN?"notifications/admin-list":"notifications/list";
   }
+  @GetMapping("/unread-count") @ResponseBody public Map<String,Long> unreadCount(Authentication auth){return Map.of("count",notifications.unread(users.byEmail(auth.getName())));}
   @PostMapping("/{id}/read") public String read(@PathVariable Long id,Authentication auth){return "redirect:"+notifications.read(id,users.byEmail(auth.getName()));}
   @PostMapping("/read-all") public String readAll(Authentication auth){notifications.markAllRead(users.byEmail(auth.getName()));return "redirect:/notifications";}
 }
