@@ -53,12 +53,51 @@ public class PaymentController {
     @GetMapping("/vnpay/return")
     public String paymentReturn(@RequestParam java.util.Map<String,String> params,Model model){
         boolean verified=vnpay.verify(params);
-        boolean bankAccepted=verified&&"00".equals(params.get("vnp_ResponseCode"))&&"00".equals(params.get("vnp_TransactionStatus"));
+        String responseCode=params.get("vnp_ResponseCode");
+        String transactionStatus=params.get("vnp_TransactionStatus");
+        boolean bankAccepted=verified
+                &&"00".equals(responseCode)
+                &&(transactionStatus==null||transactionStatus.isBlank()||"00".equals(transactionStatus));
+        if(bankAccepted){
+            try{
+                String confirmCode=payments.confirmVnpay(
+                        params.get("vnp_TxnRef"),
+                        params.get("vnp_Amount"),
+                        true);
+                log.info("VNPay return confirmed locally: txnRef={}, response={}",
+                        txnRefForLog(params.get("vnp_TxnRef")),confirmCode);
+            }catch(Exception e){
+                log.error("VNPay return confirmation failed: txnRef={}",
+                        txnRefForLog(params.get("vnp_TxnRef")),e);
+            }
+        }else if(verified){
+            try{
+                payments.confirmVnpay(params.get("vnp_TxnRef"),params.get("vnp_Amount"),false);
+            }catch(Exception e){
+                log.error("VNPay failed-return confirmation failed: txnRef={}",
+                        txnRefForLog(params.get("vnp_TxnRef")),e);
+            }
+        }
         PaymentStatus status=bankAccepted?payments.statusByTransactionCode(params.get("vnp_TxnRef")).orElse(null):null;
         model.addAttribute("verified",verified);
         model.addAttribute("success",bankAccepted&&(status==PaymentStatus.PAID||status==PaymentStatus.DISBURSED));
         model.addAttribute("pending",bankAccepted&&(status==null||status==PaymentStatus.PENDING));
         model.addAttribute("failed",verified&&(!bankAccepted||status==PaymentStatus.FAILED||status==PaymentStatus.REFUNDED));
+        model.addAttribute("transactionCode",params.get("vnp_TxnRef"));
+        model.addAttribute("bankCode",params.get("vnp_BankCode"));
+        model.addAttribute("responseCode",params.get("vnp_ResponseCode"));
+        java.math.BigDecimal displayAmount=null;
+        if(params.get("vnp_Amount")!=null){
+            try{
+                displayAmount=new java.math.BigDecimal(params.get("vnp_Amount"))
+                        .divide(java.math.BigDecimal.valueOf(100));
+            }catch(NumberFormatException ignored){}
+        }
+        model.addAttribute("amount",displayAmount);
         return "payment/vnpay-return";
+    }
+
+    private String txnRefForLog(String txnRef){
+        return txnRef!=null&&txnRef.matches("[A-Za-z0-9_-]{1,40}")?txnRef:"[invalid]";
     }
 }

@@ -42,11 +42,12 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
+        ensureAdmin("Quản trị TalentMatch", "admin@talentmatch.vn", "admin123");
+
         if (!seed) return;
         // Do not overwrite real Client changes on every application restart after demo data has been seeded.
         if (jobs.count() >= 375) return;
 
-        User admin = ensure("Quản trị TalentMatch", "admin@talentmatch.vn", Role.ADMIN, "admin123");
         User client = ensure("Nguyễn Minh Anh", "client@talentmatch.vn", Role.CUSTOMER, "123456");
         client.setCompanyName("Nova Digital");
         client.setCompanySize("11-50");
@@ -700,6 +701,28 @@ public class DataInitializer implements CommandLineRunner {
             u.setLocked(false);
             return users.save(u);
         });
+    }
+
+    private User ensureAdmin(String name, String email, String pass) {
+        User admin = users.findByEmailIgnoreCase(email).orElseGet(() -> {
+            User u = new User();
+            u.setFullName(name);
+            u.setEmail(email);
+            u.setRole(Role.ADMIN);
+            u.setEnabled(true);
+            u.setLocked(false);
+            u.setPassword(encoder.encode(pass));
+            return u;
+        });
+
+        admin.setFullName(name);
+        admin.setRole(Role.ADMIN);
+        admin.setEnabled(true);
+        admin.setLocked(false);
+        if (!encoder.matches(pass, admin.getPassword())) {
+            admin.setPassword(encoder.encode(pass));
+        }
+        return users.save(admin);
     }
 
     private User freelancer(String name, String email, String title, String field, String skills, int years, String rate, String location, double rating, String bio) {

@@ -88,7 +88,7 @@ public class PaymentService {
     public String confirmVnpay(String txnRef,String amount,boolean success){
         Payment tx=payments.lockByCode(txnRef).orElse(null);
         if(tx==null||!"VNPAY_SANDBOX".equals(tx.getMethod()))return "01";
-        if(tx.getStatus()==PaymentStatus.PAID||tx.getStatus()==PaymentStatus.DISBURSED)return "02";
+        if(tx.getStatus()==PaymentStatus.PAID||tx.getStatus()==PaymentStatus.DISBURSED)return "00";
         if(tx.getStatus()!=PaymentStatus.PENDING)return "02";
         long expected;
         try{expected=Math.multiplyExact(tx.getAmount().longValueExact(),100L);
