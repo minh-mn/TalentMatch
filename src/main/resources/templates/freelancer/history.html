@@ -8,9 +8,7 @@
 </header><div th:replace="~{fragments/common :: flash}"></div><main class="fm-main">
 <div class="th93-shell">
   <!-- Banner ảnh đã có chữ: dùng đúng tỉ lệ, không chồng thêm HTML lên ảnh. -->
-  <section class="th93-banner" aria-label="Lịch sử hoạt động">
-    <img th:src="@{/images/talentmatch-history-banner-v93.png}" src="/images/talentmatch-history-banner-v93.png" alt="Xem lại toàn bộ hoạt động của bạn">
-  </section>
+  <section th:replace="~{fragments/common :: rolePageBanner('THEO DÕI HOẠT ĐỘNG','Lịch sử','Tra cứu lịch sử ứng tuyển, thực hiện công việc và thu nhập.','fa-solid fa-clock-rotate-left')}" class="tm176-banner-slot"></section>
 
   <div class="th93-layout">
     <div class="th93-content">

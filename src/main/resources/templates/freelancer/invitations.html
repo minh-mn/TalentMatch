@@ -16,9 +16,7 @@
 <main class="fm-main">
 <div class="ti88-content">
   <!-- Banner gốc 1920x360 do người dùng cung cấp; không chồng thêm lớp chữ. -->
-  <section class="ti88-banner" aria-label="Những lời mời dành riêng cho bạn">
-    <img th:src="@{/images/talentmatch-invitations-banner-v88.png}" alt="Những lời mời dành riêng cho bạn – TalentMatch">
-  </section>
+  <section th:replace="~{fragments/common :: rolePageBanner('CƠ HỘI HỢP TÁC','Lời mời từ Client','Xem lời mời nhận được và theo dõi phản hồi đối với từng dự án.','fa-regular fa-envelope-open')}" class="tm176-banner-slot"></section>
 
   <form class="ti88-toolbar" th:action="@{/freelancer/invitations}" method="get" aria-label="Tìm kiếm và lọc nhanh lời mời">
     <input type="hidden" name="minBudget" th:value="${minBudget}">

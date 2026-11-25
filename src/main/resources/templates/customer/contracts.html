@@ -12,7 +12,7 @@
 <header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
 <div th:replace="~{fragments/common :: flash}"></div>
 <main class="market-main cc133-main"><div class="cc133-wrap">
-  <div class="cc133-banner"><img th:src="@{/images/client-contracts-banner-v133.png}" alt="Hợp đồng và Điều khoản" width="1920" height="360"></div>
+  <section th:replace="~{fragments/common :: clientPageBanner('QUẢN LÝ HỢP ĐỒNG','Hợp đồng & Điều khoản','Theo dõi hợp đồng, các điều khoản đã ký và tiến trình thực hiện dự án với Freelancer trong một giao diện thống nhất.','fa-solid fa-file-signature')}"></section>
   <div class="cc133-topbar">
     <nav aria-label="Chế độ xem"><a class="on" th:href="@{/customer/contracts}"><i class="fa-regular fa-file-lines"></i> Danh sách hợp đồng</a>
       <a th:href="@{/customer/contracts(status='active')}"><i class="fa-solid fa-scale-balanced"></i> Đang hiệu lực</a>
@@ -22,7 +22,7 @@
   <div class="cc133-stats"><div><strong th:text="${contractTotal}">0</strong><span>Tổng hợp đồng</span></div><div><strong th:text="${waitingCount}">0</strong><span>Chờ ký xác nhận</span></div><div><strong th:text="${activeCount}">0</strong><span>Đang hiệu lực</span></div><div><strong th:text="${completedCount}">0</strong><span>Đã hoàn thành</span></div></div>
   <div class="cc134-advisory" th:if="${missingDrafts>0}"><i class="fa-solid fa-circle-info"></i> <span th:text="|Có ${missingDrafts} dự án cũ chưa có phiên bản hợp đồng. Hãy kiểm tra dữ liệu migration và quy trình tạo dự thảo; không tự phát sinh hợp đồng hay chữ ký.|">Có dự án chưa có bản hợp đồng</span></div>
   <div class="tm-client-hint"><i class="fa-solid fa-circle-info"></i> Chốt báo giá → Lập hợp đồng → Hai bên ký đúng phiên bản → Thanh toán → Thực hiện và nghiệm thu. Khi thay đổi điều khoản cần ký lại phiên bản mới.</div>
-  <div class="cc133-grid"><section class="cc133-panel cc133-list-panel"><form method="get" th:action="@{/customer/contracts}" class="cc133-filter">
+  <div class="cc133-grid" th:classappend="${selectedProject!=null} ? ' tm172-detail-open' : ' tm172-list-open'"><section class="cc133-panel cc133-list-panel" th:if="${selectedProject==null}"><form method="get" th:action="@{/customer/contracts}" class="cc133-filter">
       <label><i class="fa-solid fa-magnifying-glass"></i><input name="q" th:value="${q}" placeholder="Tìm mã hợp đồng, tên dự án, freelancer..."></label>
       <select name="status" aria-label="Trạng thái"><option value="all" th:selected="${status=='all'}">Tất cả trạng thái</option><option value="waiting" th:selected="${status=='waiting'}">Chờ ký</option><option value="payment" th:selected="${status=='payment'}">Đã ký – chờ thanh toán</option><option value="active" th:selected="${status=='active'}">Đang hiệu lực</option><option value="completed" th:selected="${status=='completed'}">Hoàn thành</option><option value="disputed" th:selected="${status=='disputed'}">Tranh chấp</option><option value="cancelled" th:selected="${status=='cancelled'}">Đã hủy</option></select>
       <select name="sort" aria-label="Sắp xếp"><option value="newest" th:selected="${sort=='newest'}">Mới nhất</option><option value="oldest" th:selected="${sort=='oldest'}">Cũ nhất</option><option value="priceHigh" th:selected="${sort=='priceHigh'}">Giá giảm dần</option><option value="priceLow" th:selected="${sort=='priceLow'}">Giá tăng dần</option></select>
@@ -45,7 +45,7 @@
       <p class="cc133-count" th:text="|${allCount} hợp đồng phù hợp|">0 hợp đồng</p>
     </section>
     <section class="cc133-panel cc133-detail" th:if="${selectedProject!=null and selectedAgreement!=null}" th:with="p=${selectedProject},a=${selectedAgreement}">
-      <div class="cc133-detail-title"><h2>Chi tiết hợp đồng</h2><span class="cc133-chip green" th:if="${a.customerSignedAt!=null and a.freelancerSignedAt!=null}">Đã ký hai bên</span><span class="cc133-chip yellow" th:unless="${a.customerSignedAt!=null and a.freelancerSignedAt!=null}">Chờ ký</span></div>
+      <div class="tm172-detail-bar"><a class="tm172-back" th:href="@{/customer/contracts(q=${q},status=${status},sort=${sort},page=${page})}"><i class="fa-solid fa-arrow-left"></i> Quay lại danh sách hợp đồng</a><span class="tm172-detail-kicker">HỢP ĐỒNG &amp; ĐIỀU KHOẢN</span></div><div class="cc133-detail-title"><h2>Chi tiết hợp đồng</h2><span class="cc133-chip green" th:if="${a.customerSignedAt!=null and a.freelancerSignedAt!=null}">Đã ký hai bên</span><span class="cc133-chip yellow" th:unless="${a.customerSignedAt!=null and a.freelancerSignedAt!=null}">Chờ ký</span></div>
       <div class="tm127-contract-steps">
 <span th:classappend="${a.customerSignedAt!=null}?' done':''">1. Client ký</span>
 <span th:classappend="${a.freelancerSignedAt!=null}?' done':''">2. Freelancer ký</span>
@@ -62,23 +62,12 @@
       <form th:if="${!pendingChange and a.customerSignedAt==null and p.status.name()!='CANCELLED' and p.status.name()!='COMPLETED' and p.status.name()!='DISPUTED'}" method="post" th:action="@{/projects/{id}/agreement/sign(id=${p.id})}"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><input type="hidden" name="expectedVersion" th:value="${a.version}"><button class="cc133-primary cc133-block" type="submit"><i class="fa-solid fa-file-signature"></i> Ký xác nhận phiên bản hiện tại</button></form>
       <div class="tm127-contract-links"><a th:href="@{/customer/payments}">Thanh toán</a><a th:href="@{/customer/progress(selected=${p.id})}">Tiến độ &amp; Nghiệm thu</a></div>
       <a class="cc133-outline cc133-block" th:href="@{/projects/{id}(id=${p.id})}"><i class="fa-regular fa-eye"></i> Xem hợp đồng &amp; yêu cầu sửa điều khoản</a>
-    </section><section class="cc133-panel cc133-empty" th:if="${selectedProject==null}"><strong>Chưa có hợp đồng để xem</strong><p>Hãy chọn một hợp đồng trong danh sách hoặc chọn Freelancer từ báo giá đã chốt để lập dự thảo.</p></section>
+    </section><section class="cc133-panel cc133-empty" th:if="${false}"><strong>Chưa có hợp đồng để xem</strong><p>Hãy chọn một hợp đồng trong danh sách hoặc chọn Freelancer từ báo giá đã chốt để lập dự thảo.</p></section>
   </div>
 </div>
-<footer class="fm-footer client-same-footer tm-posted-footer">
-    <div class="fm-footer-top">
-      <div class="fm-footer-intro">
-        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
-        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
-        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
-      </div>
-      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
-      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
-      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
-      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
-    </div>
-    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
-  </footer>
+<footer th:replace="~{fragments/common :: clientFooter}"></footer>
 </main>
 <script th:replace="~{fragments/common :: scripts}"></script>
+<link rel="stylesheet" th:href="@{/css/client-sidebar-footer-v170.css(v=170)}">
+<link rel="stylesheet" th:href="@{/css/client-unified-v172.css(v=172)}">
 </body></html>

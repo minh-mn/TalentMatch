@@ -7,9 +7,7 @@
   <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i></a><a th:href="@{/freelancer/profile}" class="fm-mini-avatar" th:text="${#strings.substring(currentUser.fullName,0,1)}">F</a><span th:text="${currentUser.fullName}">Freelancer</span></div>
 </header><div th:replace="~{fragments/common :: flash}"></div><main class="fm-main tm48-main tm90-main">
  <div class="tm90-wrap">
-  <section class="tm90-banner" aria-label="Cộng đồng hỏi đáp">
-   <img th:src="@{/images/talentmatch-community-banner-v90.png}" src="/images/talentmatch-community-banner-v90.png" alt="Cộng đồng hỏi đáp TalentMatch - Đặt câu hỏi và chia sẻ kinh nghiệm"/>
-  </section>
+  <section th:replace="~{fragments/common :: rolePageBanner('CỘNG ĐỒNG FREELANCER','Hỏi đáp','Đặt câu hỏi, chia sẻ kinh nghiệm và tìm lời giải đáp từ cộng đồng.','fa-regular fa-circle-question')}" class="tm176-banner-slot"></section>
   <section class="tm90-stats" aria-label="Thống kê cộng đồng">
    <div class="tm90-stat"><span class="tm90-stat-icon blue"><i class="fa-regular fa-circle-question"></i></span><div><strong th:text="${statsTotal}">0</strong><small>Câu hỏi cộng đồng</small></div></div>
    <div class="tm90-stat"><span class="tm90-stat-icon green"><i class="fa-solid fa-circle-check"></i></span><div><strong th:text="${statsSolved}">0</strong><small>Đã được giải đáp</small></div></div>

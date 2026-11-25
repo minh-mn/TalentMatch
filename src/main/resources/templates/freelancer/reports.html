@@ -7,9 +7,7 @@
 <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i></a><a th:href="@{/freelancer/profile}" class="fm-mini-avatar" th:text="${#strings.substring(currentUser.fullName,0,1)}">F</a><span th:text="${currentUser.fullName}">Freelancer</span></div>
 </header><div th:replace="~{fragments/common :: flash}"></div><main class="fm-main rp92-main">
 <div class="rp92-shell">
-  <section class="rp92-banner" aria-label="Thống kê và Báo cáo">
-    <img th:src="@{/images/talentmatch-reports-banner-v92.png}" alt="Theo dõi hiệu suất làm việc, thu nhập và tiến độ dự án" />
-  </section>
+  <section th:replace="~{fragments/common :: rolePageBanner('PHÂN TÍCH HIỆU QUẢ','Thống kê & Báo cáo','Xem thống kê dự án, hiệu quả công việc và thu nhập từ TalentMatch.','fa-solid fa-chart-column')}" class="tm176-banner-slot"></section>
   <form class="rp92-toolbar" th:action="@{/freelancer/reports}" method="get" id="rp92-filter-form">
     <label class="rp92-date-field"><i class="fa-regular fa-calendar"></i><span>Từ ngày</span><input type="date" name="from" th:value="${reportFrom}" required /></label>
     <span class="rp92-date-separator">–</span>

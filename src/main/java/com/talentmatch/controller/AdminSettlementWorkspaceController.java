@@ -66,8 +66,15 @@ public class AdminSettlementWorkspaceController {
         int pages=Math.max(1,(count+4)/5);page=Math.min(Math.max(page,1),pages);int from=(page-1)*5;
         List<DisbursementRow> paymentRows=withdrawalTab?List.of():filteredPayments.subList(from,Math.min(from+5,filteredPayments.size()));
         List<WithdrawalRow> withdrawalRows=withdrawalTab?filteredWithdrawals.subList(from,Math.min(from+5,filteredWithdrawals.size())):List.of();
-        DisbursementRow chosenPayment=allPayments.stream().filter(r->Objects.equals(r.id(),selectedPayment)).findFirst().orElse(paymentRows.isEmpty()?null:paymentRows.get(0));
-        WithdrawalRow chosenWithdrawal=allWithdrawals.stream().filter(r->Objects.equals(r.id(),selectedWithdrawal)).findFirst().orElse(withdrawalRows.isEmpty()?null:withdrawalRows.get(0));
+        // Không tự mở bản ghi đầu tiên. Chỉ mở chi tiết khi người quản trị nhấn "Xem".
+        // Kiểm tra trong danh sách đã lọc để không mở dữ liệu nằm ngoài bộ lọc hiện tại.
+        DisbursementRow chosenPayment = !withdrawalTab && selectedPayment != null
+                ? filteredPayments.stream().filter(r -> Objects.equals(r.id(), selectedPayment)).findFirst().orElse(null)
+                : null;
+        WithdrawalRow chosenWithdrawal = withdrawalTab && selectedWithdrawal != null
+                ? filteredWithdrawals.stream().filter(r -> Objects.equals(r.id(), selectedWithdrawal)).findFirst().orElse(null)
+                : null;
+        model.addAttribute("showDetail", chosenPayment != null || chosenWithdrawal != null);
         model.addAttribute("paymentRows",paymentRows);model.addAttribute("withdrawalRows",withdrawalRows);
         model.addAttribute("chosenPayment",chosenPayment);model.addAttribute("chosenWithdrawal",chosenWithdrawal);
         model.addAttribute("q",q);model.addAttribute("status",status);model.addAttribute("tab",tab);

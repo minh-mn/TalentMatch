@@ -1,0 +1,31 @@
+/* Admin management V157: consistent layout with Admin statistics V156. */
+body.admin-workspace.tm157-page{--tm157-navy:#0b2a6f;--tm157-blue:#2f6fed;--tm157-muted:#64748b;--tm157-border:#dce6f4}
+.tm157-page .admin-shell{max-width:1700px!important;margin:0 auto!important;padding:22px 22px 36px!important}
+.tm157-head{background:linear-gradient(110deg,#ffffff 0%,#ecf4ff 70%,#d9eafd 100%);border:1px solid var(--tm157-border);border-radius:13px;padding:23px 27px;display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:16px}
+.tm157-head small{color:#2f6fed;letter-spacing:.065em;font-size:11px;font-weight:800}
+.tm157-head h1{font-size:28px;font-weight:850;color:var(--tm157-navy);margin:8px 0}
+.tm157-head p{font-size:13px;color:#546b8c;margin:0;line-height:1.65}
+.tm157-head-icon{font-size:48px;color:#2f6fed;opacity:.65}
+.tm157-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.tm157-kpis .tm157-kpi{display:flex;min-height:94px;gap:12px;align-items:center;padding:16px 15px;background:#fff;border:1px solid var(--tm157-border);border-radius:12px;text-decoration:none;color:var(--tm157-navy)}
+.tm157-kpi i{flex:0 0 38px;display:grid;place-items:center;border-radius:10px;height:38px;font-size:17px;background:#eaf2ff;color:#1f65dc}
+.tm157-kpi span{min-width:0;font-size:12px;line-height:1.5;color:#61738e}.tm157-kpi strong{display:block;color:var(--tm157-navy);font-size:24px;line-height:1.2;margin-top:5px;font-variant-numeric:tabular-nums}
+.tm157-page .admin-filters{background:#fff!important;border:1px solid var(--tm157-border)!important;border-radius:12px!important;padding:13px!important;margin-bottom:16px!important;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.tm157-page .admin-filters .admin-search{flex:1 1 280px;min-width:180px}.tm157-page .admin-filters select{min-height:40px;border:1px solid #d4e1f2;border-radius:8px;color:var(--tm157-navy);background:#fff;padding:0 12px}
+.tm157-page .admin-btn.primary{background:#1765ed!important;color:white!important;border-color:#1765ed!important}
+.tm157-page .admin-table-panel,.tm157-page .admin-job-card{background:#fff!important;border:1px solid var(--tm157-border)!important;border-radius:12px!important;box-shadow:0 2px 10px #1028540b!important}
+.tm157-page .admin-table thead{background:#eef4fd!important}.tm157-page .admin-table th{color:#49658c!important;font-size:12px!important;padding:14px!important}.tm157-page .admin-table td{padding:14px!important;border-bottom:1px solid #ecf0f8!important;font-size:12px!important}
+.tm157-page .admin-table tbody tr:hover{background:#f4f8ff!important}.tm157-page .admin-price,.tm157-page .admin-job-money b{color:#dc2626!important}
+.tm157-section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:17px 19px 10px;color:var(--tm157-navy)}.tm157-section-head h2{font-size:18px;margin:0}.tm157-section-head p{font-size:12px;margin:5px 0 0;color:#72829c}
+.tm157-page .admin-person b{font-size:12px;color:var(--tm157-navy)}.tm157-page .admin-avatar{background:#2f6fed}.tm157-page .admin-role.role-admin{background:#ede8ff;color:#6841b2}
+.tm157-page .admin-job-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-bottom:16px}.tm157-page .admin-job-card{margin:0!important;min-width:0!important}.tm157-page .admin-job-tools{flex-wrap:wrap;gap:7px}.tm157-page .admin-job-tools form{max-width:100%}.tm157-page .admin-job-intro h2 a{color:var(--tm157-navy)!important}
+.tm157-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.tm157-id{display:block;font-size:11px;color:#6982a5;margin-top:4px}.tm157-mail{font-size:12px;color:#2857a4;overflow-wrap:anywhere}
+.tm157-page .admin-shared-footer{margin-left:270px!important;width:calc(100% - 270px)!important;box-sizing:border-box;display:flex!important;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center;background:white;border-top:1px solid var(--tm157-border);padding:18px 24px;color:#6b7e9a;font-size:12px}
+.tm157-footer-brand{font-size:15px;font-weight:800;color:var(--tm157-navy)}.tm157-footer-brand small{display:block;color:#7c8da7;font-size:10px;font-weight:600;margin-top:3px}
+.tm157-footer-links{display:flex;gap:16px;flex-wrap:wrap}.tm157-footer-links a{color:#295dba;font-weight:650;text-decoration:none}
+.tm157-statistics-footer{margin-left:270px!important;width:calc(100% - 270px)!important;box-sizing:border-box;padding:20px 26px!important;background:#fff!important;border-top:1px solid #dce6f4!important;color:#667c99;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.tm157-statistics-footer strong{color:#0b2a6f;font-size:17px}.tm157-statistics-footer strong small{display:block;color:#6b80a0;font-size:10px;margin-top:4px}
+.tm157-statistics-footer a{color:#2462d4;text-decoration:none;font-size:12px;font-weight:700}
+@media(max-width:1300px){.tm157-kpis{grid-template-columns:repeat(3,1fr)}.tm157-page .admin-job-list{grid-template-columns:1fr}}
+@media(max-width:900px){.tm157-page .admin-shared-footer{margin-left:0!important;width:100%!important}.tm157-statistics-footer{margin-left:0!important;width:100%!important}.tm157-kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.tm157-head{padding:18px}.tm157-head-icon{display:none}.tm157-head h1{font-size:23px}.tm157-kpis{grid-template-columns:1fr}.tm157-page .admin-shell{padding:12px!important}}

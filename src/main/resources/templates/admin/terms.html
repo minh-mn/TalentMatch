@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/common :: head('Điều khoản & Giải quyết tranh chấp')}"></head>
+<body class="market-body client-workspace admin-workspace admin-unified">
+<aside th:replace="~{fragments/common :: marketSidebar('terms')}"></aside>
+<header th:replace="~{fragments/common :: marketTopbar('admin')}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="market-main client-main admin-main">
+  <div class="tm168-shell">
+    <section th:replace="~{fragments/common :: rolePageBanner('QUY ĐỊNH & GIẢI QUYẾT','Điều khoản giải quyết','Tra cứu căn cứ giải quyết tranh chấp và quy trình xử lý nghiệp vụ.','fa-solid fa-book-open-reader')}" class="tm176-banner-slot"></section>
+    <div class="tm168-note"><i class="fa-solid fa-circle-info"></i> <b>Phạm vi áp dụng:</b> Đây là <b>bản điều khoản đề xuất cho demo</b>, không tự động thay thế hợp đồng đã ký hoặc quy định pháp luật. Điều khoản cụ thể có hiệu lực khi được các bên chấp thuận theo quy trình hợp đồng. Admin chỉ tra cứu, lưu nhận định và xử lý theo các quyền được backend hỗ trợ.</div>
+    <div class="tm168-quick">
+      <a href="#hopdong"><i class="fa-solid fa-file-signature"></i> Hợp đồng &amp; cam kết</a>
+      <a href="#nghiemthu"><i class="fa-solid fa-clipboard-check"></i> Bàn giao &amp; nghiệm thu</a>
+      <a href="#taichinh"><i class="fa-solid fa-wallet"></i> Thanh toán &amp; giải ngân</a>
+      <a href="#tranhchap"><i class="fa-solid fa-gavel"></i> Xử lý tranh chấp</a>
+    </div>
+    <div class="tm168-layout">
+      <nav class="tm168-toc" aria-label="Mục lục điều khoản"><strong>Mục lục</strong>
+        <a href="#nguyentac">01. Nguyên tắc chung</a><a href="#hopdong">02. Hợp đồng &amp; phiên bản</a>
+        <a href="#deadline">03. Deadline &amp; thay đổi phạm vi</a><a href="#nghiemthu">04. Bàn giao &amp; nghiệm thu</a>
+        <a href="#taichinh">05. Thanh toán, phí, giải ngân</a><a href="#rut">06. Rút tiền &amp; hoàn tiền</a>
+        <a href="#bangchung">07. Chứng cứ đối chiếu</a><a href="#tranhchap">08. Quy trình tranh chấp</a>
+        <a href="#tinhhuong">09. Bảng tình huống</a><a href="#baomat">10. Trách nhiệm &amp; bảo mật</a>
+      </nav>
+      <div class="tm168-content">
+        <section id="nguyentac"><h2>01. Nguyên tắc áp dụng và thứ tự ưu tiên</h2>
+          <p>Ưu tiên kiểm tra: (1) pháp luật bắt buộc áp dụng; (2) hợp đồng/phiên bản đã được cả hai bên ký; (3) phụ lục hoặc sửa đổi hợp lệ; (4) bằng chứng và lịch sử hệ thống; (5) quy định nền tảng đã được các bên chấp thuận. Không dùng tên trạng thái làm bằng chứng duy nhất cho việc hoàn thành hoặc chuyển tiền.</p>
+          <p>Quyết định xử lý phải có cơ sở chứng cứ, ghi rõ người xử lý, thời điểm, kết luận và đường dẫn đến dữ liệu liên quan. Admin không tự ý thay đổi số tiền hay nghiệm thu thay Client.</p>
+        </section>
+        <section id="hopdong"><h2>02. Báo giá, hợp đồng và chữ ký</h2>
+          <ul><li>Báo giá được chốt phải nêu phạm vi, giá trị, sản phẩm bàn giao và thời hạn; hợp đồng được tạo từ phiên bản báo giá được chấp nhận.</li>
+          <li>Hợp đồng chỉ được coi là hai bên đồng ý khi cả Client và Freelancer ký đúng <b>phiên bản hiện hành</b>.</li>
+          <li>Thay đổi giá, phạm vi, deadline, mốc hoặc điều kiện nghiệm thu cần lập phiên bản/phụ lục mới được các bên xác nhận; lịch sử cũ phải được giữ lại.</li>
+          <li>Hợp đồng chưa đủ chữ ký không được dùng làm căn cứ buộc một bên thực hiện nghĩa vụ ngoài phần đã chấp thuận.</li></ul>
+        </section>
+        <section id="deadline"><h2>03. Thời hạn, tiến độ và thay đổi yêu cầu</h2>
+          <ul><li>Mỗi milestone cần xác định <b>hạn thanh toán</b> và <b>deadline bàn giao</b> riêng. Deadline đã hết hạn không đồng nghĩa tự động bị từ chối nghiệm thu; phải đối chiếu nguyên nhân chậm.</li>
+          <li>Freelancer cập nhật tiến độ theo từng mốc và thông báo sớm nguy cơ trễ hạn. Client cần phản hồi các yêu cầu làm rõ hoặc thay đổi phạm vi bằng thông tin lưu trên hệ thống.</li>
+          <li>Thời gian phát sinh do Client thay đổi yêu cầu hoặc chậm cung cấp đầu vào phải được ghi nhận để đánh giá trách nhiệm; không mặc định đổ lỗi cho Freelancer.</li></ul>
+        </section>
+        <section id="nghiemthu"><h2>04. Bàn giao, yêu cầu chỉnh sửa và nghiệm thu</h2>
+          <ul><li>Bàn giao phải có tệp hoặc URL hợp lệ, ghi chú đầu ra và phiên bản; milestone nên đạt 100% tiến độ báo cáo trước khi gửi nghiệm thu theo cấu hình demo hiện tại.</li>
+          <li>Client đánh giá theo tiêu chí nghiệm thu trong hợp đồng, có thể chấp nhận hoặc nêu lỗi cụ thể, mức độ và bằng chứng để yêu cầu chỉnh sửa.</li>
+          <li>Trạng thái <b>SUBMITTED</b> chỉ chứng minh đã gửi; <b>COMPLETED</b> mới là mốc được Client nghiệm thu. Tiến độ 100% không đồng nghĩa nghiệm thu.</li>
+          <li>Không giải ngân đối với phần chưa nghiệm thu hoặc đang bị phong tỏa hợp lệ trong tranh chấp.</li></ul>
+        </section>
+        <section id="taichinh"><h2>05. Thanh toán, tiền giữ và giải ngân</h2>
+          <ul><li>Client có thể thanh toán một lần hoặc từng milestone theo thỏa thuận. Chỉ giao dịch được xác nhận thành công mới được tính là <b>đã thanh toán</b>.</li>
+          <li><b>PAID</b> là khoản đã thanh toán nhưng hệ thống còn giữ, chưa phải thu nhập khả dụng của Freelancer. <b>DISBURSED</b> là trạng thái đã giải ngân trong sổ cái demo, cần có bút toán ghi có ví tương ứng.</li>
+          <li>Chính sách demo hiện hành: dự kiến giải ngân <b>72 giờ sau nghiệm thu hợp lệ</b>, không có tranh chấp/chặn thanh toán; phí nền tảng <b>10%</b> trên số tiền đủ điều kiện giải ngân. Đây là tham số demo, có thể thay đổi theo cấu hình và thỏa thuận.</li>
+          <li>Ví dụ: 10.000.000đ đủ điều kiện giải ngân → phí 1.000.000đ → ghi có Freelancer 9.000.000đ. Không khấu trừ phí hai lần.</li>
+          <li>VNPAY Sandbox chỉ mô phỏng quy trình giao dịch; trạng thái nội bộ không xác nhận đã chuyển tiền ngân hàng thật.</li></ul>
+        </section>
+        <section id="rut"><h2>06. Rút tiền, hoàn tiền, đối soát</h2>
+          <ul><li>Freelancer chỉ rút từ số dư đã ghi có, trừ phần đang giữ cho yêu cầu rút tiền. Yêu cầu <b>Chờ duyệt → Đã duyệt → Hoàn tất</b> hoặc <b>Từ chối</b>.</li>
+          <li>Admin từ chối phải ghi lý do; tiền giữ rút phải được hoàn lại cho số dư khả dụng và ghi log. “Đã duyệt” chưa đồng nghĩa “đã hoàn tất”.</li>
+          <li>Hoàn tiền khi tranh chấp không được đổi thẳng trạng thái giao dịch; cần xác minh người có quyền, số tiền, khoản đã giải ngân và bút toán đảo/điều chỉnh, tránh hoàn hai lần.</li>
+          <li>Trường hợp thanh toán thất bại, callback lặp hoặc chênh lệch ví phải được đưa vào đối soát, chưa kết luận đã chi trả.</li></ul>
+        </section>
+        <section id="bangchung"><h2>07. Bộ chứng cứ bắt buộc đối chiếu</h2>
+          <table class="tm168-table"><thead><tr><th>Loại hồ sơ</th><th>Bằng chứng cần thu thập</th><th>Mục đích</th></tr></thead><tbody>
+          <tr><td>Hợp đồng</td><td>Phiên bản hiện hành, hai chữ ký, phụ lục, điều khoản nghiệm thu</td><td>Xác định nghĩa vụ đã thỏa thuận</td></tr>
+          <tr><td>Tiến độ</td><td>Milestone, deadline, cập nhật tiến độ, trao đổi thay đổi phạm vi</td><td>Xác định phần việc và nguyên nhân chậm</td></tr>
+          <tr><td>Bàn giao</td><td>Tệp/URL, phiên bản, ngày gửi, yêu cầu sửa, thời điểm nghiệm thu</td><td>Xác định chất lượng và tình trạng bàn giao</td></tr>
+          <tr><td>Tài chính</td><td>Mã giao dịch, trạng thái cổng thanh toán, payment, wallet_credits, withdrawal</td><td>Đối soát tiền thực tế ghi nhận trong demo</td></tr>
+          <tr><td>Trao đổi</td><td>Tin nhắn, thông báo, nhật ký quản trị, phản hồi khiếu nại</td><td>Làm rõ nội dung và thời điểm thông báo</td></tr>
+          </tbody></table>
+        </section>
+        <section id="tranhchap"><h2>08. Quy trình xử lý tranh chấp</h2>
+          <ol><li><b>Tiếp nhận:</b> tạo hồ sơ, ghi rõ dự án/mốc, bên yêu cầu, lý do, khoản tiền liên quan và tài liệu đính kèm.</li>
+          <li><b>Kiểm tra:</b> đối chiếu hợp đồng đang có hiệu lực, giao dịch, deadline, bản bàn giao, phản hồi của hai bên.</li>
+          <li><b>Bảo toàn:</b> đánh dấu hồ sơ đang tranh chấp; chặn giải ngân các khoản liên quan khi đúng điều kiện backend, không khóa mọi dự án vô căn cứ.</li>
+          <li><b>Lấy ý kiến hai bên:</b> yêu cầu bổ sung chứng cứ và giải trình trong thời hạn được công bố cụ thể cho từng hồ sơ.</li>
+          <li><b>Kết luận:</b> nêu căn cứ, số tiền nếu có, trách nhiệm chỉnh sửa/bàn giao lại/hoàn tiền; ghi log Admin.</li>
+          <li><b>Thực hiện:</b> quyết định tài chính chỉ được triển khai qua quy trình đối soát có kiểm soát, không xử lý bằng cập nhật trực tiếp trạng thái SQL.</li></ol>
+          <p><b>Thời hạn xử lý tranh chấp:</b> chưa được cấu hình trong source hiện tại; không mặc định dùng “3 ngày giải ngân” làm hạn xử lý tranh chấp.</p>
+        </section>
+        <section id="tinhhuong"><h2>09. Ma trận hướng xử lý tình huống thường gặp</h2>
+          <table class="tm168-table"><thead><tr><th>Tình huống</th><th>Đối chiếu</th><th>Hướng xử lý đề xuất</th></tr></thead><tbody>
+          <tr><td>Freelancer nộp trễ</td><td>Deadline, thời điểm gửi, yêu cầu đổi phạm vi, phản hồi Client</td><td>Yêu cầu giải trình; điều chỉnh hạn nếu hai bên đồng ý, hoặc xử lý vi phạm hợp đồng</td></tr>
+          <tr><td>Client không nghiệm thu</td><td>Tiêu chí nghiệm thu, phiên bản bàn giao, lý do từ chối</td><td>Yêu cầu phản hồi cụ thể; không tự nghiệm thu thay Client</td></tr>
+          <tr><td>Client chậm thanh toán</td><td>Hạn thanh toán, trạng thái giao dịch, lịch sử VNPAY</td><td>Nhắc thanh toán/ghi nhận quá hạn; chưa cho bắt đầu mốc chưa được thanh toán</td></tr>
+          <tr><td>Sản phẩm không đạt</td><td>Điều khoản chất lượng, tệp giao, lỗi tái hiện, số lần sửa theo hợp đồng</td><td>Yêu cầu sửa phù hợp; trường hợp không thể khắc phục thì xem xét phương án thương lượng</td></tr>
+          <tr><td>Giao dịch bị giữ khi tranh chấp</td><td>PAID, milestone, trạng thái dự án, chứng cứ</td><td>Giữ khoản liên quan trong thời gian xác minh; không tự chuyển DISBURSED</td></tr>
+          <tr><td>Đã giải ngân nhưng ví thiếu</td><td>DISBURSED so với wallet_credits và nhật ký</td><td>Chuyển đối soát; tránh ghi có lặp và chưa xác nhận rút thành công</td></tr>
+          </tbody></table>
+        </section>
+        <section id="baomat"><h2>10. Trách nhiệm, bảo mật và lưu vết</h2>
+          <ul><li>Admin chỉ xem dữ liệu cần thiết để xử lý vụ việc, bảo vệ tệp, dữ liệu cá nhân và thông tin tài chính khỏi truy cập trái phép.</li>
+          <li>Chứng cứ phải giữ nguồn gốc, thời gian và liên kết đến hồ sơ; hạn chế chỉnh sửa hoặc xóa dữ liệu làm sai lịch sử.</li>
+          <li>Kết luận tranh chấp là nghiệp vụ cần xác minh, không tự động có hiệu lực chỉ vì người quản trị đã mở trang này.</li></ul>
+          <div class="tm168-actions"><a th:href="@{/admin/disputes}"><i class="fa-solid fa-scale-balanced"></i> Mở hồ sơ tranh chấp</a><a class="secondary" th:href="@{/admin/contracts}">Đối chiếu hợp đồng</a><a class="secondary" th:href="@{/admin/payments}">Đối chiếu thanh toán</a><a class="secondary" th:href="@{/admin/audit}">Nhật ký quản trị</a></div>
+        </section>
+      </div>
+    </div>
+  </div>
+</main>
+<footer th:replace="~{fragments/common :: adminFooter}"></footer>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body></html>

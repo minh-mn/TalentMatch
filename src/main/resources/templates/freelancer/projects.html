@@ -17,14 +17,7 @@
 <main class="fm-main">
 <div class="tp41-content">
   <!-- Banner: chữ HTML rõ nét, phần minh hoạ dùng hình người dùng cung cấp. -->
-  <section class="tp85-banner" aria-labelledby="tp85-title">
-    <div class="tp85-banner-art" aria-hidden="true"></div>
-    <div class="tp85-banner-copy">
-      <span class="tp85-eyebrow"><i class="fa-solid fa-briefcase"></i> Dự án đang làm</span>
-      <h1 id="tp85-title">Dự án <span>đang thực hiện</span></h1>
-      <p>Theo dõi tiến độ, bàn giao đúng hạn<br>và xây dựng uy tín với khách hàng.</p>
-    </div>
-  </section>
+  <section th:replace="~{fragments/common :: rolePageBanner('QUẢN LÝ DỰ ÁN','Dự án đang làm','Theo dõi các dự án thực hiện, thời hạn và tình trạng bàn giao.','fa-regular fa-folder-open')}" class="tm176-banner-slot"></section>
 
   <div class="tp85-layout">
     <div class="tp85-left">

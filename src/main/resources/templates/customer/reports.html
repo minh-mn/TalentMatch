@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Thống kê & Báo cáo | TalentMatch')}"></head>
+<body class="market-body client-workspace client-v52-page cd-dashboard tm171-page">
+<aside th:replace="~{fragments/common :: marketSidebar('reports')}"></aside>
+<header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="market-main client-main tm171-main tm175-unified-main">
+<div class="tm171-container tm175-unified-container">
+ <header class="tm171-hero"><div><span class="tm171-overline">PHÂN TÍCH DOANH NGHIỆP</span><h1>Thống kê &amp; Báo cáo</h1><p>Theo dõi dự án, hiệu quả tuyển dụng và chi phí đã thanh toán từ dữ liệu TalentMatch.</p></div><i class="fa-solid fa-chart-line"></i></header>
+ <form method="get" th:action="@{/customer/reports}" class="tm171-filter" id="tm171-report-filter">
+  <label>Từ ngày<input type="date" name="from" th:value="${from}"></label>
+  <label>Đến ngày<input type="date" name="to" th:value="${to}"></label>
+  <label>Biểu đồ<select name="metric"><option value="projects" th:selected="${metric=='projects'}">Dự án mới</option><option value="revenue" th:selected="${metric=='revenue'}">Chi phí thanh toán</option></select></label>
+  <label>Phân bổ<select name="pieMode"><option value="status" th:selected="${pieMode=='status'}">Trạng thái dự án</option><option value="category" th:selected="${pieMode=='category'}">Danh mục công việc</option></select></label>
+  <button class="tm171-primary" type="submit"><i class="fa-solid fa-filter"></i> Áp dụng</button><a class="tm171-secondary" th:href="@{/customer/reports}">Đặt lại</a>
+ </form>
+ <section class="tm171-kpis">
+  <a class="tm171-kpi" th:href="@{/customer/jobs}"><i class="fa-solid fa-briefcase"></i><div><span>Công việc đã đăng</span><strong th:text="${stats.jobs}">0</strong></div></a>
+  <a class="tm171-kpi" th:href="@{/customer/projects}"><i class="fa-solid fa-folder-open"></i><div><span>Tổng dự án</span><strong th:text="${projectCount}">0</strong></div></a>
+  <a class="tm171-kpi" th:href="@{/customer/progress}"><i class="fa-solid fa-spinner"></i><div><span>Đang thực hiện / chờ nghiệm thu</span><strong th:text="${activeCount}">0</strong></div></a>
+  <a class="tm171-kpi" th:href="@{/customer/history}"><i class="fa-solid fa-circle-check"></i><div><span>Đã hoàn thành</span><strong th:text="${completedCount}">0</strong></div></a>
+  <div class="tm171-kpi tm171-money"><i class="fa-solid fa-wallet"></i><div><span>Tổng thanh toán ghi nhận</span><strong th:text="${#numbers.formatDecimal(stats.cost,0,'POINT',0,'COMMA')+'đ'}">0đ</strong></div></div>
+ </section>
+ <div class="tm171-chart-grid">
+  <section class="tm171-panel"><div class="tm171-panel-head"><h2 th:text="${metric=='revenue'?'Chi phí thanh toán theo ngày':'Dự án tạo mới theo ngày'}">Dự án theo ngày</h2><span th:text="${#temporals.format(from,'dd/MM/yyyy')+' – '+#temporals.format(to,'dd/MM/yyyy')}"></span></div>
+   <div class="tm171-bars" role="img" aria-label="Biểu đồ cột dữ liệu theo ngày"><div class="tm171-bar" th:each="point:${barData}" th:title="${point.label+' • '+point.value}"><span class="tm171-bar-value" th:text="${#numbers.formatDecimal(point.value,0,'POINT',0,'COMMA')}">0</span><div class="tm171-bar-track"><div th:style="|height:${(point.value / barMax)*100}%|"></div></div><small th:text="${point.label}">01/01</small></div></div>
+  </section>
+  <section class="tm171-panel"><div class="tm171-panel-head"><h2>Phân bổ dự án trong kỳ</h2><span th:text="${pieMode=='status'?'Theo trạng thái':'Theo danh mục'}"></span></div>
+   <div th:if="${#lists.isEmpty(pieData)}" class="tm171-empty">Chưa có dự án trong khoảng thời gian đã chọn.</div>
+   <div class="tm171-pie-rows" th:each="slice:${pieData}"><div><strong th:text="${slice.label}">Trạng thái</strong><span th:text="${slice.count+' dự án · '+#numbers.formatDecimal(slice.percent,0,1)+'%'}">0</span></div><div class="tm171-mini-track"><span th:style="|width:${slice.percent}%|"></span></div></div>
+  </section>
+ </div>
+ <section class="tm171-panel"><div class="tm171-panel-head"><h2>Dự án gần đây</h2><a th:href="@{/customer/projects}">Quản lý dự án <i class="fa-solid fa-arrow-right"></i></a></div>
+  <div class="tm171-table-scroll"><table class="tm171-table"><thead><tr><th>Dự án</th><th>Freelancer</th><th>Giá trị hợp đồng</th><th>Ngày tạo</th><th>Trạng thái</th><th></th></tr></thead><tbody><tr th:each="project:${recentProjects}"><td><strong th:text="${project.application.job.title}">Dự án</strong><small th:text="${'TM-PJ-'+project.id}">Mã</small></td><td th:text="${project.freelancer.fullName}">Freelancer</td><td class="tm171-amount" th:text="${#numbers.formatDecimal(project.totalPrice,0,'POINT',0,'COMMA')+'đ'}">0đ</td><td th:text="${project.createdAt==null?'—':#temporals.format(project.createdAt,'dd/MM/yyyy')}">—</td><td><span class="tm171-status" th:attr="data-status=${project.status}" th:text="${@vnStatus.label(project.status)}">Trạng thái</span></td><td><a th:href="@{/customer/projects}">Xem</a></td></tr></tbody></table></div>
+  <div th:if="${#lists.isEmpty(recentProjects)}" class="tm171-empty">Chưa có dự án.</div>
+ </section>
+</div><footer th:replace="~{fragments/common :: clientFooter}"></footer></main>
+<script th:replace="~{fragments/common :: scripts}"></script>
+<link rel="stylesheet" th:href="@{/css/client-unified-v172.css(v=172)}">
+</body></html>

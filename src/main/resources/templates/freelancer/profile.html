@@ -17,6 +17,8 @@
 <div th:replace="~{fragments/common :: flash}"></div>
 <main class="market-main market-profile-main">
 <div class="tm44-shell">
+<section th:replace="~{fragments/common :: rolePageBanner('THÔNG TIN CÁ NHÂN','Hồ sơ Freelancer','Quản lý thông tin chuyên môn, kinh nghiệm và sản phẩm trong hồ sơ của bạn.','fa-regular fa-user')}" class="tm176-banner-slot"></section>
+
   <section class="tm44-hero">
     <img th:if="${profile.profileCover == null}" th:src="@{/images/talentmatch-profile-v42-banner.png}" alt="Ảnh bìa TalentMatch">
     <img th:unless="${profile.profileCover == null}" th:src="@{/freelancer/profile/media/cover}" alt="Ảnh bìa của tôi">

@@ -1,0 +1,76 @@
+/* TalentMatch V175 — chuẩn hóa lề và khoảng cách Client.
+ * Dùng báo cáo V171 làm mẫu, giữ nguyên dashboard và sidebar.
+ * Chỉ áp dụng cho Client có nav .tm118-client-nav.
+ */
+html body.client-workspace:has(.tm118-client-nav){
+  --tm175-gutter-x:26px;
+  --tm175-gutter-y:24px;
+  --tm175-section-gap:14px;
+}
+/* Ba trang đang bị lệch dùng cùng một quy tắc, thay vì padding riêng. */
+html body.client-workspace:has(.tm118-client-nav) main.market-main.tm175-unified-main{
+  padding:138px 0 0!important;
+  margin-right:0!important;
+  min-width:0!important;
+  min-height:100vh;
+  background:#eef3fc;
+  box-sizing:border-box!important;
+}
+html body.client-workspace:has(.tm118-client-nav) main.market-main.tm175-unified-main > .tm175-unified-container{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0 auto!important;
+  padding:var(--tm175-gutter-y) var(--tm175-gutter-x) 35px!important;
+  color:#0b2a6f;
+}
+/* Banner có cùng mép, chiều cao và khoảng cách dưới; đồng bộ v174/v171. */
+html body.client-workspace:has(.tm118-client-nav) .tm175-unified-container > :is(.tm174-banner,.tm171-hero){
+  box-sizing:border-box!important;
+  width:100%!important;
+  min-height:132px!important;
+  margin:0 0 var(--tm175-section-gap)!important;
+  border-radius:14px!important;
+}
+/* Card, bộ lọc: khoảng cách 14px, không ảnh hưởng số liệu và form. */
+html body.client-workspace:has(.tm118-client-nav) .tm175-unified-container :is(.cpay-kpis,.tm171-kpis){
+  margin-top:0!important;
+  margin-bottom:var(--tm175-section-gap)!important;
+  gap:12px!important;
+}
+html body.client-workspace:has(.tm118-client-nav) .tm175-unified-container .cpay-tabs{
+  margin:0 0 var(--tm175-section-gap)!important;
+}
+html body.client-workspace:has(.tm118-client-nav) .tm175-unified-container :is(.cpay-filters,.tm171-filter){
+  margin-top:0!important;
+  margin-bottom:var(--tm175-section-gap)!important;
+  box-sizing:border-box!important;
+}
+html body.client-workspace:has(.tm118-client-nav) .tm175-unified-container :is(.cpay-panel,.tm171-panel){
+  box-sizing:border-box!important;
+  margin-bottom:var(--tm175-section-gap)!important;
+}
+/* Tránh bị ép tràn màn hình khi filter dài. */
+html body.client-workspace:has(.tm118-client-nav) .tm175-unified-container .cpay-filters{
+  flex-wrap:wrap;
+  align-items:center;
+}
+html body.client-workspace:has(.tm118-client-nav) .tm175-unified-container .cpay-filters > label{
+  flex:1 1 230px;
+  min-width:190px;
+}
+/* Áp dụng chuẩn mép ngang cho các trang Client khác đang dùng wrapper riêng.
+ * Không tác động trang chủ, các trang chi tiết giao dịch/hợp đồng theo layout riêng. */
+html body.client-workspace:has(.tm118-client-nav):not(:has(.tmc49-main)) :is(.tm-posted-shell,.tm-contracts-shell,.tm-sent-shell,.tm-app-shell,.tm-talent-shell,.tm-jobform-shell,.fav-shell,.tm-company-shell,.tm-transactions-shell){
+  box-sizing:border-box!important;
+}
+@media(max-width:900px){
+  html body.client-workspace:has(.tm118-client-nav){--tm175-gutter-x:18px;--tm175-gutter-y:18px}
+}
+@media(max-width:750px){
+  html body.client-workspace:has(.tm118-client-nav) main.market-main.tm175-unified-main{padding-top:76px!important}
+}
+@media(max-width:550px){
+  html body.client-workspace:has(.tm118-client-nav){--tm175-gutter-x:12px;--tm175-gutter-y:14px}
+  html body.client-workspace:has(.tm118-client-nav) .tm175-unified-container .cpay-filters > label{min-width:0}
+}

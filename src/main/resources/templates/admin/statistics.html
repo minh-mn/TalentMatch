@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/common :: head('Thống kê & Báo cáo | Admin')}"></head>
+<body class="market-body client-workspace admin-workspace admin-unified">
+<link rel="stylesheet" th:href="@{/css/admin-statistics-v156.css(v=156)}">
+<link rel="stylesheet" th:href="@{/css/admin-management-v157.css(v=157)}">
+<aside th:replace="~{fragments/common :: marketSidebar('statistics')}"></aside>
+<header th:replace="~{fragments/common :: marketTopbar('admin')}"></header>
+<div th:replace="~{fragments/common :: flash}"></div>
+<main class="market-main client-main admin-main">
+<div class="client-shell admin-shell tm156-shell">
+  <section th:replace="~{fragments/common :: rolePageBanner('PHÂN TÍCH HỆ THỐNG','Thống kê & Báo cáo','Phân tích người dùng, dự án, giao dịch và hoạt động tài chính.','fa-solid fa-chart-line')}" class="tm176-banner-slot"></section>
+  <form class="tm156-toolbar" method="get" th:action="@{/admin/statistics}">
+    <div><label for="tm156-from">Từ ngày</label><input id="tm156-from" type="date" name="from" th:value="${from}" required></div>
+    <div><label for="tm156-to">Đến ngày</label><input id="tm156-to" type="date" name="to" th:value="${to}" required></div>
+    <button class="tm156-primary" type="submit"><i class="fa-solid fa-filter"></i> Áp dụng</button>
+    <a class="tm156-secondary" th:href="@{/admin/statistics}"><i class="fa-solid fa-arrow-rotate-left"></i> Đặt lại</a>
+    <a class="tm156-export" th:href="@{/admin/statistics/export(from=${from},to=${to})}"><i class="fa-solid fa-file-csv"></i> Xuất báo cáo CSV</a>
+  </form>
+  <div class="tm156-period"><i class="fa-regular fa-calendar"></i> Dữ liệu phát sinh từ <b th:text="${#temporals.format(from,'dd/MM/yyyy')}">01/01/2026</b> đến <b th:text="${#temporals.format(to,'dd/MM/yyyy')}">30/11/2026</b>. <span>Riêng tiền đang giữ là số dư toàn hệ thống ở thời điểm hiện tại.</span></div>
+  <section class="tm156-kpis">
+    <article class="tm156-kpi"><span class="tm156-kpi-icon blue"><i class="fa-solid fa-users"></i></span><small>Người dùng mới</small><strong th:text="${userCount}">0</strong><p><span th:text="${newClients}">0</span> Client · <span th:text="${newFreelancers}">0</span> Freelancer</p></article>
+    <article class="tm156-kpi"><span class="tm156-kpi-icon indigo"><i class="fa-solid fa-folder-open"></i></span><small>Dự án được tạo</small><strong th:text="${projectCount}">0</strong><p><span th:text="${completedProjects}">0</span> hoàn thành · <span th:text="${disputes}">0</span> tranh chấp</p></article>
+    <article class="tm156-kpi"><span class="tm156-kpi-icon orange"><i class="fa-solid fa-file-invoice"></i></span><small>Giao dịch mới</small><strong th:text="${transactionCount}">0</strong><p><span th:text="${jobCount}">0</span> công việc được đăng</p></article>
+    <article class="tm156-kpi"><span class="tm156-kpi-icon teal"><i class="fa-solid fa-shield-halved"></i></span><small>Báo cáo vi phạm mới</small><strong th:text="${reportCount}">0</strong><p>Phát sinh trong khoảng thời gian chọn</p></article>
+  </section>
+  <section class="tm156-finance">
+    <article><small><i class="fa-solid fa-arrow-down"></i> Client thanh toán thành công trong kỳ</small><strong th:text="${#numbers.formatDecimal(collected,0,'POINT',0,'COMMA')}+'đ'">0đ</strong><p>Chỉ giao dịch có thời điểm thanh toán, chưa tính hoàn tiền</p></article>
+    <article><small><i class="fa-solid fa-lock"></i> Tiền đang giữ (hiện tại)</small><strong th:text="${#numbers.formatDecimal(currentlyHeld,0,'POINT',0,'COMMA')}+'đ'">0đ</strong><p>Giao dịch hiện mang trạng thái PAID</p></article>
+    <article><small><i class="fa-solid fa-circle-check"></i> Tiền đã ghi có ví trong kỳ</small><strong th:text="${#numbers.formatDecimal(disbursedGross,0,'POINT',0,'COMMA')}+'đ'">0đ</strong><p>Giá trị trước phí, lấy từ sổ cái ví</p></article>
+    <article><small><i class="fa-solid fa-percent"></i> Phí nền tảng đã ghi nhận</small><strong th:text="${#numbers.formatDecimal(fee,0,'POINT',0,'COMMA')}+'đ'">0đ</strong><p>Chỉ cộng phí tại bút toán wallet_credits</p></article>
+    <article><small><i class="fa-solid fa-wallet"></i> Freelancer nhận sau phí</small><strong th:text="${#numbers.formatDecimal(net,0,'POINT',0,'COMMA')}+'đ'">0đ</strong><p>Tổng tiền ghi có sau khi trừ phí nền tảng</p></article>
+  </section>
+  <div class="tm156-grid">
+    <section class="tm156-panel tm156-chart-panel"><div class="tm156-panel-heading"><div><h2>Xu hướng dự án theo tháng</h2><p>Số dự án được tạo trong từng tháng thuộc khoảng lọc</p></div><span class="tm156-tag">Dự án</span></div>
+      <div class="tm156-chart" th:if="${!#lists.isEmpty(timeline)}"><div class="tm156-chart-col" th:each="point : ${timeline}"><div class="tm156-chart-value" th:text="${point.projects}">0</div><div class="tm156-bartrack"><div class="tm156-bar" th:style="'height:'+${point.projectHeight}+'%'" th:title="${point.label+' · '+point.projects+' dự án'}"></div></div><small th:text="${point.label}">01/2026</small></div></div>
+      <p class="tm156-empty" th:if="${#lists.isEmpty(timeline)}">Không có dữ liệu trong kỳ.</p></section>
+    <section class="tm156-panel"><div class="tm156-panel-heading"><div><h2>Trạng thái dự án</h2><p>Phân bổ dự án được tạo trong kỳ</p></div><a th:href="@{/admin/projects}">Xem tất cả <i class="fa-solid fa-arrow-right"></i></a></div>
+      <div class="tm156-status" th:each="item : ${projectStatuses}"><div><b th:text="${item.label}">Đang làm</b><span th:text="${item.count}">0</span></div><div class="tm156-meter"><span th:classappend="${' status-'+item.key}" th:style="'width:'+${item.percent}+'%' "></span></div></div>
+    </section>
+    <section class="tm156-panel tm156-chart-panel"><div class="tm156-panel-heading"><div><h2>Phí nền tảng theo tháng</h2><p>Chỉ tính phí đã ghi nhận vào sổ cái ví</p></div><span class="tm156-tag">VND</span></div>
+      <div class="tm156-chart"><div class="tm156-chart-col" th:each="point : ${timeline}"><div class="tm156-chart-value" th:text="${#numbers.formatDecimal(point.fees,0,'POINT',0,'COMMA')}">0</div><div class="tm156-bartrack"><div class="tm156-bar tm156-bar-green" th:style="'height:'+${point.feeHeight}+'%'" th:title="${point.label+' · '+point.fees+'đ'}"></div></div><small th:text="${point.label}">01/2026</small></div></div></section>
+    <section class="tm156-panel"><div class="tm156-panel-heading"><div><h2>Phân tích hoạt động</h2><p>Trạng thái giao dịch mới và lĩnh vực công việc</p></div></div><h3>Giao dịch trong kỳ</h3>
+      <div class="tm156-smallline" th:each="item : ${paymentStatuses}"><span th:text="${item.label}">Đang giữ</span><b th:text="${item.count}">0</b></div>
+      <h3>Danh mục công việc phổ biến</h3><div class="tm156-smallline" th:each="item : ${categories}"><span th:text="${item.label}">Danh mục</span><b th:text="${item.count}">0</b></div><p class="tm156-empty" th:if="${#lists.isEmpty(categories)}">Chưa có công việc trong kỳ.</p>
+    </section>
+  </div>
+  <section class="tm156-panel tm156-recent"><div class="tm156-panel-heading"><div><h2>Dự án mới nhất trong kỳ</h2><p>Danh sách các dự án được tạo gần đây</p></div><a th:href="@{/admin/projects}">Quản lý dự án <i class="fa-solid fa-arrow-right"></i></a></div>
+    <div class="tm156-tablewrap"><table><thead><tr><th>Dự án</th><th>Client</th><th>Freelancer</th><th>Giá trị hợp đồng</th><th>Ngày tạo</th><th>Trạng thái</th></tr></thead><tbody>
+      <tr th:each="p : ${latestProjects}"><td><b th:text="${p.application.job.title}">Tên dự án</b><small th:text="${'TM-PJ-'+p.id}">Mã</small></td><td th:text="${p.customer.fullName}">Client</td><td th:text="${p.freelancer.fullName}">Freelancer</td><td class="tm156-money" th:text="${#numbers.formatDecimal(p.totalPrice,0,'POINT',0,'COMMA')+'đ'}">0đ</td><td th:text="${#temporals.format(p.createdAt,'dd/MM/yyyy')}">Ngày</td><td><span class="tm156-state" th:classappend="${' status-'+p.status.name()}" th:text="${@vnStatus.label(p.status)}">Trạng thái</span></td></tr>
+      <tr th:if="${#lists.isEmpty(latestProjects)}"><td colspan="6" class="tm156-empty">Không có dự án trong khoảng thời gian đã chọn.</td></tr>
+    </tbody></table></div></section>
+  <div class="tm156-audit" th:if="${inconsistentDisbursements>0}"><i class="fa-solid fa-triangle-exclamation"></i> Có <strong th:text="${inconsistentDisbursements}">0</strong> giao dịch được đánh dấu giải ngân nhưng chưa tìm thấy bút toán ví. <a th:href="@{/admin/payments}">Mở trang đối soát</a></div>
+</div></main>
+<footer th:replace="~{fragments/common :: adminFooter}"></footer>
+<script th:replace="~{fragments/common :: scripts}"></script>
+</body></html>

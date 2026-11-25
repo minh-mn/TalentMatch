@@ -1,0 +1,126 @@
+/* TalentMatch V173 - Client sidebar aligned with Freelancer V107.
+   Scoped by role-specific nav; no changes to Admin or Freelancer.
+   Loaded after legacy Client styles and uses higher specificity to avoid overrides. */
+html body:has(#tm-freelancer-sidebar .tm118-client-nav){
+  --tm-client-sidebar-width:230px!important;
+  --sidebar-width:230px!important;
+}
+@media(min-width:901px){
+html body:has(#tm-freelancer-sidebar .tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar{
+  position:fixed!important;inset:0 auto 0 0!important;
+  width:230px!important;min-width:230px!important;max-width:230px!important;
+  height:100vh!important;height:100dvh!important;
+  display:flex!important;flex-direction:column!important;
+  box-sizing:border-box!important;margin:0!important;padding:8px 9px 0!important;
+  overflow:hidden!important;background:#fff!important;border-right:1px solid #dfe7f4!important;
+  box-shadow:none!important;z-index:1100!important;
+}
+html body:has(#tm-freelancer-sidebar .tm118-client-nav) :is(main.market-main,main.client-main,main.fm-main){
+  margin-left:230px!important;width:calc(100% - 230px)!important;
+  max-width:calc(100% - 230px)!important;min-width:0!important;box-sizing:border-box!important;
+}
+html body:has(#tm-freelancer-sidebar .tm118-client-nav) :is(.cd-header,.cd-client-header,.market-topbar,.fm-header){
+  left:230px!important;right:0!important;width:calc(100% - 230px)!important;box-sizing:border-box!important;
+}
+}
+/* Logo block */
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .market-brand-wrap{
+  flex:0 0 auto!important;margin:0 3px!important;padding:4px 5px 13px!important;
+  border-bottom:1px solid #e7edf6!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .market-brand{
+  display:flex!important;align-items:center!important;gap:9px!important;min-height:34px!important;text-decoration:none!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .market-brand img{
+  width:33px!important;min-width:33px!important;height:33px!important;object-fit:contain!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .market-brand strong{
+  font-size:16px!important;font-weight:800!important;color:#0b2a6f!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .market-brand small{
+  font-size:7.5px!important;font-weight:700!important;color:#697d9c!important;letter-spacing:.2px!important;
+}
+/* Client account block same heights and spacing as Freelancer */
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .tm118-client-profile{
+  flex:0 0 auto!important;margin:4px 5px 5px!important;padding:9px 5px 13px!important;
+  border-bottom:1px solid #e7edf6!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .tm118-client-profile-link{
+  display:flex!important;align-items:center!important;gap:10px!important;min-width:0!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .tm118-client-avatar{
+  flex:0 0 36px!important;width:36px!important;min-width:36px!important;height:36px!important;
+  border-radius:50%!important;background:#2f6fed!important;font-size:16px!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .tm118-client-profile-copy{flex:1 1 auto!important;min-width:0!important}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .tm118-client-profile-copy strong{
+  display:block!important;font-size:12.5px!important;font-weight:800!important;white-space:nowrap!important;
+  overflow:hidden!important;text-overflow:ellipsis!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .tm118-client-profile-copy small{
+  font-size:10px!important;color:#7385a2!important;
+}
+/* Only the menu scrolls */
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .market-side-section-auth{
+  display:block!important;flex:1 1 auto!important;min-height:0!important;
+  overflow-x:hidden!important;overflow-y:auto!important;scrollbar-width:thin;
+  scrollbar-color:#dce5f3 transparent;overscroll-behavior:contain;
+  margin:0!important;padding:0 3px 10px!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .market-side-section-auth>.market-side-label,
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .tm118-group-title{
+  display:block!important;margin:7px 0 3px!important;padding:7px 7px 4px!important;
+  font:800 9px/1.3 Inter,'Segoe UI',Arial,sans-serif!important;letter-spacing:.25px!important;color:#8392ac!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar nav.tm118-client-nav{
+  display:flex!important;flex-direction:column!important;gap:4px!important;padding:0 0 4px!important;margin:0!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar nav.tm118-client-nav>a{
+  display:flex!important;align-items:center!important;gap:9px!important;
+  box-sizing:border-box!important;width:100%!important;min-height:38px!important;height:38px!important;
+  margin:0!important;padding:8px 7px!important;border:0!important;border-radius:7px!important;
+  background:transparent!important;box-shadow:none!important;
+  color:#111827!important;font:700 13px/1.28 Inter,'Segoe UI',Arial,sans-serif!important;
+  letter-spacing:-.23px!important;text-decoration:none!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  transition:background-color .12s ease,color .12s ease!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar nav.tm118-client-nav>a:hover:not(.active){
+  background:#f0f5ff!important;color:#0b2a6f!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar nav.tm118-client-nav>a.active{
+  background:#2f6fed!important;color:#fff!important;box-shadow:0 4px 10px #246bfa20!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar nav.tm118-client-nav>a .market-side-icon{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  flex:0 0 20px!important;width:20px!important;min-width:20px!important;height:20px!important;
+  padding:0!important;margin:0!important;border:0!important;background:transparent!important;
+  box-shadow:none!important;color:inherit!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar nav.tm118-client-nav>a .market-side-icon i{
+  font-size:17px!important;line-height:1!important;color:inherit!important;
+}
+/* Dedicated bottom logout is NOT part of scroll content */
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar #tm171-client-signout{
+  display:block!important;position:static!important;flex:0 0 auto!important;
+  box-sizing:border-box!important;width:100%!important;height:auto!important;min-height:0!important;
+  margin:0!important;padding:10px 6px 13px!important;background:#fff!important;
+  border-top:1px solid #e7edf6!important;z-index:3!important;
+  opacity:1!important;visibility:visible!important;transform:none!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar #tm171-client-signout form{margin:0!important;width:100%!important}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar #tm171-client-signout button{
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:11px!important;
+  width:100%!important;min-height:38px!important;height:auto!important;padding:9px 12px!important;
+  color:#dc2626!important;background:#fff0f0!important;border:1px solid #ffe0e0!important;
+  border-radius:7px!important;font:700 13px/1.3 Inter,'Segoe UI',Arial,sans-serif!important;
+  text-align:left!important;cursor:pointer!important;
+}
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar #tm171-client-signout button:hover{background:#ffe5e8!important}
+/* Hide legacy footer only. Other roles unaffected. */
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar .market-side-bottom-auth{display:none!important}
+@media(max-width:900px){
+html body:has(.tm118-client-nav) aside#tm-freelancer-sidebar.market-sidebar{position:relative!important;width:100%!important;max-width:100%!important;min-width:0!important;height:auto!important;max-height:75vh!important}
+html body:has(.tm118-client-nav) :is(main.market-main,main.client-main,main.fm-main){margin-left:0!important;width:100%!important;max-width:100%!important}
+html body:has(.tm118-client-nav) :is(.cd-header,.cd-client-header,.market-topbar,.fm-header){left:0!important;width:100%!important}
+}

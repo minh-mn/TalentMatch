@@ -1,0 +1,22 @@
+/* TalentMatch V162 – Admin Finance, đồng bộ V161, responsive */
+body.admin-workspace .tm162{--tm-navy:#0b2a6f;--tm-blue:#2f6fed;--tm-border:#dce6f6;max-width:1600px;margin:auto;color:var(--tm-navy)}
+.tm162 .af152-banner,.tm162 .tm130-hero{border-radius:14px;border:1px solid #d6e7fb;background:linear-gradient(115deg,#edf5ff,#cfe5ff 65%,#8ec4ff)}
+.tm162 .af152-kpis,.tm162 .tm131-finance-summary,.tm162 .tm130-stats{gap:12px}
+.tm162 .af152-kpis article,.tm162 .tm131-finance-summary article,.tm162 .tm130-stats article,.tm162-withdraw-money article{background:#fff;border:1px solid var(--tm-border);border-radius:12px;box-shadow:0 3px 12px #173e7409;padding:18px;min-width:0}
+.tm162 .af152-tabs,.tm162 .tm130-subnav{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.tm162 .af152-tabs a,.tm162 .tm130-subnav a{border-radius:8px;font-size:13px;font-weight:700}
+.tm162-flow{margin:15px 0;background:#fff;border:1px solid var(--tm-border);border-radius:12px;display:flex;gap:12px;padding:14px 16px;align-items:center;justify-content:space-between;flex-wrap:wrap;color:#29558d;font-size:12px;font-weight:650}
+.tm162-flow>i{color:#8da8ca}.tm162-flow span i{color:var(--tm-blue);margin-right:6px}.tm162-flow b{color:#0b2a6f}
+.tm162 .tm162-panel-layout{display:block;width:100%}.tm162 .tm162-list{width:100%;box-sizing:border-box}.tm162 .af152-panel{border:1px solid var(--tm-border);border-radius:12px;background:#fff;box-shadow:0 4px 16px #173e740b;min-width:0}
+.tm162 .af152-scroll{overflow-x:auto}.tm162 .af152-scroll table{width:100%;min-width:1010px}.tm162 .af152-scroll th{background:#edf4ff;color:#31517f}.tm162 .af152-scroll td{vertical-align:middle}
+.tm162 .af152-filter{display:flex;flex-wrap:wrap;gap:9px}.tm162 .af152-filter input,.tm162 .af152-filter select{border:1px solid #cfddf1;border-radius:8px;min-height:39px;background:#fff}
+.tm162 .tm162-detail{width:100%;max-width:none;box-sizing:border-box;padding:24px}.tm162 .tm162-detail dl{display:grid;grid-template-columns:minmax(220px,32%) minmax(0,1fr);max-width:1100px;gap:13px 22px}
+.tm162 .tm162-detail .af152-detail-head{display:flex;justify-content:space-between;align-items:center;gap:14px}.tm162 .tm162-detail h2{font-size:23px}
+.tm162-back{margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid #dce6f6}.tm162-back a{background:#edf4ff;border-radius:8px;color:#1659b8;text-decoration:none;font-weight:750;padding:11px 15px;display:inline-flex;gap:8px;align-items:center}
+.tm162 .af152-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.tm162 .af152-actions a{background:#edf4ff;border-radius:8px;padding:10px 14px;color:#125cbb;text-decoration:none;font-weight:700}
+.tm162-withdraw-money{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:12px;margin:12px 0 18px}.tm162-withdraw-money small{display:block;color:#6680a7;font-size:12px}.tm162-withdraw-money strong{font-size:23px;color:#0b2a6f;display:block;margin-top:7px}.tm162-withdraw-money .tm162-process{font-size:15px;margin-top:12px;line-height:1.5}
+.tm162 .tm130-stats strong{font-size:24px}.tm162 .tm130-panel-heading{padding-top:22px}.tm162 .tm130-table td{line-height:1.55}
+.tm162 .tm130-actions-stack{gap:10px}.tm162 .tm130-reject input{width:190px}.tm162 .tm130-table-wrap{overflow-x:auto}.tm162 .tm130-table{min-width:1000px}
+.tm162 .tm130-chip.st-pending{background:#fff1d7;color:#945800}.tm162 .tm130-chip.st-approved{background:#e2efff;color:#1b5caf}.tm162 .tm130-chip.st-completed{background:#ddf7e9;color:#176e47}.tm162 .tm130-chip.st-rejected{background:#fee5e8;color:#b6263f}
+@media(max-width:1100px){.tm162-withdraw-money{grid-template-columns:repeat(2,minmax(0,1fr))}.tm162 .tm162-detail dl{grid-template-columns:190px 1fr}}
+@media(max-width:720px){.tm162-withdraw-money{grid-template-columns:1fr}.tm162 .tm162-detail dl{grid-template-columns:1fr;gap:4px}.tm162 .tm162-detail dd{margin:0 0 9px}.tm162-flow{align-items:flex-start}.tm162-flow>i{display:none}}

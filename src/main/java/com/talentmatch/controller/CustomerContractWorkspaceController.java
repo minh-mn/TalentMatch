@@ -74,7 +74,7 @@ public class CustomerContractWorkspaceController {
         List<Project> visible=filtered.subList(page*size,Math.min(filtered.size(),(page+1)*size));
         Project chosen=null;
         if(selected!=null) chosen=visible.stream().filter(p->p.getId().equals(selected)).findFirst().orElse(null);
-        if(chosen==null&&!visible.isEmpty())chosen=visible.get(0);
+
         AgreementRevision agreement=chosen==null?null:revisions.get(chosen.getId());
         boolean hasPending=chosen!=null&&pending.getOrDefault(chosen.getId(),false);
         model.addAttribute("currentUser",customer);

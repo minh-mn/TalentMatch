@@ -8,10 +8,7 @@
 </header><div th:replace="~{fragments/common :: flash}"></div>
 <main class="fm-main tm89-main">
     <div class="tm89-content">
-        <section class="tm89-banner" aria-label="Tin nhắn TalentMatch">
-            <img th:src="@{/images/talentmatch-messages-banner-v89.png}"
-                 src="/images/talentmatch-messages-banner-v89.png" alt="Kết nối dễ dàng hơn – Trao đổi với khách hàng">
-        </section>
+        <section th:replace="~{fragments/common :: rolePageBanner('TRAO ĐỔI & HỢP TÁC','Tin nhắn','Kết nối với Client và trao đổi thông tin công việc trực tiếp.','fa-regular fa-comments')}" class="tm176-banner-slot"></section>
 
         <div class="tm89-layout">
             <!-- CỘT 1: DANH SÁCH HỘI THOẠI -->

@@ -16,9 +16,7 @@
 <main class="fm-main">
 <div class="ta87-content">
   <!-- Banner: dùng ảnh tham chiếu, không vẽ thêm chữ trùng lên ảnh. -->
-  <section class="ta87-hero" aria-label="Quản lý các ứng tuyển của bạn">
-    <img th:src="@{/images/talentmatch-applications-banner-v87.png}" alt="Quản lý các ứng tuyển của bạn – theo dõi trạng thái ứng tuyển và phản hồi từ khách hàng">
-  </section>
+  <section th:replace="~{fragments/common :: rolePageBanner('QUẢN LÝ ỨNG TUYỂN','Ứng tuyển','Theo dõi hồ sơ ứng tuyển, phản hồi của khách hàng và các cơ hội hợp tác.','fa-solid fa-paper-plane')}" class="tm176-banner-slot"></section>
 
   <!-- Thanh tìm kiếm và bộ lọc theo ảnh mẫu. Tham số khớp FreelancerController. -->
   <form class="ta87-toolbar" th:action="@{/freelancer/applications}" method="get">

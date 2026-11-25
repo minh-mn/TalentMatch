@@ -111,6 +111,12 @@ public class AdminController {
             .filter(byState).filter(u->contains(u.getFullName()+" "+u.getEmail()+" "+u.getCompanyName(),q))
             .sorted(Comparator.comparing(User::getCreatedAt,Comparator.nullsLast(Comparator.reverseOrder()))).toList();
         paginate(m,all,page);m.addAttribute("q",q);m.addAttribute("role",role);m.addAttribute("state",state);
+        var everyUser=users.findAll();
+        m.addAttribute("userAllCount",everyUser.size());
+        m.addAttribute("userClientCount",everyUser.stream().filter(u->u.getRole()==Role.CUSTOMER).count());
+        m.addAttribute("userFreelancerCount",everyUser.stream().filter(u->u.getRole()==Role.FREELANCER).count());
+        m.addAttribute("userLockedCount",everyUser.stream().filter(u->Boolean.TRUE.equals(u.getLocked())).count());
+        m.addAttribute("userUnverifiedCount",everyUser.stream().filter(u->!Boolean.TRUE.equals(u.getEnabled())).count());
         return "admin/users";
     }
 
@@ -135,7 +141,25 @@ public class AdminController {
             .sorted(Comparator.comparing(Job::getCreatedAt,Comparator.nullsLast(Comparator.reverseOrder()))).toList();
         paginate(m,all,page);m.addAttribute("q",q);m.addAttribute("status",status);
         m.addAttribute("openCount",jobs.countByStatus(JobStatus.OPEN));
+        var everyJob=jobs.findAll();
+        m.addAttribute("jobAllCount",everyJob.size());
+        m.addAttribute("jobPausedCount",everyJob.stream().filter(j->j.getStatus()==JobStatus.PAUSED).count());
+        m.addAttribute("jobVerifiedCount",everyJob.stream().filter(Job::isVerified).count());
+        m.addAttribute("jobFeaturedCount",everyJob.stream().filter(Job::isFeatured).count());
         return "admin/jobs";
+    }
+
+    /** Chi tiết công việc dành riêng Admin, không dùng workspace ứng tuyển Freelancer. */
+    @GetMapping("/jobs/{id}")
+    @Transactional(readOnly = true)
+    public String jobDetail(@PathVariable Long id, Model m){
+        Job job=jobs.findById(id).orElseThrow(()->new IllegalArgumentException("Không tìm thấy công việc."));
+        m.addAttribute("job",job);
+        m.addAttribute("skills",job.getRequiredSkills()==null||job.getRequiredSkills().isBlank()
+                ?List.<String>of():Arrays.stream(job.getRequiredSkills().split("[,;\\n]+"))
+                    .map(String::trim).filter(x->!x.isEmpty()).toList());
+        m.addAttribute("isOverdue",job.getDeadline()!=null&&job.getDeadline().isBefore(LocalDate.now()));
+        return "admin/job-detail";
     }
 
     @Transactional
@@ -175,16 +199,24 @@ public class AdminController {
             .filter(p->contains(p.getApplication().getJob().getTitle()+" "+p.getCustomer().getFullName()+" "+p.getFreelancer().getFullName(),q))
             .sorted(Comparator.comparing(Project::getCreatedAt,Comparator.nullsLast(Comparator.reverseOrder()))).toList();
         paginate(m,all,page);m.addAttribute("q",q);m.addAttribute("status",status);
+        var everyProject=projects.findAll();
+        m.addAttribute("projectAllCount",everyProject.size());
+        m.addAttribute("projectWorkingCount",everyProject.stream().filter(p->p.getStatus()==ProjectStatus.IN_PROGRESS).count());
+        m.addAttribute("projectWaitingCount",everyProject.stream().filter(p->p.getStatus()==ProjectStatus.WAITING_ACCEPTANCE).count());
+        m.addAttribute("projectCompletedCount",everyProject.stream().filter(p->p.getStatus()==ProjectStatus.COMPLETED).count());
+        m.addAttribute("projectDisputedCount",everyProject.stream().filter(p->p.getStatus()==ProjectStatus.DISPUTED).count());
         return "admin/projects";
     }
 
     @GetMapping("/reports")
     public String reports(Model m,@RequestParam(required=false)String q,@RequestParam(defaultValue="all")String status,
-                          @RequestParam(defaultValue="1")Integer page){
+                          @RequestParam(defaultValue="1")Integer page,
+                          @RequestParam(required=false)Long selected){
         var all=reports.findAllByOrderByCreatedAtDesc().stream()
             .filter(r->"all".equals(status)||r.getStatus().equals(status))
             .filter(r->contains(r.getReason()+" "+r.getDescription()+" "+r.getReporter().getFullName()+" "+r.getReportedUser().getFullName(),q)).toList();
         paginate(m,all,page);m.addAttribute("q",q);m.addAttribute("status",status);
+        m.addAttribute("selectedReport",selected==null?null:all.stream().filter(r->r.getId().equals(selected)).findFirst().orElse(null));
         m.addAttribute("pendingCount",reports.findAll().stream().filter(r->"PENDING".equals(r.getStatus())).count());
         return "admin/reports";
     }
@@ -208,10 +240,27 @@ public class AdminController {
     }
 
     @GetMapping("/audit")
-    public String auditLog(Model m,@RequestParam(defaultValue="1")Integer page){
-        var all=audits.findAll().stream()
+    @Transactional(readOnly=true)
+    public String auditLog(Model m,@RequestParam(defaultValue="1")Integer page,
+          @RequestParam(defaultValue="")String q,@RequestParam(defaultValue="all")String action,
+          @RequestParam(required=false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate from,
+          @RequestParam(required=false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate to,
+          @RequestParam(required=false) Long selected){
+        if(from!=null && to!=null && from.isAfter(to))throw new IllegalArgumentException("Ngày bắt đầu phải trước ngày kết thúc.");
+        var allLogs=audits.findAll();
+        var all=allLogs.stream()
+            .filter(a->"all".equals(action)||a.getAction().equals(action))
+            .filter(a->contains(a.getActorEmail()+" "+a.getAction()+" "+a.getTargetType()+" "+a.getTargetId()+" "+a.getDetails(),q))
+            .filter(a->from==null||(a.getCreatedAt()!=null&&!a.getCreatedAt().toLocalDate().isBefore(from)))
+            .filter(a->to==null||(a.getCreatedAt()!=null&&!a.getCreatedAt().toLocalDate().isAfter(to)))
             .sorted(Comparator.comparing(AdminAuditLog::getCreatedAt,Comparator.nullsLast(Comparator.reverseOrder()))).toList();
-        paginate(m,all,page);return "admin/audit";
+        paginate(m,all,page);
+        m.addAttribute("q",q);m.addAttribute("action",action);m.addAttribute("from",from);m.addAttribute("to",to);
+        m.addAttribute("actions",allLogs.stream().map(AdminAuditLog::getAction).distinct().sorted().toList());
+        m.addAttribute("allAuditCount",allLogs.size());
+        m.addAttribute("disputeAuditCount",allLogs.stream().filter(x->x.getAction().startsWith("DISPUTE")).count());
+        m.addAttribute("selectedLog",selected==null?null:allLogs.stream().filter(x->x.getId().equals(selected)).findFirst().orElse(null));
+        return "admin/audit";
     }
 
     private String gradient(List<PieSlice> slices){

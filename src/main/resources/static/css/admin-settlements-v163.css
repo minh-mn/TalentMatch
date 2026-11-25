@@ -1,0 +1,22 @@
+/* V163: danh sach rong 100%; nhan Xem moi hien chi tiet toan trang */
+.st153 .st163-workspace{display:block!important;grid-template-columns:1fr!important;width:100%;}
+.st153 .st163-list-panel{width:100%;max-width:none;}
+.st153 .st163-detail-panel{width:100%;max-width:none;min-height:470px;padding:26px 30px;}
+.st163-detail-header{display:flex;justify-content:space-between;align-items:center;gap:24px;border-bottom:1px solid #dfe7f5;padding-bottom:22px;margin-bottom:24px}
+.st163-detail-header h1{font-size:28px;color:#0b2a6f;margin:8px 0}
+.st163-detail-header p{color:#5e7191;font-size:14px;margin:0}
+.st163-breadcrumb{color:#3968b7;font-size:13px;font-weight:700}
+.st163-back{display:inline-flex;align-items:center;justify-content:center;gap:9px;white-space:nowrap;color:#075be6;background:#ecf3ff;border:1px solid #bed3f8;padding:11px 16px;border-radius:9px;text-decoration:none;font-weight:700}
+.st163-back:hover{background:#dceaff}
+.st163-detail-body{max-width:none}
+.st163-detail-body h2{font-size:19px;color:#0b2a6f;margin:0 0 15px}
+.st163-detail-panel dl{display:grid;grid-template-columns:240px minmax(0,1fr);gap:0;margin:0 0 20px;border:1px solid #e0e9f7;border-radius:10px;overflow:hidden}
+.st163-detail-panel dt,.st163-detail-panel dd{padding:16px 18px!important;margin:0!important;border-bottom:1px solid #e5edf8;font-size:14px}
+.st163-detail-panel dt{background:#f6f9ff;color:#567096;font-weight:600}
+.st163-detail-panel dd{color:#0b2a6f;font-weight:700;overflow-wrap:anywhere}
+.st163-detail-panel dl dt:nth-last-of-type(1),.st163-detail-panel dl dd:nth-last-of-type(1){border-bottom:0}
+.st163-detail-panel .st153-primary{margin-top:8px}
+.st163-list-mode .st153-scroll table{font-size:13px}
+.st163-list-mode .st153-scroll td,.st163-list-mode .st153-scroll th{padding:14px 13px}
+.st163-list-mode .st153-scroll td:last-child a{color:#0b60eb;font-weight:700;text-decoration:none;white-space:nowrap}
+@media(max-width:760px){.st163-detail-header{flex-direction:column;align-items:flex-start}.st163-detail-panel dl{grid-template-columns:38% 62%}.st163-detail-panel dt,.st163-detail-panel dd{padding:11px!important;font-size:12px}.st153 .st163-detail-panel{padding:16px}}

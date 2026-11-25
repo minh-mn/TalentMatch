@@ -1,0 +1,9 @@
+/* V160: details only after explicit selection, list takes full width otherwise. */
+.ac150-columns.tm160-list-only,.ap151-columns.tm160-list-only{grid-template-columns:minmax(0,1fr)!important}
+.tm160-list-only>.ac150-panel,.tm160-list-only>.ap151-card{width:100%;max-width:none}
+.tm160-list-only .ac150-scroller,.tm160-list-only .ap151-scroll{overflow-x:auto}
+.tm160-list-only table{width:100%}
+.tm160-detail-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.tm160-close{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:#1c58bb;font-size:12px;font-weight:700;padding:9px 12px;background:#eff5ff;border:1px solid #bcd4fa;border-radius:8px;white-space:nowrap}
+.tm160-close:hover{background:#dfeaff;border-color:#4285f4}
+@media(max-width:1250px){.tm160-workspace.tm160-has-detail{grid-template-columns:minmax(0,1fr)!important}}

@@ -40,7 +40,7 @@ public class CustomerProgressWorkspaceController {
       case "disputed"->pr.getStatus()==ProjectStatus.DISPUTED;
       default->true;}).filter(pr->"all".equals(type)||("milestone".equals(type) && !byProject.get(pr.getId()).isEmpty())||("full".equals(type) && byProject.get(pr.getId()).isEmpty())).collect(Collectors.toCollection(ArrayList::new));
   int totalPages=Math.max(1,(filtered.size()+4)/5);page=Math.max(0,Math.min(page,totalPages-1));List<Project> visible=filtered.subList(page*5,Math.min(filtered.size(),(page+1)*5));
-  Project choice=null;if(selected!=null)choice=visible.stream().filter(pr->pr.getId().equals(selected)).findFirst().orElse(null);if(choice==null&&!visible.isEmpty())choice=visible.get(0);
+  Project choice=null;if(selected!=null)choice=visible.stream().filter(pr->pr.getId().equals(selected)).findFirst().orElse(null);
   List<Milestone> chosen=choice==null?List.of():byProject.get(choice.getId());Milestone selectedMilestone=null;if(milestone!=null)selectedMilestone=chosen.stream().filter(m->m.getId().equals(milestone)).findFirst().orElse(null);if(selectedMilestone==null&&!chosen.isEmpty())selectedMilestone=chosen.get(0);
   List<ProjectDelivery> evidence=choice==null?List.of():deliveries.findByProjectOrderBySubmittedAtDesc(choice);Milestone pick=selectedMilestone;
   List<ProjectDelivery> current=evidence.stream().filter(d->pick!=null&&d.getMilestone()!=null&&d.getMilestone().getId().equals(pick.getId())).sorted(Comparator.comparing(ProjectDelivery::getVersion).reversed()).toList();

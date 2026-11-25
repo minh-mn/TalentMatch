@@ -34,6 +34,8 @@ public class WalletDemoController {
   }).sorted(java.util.Comparator.comparing(WalletWithdrawal::getCreatedAt,java.util.Comparator.nullsLast(java.util.Comparator.reverseOrder()))).toList();
   model.addAttribute("requests",filtered);model.addAttribute("q",q);model.addAttribute("status",status);
   model.addAttribute("withdrawalTotal",all.size());
+  model.addAttribute("withdrawalHeldAmount",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.PENDING||w.getStatus()==WalletWithdrawal.State.APPROVED).map(WalletWithdrawal::getAmount).reduce(BigDecimal.ZERO,BigDecimal::add));
+  model.addAttribute("withdrawalCompletedAmount",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.COMPLETED).map(WalletWithdrawal::getAmount).reduce(BigDecimal.ZERO,BigDecimal::add));
   model.addAttribute("withdrawalPending",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.PENDING).count());
   model.addAttribute("withdrawalApproved",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.APPROVED).count());
   model.addAttribute("withdrawalCompleted",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.COMPLETED).count());

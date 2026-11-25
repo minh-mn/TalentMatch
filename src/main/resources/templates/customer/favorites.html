@@ -10,7 +10,7 @@
 <div th:replace="~{fragments/common :: flash}"></div>
 <main class="market-main client-main tm-fav-main">
  <div class="fav-shell">
-  <div class="fav-banner"><img th:src="@{/images/talentmatch-customer-favorites-banner-v121.png}" alt="Danh sách Freelancer bạn yêu thích"></div>
+  <section th:replace="~{fragments/common :: clientPageBanner('DANH SÁCH ĐÃ LƯU','Freelancer yêu thích','Lưu lại những Freelancer nổi bật để so sánh, liên hệ lại và xây dựng danh sách ứng viên tiềm năng.','fa-regular fa-heart')}"></section>
   <div class="fav-layout">
    <section class="fav-content">
     <form id="fav-filter" class="fav-toolbar" method="get" th:action="@{/customer/favorites}">
@@ -35,20 +35,9 @@
    <aside class="fav-filters"><h2><i class="fa-solid fa-sliders"></i> Bộ lọc tìm kiếm <a th:href="@{/customer/favorites}">Xóa tất cả</a></h2><h3>Trạng thái</h3><label><input type="radio" form="fav-filter" name="availability" value="all" th:checked="${availability == 'all'}"> Tất cả (<span th:text="${totalSaved}">0</span>)</label><label><input type="radio" form="fav-filter" name="availability" value="online" th:checked="${availability == 'online'}"> Sẵn sàng (<span th:text="${onlineCount}">0</span>)</label><label><input type="radio" form="fav-filter" name="availability" value="offline" th:checked="${availability == 'offline'}"> Chưa sẵn sàng</label><div class="fav-divider"></div><h3>Dự án muốn mời hợp tác</h3><form method="get" th:action="@{/customer/favorites}" id="fav-job-form"><select name="jobId"><option th:each="job:${openJobs}" th:value="${job.id}" th:selected="${selectedJob != null and selectedJob.id.equals(job.id)}" th:text="${job.title}">Dự án</option><option th:if="${#lists.isEmpty(openJobs)}" value="">Chưa có công việc đang tuyển</option></select><button class="fav-submit" type="submit">Chọn công việc</button></form><p class="fav-hint">Lời mời chỉ được gửi cho công việc đang mở tuyển. Nếu chưa có công việc, hãy đăng công việc trước.</p><div class="fav-divider"></div><h3>Gợi ý</h3><p class="fav-hint">Bạn có thể lưu Freelancer ở trang Tìm & gợi ý Freelancer, xem hồ sơ và mời hợp tác cho dự án.</p></aside>
   </div>
  </div>
-  <footer class="fm-footer client-same-footer tm-posted-footer">
-    <div class="fm-footer-top">
-      <div class="fm-footer-intro">
-        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
-        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
-        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
-      </div>
-      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
-      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
-      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
-      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
-    </div>
-    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
-  </footer>
+  <footer th:replace="~{fragments/common :: clientFooter}"></footer>
 </main>
 <script th:replace="~{fragments/common :: scripts}"></script>
+<link rel="stylesheet" th:href="@{/css/client-sidebar-footer-v170.css(v=170)}">
+<link rel="stylesheet" th:href="@{/css/client-unified-v172.css(v=172)}">
 </body></html>

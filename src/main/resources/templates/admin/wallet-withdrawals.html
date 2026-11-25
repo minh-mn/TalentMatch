@@ -3,11 +3,12 @@
 <head th:replace="~{fragments/common :: head('Giải ngân & Rút tiền')}"></head>
 <body class="market-body client-workspace admin-workspace admin-unified">
 <link rel="stylesheet" th:href="@{/css/admin-finance-v130.css(v=130)}">
+<link rel="stylesheet" th:href="@{/css/admin-finance-v162.css(v=162)}">
 <aside th:replace="~{fragments/common :: marketSidebar('wallet')}"></aside>
 <header th:replace="~{fragments/common :: marketTopbar('admin')}"></header>
 <div th:replace="~{fragments/common :: flash}"></div>
-<main class="market-main client-main admin-main"><div class="client-shell admin-shell tm130">
- <section class="tm130-hero"><div><span class="tm130-kicker">QUẢN LÝ TÀI CHÍNH</span><h1>Giải ngân &amp; Rút tiền</h1><p>Kiểm soát yêu cầu rút tiền, theo dõi phê duyệt và lịch sử xử lý ví Freelancer.</p></div><i class="fa-solid fa-money-bill-transfer"></i></section>
+<main class="market-main client-main admin-main"><div class="client-shell admin-shell tm130 tm162">
+ <section th:replace="~{fragments/common :: rolePageBanner('QUẢN LÝ TÀI CHÍNH','Giải ngân & Rút tiền','Kiểm soát yêu cầu rút tiền và lịch sử xử lý ví Freelancer.','fa-solid fa-money-bill-transfer')}" class="tm176-banner-slot"></section>
  <section class="tm130-stats">
   <article><span>Tổng yêu cầu</span><strong th:text="${withdrawalTotal}">0</strong></article>
   <article><span>Chờ duyệt</span><strong th:text="${withdrawalPending}">0</strong></article>
@@ -15,6 +16,7 @@
   <article><span>Đã hoàn tất</span><strong th:text="${withdrawalCompleted}">0</strong></article>
   <article><span>Đã từ chối</span><strong th:text="${withdrawalRejected}">0</strong></article>
  </section>
+ <section class="tm162-withdraw-money"><article><small>Số tiền đang giữ chờ duyệt / hoàn tất</small><strong th:text="${#numbers.formatDecimal(withdrawalHeldAmount,0,'POINT',0,'COMMA')+'đ'}">0đ</strong></article><article><small>Đã rút hoàn tất</small><strong th:text="${#numbers.formatDecimal(withdrawalCompletedAmount,0,'POINT',0,'COMMA')+'đ'}">0đ</strong></article><article><small>Quy trình xử lý</small><strong class="tm162-process">Chờ duyệt → Đã duyệt → Hoàn tất</strong></article></section>
  <div class="tm130-subnav"><a th:href="@{/admin/payments(tab='all')}"><i class="fa-solid fa-receipt"></i> Giao dịch &amp; Thanh toán</a><a class="active" th:href="@{/admin/wallet-withdrawals}"><i class="fa-solid fa-wallet"></i> Yêu cầu rút tiền</a></div>
  <section class="tm130-panel">
   <div class="tm130-panel-heading"><div><h2>Danh sách yêu cầu rút tiền</h2><p>Lọc theo mã yêu cầu, Freelancer, ngân hàng hoặc trạng thái phê duyệt.</p></div><span class="tm130-count" th:text="${#lists.size(requests)}+' kết quả'">0 kết quả</span></div>
@@ -38,7 +40,7 @@
    </td>
   </tr><tr th:if="${#lists.isEmpty(requests)}"><td colspan="6" class="tm130-empty">Không có yêu cầu nào phù hợp với bộ lọc.</td></tr></tbody></table></div>
  </section>
- <p class="tm130-footnote">Các yêu cầu trong môi trường thử nghiệm được xử lý bằng sổ cái mô phỏng; thao tác hoàn tất không chuyển khoản ngân hàng thực tế.</p>
+ 
 </div></main>
-<footer class="admin-shared-footer"><strong>TalentMatch <small>ADMIN WORKSPACE</small></strong><span>Quản trị tài chính &amp; lịch sử quyết định</span><span>© 2026 TalentMatch</span></footer>
+<footer th:replace="~{fragments/common :: adminFooter}"></footer>
 <script th:replace="~{fragments/common :: scripts}"></script></body></html>

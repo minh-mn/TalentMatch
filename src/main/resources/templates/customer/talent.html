@@ -12,9 +12,7 @@
 <div th:replace="~{fragments/common :: flash}"></div>
 <main class="market-main client-main tm-talent-main">
   <div class="tm-talent-shell">
-    <section class="tm-talent-banner" aria-label="Tìm và gợi ý Freelancer">
-      <img th:src="@{/images/talentmatch-client-talent-banner-v97.png}" alt="Tìm freelancer phù hợp cho dự án của bạn" width="2048" height="384">
-    </section>
+    <section th:replace="~{fragments/common :: clientPageBanner('TÌM KIẾM NHÂN TÀI','Tìm & gợi ý Freelancer','Khám phá danh sách Freelancer phù hợp với nhu cầu tuyển dụng của bạn và gửi lời mời hợp tác nhanh chóng.','fa-solid fa-magnifying-glass')}"></section>
 
     <section class="tm-talent-kpis" aria-label="Thống kê Freelancer">
       <div class="tm-talent-kpi"><span class="kpi-icon blue"><i class="fa-regular fa-user"></i></span><div><span th:text="${selected != null ? 'Phù hợp cao (≥' + highMatchThreshold + ' điểm)' : 'Hồ sơ Freelancer'}">Freelancer phù hợp</span><strong th:text="${selected != null ? highMatchCount : totalCandidates}">0</strong></div></div>
@@ -96,20 +94,9 @@
     </div>
     <section class="tm-talent-tips"><h2><i class="fa-solid fa-lightbulb"></i> Mẹo tuyển nhanh Freelancer</h2><div><p><i class="fa-solid fa-bullseye"></i><strong>Xác định rõ yêu cầu</strong><span>Mô tả kỹ năng và kết quả mong đợi trong công việc.</span></p><p><i class="fa-solid fa-sliders"></i><strong>Sử dụng bộ lọc thông minh</strong><span>Chọn kỹ năng, kinh nghiệm và ngân sách phù hợp.</span></p><p><i class="fa-regular fa-star"></i><strong>Đánh giá hồ sơ</strong><span>So sánh kinh nghiệm, sản phẩm đã làm và đánh giá.</span></p></div></section>
   </div>
-  <footer class="fm-footer client-same-footer tm-posted-footer">
-    <div class="fm-footer-top">
-      <div class="fm-footer-intro">
-        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
-        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
-        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
-      </div>
-      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
-      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
-      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
-      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
-    </div>
-    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
-  </footer>
+  <footer th:replace="~{fragments/common :: clientFooter}"></footer>
 </main>
 <script th:replace="~{fragments/common :: scripts}"></script>
+<link rel="stylesheet" th:href="@{/css/client-sidebar-footer-v170.css(v=170)}">
+<link rel="stylesheet" th:href="@{/css/client-unified-v172.css(v=172)}">
 </body></html>

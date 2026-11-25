@@ -3,7 +3,7 @@
 <div th:replace="~{fragments/common :: flash}"></div>
 <main class="market-main client-main admin-main"><div class="admin-shell v74-shell"><section class="v74-banner" aria-label="Banner quản trị">
 <img th:src="@{/images/admin-banner-v74.png}" alt="Quản trị hệ thống dễ dàng và hiệu quả">
-<a class="v74-banner-link" th:href="@{/admin/reports}" aria-label="Xem báo cáo tổng quan"></a>
+<a class="v74-banner-link" th:href="@{/admin/statistics}" aria-label="Xem báo cáo thống kê"></a>
 </section><div class="admin-kpi-grid">
 <a class="admin-kpi purple" th:href="@{/admin/users}"><div class="admin-kpi-icon"><i class="fa-solid fa-users"></i></div><div><small>Tổng người dùng</small><strong th:text="${stats.users}">0</strong><span th:text="|${stats.freelancers} Freelancer · ${stats.customers} Client|">Tài khoản</span></div></a>
 <a class="admin-kpi blue" th:href="@{/admin/jobs}"><div class="admin-kpi-icon"><i class="fa-solid fa-briefcase"></i></div><div><small>Công việc</small><strong th:text="${stats.jobs}">0</strong><span th:text="|${stats.openJobs} đang tuyển|">Đang tuyển</span></div></a>
@@ -16,7 +16,7 @@
 <a th:href="@{/admin/users}"><i class="fa-solid fa-user-check"></i><b>Xét duyệt freelancer</b><small>Kiểm tra người dùng</small></a>
 <a th:href="@{/admin/payments}"><i class="fa-solid fa-credit-card"></i><b>Quản lý thanh toán</b><small>Kiểm tra giao dịch</small></a>
 <a th:href="@{/admin/disputes}"><i class="fa-solid fa-triangle-exclamation"></i><b>Tranh chấp</b><small>Giải quyết khiếu nại</small></a>
-<a th:href="@{/admin/reports}"><i class="fa-solid fa-chart-column"></i><b>Báo cáo thống kê</b><small>Xem số liệu chi tiết</small></a>
+<a th:href="@{/admin/statistics}"><i class="fa-solid fa-chart-column"></i><b>Báo cáo thống kê</b><small>Xem số liệu chi tiết</small></a>
 </div></section><div class="v74-grid-two"><section class="v74-panel v74-pending"><div class="v74-section-head"><h2><i class="fa-solid fa-clipboard-check"></i> Công việc / dự án chờ duyệt</h2><a th:href="@{/admin/jobs}">Xem tất cả →</a></div><p class="v74-desc">Theo dõi các công việc và dự án trên nền tảng.</p>
 <div class="v74-shortcuts"><a th:href="@{/admin/jobs}"><i class="fa-solid fa-briefcase"></i><span><b th:text="${stats.openJobs}">0</b><small>Công việc đang tuyển</small></span><i class="fa-solid fa-arrow-right"></i></a>
 <a th:href="@{/admin/projects}"><i class="fa-solid fa-folder-open"></i><span><b th:text="${stats.projects}">0</b><small>Dự án trong hệ thống</small></span><i class="fa-solid fa-arrow-right"></i></a>
@@ -29,4 +29,4 @@
 <a th:href="@{/admin/users(state='locked')}"><i class="fa-solid fa-user-lock"></i><b th:text="${stats.locked}">0</b><span>Tài khoản bị khóa</span></a>
 </div></section></div><section class="v74-panel"><div class="v74-section-head"><h2><i class="fa-solid fa-layer-group"></i> Danh mục quản trị</h2></div><div class="v74-categories">
 <a th:href="@{/admin/users}"><i class="fa-solid fa-users"></i> Người dùng</a><a th:href="@{/admin/projects}"><i class="fa-solid fa-folder"></i> Dự án</a><a th:href="@{/admin/payments}"><i class="fa-solid fa-wallet"></i> Thanh toán</a><a th:href="@{/admin/reports}"><i class="fa-solid fa-file-lines"></i> Báo cáo</a><a th:href="@{/admin/disputes}"><i class="fa-solid fa-scale-balanced"></i> Tranh chấp</a><a th:href="@{/admin/audit}"><i class="fa-solid fa-clock-rotate-left"></i> Nhật ký</a>
-</div></section></div></main><footer class="admin-shared-footer"><strong>TalentMatch <small>ADMIN WORKSPACE</small></strong><span>Quản trị nền tảng · Phân quyền &amp; nhật ký hoạt động</span><span>© 2026 TalentMatch</span></footer><script th:replace="~{fragments/common :: scripts}"></script></body></html>
+</div></section></div></main><footer th:replace="~{fragments/common :: adminFooter}"></footer><script th:replace="~{fragments/common :: scripts}"></script></body></html>

@@ -1,0 +1,16 @@
+/* V174 - Đồng bộ banner các trang Client theo phong cách Thống kê & Báo cáo */
+.client-workspace .tm174-banner{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 28px;border-radius:16px;border:1px solid #d8e6fb;background:linear-gradient(90deg,#edf5ff 0%,#ddecff 46%,#b8d7ff 100%);box-shadow:0 8px 24px rgba(24,77,168,.06);margin:0 0 14px;min-height:132px;overflow:hidden}
+.client-workspace .tm174-banner-copy{min-width:0;flex:1}
+.client-workspace .tm174-banner-eyebrow{display:inline-block;margin-bottom:10px;font-size:12px;line-height:1.2;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#2d6bf3}
+.client-workspace .tm174-banner h1{margin:0 0 8px;font-size:26px;line-height:1.2;font-weight:800;color:#0b2a6f;letter-spacing:-.02em}
+.client-workspace .tm174-banner p{margin:0;max-width:760px;font-size:14px;line-height:1.65;color:#58709b}
+.client-workspace .tm174-banner-icon{flex:0 0 88px;width:88px;height:88px;border-radius:22px;display:grid;place-items:center;background:rgba(47,111,237,.10);color:#2f6fed;box-shadow:inset 0 0 0 1px rgba(47,111,237,.08)}
+.client-workspace .tm174-banner-icon i{font-size:42px}
+.client-workspace .client-page-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:26px 28px;border-radius:16px;border:1px solid #d8e6fb;background:linear-gradient(90deg,#edf5ff 0%,#ddecff 46%,#b8d7ff 100%);box-shadow:0 8px 24px rgba(24,77,168,.06);margin:0 0 14px}
+.client-workspace .client-page-heading .client-eyebrow{display:inline-block;margin-bottom:10px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#2d6bf3}
+.client-workspace .client-page-heading h1{margin:0 0 8px;font-size:26px;line-height:1.2;font-weight:800;color:#0b2a6f}
+.client-workspace .client-page-heading h1 span{color:#2f6fed}
+.client-workspace .client-page-heading p{margin:0;max-width:760px;font-size:14px;line-height:1.65;color:#58709b}
+.client-workspace .client-page-heading .client-btn{align-self:center;white-space:nowrap}
+@media (max-width: 900px){.client-workspace .tm174-banner,.client-workspace .client-page-heading{padding:22px 18px;gap:16px}.client-workspace .tm174-banner h1,.client-workspace .client-page-heading h1{font-size:22px}.client-workspace .tm174-banner-icon{width:72px;height:72px;flex-basis:72px}.client-workspace .tm174-banner-icon i{font-size:34px}}
+@media (max-width: 640px){.client-workspace .tm174-banner,.client-workspace .client-page-heading{flex-direction:column;align-items:flex-start}.client-workspace .tm174-banner-icon{display:none}}

@@ -118,22 +118,11 @@
       <form th:action="@{/customer/invitations}" method="post"><input type="hidden" name="freelancerId" th:value="${profile.id}"><label for="tmfp-job-id">Công việc đang tuyển <b>*</b></label><select name="jobId" id="tmfp-job-id" required><option value="">-- Chọn công việc --</option><option th:each="job : ${clientJobs}" th:value="${job.id}" th:text="${job.title}">Tên công việc</option></select><label for="tmfp-invite-note">Lời nhắn</label><textarea id="tmfp-invite-note" name="message" rows="4" maxlength="1000" placeholder="Chúng tôi quan tâm đến hồ sơ của bạn và mong muốn mời bạn trao đổi về công việc..."></textarea><div class="tmfp-modal-buttons"><button type="button" class="tmfp-btn outline" data-invite-close>Hủy</button><button type="submit" class="tmfp-btn primary">Gửi lời mời</button></div></form>
     </div>
   </div>
-  <footer class="fm-footer client-same-footer tm-posted-footer">
-    <div class="fm-footer-top">
-      <div class="fm-footer-intro">
-        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
-        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
-        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
-      </div>
-      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
-      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
-      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
-      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
-    </div>
-    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
-  </footer>
+  <footer th:replace="~{fragments/common :: clientFooter}"></footer>
 </main>
 <script th:replace="~{fragments/common :: scripts}"></script>
 <script th:src="@{/js/customer-freelancer-profile-v103.js(v=103)}" defer></script>
+<link rel="stylesheet" th:href="@{/css/client-sidebar-footer-v170.css(v=170)}">
+<link rel="stylesheet" th:href="@{/css/client-unified-v172.css(v=172)}">
 </body>
 </html>

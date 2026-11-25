@@ -18,9 +18,7 @@
 <div th:replace="~{fragments/common :: flash}"></div>
 <main class="fm-main">
 <div class="tm37-content">
-  <section class="tm37-banner" aria-label="Việc quan tâm">
-    <img th:src="@{/images/talentmatch-saved-banner-v79.png}" alt="Những công việc bạn đã quan tâm">
-  </section>
+  <section th:replace="~{fragments/common :: rolePageBanner('CƠ HỘI ĐÃ LƯU','Việc quan tâm','Quản lý danh sách công việc đã lưu để ứng tuyển vào thời điểm phù hợp.','fa-regular fa-heart')}" class="tm176-banner-slot"></section>
   <section class="tm37-layout">
     <div class="tm37-maincol">
       <form id="tm37-search" class="tm37-search" th:action="@{/freelancer/saved-jobs}" method="get">

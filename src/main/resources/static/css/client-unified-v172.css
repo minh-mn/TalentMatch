@@ -1,0 +1,38 @@
+/* V172 – Client shared layout & open-on-click full-page details */
+@media (min-width:751px){
+body:has(.tm118-client-nav) main.market-main{margin-left:230px!important;width:calc(100% - 230px)!important;max-width:calc(100% - 230px)!important;box-sizing:border-box!important;min-width:0!important}
+}
+/* Main page consistent outer gutters below the fixed topbar. Exclude already-custom dashboard. */
+body:has(.tm118-client-nav):not(:has(.cr-hero)) :is(.cc133-wrap,.cp135-wrap,.tm-contracts-shell,.tm171-shell,.tm-posted-shell,.cq126-shell,.tm124-shell,.cpay-shell){max-width:none!important;box-sizing:border-box!important;margin-left:0!important;margin-right:0!important}
+body.tm-client-contracts-v134 main.market-main.cc133-main{padding:78px 18px 24px!important}
+body.tm-client-progress-v135 main.market-main.cp135-main{padding:78px 18px 24px!important}
+body:has(.tm118-client-nav) .tm-contracts-main{padding-left:18px!important;padding-right:18px!important}
+/* Image banners share exact 1920 x 360 ratio, with no stretching or oversized height */
+body:has(.tm118-client-nav) :is(.cc133-banner,.cp135-banner,.tm-contracts-hero,.tm-posted-banner,.tm-jobform-banner,.tm-sent-banner,.tm-app-banner,.fav-banner,.tm-talent-banner,.tm-transactions-banner,.tm-company-banner){width:100%!important;aspect-ratio:16/3!important;height:auto!important;max-height:none!important;border-radius:12px!important;overflow:hidden!important;box-sizing:border-box!important}
+body:has(.tm118-client-nav) :is(.cc133-banner,.cp135-banner,.tm-contracts-hero,.tm-posted-banner,.tm-jobform-banner,.tm-sent-banner,.tm-app-banner,.fav-banner,.tm-talent-banner,.tm-transactions-banner,.tm-company-banner) > img{display:block!important;width:100%!important;height:100%!important;aspect-ratio:16/3!important;object-fit:cover!important;max-height:none!important;min-height:0!important}
+body:has(.tm118-client-nav) :is(.tm171-hero,.cpay-hero,.cq126-hero,.tm124-hero,.tm132-hero){min-height:0!important;max-height:none!important;box-sizing:border-box!important;border-radius:12px!important}
+/* On selection open a real full-width content screen, never a 2-column master/detail */
+body.tm-client-contracts-v134 .cc133-grid.tm172-list-open,
+body.tm-client-contracts-v134 .cc133-grid.tm172-detail-open,
+body.tm-client-progress-v135 .cp135-layout.tm172-list-open,
+body.tm-client-progress-v135 .cp135-layout.tm172-detail-open{display:block!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important}
+body.tm-client-contracts-v134 .cc133-grid.tm172-list-open > .cc133-list-panel,
+body.tm-client-contracts-v134 .cc133-grid.tm172-detail-open > .cc133-detail,
+body.tm-client-progress-v135 .cp135-layout.tm172-list-open > .cp135-list,
+body.tm-client-progress-v135 .cp135-layout.tm172-detail-open > .cp135-detail{display:block!important;width:100%!important;max-width:none!important;min-width:0!important;margin:0!important;box-sizing:border-box!important}
+body.tm-client-contracts-v134 .cc133-grid.tm172-detail-open > .cc133-list-panel,
+body.tm-client-contracts-v134 .cc133-grid.tm172-list-open > .cc133-detail,
+body.tm-client-progress-v135 .cp135-layout.tm172-detail-open > .cp135-list,
+body.tm-client-progress-v135 .cp135-layout.tm172-list-open > .cp135-detail{display:none!important}
+.tm172-detail-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 18px;padding:0 0 14px;border-bottom:1px solid #e0e8f5;flex-wrap:wrap}
+.tm172-back{display:inline-flex;align-items:center;gap:9px;border:1px solid #cbdcf7;color:#0b4fc4!important;background:#eef5ff;border-radius:9px;padding:11px 15px;font-size:13px;font-weight:750;text-decoration:none!important;min-height:40px}
+.tm172-back:hover{background:#e1eeff;border-color:#2f6fed}
+.tm172-detail-kicker{font-size:11px;font-weight:800;color:#6080aa;letter-spacing:.06em}
+body.tm-client-contracts-v134 .cc133-grid.tm172-detail-open .cc133-detail{padding:24px!important}
+body.tm-client-contracts-v134 .cc133-grid.tm172-detail-open .cc133-details{grid-template-columns:minmax(145px,1fr) minmax(0,3fr)}
+body.tm-client-progress-v135 .cp135-layout.tm172-detail-open .cp135-detail{max-width:none!important}
+body.tm-client-progress-v135 .cp135-layout.tm172-detail-open .cp135-projecthead{padding:22px!important}
+body.tm-client-progress-v135 .cp135-layout.tm172-detail-open .cp135-meta{grid-template-columns:repeat(5,minmax(0,1fr))}
+body:has(.tm118-client-nav) :is(.cc133-contract,.cp135-project){scroll-margin-top:112px}
+@media(max-width:980px){body.tm-client-progress-v135 .cp135-layout.tm172-detail-open .cp135-meta{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:750px){body.tm-client-contracts-v134 main.market-main.cc133-main,body.tm-client-progress-v135 main.market-main.cp135-main{padding:76px 12px 18px!important}body.tm-client-progress-v135 .cp135-layout.tm172-detail-open .cp135-meta{grid-template-columns:repeat(2,minmax(0,1fr))}}

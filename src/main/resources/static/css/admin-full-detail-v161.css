@@ -1,0 +1,48 @@
+/* V161: Admin chi tiết dạng trang nội dung toàn chiều rộng, không chia đôi. */
+.ac150-columns.tm161-full-detail,
+.ap151-columns.tm161-full-detail {
+    display:block!important;
+    grid-template-columns:none!important;
+    width:100%!important;
+}
+.tm161-full-detail > .tm161-detail-page {
+    display:block;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0;
+    box-sizing:border-box;
+    padding:24px 28px;
+    margin:0;
+}
+.tm161-full-detail .tm161-detail-page h2 {font-size:23px;line-height:1.35;margin:0;}
+.tm161-full-detail .tm161-detail-page .tm160-detail-head {
+    display:flex;align-items:center;gap:14px;justify-content:space-between;
+    flex-wrap:wrap;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid #e0eaf8;
+}
+.tm161-full-detail .tm160-close {
+    margin-left:auto;background:#edf4ff;border-color:#c7d9f5;
+    color:#1251ab;padding:11px 16px;font-size:13px;
+}
+.tm161-full-detail .tm159-signatures,
+.tm161-full-detail .tm159-metrics,
+.tm161-full-detail .ap151-progress {gap:16px;}
+.tm161-full-detail .ac150-detail-tabs,
+.tm161-full-detail .ap151-tabs {margin:18px 0;}
+.tm161-full-detail .ac150-detail dl {
+    grid-template-columns:minmax(160px,220px) minmax(0,1fr);
+    font-size:14px;line-height:1.6;padding:20px 24px;gap:14px 24px;
+}
+.tm161-full-detail .ac150-section,
+.tm161-full-detail .ap151-detail>div:not(.tm160-detail-head) {max-width:none;}
+.tm161-full-detail .ac150-section {padding-top:18px;margin-top:22px;}
+.tm161-full-detail .ac150-section h3,
+.tm161-full-detail .ap151-detail h3 {font-size:18px;}
+.tm161-full-detail .ap151-milestone {padding:16px 12px;gap:18px;grid-template-columns:minmax(0,1fr) 75px 160px;}
+.tm161-full-detail .ap151-progress > div {padding:20px;}
+.tm161-full-detail .ap151-progress strong {font-size:30px;}
+@media(max-width:800px){
+ .tm161-full-detail>.tm161-detail-page{padding:16px;}
+ .tm161-full-detail .ac150-detail dl{grid-template-columns:1fr;gap:5px;padding:15px;}
+ .tm161-full-detail .ap151-milestone{grid-template-columns:1fr;}
+ .tm161-full-detail .tm160-detail-head{align-items:flex-start;}
+}

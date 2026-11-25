@@ -1,53 +1,20 @@
-<!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/common :: head('Khiếu nại & Hỗ trợ')}"></head>
-<body class="market-body client-workspace client-v52-page cd-dashboard">
-<link rel="stylesheet" th:href="@{/css/customer-footer-banner-v72.css(v=72)}">
-<link rel="stylesheet" th:href="@{/css/client-sidebar-v118.css(v=118)}">
-<aside th:replace="~{fragments/common :: marketSidebar('support')}"></aside>
-<header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Khiếu nại & Hỗ trợ | TalentMatch')}"></head>
+<body class="market-body client-workspace client-v52-page cd-dashboard tm171-page">
+<aside th:replace="~{fragments/common :: marketSidebar('support')}"></aside><header th:replace="~{fragments/common :: marketClientTopbar()}"></header>
 <div th:replace="~{fragments/common :: flash}"></div>
-<main class="market-main client-main">
-  <div class="client-shell" style="max-width:1180px;margin:32px auto;padding:24px">
-    <header style="margin-bottom:24px">
-      <h1>Khiếu nại &amp; Hỗ trợ</h1>
-      <p>Gửi sự việc liên quan đến dự án để đội ngũ TalentMatch tiếp nhận và xem xét.</p>
-      <a th:href="@{/freelancer/community}">Xem Hỏi đáp cộng đồng</a>
-    </header>
-    <section class="client-card" style="padding:24px;margin-bottom:24px">
-      <h2>Gửi yêu cầu hỗ trợ về dự án</h2>
-      <p>Với dự án đã thanh toán, việc gửi yêu cầu không tự hoàn tiền hoặc thay đổi trạng thái giao dịch.</p>
-      <form method="post" th:action="@{/customer/support/reports}">
-        <label for="support-project">Dự án</label>
-        <select id="support-project" name="projectId" required>
-          <option value="">Chọn dự án cần hỗ trợ</option>
-          <option th:each="project : ${ownedProjects}" th:value="${project.id}" th:text="${project.title}">Dự án</option>
-        </select>
-        <label for="support-reason">Lý do</label>
-        <input id="support-reason" name="reason" required maxlength="120" placeholder="Ví dụ: Không đúng thỏa thuận">
-        <label for="support-description">Mô tả sự việc</label>
-        <textarea id="support-description" name="description" required minlength="15" maxlength="5000" rows="5"
-                  placeholder="Mô tả nội dung cần hỗ trợ và thông tin liên quan"></textarea>
-        <button type="submit">Gửi yêu cầu</button>
-      </form>
-      <p th:if="${#lists.isEmpty(ownedProjects)}">Bạn chưa có dự án để gửi khiếu nại.</p>
-    </section>
-    <section class="client-card" style="padding:24px">
-      <h2>Yêu cầu đã gửi</h2>
-      <p th:if="${#lists.isEmpty(requests)}">Bạn chưa gửi yêu cầu hỗ trợ nào.</p>
-      <article th:each="request : ${requests}" style="border-top:1px solid #dbe5f4;padding:16px 0">
-        <h3 th:text="${request.projectTitle}">Dự án</h3>
-        <p><strong>Lý do:</strong> <span th:text="${request.reason}">Lý do</span></p>
-        <p th:text="${request.description}">Mô tả</p>
-        <small>
-          <span th:text="${request.status}">PENDING</span>
-          · <span th:text="${request.reportedUser}">Đối tác</span>
-          · <span th:text="${request.createdAt != null ? #temporals.format(request.createdAt,'dd/MM/yyyy HH:mm') : 'Vừa gửi'}">Ngày gửi</span>
-        </small>
-      </article>
-    </section>
-  </div>
-</main>
-<script th:replace="~{fragments/common :: scripts}"></script>
-</body>
-</html>
+<main class="market-main client-main tm171-main tm175-unified-main"><div class="tm171-container tm175-unified-container">
+<header class="tm171-hero"><div><span class="tm171-overline">TRUNG TÂM HỖ TRỢ CLIENT</span><h1>Khiếu nại &amp; Hỗ trợ</h1><p>Gửi yêu cầu theo dự án, theo dõi trạng thái và cung cấp thông tin rõ ràng để xử lý.</p></div><i class="fa-solid fa-headset"></i></header>
+<section class="tm171-kpis tm171-support-kpis"><div class="tm171-kpi"><i class="fa-solid fa-ticket"></i><div><span>Tổng yêu cầu đã gửi</span><strong th:text="${totalRequests}">0</strong></div></div><div class="tm171-kpi"><i class="fa-solid fa-clock"></i><div><span>Chờ tiếp nhận</span><strong th:text="${pendingRequests}">0</strong></div></div><div class="tm171-kpi"><i class="fa-solid fa-check-circle"></i><div><span>Đã kết thúc xử lý</span><strong th:text="${processedRequests}">0</strong></div></div></section>
+<div th:if="${selectedRequest!=null}" class="tm171-panel tm171-detail"><div class="tm171-panel-head"><div><h2 th:text="${'Chi tiết yêu cầu #'+selectedRequest.id}">Chi tiết</h2><span th:text="${selectedRequest.projectTitle}">Dự án</span></div><a th:href="@{/customer/support(q=${q},status=${statusFilter})}" class="tm171-secondary">← Quay lại danh sách</a></div>
+  <dl class="tm171-detail-grid"><div><dt>Trạng thái</dt><dd><span class="tm171-status" th:attr="data-status=${selectedRequest.status}" th:text="${@vnStatus.label(selectedRequest.status)}">Trạng thái</span></dd></div><div><dt>Ngày gửi</dt><dd th:text="${#temporals.format(selectedRequest.createdAt,'dd/MM/yyyy HH:mm')}">—</dd></div><div><dt>Dự án</dt><dd th:text="${selectedRequest.projectTitle}">Dự án</dd></div><div><dt>Đối tác liên quan</dt><dd th:text="${selectedRequest.reportedUser}">Freelancer</dd></div><div><dt>Lý do</dt><dd th:text="${selectedRequest.reason}">Lý do</dd></div></dl><h3>Nội dung yêu cầu</h3><p class="tm171-description" th:text="${selectedRequest.description}">Mô tả</p><a th:if="${selectedRequest.projectId!=null}" th:href="@{/customer/projects}" class="tm171-secondary">Xem dự án</a>
+</div>
+<th:block th:if="${selectedRequest==null}">
+<div class="tm171-two-col"><section class="tm171-panel"><div class="tm171-panel-head"><h2>Gửi yêu cầu hỗ trợ</h2></div>
+<form method="post" th:action="@{/customer/support/reports}" class="tm171-support-form"><label>Dự án liên quan<select name="projectId" required><option value="">Chọn dự án</option><option th:each="project:${ownedProjects}" th:value="${project.id}" th:text="${project.title}">Dự án</option></select></label><label>Lý do khiếu nại<input name="reason" placeholder="Ví dụ: Trễ deadline, sản phẩm không đúng yêu cầu" minlength="1" maxlength="120" required></label><label>Thông tin và bằng chứng<textarea name="description" rows="6" minlength="15" maxlength="5000" placeholder="Mô tả sự việc, mốc thời gian, các file hoặc liên kết bằng chứng..." required></textarea></label><button type="submit" class="tm171-primary" th:disabled="${#lists.isEmpty(ownedProjects)}"><i class="fa-solid fa-paper-plane"></i> Gửi yêu cầu</button><p class="tm171-help" th:if="${#lists.isEmpty(ownedProjects)}">Chưa có dự án để gửi yêu cầu.</p></form></section>
+<section class="tm171-panel"><div class="tm171-panel-head"><h2>Quy trình giải quyết</h2></div><ol class="tm171-steps"><li><strong>Gửi hồ sơ</strong><span>Nêu lý do, dự án và các bằng chứng liên quan.</span></li><li><strong>Đội ngũ kiểm tra</strong><span>Đối chiếu lịch sử, điều khoản hợp đồng và tiến độ.</span></li><li><strong>Bổ sung thông tin</strong><span>Cung cấp chứng cứ nếu được yêu cầu.</span></li><li><strong>Phản hồi kết quả</strong><span>Theo dõi trạng thái tại danh sách yêu cầu.</span></li></ol><div class="tm171-info"><i class="fa-solid fa-circle-info"></i> Gửi khiếu nại không tự hoàn tiền hay thay đổi trạng thái thanh toán.</div></section></div>
+<section class="tm171-panel"><div class="tm171-panel-head"><h2>Danh sách yêu cầu đã gửi</h2></div>
+<form method="get" th:action="@{/customer/support}" class="tm171-filter"><label class="tm171-wide">Tìm kiếm<input type="search" name="q" th:value="${q}" placeholder="Mã yêu cầu, dự án, lý do..."></label><label>Trạng thái<select name="status"><option value="all" th:selected="${statusFilter=='all'}">Tất cả</option><option value="PENDING" th:selected="${statusFilter=='PENDING'}">Chờ tiếp nhận</option><option value="REVIEWING" th:selected="${statusFilter=='REVIEWING'}">Đang xác minh</option><option value="NEED_EVIDENCE" th:selected="${statusFilter=='NEED_EVIDENCE'}">Cần bổ sung</option><option value="RESOLVED" th:selected="${statusFilter=='RESOLVED'}">Đã giải quyết</option><option value="REJECTED" th:selected="${statusFilter=='REJECTED'}">Đã từ chối</option></select></label><button class="tm171-primary" type="submit">Lọc</button><a class="tm171-secondary" th:href="@{/customer/support}">Đặt lại</a></form>
+<div class="tm171-table-scroll"><table class="tm171-table"><thead><tr><th>Mã</th><th>Dự án</th><th>Lý do</th><th>Ngày gửi</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody><tr th:each="r:${requests}"><td th:text="${'YC-'+r.id}">YC</td><td th:text="${r.projectTitle}">Dự án</td><td th:text="${r.reason}">Lý do</td><td th:text="${#temporals.format(r.createdAt,'dd/MM/yyyy HH:mm')}">Ngày</td><td><span class="tm171-status" th:attr="data-status=${r.status}" th:text="${@vnStatus.label(r.status)}">Trạng thái</span></td><td><a th:href="@{/customer/support(selected=${r.id},q=${q},status=${statusFilter})}">Xem chi tiết</a></td></tr></tbody></table></div><p class="tm171-empty" th:if="${#lists.isEmpty(requests)}">Không có yêu cầu phù hợp với bộ lọc.</p></section>
+</th:block></div><footer th:replace="~{fragments/common :: clientFooter}"></footer></main><script th:replace="~{fragments/common :: scripts}"></script><link rel="stylesheet" th:href="@{/css/client-unified-v172.css(v=172)}">
+</body></html>

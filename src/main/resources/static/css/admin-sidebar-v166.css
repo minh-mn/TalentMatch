@@ -1,0 +1,78 @@
+/* V166 - Admin sidebar đồng bộ nhịp bố cục với Freelancer, chỉ tác động vai trò Admin. */
+body.admin-workspace { --admin147-w:230px !important; }
+body.admin-workspace aside.market-sidebar {
+  width:230px!important; min-width:230px!important; max-width:230px!important;
+  padding:9px 8px 0!important; display:flex!important; flex-direction:column!important;
+  overflow:hidden!important; background:#fff!important; box-shadow:none!important;
+}
+body.admin-workspace aside.market-sidebar .market-brand-wrap {
+  padding:10px 9px 13px!important; margin:0 0 3px!important;
+  border-bottom:1px solid #edf0f5!important; flex-shrink:0!important;
+}
+body.admin-workspace aside.market-sidebar .market-brand {gap:9px!important;min-height:35px!important;}
+body.admin-workspace aside.market-sidebar .admin147-brand-icon {
+  width:34px!important; min-width:34px!important; height:34px!important; border-radius:9px!important;
+}
+body.admin-workspace aside.market-sidebar .admin147-brand-icon i {font-size:17px!important;}
+body.admin-workspace aside.market-sidebar .market-brand strong {font-size:16px!important;color:#0b2a6f!important;}
+body.admin-workspace aside.market-sidebar .market-brand small {font-size:8px!important;letter-spacing:.25px!important;}
+body.admin-workspace aside.market-sidebar .admin147-profile {
+  flex-shrink:0!important; margin:5px 7px 5px!important; padding:10px 0 12px!important;
+  border-bottom:1px solid #e6eaf1!important;
+}
+body.admin-workspace aside.market-sidebar .admin147-avatar {width:33px!important;height:33px!important;}
+body.admin-workspace aside.market-sidebar .admin147-profile-copy strong {font-size:12px!important;font-weight:800!important;}
+body.admin-workspace aside.market-sidebar .market-side-section-auth {
+  flex:1 1 auto!important; min-height:0!important; overflow-x:hidden!important; overflow-y:auto!important;
+  padding:0 1px 8px!important; margin:0!important; scrollbar-width:thin;
+  scrollbar-color:#d5deed transparent;
+}
+body.admin-workspace aside.market-sidebar .admin-nav {
+  display:flex!important; flex-direction:column!important; gap:4px!important; padding:0!important; margin:0!important;
+}
+body.admin-workspace aside.market-sidebar .admin-nav .tm118-group-title {
+  margin:3px 0 1px!important; padding:10px 10px 4px!important; display:block!important;
+  font:800 9px/1.1 Inter,Arial,sans-serif!important; letter-spacing:.2px!important; color:#8b9097!important;
+}
+body.admin-workspace aside.market-sidebar .admin-nav>a {
+  display:flex!important; align-items:center!important; gap:10px!important;
+  width:100%!important; box-sizing:border-box!important; min-height:34px!important;
+  padding:7px 9px!important; margin:0!important; border:0!important; border-radius:6px!important;
+  font:700 13px/1.25 Inter,Arial,sans-serif!important; color:#111827!important;
+  background:transparent!important; box-shadow:none!important; white-space:normal!important;
+  overflow-wrap:normal!important; text-decoration:none!important;
+}
+body.admin-workspace aside.market-sidebar .admin-nav>a:hover:not(.active){background:#f0f5ff!important;color:#0b2a6f!important;}
+body.admin-workspace aside.market-sidebar .admin-nav>a.active{
+  background:#2f6fed!important;color:#fff!important;box-shadow:0 3px 8px #2f6fed24!important;
+}
+body.admin-workspace aside.market-sidebar .admin-nav>a .market-side-icon {
+  display:inline-flex!important; align-items:center!important; justify-content:center!important;
+  flex:0 0 20px!important; width:20px!important; min-width:20px!important; height:20px!important;
+  font-size:17px!important; color:inherit!important; margin:0!important;
+}
+body.admin-workspace aside.market-sidebar .admin-nav>a .market-side-icon i {font-size:16px!important;color:inherit!important;}
+body.admin-workspace aside.market-sidebar .market-side-bottom-auth {
+  display:block!important; position:relative!important; flex:0 0 auto!important;
+  padding:10px 7px 12px!important; margin:0!important; border-top:1px solid #edf0f5!important;
+  background:#fff!important; z-index:2!important;
+}
+body.admin-workspace aside.market-sidebar .admin147-logout {width:100%!important;margin:0!important;}
+body.admin-workspace aside.market-sidebar .admin147-logout button {
+  width:100%!important; min-height:38px!important; display:flex!important; align-items:center!important;
+  justify-content:flex-start!important; gap:11px!important; border-radius:7px!important;
+  padding:9px 12px!important; background:#fff0f0!important; border:1px solid #ffe0e0!important;
+  color:#dc2626!important; text-align:left!important; font:700 13px/1.2 Inter,Arial,sans-serif!important;
+  box-shadow:none!important; cursor:pointer!important;
+}
+body.admin-workspace aside.market-sidebar .admin147-logout button:hover{background:#ffe4e4!important;}
+body.admin-workspace .market-topbar {left:230px!important;width:calc(100% - 230px)!important;}
+body.admin-workspace .market-main {margin-left:230px!important;width:calc(100% - 230px)!important;}
+body.admin-workspace .admin-shared-footer {margin-left:230px!important;}
+@media(max-width:900px){
+ body.admin-workspace{--admin147-w:0px!important;}
+ body.admin-workspace aside.market-sidebar{display:none!important;}
+ body.admin-workspace .market-topbar{left:0!important;width:100%!important;}
+ body.admin-workspace .market-main{margin-left:0!important;width:100%!important;}
+ body.admin-workspace .admin-shared-footer{margin-left:0!important;}
+}

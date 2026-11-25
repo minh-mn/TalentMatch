@@ -18,6 +18,9 @@ public class NotificationService {
     }
     public List<Notification> inbox(User user){return repository.findTop100ByRecipientOrderByCreatedAtDesc(user);}
     public long unread(User user){return repository.countByRecipientAndReadFalse(user);}
+    @Transactional public void markAllRead(User user){
+        repository.markAllReadForUser(user);
+    }
     @Transactional public String read(Long id,User user){
         Notification n=repository.findById(id).orElseThrow(()->new IllegalArgumentException("Không tìm thấy thông báo."));
         if(!n.getRecipient().getId().equals(user.getId()))throw new IllegalArgumentException("Bạn không sở hữu thông báo.");

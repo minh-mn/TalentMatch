@@ -12,14 +12,7 @@
   <div th:replace="~{fragments/common :: flash}"></div>
   <main class="market-main client-main tm-posted-main tm-client-messages-main tm89-main">
     <div class="tm89-content">
-        <section class="tm100-hero" aria-label="Tin nhắn TalentMatch">
-          <div class="tm100-hero-copy">
-            <span class="tm100-hero-tag"><i class="fa-regular fa-comments"></i> Tin nhắn</span>
-            <h1>Kết nối <em>dễ dàng hơn</em></h1>
-            <p>Trao đổi trực tiếp với freelancer, thảo luận dự án<br class="tm100-desktop-break"> và xây dựng mối quan hệ hợp tác lâu dài.</p>
-          </div>
-          <img class="tm100-hero-art" th:src="@{/images/talentmatch-client-chat-art-v100.jpg}" alt="Minh họa trao đổi tin nhắn và hợp tác" width="1078" height="682">
-        </section>
+        <section th:replace="~{fragments/common :: clientPageBanner('TRAO ĐỔI TRỰC TIẾP','Tin nhắn','Kết nối với Freelancer, thảo luận dự án và phản hồi nhanh trong không gian trò chuyện tập trung.','fa-regular fa-comments')}"></section>
 
         <div class="tm89-layout">
             <!-- CỘT 1: DANH SÁCH HỘI THOẠI -->
@@ -268,22 +261,11 @@
             }
         });
     </script>
-  <footer class="fm-footer client-same-footer tm-posted-footer">
-    <div class="fm-footer-top">
-      <div class="fm-footer-intro">
-        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
-        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
-        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
-      </div>
-      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
-      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
-      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
-      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
-    </div>
-    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
-  </footer>
+  <footer th:replace="~{fragments/common :: clientFooter}"></footer>
 
   </main>
   <script th:replace="~{fragments/common :: scripts}"></script>
+<link rel="stylesheet" th:href="@{/css/client-sidebar-footer-v170.css(v=170)}">
+<link rel="stylesheet" th:href="@{/css/client-unified-v172.css(v=172)}">
 </body>
 </html>

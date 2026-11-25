@@ -11,9 +11,7 @@
 <div th:replace="~{fragments/common :: flash}"></div>
 <main class="market-main client-main tm-posted-main tm-sent-main">
   <div class="tm-posted-shell tm-sent-shell">
-    <section class="tm-sent-banner" aria-label="Quản lý các lời mời đã gửi">
-      <img th:src="@{/images/talentmatch-client-sent-invitations-v98.jpg}" alt="Quản lý các lời mời đã gửi" width="1920" height="384">
-    </section>
+    <section th:replace="~{fragments/common :: clientPageBanner('KẾT NỐI HỢP TÁC','Lời mời đã gửi','Theo dõi các lời mời đã gửi, phản hồi của Freelancer và hiệu quả tiếp cận ứng viên cho từng dự án.','fa-regular fa-paper-plane')}"></section>
 
     <section class="tm-sent-kpis" aria-label="Thống kê lời mời">
       <div class="tm-sent-kpi"><span class="tm-kpi-icon sky"><i class="fa-solid fa-paper-plane"></i></span><div><strong th:text="${invitationCount}">0</strong><small>Tổng lời mời đã gửi</small></div></div>
@@ -67,22 +65,11 @@
     </nav>
   </div>
 
-  <footer class="fm-footer client-same-footer tm-posted-footer">
-    <div class="fm-footer-top">
-      <div class="fm-footer-intro">
-        <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
-        <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
-        <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span><span aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></span></div>
-      </div>
-      <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a><a th:href="@{/#pricing}">Bảng giá</a></div>
-      <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/jobs}">Khám phá dự án</a></div>
-      <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a><a th:href="@{/customer/history}">Lịch sử giao dịch</a></div>
-      <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a><a th:href="@{/#how}">Trung tâm trợ giúp</a></div>
-    </div>
-    <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
-  </footer>
+  <footer th:replace="~{fragments/common :: clientFooter}"></footer>
 
 </main>
 <script th:replace="~{fragments/common :: scripts}"></script>
+<link rel="stylesheet" th:href="@{/css/client-sidebar-footer-v170.css(v=170)}">
+<link rel="stylesheet" th:href="@{/css/client-unified-v172.css(v=172)}">
 </body>
 </html>

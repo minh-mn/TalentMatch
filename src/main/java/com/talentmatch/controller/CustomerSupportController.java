@@ -36,7 +36,10 @@ public class CustomerSupportController {
 
     @GetMapping
     @Transactional(readOnly = true)
-    public String index(Authentication auth, Model model) {
+    public String index(Authentication auth, Model model,
+                        @RequestParam(defaultValue="") String q,
+                        @RequestParam(defaultValue="all") String status,
+                        @RequestParam(required=false) Long selected) {
         User customer = customer(auth);
         List<SupportProject> ownedProjects = projects.findByCustomerOrderByCreatedAtDesc(customer).stream()
                 .map(project -> new SupportProject(project.getId(), projectTitle(project), project.getStatus().name()))
@@ -53,7 +56,16 @@ public class CustomerSupportController {
                         report.getCreatedAt()))
                 .toList();
         model.addAttribute("ownedProjects", ownedProjects);
-        model.addAttribute("requests", requests);
+        String query=q==null?"":q.trim().toLowerCase(java.util.Locale.ROOT);
+        String safeStatus=java.util.Set.of("all","PENDING","REVIEWING","RESOLVED","REJECTED","NEED_EVIDENCE").contains(status)?status:"all";
+        List<SupportRequest> filtered=requests.stream().filter(r->"all".equals(safeStatus)||safeStatus.equalsIgnoreCase(r.status()))
+           .filter(r->query.isBlank()||(r.projectTitle()+" "+r.reason()+" "+r.description()+" "+r.id()).toLowerCase(java.util.Locale.ROOT).contains(query)).toList();
+        model.addAttribute("requests",filtered);
+        model.addAttribute("totalRequests",requests.size());
+        model.addAttribute("pendingRequests",requests.stream().filter(r->"PENDING".equals(r.status())).count());
+        model.addAttribute("processedRequests",requests.stream().filter(r->"RESOLVED".equals(r.status())||"REJECTED".equals(r.status())).count());
+        model.addAttribute("q",q);model.addAttribute("statusFilter",safeStatus);
+        model.addAttribute("selectedRequest",selected==null?null:filtered.stream().filter(r->r.id().equals(selected)).findFirst().orElse(null));
         return "customer/support";
     }
 

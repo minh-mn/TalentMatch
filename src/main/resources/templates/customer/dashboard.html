@@ -115,19 +115,8 @@
  <div class="cr-talent-grid"><a th:href="@{/customer/talent(q='UI/UX')}" class="cr-talent"><span class="cr-talent-avatar"><i class="fa-solid fa-palette"></i></span><strong>Thiết kế UI/UX</strong><small>Figma · Web Design</small><span>Xem Freelancer →</span></a><a th:href="@{/customer/talent(q='Developer')}" class="cr-talent"><span class="cr-talent-avatar"><i class="fa-solid fa-code"></i></span><strong>Lập trình viên</strong><small>Web · Mobile App</small><span>Xem Freelancer →</span></a><a th:href="@{/customer/talent(q='Data')}" class="cr-talent"><span class="cr-talent-avatar"><i class="fa-solid fa-chart-line"></i></span><strong>Phân tích dữ liệu</strong><small>Excel · Dashboard</small><span>Xem Freelancer →</span></a><a th:href="@{/customer/talent(q='Content')}" class="cr-talent"><span class="cr-talent-avatar"><i class="fa-solid fa-pen-nib"></i></span><strong>Content Marketing</strong><small>SEO · Writing</small><span>Xem Freelancer →</span></a></div>
 </section>
 <section class="cr-panel cr-journey"><div class="cr-heading"><h2><i class="fa-solid fa-list-check"></i> Cách TalentMatch hoạt động</h2><a th:href="@{/customer/jobs/new}">Xem chi tiết →</a></div><p class="cr-sub">Chỉ với 4 bước đơn giản để tìm được freelancer phù hợp.</p><div class="cr-steps"><a th:href="@{/customer/jobs/new}"><b>1</b><span><strong>Đăng dự án</strong><small>Mô tả nhu cầu, ngân sách và thời gian</small></span></a><a th:href="@{/customer/applicants}"><b>2</b><span><strong>Nhận hồ sơ</strong><small>Xem và đánh giá các đề xuất</small></span></a><a th:href="@{/customer/talent}"><b>3</b><span><strong>Chọn freelancer</strong><small>Trao đổi và lựa chọn nhân sự</small></span></a><a th:href="@{/customer/projects}"><b>4</b><span><strong>Quản lý & thanh toán</strong><small>Theo dõi tiến độ và chi phí</small></span></a></div></section>
-<footer class="fm-footer client-same-footer">
-  <div class="fm-footer-top">
-    <div class="fm-footer-intro">
-      <a class="fm-footer-brand" th:href="@{/}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="Logo TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
-      <p>Kết nối nhân tài – Kiến tạo giá trị.<br>Nền tảng freelancer dành cho người Việt.</p>
-      <div class="fm-socials"><span aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></span><span aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></span><span aria-label="YouTube"><i class="fa-brands fa-youtube"></i></span></div>
-    </div>
-    <div><h3>Về TalentMatch</h3><a th:href="@{/}">Giới thiệu</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs}">Danh mục dự án</a></div>
-    <div><h3>Dành cho Freelancer</h3><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/freelancers}">Tạo hồ sơ</a><a th:href="@{/freelancers}">Khám phá Freelancer</a></div>
-    <div><h3>Dành cho Doanh nghiệp</h3><a th:href="@{/customer/jobs/new}">Đăng dự án</a><a th:href="@{/customer/talent}">Tìm freelancer</a><a th:href="@{/customer/projects}">Quản lý dự án</a></div>
-    <div><h3>Hỗ trợ</h3><a th:href="@{/notifications}">Thông báo</a><a th:href="@{/customer/profile}">Quản lý tài khoản</a></div>
-  </div>
-  <div class="fm-footer-line"><span>© 2026 TalentMatch. All rights reserved.</span><span>Điều khoản &nbsp;·&nbsp; Bảo mật &nbsp;·&nbsp; Hỗ trợ</span></div>
-</footer>
+<footer th:replace="~{fragments/common :: clientFooter}"></footer>
 </div></main><script th:replace="~{fragments/common :: scripts}"></script>
+<link rel="stylesheet" th:href="@{/css/client-sidebar-footer-v170.css(v=170)}">
+<link rel="stylesheet" th:href="@{/css/client-unified-v172.css(v=172)}">
 </body></html>

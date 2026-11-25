@@ -49,7 +49,7 @@ public class CustomerController {
     private final PaymentService payments; private final DashboardService dashboard; private final JobRepository jobRepository;
     public CustomerController(UserService users,JobService jobs,ProjectService projects,PaymentService payments,DashboardService dashboard,JobRepository jobRepository){this.users=users;this.jobs=jobs;this.projects=projects;this.payments=payments;this.dashboard=dashboard;this.jobRepository=jobRepository;}
 
-    @GetMapping({"/dashboard", "/reports"})
+    @GetMapping("/dashboard")
     public String dashboard(
             Authentication auth,
             HttpServletRequest request,
