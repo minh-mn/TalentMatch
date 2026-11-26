@@ -49,8 +49,20 @@
   <link rel="stylesheet" sec:authorize="hasAnyRole('ADMIN','FREELANCER')" th:href="@{/css/role-banner-v176.css(v=176)}">
   <link rel="stylesheet" sec:authorize="hasRole('ADMIN')" th:href="@{/css/admin-spacing-v178.css(v=178)}">
   <link rel="stylesheet" sec:authorize="hasRole('ADMIN')" th:href="@{/css/admin-three-pages-v180.css(v=180)}">
+  <link rel="stylesheet" th:href="@{/css/ai-insights-v189.css(v=189)}">
+  <link rel="stylesheet" th:href="@{/css/ai-insights-v191.css(v=191)}">
+  <link rel="stylesheet" th:href="@{/css/ai-insights-v192.css(v=192)}">
+  <link rel="stylesheet" th:href="@{/css/ai-insights-v193.css(v=193)}">
+  <link rel="stylesheet" th:href="@{/css/ai-insights-v194.css(v=194)}">
+  <link rel="stylesheet" th:href="@{/css/ai-insights-v195.css(v=195)}">
+  <link rel="stylesheet" th:href="@{/css/ai-insights-v196.css(v=196)}">
+  <link rel="stylesheet" th:href="@{/css/customer-recruitment-v198.css(v=198)}">
   <link rel="stylesheet" th:href="@{/css/notifications-v184.css(v=184)}">
   <script defer th:src="@{/js/notification-badges-v184.js(v=184)}"></script>
+  <meta sec:authorize="isAuthenticated()" name="tm-assistant-csrf" th:content="${_csrf.token}">
+  <meta sec:authorize="isAuthenticated()" name="tm-assistant-csrf-header" th:content="${_csrf.headerName}">
+  <link sec:authorize="isAuthenticated()" rel="stylesheet" th:href="@{/css/support-chat.css(v=groq1)}">
+  <script sec:authorize="isAuthenticated()" defer th:src="@{/js/support-chat.js(v=groq1)}"></script>
 </head>
 <body>
 
@@ -191,6 +203,8 @@
           <a th:href="@{/freelancer/messages}" th:classappend="${active == 'messages'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-regular fa-comment"></i></span>Tin nhắn</a>
           <a th:href="@{/freelancer/community}" th:classappend="${active == 'community'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-regular fa-circle-question"></i></span>Hỏi đáp</a>
           <a th:href="@{/freelancer/profile}" th:classappend="${active == 'profile'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-regular fa-user"></i></span>Hồ sơ của tôi</a>
+          <a th:href="@{/ai/matching}" th:classappend="${active == 'ai' or active == 'ai-matching'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>Gợi ý công việc phù hợp</a>
+          <a th:href="@{/ai/sentiment}" th:classappend="${active == 'ai-sentiment'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-face-smile"></i></span>Đánh giá của khách hàng</a>
           <a th:href="@{/freelancer/reports}" th:classappend="${active == 'reports'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-chart-column"></i></span>Thống kê &amp; Báo cáo</a>
         </nav>
         <div class="market-side-label tm104-menu-label">HỖ TRỢ</div>
@@ -219,6 +233,7 @@
         <a th:href="@{/customer/messages}" th:classappend="${active == 'messages'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-regular fa-comment"></i></span>Tin nhắn</a>
         <a th:href="@{/customer/favorites}" th:classappend="${active == 'favorites'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-regular fa-heart"></i></span>Freelancer yêu thích</a>
         <a th:href="@{/customer/profile}" th:classappend="${active == 'profile'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-regular fa-building"></i></span>Hồ sơ doanh nghiệp</a>
+        <a th:href="@{/ai/sentiment}" th:classappend="${active == 'ai-sentiment'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-face-smile"></i></span>Phân tích phản hồi dự án</a>
         <a th:href="@{/customer/reports(metric='projects',pieMode='status')}" th:classappend="${active == 'reports'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-chart-column"></i></span>Thống kê &amp; Báo cáo</a>
         <span class="tm118-group-title">TIỆN ÍCH &amp; HỖ TRỢ</span>
         <a th:href="@{/customer/profile}" th:classappend="${active == 'credit'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-coins"></i></span>TalentCredit</a>
@@ -229,6 +244,7 @@
       <nav class="market-side-nav market-side-nav-auth admin-nav" sec:authorize="hasRole('ADMIN')" aria-label="Điều hướng quản trị">
         <span class="tm118-group-title">TỔNG QUAN</span>
         <a th:href="@{/admin/dashboard}" th:classappend="${active == 'dashboard'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-table-cells-large"></i></span>Trang chủ Admin</a>
+        <a th:href="@{/ai/sentiment}" th:classappend="${active == 'ai-sentiment'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-face-smile"></i></span>Phân tích cảm xúc nền tảng</a>
         <a th:href="@{/admin/statistics}" th:classappend="${active == 'statistics'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-chart-line"></i></span>Thống kê &amp; Báo cáo</a>
         <span class="tm118-group-title">QUẢN LÝ NỀN TẢNG</span>
         <a th:href="@{/admin/users}" th:classappend="${active == 'users'} ? ' active' : ''"><span class="market-side-icon"><i class="fa-solid fa-users"></i></span>Quản lý người dùng</a>
@@ -344,6 +360,14 @@
   </div>
 </header>
 
+
+<!-- AI Freelancer header: same layout/navigation as normal Freelancer workspace -->
+<header th:fragment="aiFreelancerTopbar()" class="fm-header tm192-ai-header tm193-ai-header">
+  <a class="fm-brand" th:href="@{/freelancer/dashboard}"><img th:src="@{/images/talentmatch-logo-mark.png}" alt="TalentMatch"><span><strong>TalentMatch</strong><small>FREELANCE MARKETPLACE</small></span></a>
+  <form class="fm-header-search" th:action="@{/jobs}" method="get"><i class="fa-solid fa-magnifying-glass"></i><input name="q" th:value="${q}" placeholder="Tìm dự án, kỹ năng, khách hàng..." aria-label="Tìm dự án"><button type="submit" aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+  <nav class="fm-header-links"><a th:href="@{/jobs}">Tìm dự án</a><a th:href="@{/#pricing}">Bảng giá</a><a th:href="@{/#how}">Cách hoạt động</a><a th:href="@{/jobs#jb-categories}">Danh mục nghề</a></nav>
+  <div class="fm-header-user"><a th:href="@{/notifications}" aria-label="Thông báo"><i class="fa-regular fa-bell"></i><span class="notification-count-badge" th:if="${unreadNotificationCount != null and unreadNotificationCount > 0}" th:text="${unreadNotificationCount > 99 ? '99+' : unreadNotificationCount}">0</span></a><a th:href="@{/freelancer/messages}" aria-label="Tin nhắn"><i class="fa-regular fa-message"></i></a><a class="fm-mini-avatar" th:href="@{/freelancer/profile}" th:text="${currentUser != null and currentUser.fullName != null and !#strings.isEmpty(currentUser.fullName) ? #strings.substring(currentUser.fullName,0,1) : 'F'}">F</a><span th:text="${currentUser != null and currentUser.fullName != null ? currentUser.fullName : 'Freelancer'}">Freelancer</span></div>
+</header>
 
 <!-- MARKET TOPBAR -->
 <header class="market-topbar" th:fragment="marketTopbar(active)">

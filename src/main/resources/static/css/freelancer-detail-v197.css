@@ -1,0 +1,19 @@
+/* Freelancer detail pages: shared workspace rhythm and full-width footer. */
+html body.tm197-detail:has(.tm104-fnav) main.fm-main,
+html body.tm197-detail:has(.tm104-fnav) main.market-main {padding:calc(var(--tm106-header,64px) + 14px) 0 0!important; background:#eef3fc!important; min-height:100vh; display:flex; flex-direction:column;}
+html body.tm197-detail main>.tm116-detail,html body.tm197-detail main>.client-shell,html body.tm197-detail main>.market-page-shell {width:100%!important;max-width:none!important; margin:0!important; padding:0 24px 28px!important;box-sizing:border-box!important; flex:1; min-width:0;}
+.tm197-detail .tm176-banner {margin:0 0 14px!important; width:100%;box-sizing:border-box;}
+.tm197-detail .tm197-back,.tm197-detail .tm116-back {display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;color:#2368ed;font-weight:700;font-size:13px;text-decoration:none;}
+.tm197-detail .client-panel,.tm197-detail .tm116-detail-card,.tm197-detail .tm116-detail-head,.tm197-detail .project-detail-hero-v23 {border:1px solid #d5e2f7!important;border-radius:12px!important;background:#fff!important;box-shadow:none!important;color:#0b2a6f;}
+.tm197-detail .client-panel h2,.tm197-detail .project-detail-title h1,.tm197-detail .tm116-detail-head h1 {color:#0b2a6f!important;}
+.tm197-detail .project-detail-layout-v23 {grid-template-columns:minmax(0,2.2fr) minmax(0,1fr);gap:16px;}
+.tm197-detail .project-detail-main-v23,.tm197-detail .project-detail-side-v23 {min-width:0;}
+.tm197-detail .client-question-box textarea {width:100%;box-sizing:border-box;border:1px solid #d5e2f7;border-radius:8px;padding:12px;}
+.tm197-detail .client-btn.primary {background:#2368ed!important;color:white!important;border-radius:8px;}
+.tm197-detail .tm114-table-wrap {overflow-x:auto;}
+.tm197-detail main>footer.fm-footer {width:100%!important;box-sizing:border-box;margin:0!important;}
+.tm197-detail [id] {scroll-margin-top:90px;}
+@media(max-width:1100px){.tm197-detail .project-detail-layout-v23{grid-template-columns:1fr!important;}}
+@media(max-width:720px){html body.tm197-detail main>.tm116-detail,html body.tm197-detail main>.client-shell,html body.tm197-detail main>.market-page-shell{padding:0 14px 24px!important;}.tm197-detail .project-detail-hero-v23{flex-wrap:wrap;}}
+
+.tm130-chip.st-processing,.tm126-status.state-processing{background:#ede9fe;color:#6d28d9}.tm130-chip.st-failed,.tm126-status.state-failed{background:#fee2e2;color:#b91c1c}.tm130-chip.st-cancelled,.tm126-status.state-cancelled{background:#f1f5f9;color:#64748b}

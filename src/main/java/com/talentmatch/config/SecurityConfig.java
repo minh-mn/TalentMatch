@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/jobs/*/document").authenticated()
                 .requestMatchers(HttpMethod.GET,"/jobs/**","/freelancers/**","/hire","/projects").permitAll()
                 .requestMatchers("/payment/vnpay/ipn", "/payment/vnpay/return").permitAll()
+                .requestMatchers("/assistant/**").hasAnyRole("ADMIN","CUSTOMER","FREELANCER")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/customer/**").hasRole("CUSTOMER")
                 .requestMatchers("/freelancer/community/**").hasAnyRole("FREELANCER", "CUSTOMER")

@@ -16,9 +16,9 @@ import java.util.*;
 public class VnPaySandboxService {
     private final String terminal,secret,baseUrl,returnUrl;
     public VnPaySandboxService(@Value("${VNPAY_TMN_CODE:${vnpay.tmn-code:}}") String terminal,
-        @Value("${VNPAY_HASH_SECRET:${vnpay.hash-secret:}}") String secret,
-        @Value("${VNPAY_URL:${vnpay.url:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}}") String baseUrl,
-        @Value("${VNPAY_RETURN_URL:${vnpay.return-url:http://localhost:8080/payment/vnpay/return}}") String returnUrl){
+                               @Value("${VNPAY_HASH_SECRET:${vnpay.hash-secret:}}") String secret,
+                               @Value("${VNPAY_URL:${vnpay.url:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}}") String baseUrl,
+                               @Value("${VNPAY_RETURN_URL:${vnpay.return-url:http://localhost:8080/payment/vnpay/return}}") String returnUrl){
         this.terminal=terminal.trim();this.secret=secret.trim();this.baseUrl=baseUrl;this.returnUrl=returnUrl;
     }
     public boolean configured(){return !terminal.isBlank()&&!secret.isBlank();}

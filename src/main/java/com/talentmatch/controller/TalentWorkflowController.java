@@ -46,8 +46,12 @@ public class TalentWorkflowController {
      User customerUser = me(auth);
      customer(customerUser);
      List<Job> myJobs = jobs.findByCustomerOrderByCreatedAtDesc(customerUser);
-     List<Job> openJobs = myJobs.stream().filter(j -> j.getStatus() == JobStatus.OPEN).toList();
-     Job selected = jobId == null ? (openJobs.isEmpty() ? null : openJobs.get(0)) : ownedJob(jobId, customerUser);
+     List<Job> openJobs = myJobs.stream().filter(j -> j.getStatus() == JobStatus.OPEN && (j.getDeadline() == null || !j.getDeadline().isBefore(java.time.LocalDate.now()))).toList();
+     Job selected = jobId == null ? (openJobs.isEmpty() ? null : openJobs.get(0)) : openJobs.stream().filter(job -> jobId.equals(job.getId())).findFirst().orElse(null);
+     Map<Long,String> invitationStates = new HashMap<>();
+     if (selected != null) invites.findByCustomerOrderByCreatedAtDesc(customerUser).stream()
+             .filter(inv -> selected.getId().equals(inv.getJob().getId()))
+             .forEach(inv -> invitationStates.put(inv.getFreelancer().getId(), inv.getStatus()));
      String keyword = norm(q);
      String wantedSkill = norm(skill);
      String wantedField = norm(field);
@@ -76,6 +80,7 @@ public class TalentWorkflowController {
          row.put("score", score);
          row.put("reason", match == null ? "Chọn công việc đang tuyển để xem mức độ phù hợp" : match.reason());
          row.put("saved", savedIds.contains(f.getId()));
+         row.put("invitationStatus", invitationStates.getOrDefault(f.getId(), "NONE"));
          if (match != null && selected != null) {
              row.put("factors", matchingFactors(selected, f, match));
              row.put("matchedSkills", match.matchedSkills());
@@ -117,6 +122,7 @@ public class TalentWorkflowController {
              .filter(row -> (int) row.get("score") >= MatchingService.HIGH_MATCH_THRESHOLD)
              .count();
      List<Map<String,Object>> recommended = candidates.stream()
+             .filter(row -> selected != null && (int)row.get("score") >= MatchingService.HIGH_MATCH_THRESHOLD && Boolean.TRUE.equals(((User)row.get("user")).getAvailable()))
              .sorted(Comparator.comparingInt((Map<String, Object> r) -> (int) r.get("score")).reversed()
                      .thenComparing(byRating.reversed())
                      .thenComparing(byExperience.reversed())
@@ -308,9 +314,10 @@ public class TalentWorkflowController {
  @PostMapping("/customer/invitations") @Transactional
  public String invite(Authentication a,@RequestParam Long jobId,@RequestParam Long freelancerId,@RequestParam(required=false)String message,RedirectAttributes ra){
  try{User u=me(a);customer(u);Job job=ownedJob(jobId,u);
-  if(job.getStatus()!=JobStatus.OPEN)throw new IllegalArgumentException("Chỉ được mời vào công việc đang tuyển.");
-  User f=userRepo.findById(freelancerId).orElseThrow();if(f.getRole()!=Role.FREELANCER||Boolean.TRUE.equals(f.getLocked()))throw new IllegalArgumentException("Freelancer không khả dụng.");
+  if(job.getStatus()!=JobStatus.OPEN || (job.getDeadline()!=null && job.getDeadline().isBefore(java.time.LocalDate.now())))throw new IllegalArgumentException("Chỉ được mời vào công việc đang tuyển.");
+  User f=userRepo.findById(freelancerId).orElseThrow();if(f.getRole()!=Role.FREELANCER||Boolean.TRUE.equals(f.getLocked())||!Boolean.TRUE.equals(f.getEnabled())||!Boolean.TRUE.equals(f.getAvailable()))throw new IllegalArgumentException("Freelancer không khả dụng.");
   JobInvitation i=invites.findByJobAndFreelancer(job,f).orElseGet(JobInvitation::new);
+  if(i.getId()!=null && "SENT".equals(i.getStatus()))throw new IllegalArgumentException("Lời mời đang chờ phản hồi.");
   if(i.getId()!=null && "ACCEPTED".equals(i.getStatus()))throw new IllegalArgumentException("Freelancer đã đồng ý lời mời.");
   i.setJob(job);i.setCustomer(u);i.setFreelancer(f);i.setStatus("SENT");i.setMessage(message==null?"Mời bạn xem công việc và gửi Proposal.":message.trim());invites.save(i);
   ra.addFlashAttribute("success","Đã gửi lời mời đến "+f.getFullName());

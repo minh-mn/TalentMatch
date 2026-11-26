@@ -83,7 +83,7 @@ public class AdminSettlementWorkspaceController {
         model.addAttribute("creditedCount",allPayments.stream().filter(r->r.status().equals("DISBURSED")).count());
         model.addAttribute("creditedAmount",sum(allPayments.stream().filter(r->r.status().equals("DISBURSED")).map(DisbursementRow::amount).toList()));
         model.addAttribute("awaitingAmount",sum(allPayments.stream().filter(r->r.status().equals("PAID")).map(DisbursementRow::amount).toList()));
-        model.addAttribute("withdrawalPendingCount",allWithdrawals.stream().filter(r->r.status().equals("PENDING")).count());
+        model.addAttribute("withdrawalPendingCount",allWithdrawals.stream().filter(r->java.util.Set.of("PENDING","APPROVED","PROCESSING").contains(r.status())).count());
         model.addAttribute("withdrawalCompleteAmount",sum(allWithdrawals.stream().filter(r->r.status().equals("COMPLETED")).map(WithdrawalRow::amount).toList()));
         model.addAttribute("active","settlements");
         return "admin/settlements";

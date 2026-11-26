@@ -1,0 +1,49 @@
+/* V195 – one banner and same vertical rhythm as Client > Đăng công việc. */
+body.tm195-ai.cd-dashboard main.tm192-main{
+  margin-left:196px!important;width:calc(100% - 196px)!important;
+  max-width:calc(100% - 196px)!important;min-width:0!important;
+  padding:64px 0 0!important;background:#eef3fc!important;
+}
+body.tm195-ai.cd-dashboard .tm195-shell{
+  width:100%!important;max-width:none!important;margin:0!important;
+  padding:8px 16px 24px!important;box-sizing:border-box!important;
+}
+body.tm195-ai.cd-dashboard .tm195-shell>.tm174-banner{
+  margin:0 0 12px!important;min-height:122px!important;
+  border-radius:13px!important;padding:22px 24px!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+}
+body.tm195-ai.cd-dashboard .tm195-shell>.tm174-banner h1{
+  font-size:24px!important;line-height:1.24!important;margin:3px 0 7px!important;
+}
+body.tm195-ai.cd-dashboard .tm195-shell>.tm174-banner p{margin:0!important}
+body.tm195-ai.cd-dashboard .tm195-shell>.tm174-banner .tm174-banner-icon{
+  width:76px!important;height:76px!important;flex:0 0 76px!important;
+}
+body.tm195-ai.cd-dashboard .tm195-shell>.tm189-tabs{margin:0 0 12px!important}
+body.tm195-ai.cd-dashboard .tm195-shell>.tm189-tabs a{
+  padding:10px 16px!important;min-height:38px!important;
+  font-size:13px!important;border-radius:8px!important;
+}
+body.tm195-ai.cd-dashboard .tm195-shell>.tm189-panel,
+body.tm195-ai.cd-dashboard .tm195-shell>.tm191-overview,
+body.tm195-ai.cd-dashboard .tm195-shell>.tm189-kpis,
+body.tm195-ai.cd-dashboard .tm195-shell>.tm191-metrics{
+  margin:0 0 12px!important;
+}
+body.tm195-ai.cd-dashboard .tm195-shell>.tm189-note{margin:0 0 12px!important}
+body.tm195-ai.cd-dashboard .tm195-shell .tm189-panel{padding:16px!important}
+body.tm195-ai.cd-dashboard .tm195-shell .tm189-sectionhead h2{font-size:16px!important}
+body.tm195-ai.cd-dashboard .tm195-shell .tm189-match{padding:16px 6px!important;min-height:92px!important}
+body.tm195-ai.cd-dashboard .tm195-shell .tm191-review{padding:16px 0!important}
+body.tm195-ai.cd-dashboard .cd-client-header,
+body.tm195-ai.cd-dashboard .tm118-client-header{
+ left:196px!important;width:calc(100% - 196px)!important;
+ max-width:calc(100% - 196px)!important;right:0!important;top:0!important;
+}
+@media(max-width:900px){
+ body.tm195-ai.cd-dashboard main.tm192-main{margin-left:0!important;width:100%!important;max-width:100%!important}
+ body.tm195-ai.cd-dashboard .tm195-shell{padding:10px 12px 20px!important}
+ body.tm195-ai.cd-dashboard .cd-client-header,
+ body.tm195-ai.cd-dashboard .tm118-client-header{left:0!important;width:100%!important;max-width:100%!important}
+}

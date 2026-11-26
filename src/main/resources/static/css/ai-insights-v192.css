@@ -1,0 +1,16 @@
+/* V192: AI pages follow exact role workspace header and spacing conventions */
+html body.tm192-ai{--tm192-sidebar:196px}
+html body.tm192-ai main.tm192-main{margin-left:var(--tm192-sidebar)!important;width:calc(100% - var(--tm192-sidebar))!important;max-width:calc(100% - var(--tm192-sidebar))!important;padding:68px 0 0!important;min-height:100vh!important}
+html body.tm192-ai .tm191-shell{padding:14px 20px 28px!important;max-width:none!important}
+html body.tm192-ai .tm191-shell>.tm176-banner{margin:0 0 12px!important}
+html body.tm192-ai .tm189-tabs{margin:0 0 12px!important}
+html body.tm192-ai .tm191-panel{margin-bottom:12px!important}
+html body.tm192-ai header.tm192-ai-header{position:fixed!important;top:0!important;left:var(--tm192-sidebar)!important;right:0!important;width:auto!important;z-index:100!important}
+html body.tm192-ai .cd-client-header,html body.tm192-ai .market-topbar{left:var(--tm192-sidebar)!important;right:0!important;width:auto!important;z-index:100!important}
+html body.tm192-ai .tm191-review .tm189-tag.UNCLEAR{background:#fff3dd!important;color:#9c6508!important}
+html body.tm192-ai .tm191-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
+html body.tm192-ai .tm189-match .tm189-score{flex-shrink:0}
+html body.tm192-ai .tm189-panel{min-width:0}
+@media(min-width:1100px){html body.tm192-ai .tm189-match{gap:15px}}
+@media(max-width:900px){html body.tm192-ai{--tm192-sidebar:0px}html body.tm192-ai .tm191-shell{padding:14px!important}}
+@media(max-width:650px){html body.tm192-ai .tm191-metrics{grid-template-columns:1fr}}

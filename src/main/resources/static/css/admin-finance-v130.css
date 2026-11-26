@@ -29,3 +29,5 @@ body.admin-workspace .tm130-payments{padding-top:10px}.tm130-payments .tm129-set
 .tm130-payments .af152-status.neutral{background:#f0f3f9;color:#4f6589}
 @media(max-width:1200px){.tm131-finance-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.tm131-finance-summary{grid-template-columns:1fr}}
+
+.tm130-chip.st-processing,.tm126-status.state-processing{background:#ede9fe;color:#6d28d9}.tm130-chip.st-failed,.tm126-status.state-failed{background:#fee2e2;color:#b91c1c}.tm130-chip.st-cancelled,.tm126-status.state-cancelled{background:#f1f5f9;color:#64748b}

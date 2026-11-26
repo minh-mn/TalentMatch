@@ -14,6 +14,7 @@
   <div class="tm-app-shell">
     <section th:replace="~{fragments/common :: clientPageBanner('TUYỂN CHỌN ỨNG VIÊN','Quản lý ứng viên','Xem, đánh giá và sàng lọc danh sách ứng viên cho từng công việc để chọn đúng Freelancer phù hợp.','fa-solid fa-users')}"></section>
 
+    <div class="tm198-recruit-nav"><a class="active" th:href="@{/customer/applicants}"><i class="fa-solid fa-users"></i> Quản lý ứng viên</a><a th:href="@{/customer/talent}"><i class="fa-solid fa-wand-magic-sparkles"></i> Tìm kiếm &amp; AI Matching</a><a th:href="@{/customer/invitations}"><i class="fa-regular fa-paper-plane"></i> Lời mời đã gửi</a></div>
     <div class="tm-app-columns">
       <div class="tm-app-left">
         <section class="tm-app-job-picker">

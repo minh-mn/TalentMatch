@@ -1,0 +1,91 @@
+/* V193: align AI pages with the Freelancer jobs-board header and overall content rhythm */
+html body.tm193-ai{--tm193-sidebar:196px;--tm193-header:64px}
+html body.tm193-ai main.tm192-main,
+html body.tm193-ai main.tm191-main,
+html body.tm193-ai main.tm189-main{
+  margin-left:var(--tm193-sidebar)!important;
+  width:calc(100% - var(--tm193-sidebar))!important;
+  max-width:calc(100% - var(--tm193-sidebar))!important;
+  padding-top:calc(var(--tm193-header) + 6px)!important;
+  min-height:100vh!important;
+  background:#eef3fc!important;
+}
+html body.tm193-ai .tm191-shell,
+html body.tm193-ai .tm189-shell{
+  max-width:none!important;
+  margin:0!important;
+  padding:14px 18px 28px!important;
+  box-sizing:border-box!important;
+}
+html body.tm193-ai .tm191-shell>.tm176-banner,
+html body.tm193-ai .tm189-shell>.tm176-banner{
+  margin:0 0 14px!important;
+}
+html body.tm193-ai .tm189-tabs{
+  gap:8px!important;
+  margin:0 0 12px!important;
+}
+html body.tm193-ai .tm189-tabs a{
+  min-height:44px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0 18px!important;
+  border-radius:10px!important;
+}
+html body.tm193-ai .tm189-panel{border-radius:14px!important}
+html body.tm193-ai .tm189-sectionhead{margin-bottom:12px!important}
+html body.tm193-ai .tm189-match{
+  display:grid!important;
+  grid-template-columns:74px minmax(0,1fr) auto!important;
+  gap:14px!important;
+  align-items:center!important;
+  padding:18px 8px!important;
+}
+html body.tm193-ai .tm189-score{
+  width:60px!important;height:60px!important;flex:0 0 60px!important;
+  border-radius:16px!important;font-size:15px!important;font-weight:800!important;
+}
+html body.tm193-ai .tm189-matchbody h3{font-size:15px!important;line-height:1.4!important}
+html body.tm193-ai .tm189-matchbody p,
+html body.tm193-ai .tm189-explain{font-size:12px!important;line-height:1.55!important}
+html body.tm193-ai .tm189-action{
+  min-width:98px!important;
+  text-align:center!important;
+}
+html body.tm193-ai .tm191-overview{margin-bottom:12px!important}
+html body.tm193-ai .tm191-overview-primary,
+html body.tm193-ai .tm191-overview-secondary,
+html body.tm193-ai .tm191-metrics>div,
+html body.tm193-ai .tm189-kpis article{border-radius:14px!important}
+html body.tm193-ai .tm191-filter{margin-bottom:12px!important}
+html body.tm193-ai .tm191-review{padding:18px 0!important}
+html body.tm193-ai .tm191-review-warning{border-radius:8px!important}
+html body.tm193-ai header.tm193-ai-header{
+  position:fixed!important;
+  top:0!important;
+  left:var(--tm193-sidebar)!important;
+  right:0!important;
+  width:auto!important;
+  z-index:150!important;
+}
+html body.tm193-ai .tm193-ai-header .fm-header-search{max-width:470px!important}
+html body.tm193-ai .tm193-ai-header .fm-header-links{justify-content:center!important}
+html body.tm193-ai .tm193-ai-header .fm-header-user>span{max-width:132px!important}
+@media (max-width:1180px){
+  html body.tm193-ai .tm193-ai-header .fm-header-links{gap:10px!important}
+  html body.tm193-ai .tm193-ai-header .fm-header-links a{font-size:11px!important}
+}
+@media (max-width:900px){
+  html body.tm193-ai{--tm193-sidebar:0px}
+  html body.tm193-ai main.tm192-main,
+  html body.tm193-ai main.tm191-main,
+  html body.tm193-ai main.tm189-main{margin-left:0!important;width:100%!important;max-width:100%!important}
+  html body.tm193-ai .tm191-shell,
+  html body.tm193-ai .tm189-shell{padding:14px!important}
+  html body.tm193-ai header.tm193-ai-header{left:0!important;width:100%!important}
+}
+@media (max-width:720px){
+  html body.tm193-ai .tm189-match{grid-template-columns:1fr!important}
+  html body.tm193-ai .tm189-action{justify-self:start!important}
+}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/common :: head('Phân tích phản hồi | TalentMatch')}"></head>
+<body class="market-body client-workspace tm189-ai tm191-ai tm192-ai tm193-ai tm194-ai tm195-ai tm196-ai" th:classappend="${aiRole == 'ADMIN' ? ' admin-workspace admin-unified' : (aiRole == 'FREELANCER' ? ' fm-dashboard' : ' cd-dashboard')}">
+<link sec:authorize="hasRole('FREELANCER')" rel="stylesheet" th:href="@{/css/freelancer-dashboard-final.css}">
+<link sec:authorize="hasRole('FREELANCER')" rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
+<link sec:authorize="hasRole('FREELANCER')" rel="stylesheet" th:href="@{/css/freelancer-layout-v106.css(v=106)}">
+<link sec:authorize="hasRole('FREELANCER')" rel="stylesheet" th:href="@{/css/freelancer-sidebar-unified-v107.css(v=107)}">
+<aside th:replace="~{fragments/common :: marketSidebar('ai-sentiment')}"></aside>
+<th:block th:if="${aiRole=='CUSTOMER'}"><header th:replace="~{fragments/common :: marketClientTopbar()}"></header></th:block>
+<th:block th:if="${aiRole=='FREELANCER'}"><header th:replace="~{fragments/common :: aiFreelancerTopbar()}"></header></th:block>
+<th:block th:if="${aiRole=='ADMIN'}"><header th:replace="~{fragments/common :: marketTopbar('admin')}"></header></th:block>
+<main class="market-main client-main tm189-main tm191-main tm192-main"><div class="tm189-shell tm191-shell tm195-shell">
+<th:block th:if="${aiRole == 'CUSTOMER'}"><section th:replace="~{fragments/common :: clientPageBanner('PHÂN TÍCH PHẢN HỒI',${aiPageTitle},${aiPageSubtitle},'fa-solid fa-comments')}"></section></th:block>
+<th:block th:unless="${aiRole == 'CUSTOMER'}"><section th:replace="~{fragments/common :: rolePageBanner('PHÂN TÍCH PHẢN HỒI',${aiPageTitle},${aiPageSubtitle},'fa-solid fa-comments')}"></section></th:block>
+<nav class="tm189-tabs" aria-label="Điều hướng AI">
+<a th:if="${aiRole == 'FREELANCER'}" th:href="@{/ai/matching}">Gợi ý phù hợp</a><a th:if="${aiRole == 'CUSTOMER'}" th:href="@{/customer/talent}">Tìm &amp; gợi ý Freelancer</a><a class="active" th:href="@{/ai/sentiment}" th:text="${aiRole=='FREELANCER'?'Đánh giá của tôi':(aiRole=='CUSTOMER'?'Phản hồi dự án':'Phân tích toàn nền tảng')}">Phân tích cảm xúc</a>
+</nav>
+<section class="tm191-overview">
+<div class="tm191-overview-primary"><span class="tm191-eyebrow" th:text="${aiRole=='FREELANCER'?'GÓC NHÌN FREELANCER':(aiRole=='CUSTOMER'?'GÓC NHÌN DOANH NGHIỆP':'GÓC NHÌN QUẢN TRỊ')}">PHÂN TÍCH</span><h2 th:text="${aiPracticalTitle}">Tác dụng</h2><p th:text="${aiPracticalDesc}">Ý nghĩa</p></div>
+<div class="tm191-overview-secondary"><strong>Phạm vi dữ liệu</strong><p th:text="${sentimentScope}"></p><small>Đang tổng hợp tối đa 100 đánh giá gần nhất; Admin còn xem tối đa 100 bình luận cộng đồng. Không đại diện cho toàn bộ dữ liệu lịch sử.</small></div>
+</section>
+<div class="tm189-kpis tm191-kpis">
+<article><small><i class="fa-solid fa-face-smile"></i> Tích cực</small><strong th:text="${positiveCount}">0</strong><span>Điểm mạnh và lời khen được nêu rõ</span></article>
+<article><small><i class="fa-solid fa-face-meh"></i> Trung lập</small><strong th:text="${neutralCount}">0</strong><span>Nội dung trung lập nhưng có tín hiệu ngôn ngữ</span></article>
+<article><small><i class="fa-solid fa-face-frown"></i> Tiêu cực</small><strong th:text="${negativeCount}">0</strong><span>Nên xem nội dung, không tự động xử phạt</span></article>
+</div>
+<section class="tm191-metrics tm192-metrics"><div><b th:text="${sampleCount}">0</b><span>Phản hồi đã xét</span></div><div><b th:text="${unclearCount}">0</b><span>Chưa đủ tín hiệu cảm xúc</span></div><div><b th:text="${mismatchCount}">0</b><span>Điểm sao lệch cảm xúc văn bản</span></div></section>
+<section class="tm189-panel tm191-panel"><div class="tm189-sectionhead"><div><h2>Danh sách phản hồi và bằng chứng</h2><p>Ưu tiên đọc nhận xét có nội dung cụ thể; lọc theo kết quả phân tích</p></div><span class="tm189-caption" th:text="${filteredCount+' phản hồi phù hợp'}"></span></div>
+<nav class="tm191-filter" aria-label="Lọc kết quả">
+<a th:href="@{/ai/sentiment(mood='ALL')}" th:classappend="${mood=='ALL'?' active':''}">Tất cả</a>
+<a th:href="@{/ai/sentiment(mood='POSITIVE')}" th:classappend="${mood=='POSITIVE'?' active':''}">Tích cực</a>
+<a th:href="@{/ai/sentiment(mood='NEGATIVE')}" th:classappend="${mood=='NEGATIVE'?' active':''}">Tiêu cực</a>
+<a th:href="@{/ai/sentiment(mood='NEUTRAL')}" th:classappend="${mood=='NEUTRAL'?' active':''}">Trung lập</a>
+<a th:href="@{/ai/sentiment(mood='UNCLEAR')}" th:classappend="${mood=='UNCLEAR'?' active':''}">Chưa đủ tín hiệu</a>
+</nav>
+<div class="tm189-empty" th:if="${#lists.isEmpty(reviews)}">Chưa có phản hồi phù hợp với bộ lọc đang chọn.</div>
+<article class="tm189-review tm191-review" th:each="r:${reviews}">
+<div class="tm189-review-head"><strong th:text="${r.source+' · '+r.author+' → '+r.target}">Người nhận xét</strong><span class="tm189-tag" th:classappend="${r.code}" th:text="${r.sentiment}">Trung lập</span></div>
+<p th:text="${r.content == null || r.content.isBlank() ? 'Không có nội dung đánh giá' : r.content}"></p>
+<div class="tm191-review-meta"><span th:if="${r.rating != null}" th:text="${'Đánh giá: '+r.rating+'/5 sao'}">5 sao</span><span th:text="${'Dấu hiệu ngôn ngữ: '+r.explanation}">Dấu hiệu</span></div>
+<div class="tm191-review-warning" th:if="${r.code == 'UNCLEAR'}">Nội dung chưa có đủ tín hiệu để suy ra cảm xúc; không đồng nghĩa với trung lập hoặc hài lòng.</div>
+<div class="tm191-review-warning" th:if="${r.rating != null && ((r.rating >= 4 && r.code == 'NEGATIVE') || (r.rating <= 2 && r.code == 'POSITIVE'))}">Điểm sao và nội dung có dấu hiệu không thống nhất — cần đọc thủ công.</div>
+</article>
+<div class="tm191-pager" th:if="${totalPages > 1}"><a th:if="${page>0}" th:href="@{/ai/sentiment(mood=${mood},page=${page-1})}">‹ Trước</a><span th:text="${'Trang '+(page+1)+' / '+totalPages}"></span><a th:if="${page+1<totalPages}" th:href="@{/ai/sentiment(mood=${mood},page=${page+1})}">Sau ›</a></div>
+</section>
+<section class="tm189-panel tm191-demo"><div class="tm189-sectionhead"><div><h2>Thử phân tích câu bình luận</h2><p>Kiểm tra nhanh một câu mới; kết quả thử không được ghi vào đánh giá thật.</p></div></div>
+<form class="tm189-test" method="get" th:action="@{/ai/sentiment}"><textarea name="text" maxlength="1000" placeholder="Ví dụ: Giao đúng hạn, sản phẩm rất tốt nhưng hỗ trợ hơi chậm..." th:text="${inputText}"></textarea><button type="submit"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân tích thử</button></form>
+<div class="tm189-testresult" th:if="${testResult!=null}"><span class="tm189-tag" th:classappend="${testResult.code}" th:text="${testResult.label}">Tích cực</span><strong th:text="${'Điểm từ điển: '+testResult.score}"></strong><p th:text="${'Dấu hiệu: '+testResult.evidence}">Kết quả</p></div>
+</section>
+<section class="tm189-note"><strong>Giới hạn:</strong> Phân loại dựa trên từ/cụm từ tiếng Việt, có thể nhầm khi bình luận mỉa mai, viết tắt hoặc không có nhận xét cụ thể. Đây không phải xác suất dự đoán và không dùng để tự động xử phạt, khóa tài khoản, quyết định nghiệm thu hay giải ngân.</section>
+</div>
+<div th:if="${aiRole=='CUSTOMER'}"><footer th:replace="~{fragments/common :: clientFooter}"></footer></div>
+<div th:if="${aiRole=='FREELANCER'}"><footer th:replace="~{fragments/common :: freelancerFooter}"></footer></div>
+<div th:if="${aiRole=='ADMIN'}"><footer th:replace="~{fragments/common :: adminFooter}"></footer></div>
+</main><script th:replace="~{fragments/common :: scripts}"></script></body></html>

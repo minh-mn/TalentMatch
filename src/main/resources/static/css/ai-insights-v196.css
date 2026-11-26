@@ -1,0 +1,72 @@
+/* V196: Admin AI layout – single banner, correctly aligned with the 230px admin workspace.
+   Scoped to the AI routes only: no impact on Admin dashboard, Client or Freelancer. */
+html body.tm196-ai.admin-workspace { --tm196-admin-sidebar:230px; --tm196-admin-header:64px; }
+html body.tm196-ai.admin-workspace aside.market-sidebar {
+  width:var(--tm196-admin-sidebar)!important;
+  min-width:var(--tm196-admin-sidebar)!important;
+  max-width:var(--tm196-admin-sidebar)!important;
+}
+html body.tm196-ai.admin-workspace > header.market-topbar {
+  position:fixed!important;top:0!important;
+  left:var(--tm196-admin-sidebar)!important;
+  right:0!important;width:calc(100% - var(--tm196-admin-sidebar))!important;
+  height:var(--tm196-admin-header)!important;
+  transform:none!important;margin:0!important;z-index:300!important;
+}
+html body.tm196-ai.admin-workspace main.market-main.tm192-main {
+  display:block!important;position:relative!important;
+  margin:0 0 0 var(--tm196-admin-sidebar)!important;
+  padding:var(--tm196-admin-header) 0 0!important;
+  width:calc(100% - var(--tm196-admin-sidebar))!important;
+  min-width:0!important;max-width:calc(100% - var(--tm196-admin-sidebar))!important;
+  overflow-x:clip!important;box-sizing:border-box!important;
+  transform:none!important;left:auto!important;right:auto!important;
+  background:#eef3fc!important;
+}
+html body.tm196-ai.admin-workspace main.tm192-main > .tm195-shell {
+  display:block!important;position:relative!important;
+  box-sizing:border-box!important;
+  width:100%!important;min-width:0!important;max-width:100%!important;
+  margin:0!important;padding:12px 18px 28px!important;
+  left:auto!important;right:auto!important;transform:none!important;
+}
+html body.tm196-ai.admin-workspace .tm195-shell > .tm176-banner {
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  position:relative!important;float:none!important;clear:both!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  min-height:122px!important;height:auto!important;
+  padding:22px 24px!important;margin:0 0 12px!important;
+  border-radius:13px!important;box-sizing:border-box!important;
+  background:linear-gradient(90deg,#edf5ff,#dceaff 48%,#b8d7ff)!important;
+}
+html body.tm196-ai.admin-workspace .tm195-shell > .tm176-banner h1 {
+  margin:4px 0 7px!important;color:#0b2a6f!important;
+  font-size:24px!important;line-height:1.24!important;font-weight:800!important;
+}
+html body.tm196-ai.admin-workspace .tm195-shell > .tm176-banner p {margin:0!important;font-size:13px!important;line-height:1.5!important}
+html body.tm196-ai.admin-workspace .tm195-shell > .tm189-tabs {margin:0 0 12px!important;padding:0!important;gap:8px!important}
+html body.tm196-ai.admin-workspace .tm195-shell > .tm189-tabs a {min-height:38px!important;display:inline-flex!important;align-items:center!important;padding:9px 15px!important}
+html body.tm196-ai.admin-workspace .tm195-shell > :is(.tm191-overview,.tm189-kpis,.tm191-metrics,.tm189-panel,.tm189-note){margin:0 0 12px!important;max-width:100%!important;box-sizing:border-box!important}
+html body.tm196-ai.admin-workspace .tm195-shell .tm189-panel {padding:16px!important;min-width:0!important}
+html body.tm196-ai.admin-workspace .tm195-shell .tm191-overview {grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)!important}
+html body.tm196-ai.admin-workspace .tm195-shell .tm189-kpis {grid-template-columns:repeat(3,minmax(0,1fr))!important}
+html body.tm196-ai.admin-workspace .tm195-shell .tm191-metrics {grid-template-columns:repeat(3,minmax(0,1fr))!important}
+html body.tm196-ai.admin-workspace .tm195-shell .tm191-review {padding:16px 0!important}
+/* Older pre-banner page introductions must not appear alongside the shared banner. */
+html body.tm196-ai.admin-workspace .tm195-shell > :is(.tm189-hero,.tm189-intro,.tm191-hero,.tm191-intro,.tm192-hero,.ai-page-hero,.ai-page-intro) {display:none!important}
+@media(max-width:1060px){
+  html body.tm196-ai.admin-workspace .tm195-shell .tm191-overview{grid-template-columns:1fr!important}
+}
+@media(max-width:900px){
+ html body.tm196-ai.admin-workspace {--tm196-admin-sidebar:0px}
+ html body.tm196-ai.admin-workspace aside.market-sidebar{display:none!important}
+ html body.tm196-ai.admin-workspace main.market-main.tm192-main{margin-left:0!important;width:100%!important;max-width:100%!important}
+ html body.tm196-ai.admin-workspace > header.market-topbar{left:0!important;width:100%!important}
+ html body.tm196-ai.admin-workspace main.tm192-main > .tm195-shell{padding:12px!important}
+}
+@media(max-width:640px){
+ html body.tm196-ai.admin-workspace .tm195-shell > .tm176-banner{padding:18px!important}
+ html body.tm196-ai.admin-workspace .tm195-shell > .tm176-banner .tm176-banner-art{display:none!important}
+ html body.tm196-ai.admin-workspace .tm195-shell .tm189-kpis,
+ html body.tm196-ai.admin-workspace .tm195-shell .tm191-metrics{grid-template-columns:1fr!important}
+}

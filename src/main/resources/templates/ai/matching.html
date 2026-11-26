@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/common :: head('AI TalentMatch')}"></head>
+<body class="market-body client-workspace tm189-ai tm191-ai tm192-ai tm193-ai tm194-ai tm195-ai tm196-ai" th:classappend="${aiRole == 'ADMIN' ? ' admin-workspace admin-unified' : (aiRole == 'FREELANCER' ? ' fm-dashboard' : ' cd-dashboard')}">
+<link sec:authorize="hasRole('FREELANCER')" rel="stylesheet" th:href="@{/css/freelancer-dashboard-final.css}">
+<link sec:authorize="hasRole('FREELANCER')" rel="stylesheet" th:href="@{/css/freelancer-dashboard-reference.css}">
+<link sec:authorize="hasRole('FREELANCER')" rel="stylesheet" th:href="@{/css/freelancer-layout-v106.css(v=106)}">
+<link sec:authorize="hasRole('FREELANCER')" rel="stylesheet" th:href="@{/css/freelancer-sidebar-unified-v107.css(v=107)}">
+<aside th:replace="~{fragments/common :: marketSidebar('ai-matching')}"></aside>
+<th:block th:if="${aiRole=='CUSTOMER'}"><header th:replace="~{fragments/common :: marketClientTopbar()}"></header></th:block>
+<th:block th:if="${aiRole=='FREELANCER'}"><header th:replace="~{fragments/common :: aiFreelancerTopbar()}"></header></th:block>
+<th:block th:if="${aiRole=='ADMIN'}"><header th:replace="~{fragments/common :: marketTopbar('admin')}"></header></th:block>
+<main class="market-main client-main tm189-main tm191-main tm192-main"><div class="tm189-shell tm191-shell tm195-shell">
+
+<th:block th:if="${aiRole == 'CUSTOMER'}"><section th:replace="~{fragments/common :: clientPageBanner('HỖ TRỢ GỢI Ý THÔNG MINH','Gợi ý Freelancer phù hợp','Đối chiếu yêu cầu dự án, kỹ năng và kinh nghiệm để lựa chọn Freelancer phù hợp.','fa-solid fa-wand-magic-sparkles')}"></section></th:block>
+<th:block th:unless="${aiRole == 'CUSTOMER'}"><section th:replace="~{fragments/common :: rolePageBanner('HỖ TRỢ GỢI Ý THÔNG MINH',${aiRole=='FREELANCER'?'Gợi ý công việc phù hợp':'Gợi ý Freelancer phù hợp'},'Đối chiếu yêu cầu, kỹ năng và kinh nghiệm để ưu tiên những lựa chọn đáng xem xét.','fa-solid fa-wand-magic-sparkles')}"></section></th:block>
+<nav class="tm189-tabs"><a class="active" th:href="@{/ai/matching}">Gợi ý phù hợp</a><a th:href="@{/ai/sentiment}">Đánh giá &amp; phản hồi</a></nav>
+<section class="tm189-panel tm191-panel" th:if="${aiRole != 'FREELANCER'}">
+ <h2>Chọn công việc để tìm Freelancer phù hợp</h2>
+ <form method="get" th:action="@{/ai/matching}" class="tm189-select-form">
+  <select name="jobId" aria-label="Chọn công việc"><option th:each="j:${jobOptions}" th:value="${j.id}" th:text="${j.title}" th:selected="${selectedJobId==j.id}"></option></select>
+  <button type="submit">Phân tích độ phù hợp</button>
+ </form>
+</section>
+<section class="tm189-panel tm191-panel">
+ <div class="tm189-sectionhead"><div><h2 th:text="${aiRole=='FREELANCER'?'Công việc đề xuất cho bạn':'Freelancer phù hợp với công việc'}">Đề xuất</h2><p th:text="${'Tìm thấy '+#lists.size(results)+' kết quả · Xếp hạng theo điểm phù hợp'}">Kết quả</p></div><span class="tm189-caption">Chỉ gợi ý, không tự động tuyển chọn</span></div>
+ <div class="tm189-empty" th:if="${#lists.isEmpty(results)}">Chưa có dữ liệu phù hợp. Hãy bổ sung kỹ năng vào hồ sơ hoặc chọn công việc khác.</div>
+ <article class="tm189-match" th:each="r,st:${results}">
+  <div class="tm189-score" th:text="${r.score}+'%'" th:classappend="${r.score >= 70 ? ' good' : (r.score >= 40 ? ' average' : ' low')}">75%</div>
+  <div class="tm189-matchbody"><div class="tm189-small" th:text="${'Gợi ý #'+st.count}">Gợi ý 1</div><h3 th:text="${r.title}">Công việc</h3>
+   <p th:text="${'Kỹ năng: '+(r.skills==null || r.skills.isBlank() ? 'Chưa khai báo' : r.skills)}">Kỹ năng</p>
+   <div class="tm189-explain"><i class="fa-solid fa-circle-info"></i> <span th:text="${r.reason}">Giải thích</span></div>
+  </div><a class="tm189-action" th:href="${r.url}">Xem chi tiết <i class="fa-solid fa-arrow-right"></i></a>
+ </article>
+</section>
+<section class="tm189-note"><strong>Cách tính điểm (0–100):</strong> Kỹ năng bắt buộc tối đa 45; kinh nghiệm 20; lĩnh vực 15; hình thức làm việc 10; ngân sách 10 (chỉ so sánh khi cùng đơn vị). Khi thiếu cơ sở so sánh giá, điểm được chuẩn hóa theo 90 điểm còn lại. Các tiêu chí thiếu dữ liệu không tự được coi là phù hợp. Đây là mô hình chấm điểm theo quy tắc, chưa phải hệ thống ML đã huấn luyện.</section>
+</div>
+<div th:if="${aiRole=='CUSTOMER'}"><footer th:replace="~{fragments/common :: clientFooter}"></footer></div>
+<div th:if="${aiRole=='FREELANCER'}"><footer th:replace="~{fragments/common :: freelancerFooter}"></footer></div>
+<div th:if="${aiRole=='ADMIN'}"><footer th:replace="~{fragments/common :: adminFooter}"></footer></div>
+</main><script th:replace="~{fragments/common :: scripts}"></script></body></html>

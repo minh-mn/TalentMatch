@@ -21,7 +21,7 @@ public class SettlementDemoService {
    this.payments=payments;this.projects=projects;this.wallet=wallet;this.holdDays=holdDays;
  }
  public int holdDays(){return holdDays;}
- @Transactional
+ @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
  public void settleOne(Long id){
    Payment before=payments.findById(id).orElseThrow();
    Project p=projects.findForUpdate(before.getProject().getId()).orElseThrow();

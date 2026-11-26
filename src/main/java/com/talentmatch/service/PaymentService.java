@@ -56,7 +56,7 @@ public class PaymentService {
             throw new IllegalArgumentException("Tổng giá trị các mốc phải bằng giá trị hợp đồng trước khi thanh toán.");
         if(milestoneId==null)throw new IllegalArgumentException("Hợp đồng thanh toán theo mốc. Hãy chọn mốc cụ thể.");
         Milestone m=plan.stream().filter(x->x.getId().equals(milestoneId)).findFirst()
-            .orElseThrow(()->new IllegalArgumentException("Không tìm thấy mốc của dự án."));
+                .orElseThrow(()->new IllegalArgumentException("Không tìm thấy mốc của dự án."));
         if(m.getPaymentDueDate()==null)throw new IllegalArgumentException("Mốc chưa được thiết lập hạn thanh toán.");
         if(m.getDeadline()==null)throw new IllegalArgumentException("Mốc chưa có deadline bàn giao.");
     }
@@ -102,7 +102,7 @@ public class PaymentService {
         if(tx.getMilestone()!=null){
             Milestone m=tx.getMilestone();
             if(m.getStatus()!=MilestoneStatus.UNPAID||payments.findByProjectAndMilestone(p,m).stream()
-                .anyMatch(other->!other.getId().equals(tx.getId())&&paid.contains(other.getStatus())))return "02";
+                    .anyMatch(other->!other.getId().equals(tx.getId())&&paid.contains(other.getStatus())))return "02";
             m.setStatus(MilestoneStatus.PAID);milestones.save(m);
         }else if(payments.findByProjectOrderByCreatedAtDesc(p).stream().anyMatch(other->!other.getId().equals(tx.getId())&&other.getMilestone()==null&&paid.contains(other.getStatus())))return "02";
         tx.setStatus(PaymentStatus.PAID);tx.setPaidAt(LocalDateTime.now());payments.save(tx);

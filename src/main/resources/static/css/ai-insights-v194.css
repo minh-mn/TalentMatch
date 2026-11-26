@@ -1,0 +1,66 @@
+/* V194 - AI Customer uses exactly the same banner and content proportions as Post a Job. */
+html body.tm194-ai.cd-dashboard:has(.tm118-client-nav){--tm194-sidebar:230px;--tm194-topbar:64px;}
+html body.tm194-ai.cd-dashboard:has(.tm118-client-nav) main.tm192-main{
+  margin:0 0 0 var(--tm194-sidebar)!important;
+  padding:calc(var(--tm194-topbar) + 12px) 0 0!important;
+  width:calc(100% - var(--tm194-sidebar))!important;
+  max-width:calc(100% - var(--tm194-sidebar))!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  overflow-x:clip!important;
+  background:linear-gradient(#eff5ff,#eef3fc)!important;
+}
+html body.tm194-ai.cd-dashboard .tm191-shell{
+  width:100%!important;max-width:none!important;
+  padding:0 16px 28px!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+}
+html body.tm194-ai.cd-dashboard .tm191-shell>.tm174-banner{
+  width:100%!important;min-height:122px!important;
+  border-radius:14px!important;
+  margin:0 0 12px!important;
+  display:flex!important;align-items:center!important;
+  padding:25px 24px!important;
+  background:linear-gradient(90deg,#edf5ff 0%,#dceaff 47%,#b8d7ff 100%)!important;
+  border:1px solid #d8e6fb!important;
+  color:#0b2a6f!important;
+}
+html body.tm194-ai.cd-dashboard .tm191-shell>.tm174-banner .tm174-banner-eyebrow{
+  color:#2168e6!important;font-size:11px!important;font-weight:800!important;
+  margin:0 0 7px!important;
+}
+html body.tm194-ai.cd-dashboard .tm191-shell>.tm174-banner h1{
+  font-size:25px!important;font-weight:800!important;line-height:1.24!important;
+  color:#0b2a6f!important;margin:0 0 7px!important;
+}
+html body.tm194-ai.cd-dashboard .tm191-shell>.tm174-banner p{
+  font-size:13px!important;color:#58709b!important;line-height:1.55!important;margin:0!important;
+}
+html body.tm194-ai.cd-dashboard .tm191-shell>.tm174-banner .tm174-banner-icon{
+  display:grid!important;place-items:center!important;
+  width:78px!important;height:78px!important;flex:0 0 78px!important;
+  border-radius:20px!important;background:#accfff8a!important;color:#2f6fed!important;
+}
+html body.tm194-ai.cd-dashboard .tm191-shell>.tm174-banner .tm174-banner-icon i{font-size:37px!important}
+html body.tm194-ai.cd-dashboard .tm189-tabs{margin:0 0 12px!important}
+html body.tm194-ai.cd-dashboard :is(.tm191-overview,.tm189-kpis,.tm191-metrics){margin-bottom:12px!important}
+html body.tm194-ai.cd-dashboard :is(.tm189-panel,.tm191-overview-primary,.tm191-overview-secondary,.tm189-kpis article,.tm191-metrics>div){border-color:#d8e4f7!important;box-shadow:none!important}
+html body.tm194-ai.cd-dashboard .tm189-panel{padding:18px 16px!important}
+html body.tm194-ai.cd-dashboard .tm189-match{min-height:100px!important}
+html body.tm194-ai.cd-dashboard .tm189-note{margin:0 0 16px!important}
+html body.tm194-ai.cd-dashboard .cd-client-header{
+  position:fixed!important;top:0!important;left:var(--tm194-sidebar)!important;right:0!important;
+  width:calc(100% - var(--tm194-sidebar))!important;z-index:600!important;
+}
+html body.tm194-ai.cd-dashboard .cd-client-header .cd-header-links{display:flex!important}
+/* Remove V193's 196px sidebar assumption only for Client; role-owned sidebar remains intact. */
+@media(max-width:900px){
+  html body.tm194-ai.cd-dashboard:has(.tm118-client-nav){--tm194-sidebar:0px}
+  html body.tm194-ai.cd-dashboard .tm191-shell{padding:0 12px 20px!important}
+  html body.tm194-ai.cd-dashboard .cd-client-header{left:0!important;width:100%!important}
+}
+@media(max-width:640px){
+ html body.tm194-ai.cd-dashboard .tm191-shell>.tm174-banner{padding:20px!important}
+ html body.tm194-ai.cd-dashboard .tm191-shell>.tm174-banner .tm174-banner-icon{display:none!important}
+}

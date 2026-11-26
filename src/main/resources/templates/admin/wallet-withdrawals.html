@@ -4,37 +4,37 @@
 <body class="market-body client-workspace admin-workspace admin-unified">
 <link rel="stylesheet" th:href="@{/css/admin-finance-v130.css(v=130)}">
 <link rel="stylesheet" th:href="@{/css/admin-finance-v162.css(v=162)}">
-<aside th:replace="~{fragments/common :: marketSidebar('wallet')}"></aside>
+<aside th:replace="~{fragments/common :: marketSidebar('settlements')}"></aside>
 <header th:replace="~{fragments/common :: marketTopbar('admin')}"></header>
 <div th:replace="~{fragments/common :: flash}"></div>
 <main class="market-main client-main admin-main"><div class="client-shell admin-shell tm130 tm162">
- <section th:replace="~{fragments/common :: rolePageBanner('QUẢN LÝ TÀI CHÍNH','Giải ngân & Rút tiền','Kiểm soát yêu cầu rút tiền và lịch sử xử lý ví Freelancer.','fa-solid fa-money-bill-transfer')}" class="tm176-banner-slot"></section>
+ <section th:replace="~{fragments/common :: rolePageBanner('QUẢN LÝ TÀI CHÍNH','Giải ngân & Rút tiền','Kiểm soát yêu cầu rút tiền Sandbox và lịch sử xử lý ví Freelancer.','fa-solid fa-money-bill-transfer')}" class="tm176-banner-slot"></section>
  <section class="tm130-stats">
   <article><span>Tổng yêu cầu</span><strong th:text="${withdrawalTotal}">0</strong></article>
   <article><span>Chờ duyệt</span><strong th:text="${withdrawalPending}">0</strong></article>
   <article><span>Đã duyệt, chờ hoàn tất</span><strong th:text="${withdrawalApproved}">0</strong></article>
-  <article><span>Đã hoàn tất</span><strong th:text="${withdrawalCompleted}">0</strong></article>
-  <article><span>Đã từ chối</span><strong th:text="${withdrawalRejected}">0</strong></article>
+  <article><span>Đã hoàn tất mô phỏng</span><strong th:text="${withdrawalCompleted}">0</strong></article>
+  <article><span>Đang chuyển tiền test</span><strong th:text="${withdrawalProcessing}">0</strong></article><article><span>Thất bại / đã hủy</span><strong th:text="${withdrawalClosed}">0</strong></article><article><span>Đã từ chối</span><strong th:text="${withdrawalRejected}">0</strong></article>
  </section>
- <section class="tm162-withdraw-money"><article><small>Số tiền đang giữ chờ duyệt / hoàn tất</small><strong th:text="${#numbers.formatDecimal(withdrawalHeldAmount,0,'POINT',0,'COMMA')+'đ'}">0đ</strong></article><article><small>Đã rút hoàn tất</small><strong th:text="${#numbers.formatDecimal(withdrawalCompletedAmount,0,'POINT',0,'COMMA')+'đ'}">0đ</strong></article><article><small>Quy trình xử lý</small><strong class="tm162-process">Chờ duyệt → Đã duyệt → Hoàn tất</strong></article></section>
- <div class="tm130-subnav"><a th:href="@{/admin/payments(tab='all')}"><i class="fa-solid fa-receipt"></i> Giao dịch &amp; Thanh toán</a><a class="active" th:href="@{/admin/wallet-withdrawals}"><i class="fa-solid fa-wallet"></i> Yêu cầu rút tiền</a></div>
+ <section class="tm162-withdraw-money"><article><small>Số tiền đang giữ chờ duyệt / hoàn tất</small><strong th:text="${#numbers.formatDecimal(withdrawalHeldAmount,0,'POINT',0,'COMMA')+'đ'}">0đ</strong></article><article><small>Đã rút hoàn tất (mô phỏng)</small><strong th:text="${#numbers.formatDecimal(withdrawalCompletedAmount,0,'POINT',0,'COMMA')+'đ'}">0đ</strong></article><article><small>Quy trình xử lý</small><strong class="tm162-process">Chờ duyệt → Đã duyệt → Đang chuyển → Thành công / Thất bại</strong></article></section>
+ <div class="tm130-subnav"><a th:href="@{/admin/settlements}">Tổng quan giải ngân</a><a th:href="@{/admin/payments(tab='all')}"><i class="fa-solid fa-receipt"></i> Giao dịch &amp; Thanh toán</a><a class="active" th:href="@{/admin/wallet-withdrawals}"><i class="fa-solid fa-wallet"></i> Yêu cầu rút tiền</a></div>
  <section class="tm130-panel">
   <div class="tm130-panel-heading"><div><h2>Danh sách yêu cầu rút tiền</h2><p>Lọc theo mã yêu cầu, Freelancer, ngân hàng hoặc trạng thái phê duyệt.</p></div><span class="tm130-count" th:text="${#lists.size(requests)}+' kết quả'">0 kết quả</span></div>
   <form class="tm130-filter" method="get" th:action="@{/admin/wallet-withdrawals}">
    <label class="tm130-search"><i class="fa-solid fa-magnifying-glass"></i><input name="q" th:value="${q}" placeholder="Tìm mã WD, Freelancer, ngân hàng..."></label>
-   <select name="status" aria-label="Lọc trạng thái"><option value="all" th:selected="${status=='all'}">Tất cả trạng thái</option><option value="PENDING" th:selected="${status=='PENDING'}">Chờ duyệt</option><option value="APPROVED" th:selected="${status=='APPROVED'}">Đã duyệt</option><option value="COMPLETED" th:selected="${status=='COMPLETED'}">Hoàn tất</option><option value="REJECTED" th:selected="${status=='REJECTED'}">Từ chối</option></select>
+   <select name="status" aria-label="Lọc trạng thái"><option value="all" th:selected="${status=='all'}">Tất cả trạng thái</option><option value="PENDING" th:selected="${status=='PENDING'}">Chờ duyệt</option><option value="APPROVED" th:selected="${status=='APPROVED'}">Đã duyệt</option><option value="COMPLETED" th:selected="${status=='COMPLETED'}">Hoàn tất</option><option value="PROCESSING" th:selected="${status=='PROCESSING'}">Đang chuyển tiền test</option><option value="FAILED" th:selected="${status=='FAILED'}">Chuyển tiền thất bại</option><option value="CANCELLED" th:selected="${status=='CANCELLED'}">Đã hủy</option><option value="REJECTED" th:selected="${status=='REJECTED'}">Từ chối</option></select>
    <button class="tm130-btn primary" type="submit">Áp dụng</button><a class="tm130-btn subtle" th:href="@{/admin/wallet-withdrawals}">Đặt lại</a>
   </form>
   <div class="tm130-table-wrap"><table class="tm130-table"><thead><tr><th>Mã yêu cầu / Ngày</th><th>Freelancer</th><th>Tài khoản nhận</th><th class="money">Số tiền</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
   <tbody><tr th:each="w:${requests}">
    <td><strong th:text="${'WD-'+w.id}">WD-001</strong><small th:text="${w.createdAt!=null?#temporals.format(w.createdAt,'dd/MM/yyyy HH:mm'):'—'}">—</small></td>
    <td th:text="${w.freelancer.fullName}">Freelancer</td>
-   <td><strong th:text="${w.bank.bankName}">Ngân hàng</strong><small th:text="${w.bank.masked}">•••• 0002</small></td>
+   <td><strong th:text="${w.bank.bankName}">Ngân hàng</strong><small th:text="${w.bank.holder}"></small><small th:text="${w.bank.masked}">•••• 0002</small></td>
    <td class="money tm130-amount" th:text="${#numbers.formatDecimal(w.amount,0,'POINT',0,'COMMA')+'đ'}">0đ</td>
-   <td><span class="tm130-chip" th:classappend="${' st-'+w.status.name().toLowerCase()}" th:text="${@vnStatus.label(w.status)}">Chờ duyệt</span></td>
+   <td><span class="tm130-chip" th:classappend="${' st-'+w.status.name().toLowerCase()}" th:text="${w.statusLabel}">Chờ duyệt</span></td>
    <td class="tm130-actions">
     <div th:if="${w.status.name()=='PENDING'}" class="tm130-actions-stack"><form method="post" th:action="@{/admin/wallet-withdrawals/{id}/review(id=${w.id})}"><input type="hidden" name="accept" value="true"><button class="tm130-btn primary" type="submit" onclick="return confirm('Duyệt yêu cầu rút tiền này?')">Duyệt</button></form><form class="tm130-reject" method="post" th:action="@{/admin/wallet-withdrawals/{id}/review(id=${w.id})}"><input type="hidden" name="accept" value="false"><input name="reason" minlength="10" maxlength="500" required placeholder="Lý do từ chối (≥10 ký tự)" aria-label="Lý do từ chối"><button class="tm130-btn danger" type="submit" onclick="return confirm('Xác nhận từ chối yêu cầu này?')">Từ chối</button></form></div>
-    <form th:if="${w.status.name()=='APPROVED'}" method="post" th:action="@{/admin/wallet-withdrawals/{id}/complete(id=${w.id})}"><button class="tm130-btn success" type="submit" onclick="return confirm('Xác nhận hoàn tất mô phỏng? Không có chuyển khoản ngân hàng thật.')">Hoàn tất</button></form>
+    <form th:if="${w.status.name()=='APPROVED'}" method="post" th:action="@{/admin/wallet-withdrawals/{id}/start(id=${w.id})}"><button class="tm130-btn primary" type="submit">Bắt đầu chuyển tiền test</button></form><form th:if="${w.status.name()=='PROCESSING'}" method="post" th:action="@{/admin/wallet-withdrawals/{id}/complete(id=${w.id})}"><button class="tm130-btn success" type="submit" onclick="return confirm('Xác nhận hoàn tất mô phỏng? Không có chuyển khoản ngân hàng thật.')">Xác nhận thành công (test)</button></form><form th:if="${w.status.name()=='PROCESSING'}" method="post" th:action="@{/admin/wallet-withdrawals/{id}/fail(id=${w.id})}"><input name="reason" required minlength="10" maxlength="500" placeholder="Lý do thất bại"><button class="tm130-btn danger">Xác nhận thất bại (test)</button></form><small th:if="${w.payoutCode!=null}" th:text="${w.payoutCode}"></small>
     <span class="tm130-done" th:if="${w.status.name()=='COMPLETED'}"><i class="fa-solid fa-circle-check"></i> Đã xử lý</span><span class="tm130-done" th:if="${w.status.name()=='REJECTED'}">Đã đóng</span>
     <small class="tm130-reason" th:if="${w.reason!=null and !w.reason.isBlank()}" th:text="${'Lý do: '+w.reason}"></small>
    </td>

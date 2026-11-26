@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 
 class PaymentServiceTest {
     @Test
-    void abandonedVnpayAttemptExpiresBeforeRetry() {
+    void pendingVnpayAttemptBlocksRetryUntilReconciled() {
         PaymentRepository payments = mock(PaymentRepository.class);
         ProjectRepository projects = mock(ProjectRepository.class);
         MilestoneRepository milestones = mock(MilestoneRepository.class);
@@ -58,13 +58,10 @@ class PaymentServiceTest {
         when(payments.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         PaymentService service = new PaymentService(payments, projects, milestones, agreements);
-        Payment retry = service.startVnpay(project, null, customer);
-
-        assertEquals(PaymentStatus.FAILED, abandoned.getStatus());
-        assertEquals(PaymentStatus.FAILED, legacyPending.getStatus());
-        assertEquals(PaymentStatus.PENDING, retry.getStatus());
-        verify(payments).saveAll(anyList());
-        verify(payments).save(any(Payment.class));
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class,()->service.startVnpay(project,null,customer));
+        assertEquals(PaymentStatus.PENDING, abandoned.getStatus());
+        assertEquals(PaymentStatus.PENDING, legacyPending.getStatus());
+        verify(payments,never()).save(any(Payment.class));
     }
 
     @Test

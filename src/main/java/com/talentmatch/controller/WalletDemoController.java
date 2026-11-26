@@ -32,11 +32,13 @@ public class WalletDemoController {
    String search=("WD-"+w.getId()+" "+w.getFreelancer().getFullName()+" "+w.getBank().getBankName()+" "+w.getBank().getMasked()).toLowerCase(java.util.Locale.ROOT);
    return keyword.isBlank()||search.contains(keyword);
   }).sorted(java.util.Comparator.comparing(WalletWithdrawal::getCreatedAt,java.util.Comparator.nullsLast(java.util.Comparator.reverseOrder()))).toList();
-  model.addAttribute("requests",filtered);model.addAttribute("q",q);model.addAttribute("status",status);
+  model.addAttribute("active","settlements");model.addAttribute("requests",filtered);model.addAttribute("q",q);model.addAttribute("status",status);
   model.addAttribute("withdrawalTotal",all.size());
-  model.addAttribute("withdrawalHeldAmount",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.PENDING||w.getStatus()==WalletWithdrawal.State.APPROVED).map(WalletWithdrawal::getAmount).reduce(BigDecimal.ZERO,BigDecimal::add));
+  model.addAttribute("withdrawalHeldAmount",all.stream().filter(w->w.isHeld()).map(WalletWithdrawal::getAmount).reduce(BigDecimal.ZERO,BigDecimal::add));
   model.addAttribute("withdrawalCompletedAmount",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.COMPLETED).map(WalletWithdrawal::getAmount).reduce(BigDecimal.ZERO,BigDecimal::add));
   model.addAttribute("withdrawalPending",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.PENDING).count());
+  model.addAttribute("withdrawalProcessing",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.PROCESSING).count());
+  model.addAttribute("withdrawalClosed",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.FAILED||w.getStatus()==WalletWithdrawal.State.CANCELLED).count());
   model.addAttribute("withdrawalApproved",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.APPROVED).count());
   model.addAttribute("withdrawalCompleted",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.COMPLETED).count());
   model.addAttribute("withdrawalRejected",all.stream().filter(w->w.getStatus()==WalletWithdrawal.State.REJECTED).count());
@@ -50,8 +52,14 @@ public class WalletDemoController {
  }
  @PostMapping("/admin/wallet-withdrawals/{id}/complete")
  public String complete(@PathVariable Long id,RedirectAttributes a){
-  try{wallet.complete(id);a.addFlashAttribute("success","Đã xác nhận hoàn tất CHUYỂN TIỀN MÔ PHỎNG (không có tiền thật).");}
+  try{wallet.finishPayout(id,true,null);a.addFlashAttribute("success","Đã xác nhận hoàn tất CHUYỂN TIỀN MÔ PHỎNG (không có tiền thật).");}
   catch(Exception e){a.addFlashAttribute("error",e.getMessage());}
   return "redirect:/admin/wallet-withdrawals";
  }
+ @PostMapping("/admin/wallet-withdrawals/{id}/start")
+ public String start(@PathVariable Long id,RedirectAttributes a){try{wallet.startPayout(id);a.addFlashAttribute("success","Đã tạo giao dịch chuyển tiền test.");}catch(Exception e){a.addFlashAttribute("error",e.getMessage());}return "redirect:/admin/wallet-withdrawals";}
+ @PostMapping("/admin/wallet-withdrawals/{id}/fail")
+ public String fail(@PathVariable Long id,@RequestParam String reason,RedirectAttributes a){try{wallet.finishPayout(id,false,reason);a.addFlashAttribute("success","Chuyển tiền test thất bại; đã trả lại số dư khả dụng.");}catch(Exception e){a.addFlashAttribute("error",e.getMessage());}return "redirect:/admin/wallet-withdrawals";}
+ @PostMapping("/freelancer/earnings/withdrawals/{id}/cancel")
+ public String cancel(@PathVariable Long id,Authentication auth,RedirectAttributes a){try{wallet.cancel(id,users.byEmail(auth.getName()));a.addFlashAttribute("success","Đã hủy yêu cầu.");}catch(Exception e){a.addFlashAttribute("error",e.getMessage());}return "redirect:/freelancer/earnings?tab=withdrawals";}
 }
